@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane id="AnchorPane" prefHeight="535.0" prefWidth="676.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.FXMLUserStoryCreateController">
+   <children>
+      <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="240.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../content/logoScrumBO.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="192.0" layoutY="123.0" text="User Story übertragen">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Label layoutX="162.0" layoutY="203.0" text="User Story">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <ComboBox layoutX="286.0" layoutY="203.0" prefWidth="150.0" />
+      <ListView layoutX="162.0" layoutY="242.0" prefHeight="200.0" prefWidth="352.0" />
+      <Button layoutX="411.0" layoutY="451.0" mnemonicParsing="false" text="Task hinzufügen" />
+      <Button layoutX="445.0" layoutY="486.0" mnemonicParsing="false" text="Speichern" />
+      <Button layoutX="361.0" layoutY="486.0" mnemonicParsing="false" text="Abbrechen" />
+   </children>
+   <cursor>
+      <Cursor fx:constant="DEFAULT" />
+   </cursor>
+</AnchorPane>

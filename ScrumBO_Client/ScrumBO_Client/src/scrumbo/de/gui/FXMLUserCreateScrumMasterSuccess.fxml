@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import scrumbo.de.common.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.FXMLUserCreateScrumMasterSuccessController">
+   <children>
+      <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="75.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../content/logoScrumBO.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="buttonForward" layoutX="379.0" layoutY="300.0" mnemonicParsing="false" onAction="#handleButtonForward" text="Ok">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Text fill="#00ff09" layoutX="247.0" layoutY="208.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Benutzer wurde erfolgreich erstellt.">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Text fill="#00ff09" layoutX="263.0" layoutY="268.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Sie können sich nun einloggen.">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Text>
+      <Label layoutX="400.0" layoutY="65.0" text="Benutzer erstellen">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+   </children>
+</AnchorPane>

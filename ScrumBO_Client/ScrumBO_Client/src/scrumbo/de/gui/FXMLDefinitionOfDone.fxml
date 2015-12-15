@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import scrumbo.de.common.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="587.0" prefWidth="676.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.FXMLDefinitionOfDoneController">
+   <children>
+      <ImageView fitHeight="77.0" fitWidth="98.0" layoutX="535.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../content/logoScrumBO.png" />
+         </image>
+      </ImageView>
+      <TableView fx:id="tableViewDefinitionOfDone" editable="true" layoutX="46.0" layoutY="88.0" prefHeight="421.0" prefWidth="587.0">
+         <columns>
+            <TableColumn fx:id="tableColumnKriterien" maxWidth="732.0" minWidth="284.0" prefWidth="423.0" resizable="false" sortable="false" text="Kriterien" />
+            <TableColumn fx:id="tableColumnStatus" editable="false" maxWidth="540.0" minWidth="62.0" prefWidth="163.0" resizable="false" sortable="false" text="Status" />
+         </columns></TableView>
+      <Label layoutX="223.0" layoutY="35.0" text="DefinitionOfDone">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Button fx:id="buttonBack" layoutX="46.0" layoutY="518.0" mnemonicParsing="false" onAction="#handleButtonBack" prefHeight="37.0" prefWidth="98.0" text="Zurück">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="buttonCreateDefinitionOfDone" layoutX="400.0" layoutY="518.0" mnemonicParsing="false" onAction="#handleButtonCreateDefinitionOfDone" prefHeight="37.0" prefWidth="233.0" text="DefinitionOfDone hinzufügen">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="buttonReload" layoutX="46.0" layoutY="57.0" mnemonicParsing="false" onAction="#handleButtonReload" text="Neu laden" />
+   </children>
+   <cursor>
+      <Cursor fx:constant="DEFAULT" />
+   </cursor>
+</AnchorPane>

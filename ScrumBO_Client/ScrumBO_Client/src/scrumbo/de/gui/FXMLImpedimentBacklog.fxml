@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import scrumbo.de.common.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.FXMLImpedimentBacklogController">
+   <children>
+      <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="75.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../content/logoScrumBO.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="buttonLogout" layoutX="860.0" layoutY="58.0" mnemonicParsing="false" onAction="#handleButtonLogout" prefHeight="30.0" prefWidth="98.0" text="Ausloggen">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Text fx:id="benutzerrolle" layoutX="180.0" layoutY="580.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="97.99998998641968" />
+      <Text fx:id="nachname" layoutX="124.0" layoutY="580.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="56.0" />
+      <Text fx:id="vorname" layoutX="75.0" layoutY="580.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="48.999998927116394" />
+      <Label layoutX="287.0" layoutY="566.0" text="Projektname:" />
+      <Text fx:id="projektname" layoutX="367.0" layoutY="579.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="129.13671875" />
+      <TableView fx:id="tableViewImpedimentBacklog" editable="true" layoutX="75.0" layoutY="173.0" prefHeight="373.0" prefWidth="883.0">
+         <columns>
+            <TableColumn fx:id="tableColumnPrioritaet" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" resizable="false" text="Priorität" />
+            <TableColumn fx:id="tableColumnBeschreibung" maxWidth="203.0" minWidth="125.0" prefWidth="203.0" resizable="false" sortable="false" text="Beschreibung" />
+            <TableColumn fx:id="tableColumnErstelltVon" maxWidth="284.0" minWidth="54.0" prefWidth="120.0" resizable="false" sortable="false" text="Erstellt von" />
+            <TableColumn fx:id="tableColumnErstelltAm" maxWidth="436.0" minWidth="97.0" prefWidth="116.0" resizable="false" sortable="false" text="Erstellt am" />
+            <TableColumn fx:id="tableColumnBehobenAm" maxWidth="408.0" minWidth="101.0" prefWidth="116.0" resizable="false" sortable="false" text="Behoben am" />
+            <TableColumn fx:id="tableColumnKommentar" maxWidth="307.0" minWidth="124.0" prefWidth="252.0" resizable="false" sortable="false" text="Kommentar (SM)" />
+         </columns></TableView>
+      <Label layoutX="392.0" layoutY="54.0" text="Impediment Backlog">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Button fx:id="buttonBack" layoutX="750.0" layoutY="58.0" mnemonicParsing="false" onAction="#handleButtonBack" prefHeight="37.0" prefWidth="98.0" text="Zurück">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="buttonAddImpediment" layoutX="762.0" layoutY="124.0" mnemonicParsing="false" onAction="#handleButtonAddImpediment" prefHeight="37.0" prefWidth="196.0" text="Impediment hinzufügen">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="buttonReload" layoutX="74.0" layoutY="143.0" mnemonicParsing="false" onAction="#handleButtonReload" text="Neu laden" />
+   </children>
+   <cursor>
+      <Cursor fx:constant="DEFAULT" />
+   </cursor>
+</AnchorPane>

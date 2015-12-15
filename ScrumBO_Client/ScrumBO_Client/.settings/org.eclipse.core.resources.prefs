@@ -1,0 +1,10 @@
+eclipse.preferences.version=1
+encoding//src/scrumbo/de/controller/FXMLAdminLoginController.java=UTF-8
+encoding//src/scrumbo/de/controller/FXMLUserCreateController.java=UTF-8
+encoding//src/scrumbo/de/controller/FXMLUserCreateFailController.java=UTF-8
+encoding//src/scrumbo/de/controller/FXMLUserCreateForProjectController.java=UTF-8
+encoding//src/scrumbo/de/controller/FXMLUserCreateScrumMasterController.java=UTF-8
+encoding//src/scrumbo/de/controller/FXMLUserCreateScrumMasterFailController.java=UTF-8
+encoding//src/scrumbo/de/controller/FXMLUserCreateScrumMasterSuccessController.java=UTF-8
+encoding//src/scrumbo/de/controller/FXMLUserCreateSuccessController.java=UTF-8
+encoding//src/scrumbo/de/controller/FXMLUserLoginController.java=UTF-8
