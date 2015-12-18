@@ -84,6 +84,12 @@ public class SprintDao implements DaoInterface<Sprint, Integer> {
 		return sprint;
 	}
 	
+	public Sprint findByProjectIdandSprintNumber(Integer scrumprojektid, Integer sprintnumber) {
+		Sprint sprint = (Sprint) getCurrentSession().createQuery("from Sprint where scrumprojekt_id like '"
+				+ scrumprojektid + "' AND sprint_nummer like'" + sprintnumber + "'").uniqueResult();
+		return sprint;
+	}
+	
 	public void delete(Sprint entity) {
 		getCurrentSession().delete(entity);
 	}

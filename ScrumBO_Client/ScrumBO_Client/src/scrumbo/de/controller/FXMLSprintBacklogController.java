@@ -17,6 +17,7 @@ import com.google.gson.reflect.TypeToken;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -30,6 +31,7 @@ import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.common.MyHBox;
 import scrumbo.de.entity.CurrentBenutzer;
@@ -60,20 +62,64 @@ public class FXMLSprintBacklogController implements Initializable {
 	@FXML
 	private Button							buttonLoadSprint;
 	@FXML
+	private Button							buttonCreateNewSprint;
+	@FXML
 	private VBox							VBOXUserStories;
 	@FXML
 	private Text							sprintNumber;
 											
-	public static ObservableList<UserStory>	dataProductBacklog	= FXCollections.observableArrayList();
-	private Integer							anzahlSprints		= 0;
+	public static ObservableList<UserStory>	dataSprintBacklog	= FXCollections.observableArrayList();
+	private static Integer					anzahlSprints		= 0;
 																
 	public static ObservableList<UserStory> getData() {
-		return dataProductBacklog;
+		return dataSprintBacklog;
+	}
+	
+	public static Integer getAnzahlSprints() {
+		return anzahlSprints;
+	}
+	
+	public void initLoadOldSprint() {
+		ladeAltenSprint(CurrentSprint.sprintnummer);
+		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.get(0).getId());
+		
+		for (int i = 1; i < VBOXUserStories.getChildren().size(); i++) {
+			VBOXUserStories.getChildren().remove(i);
+		}
+		
+		for (int i = 0; i < dataSprintBacklog.size(); i++) {
+			UserStory userstory = dataSprintBacklog.get(i);
+			MyHBox hb = new MyHBox(userstory);
+			VBOXUserStories.getChildren().add(hb);
+		}
+		
+		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
 	}
 	
 	@FXML
 	private void handleButtonLoadSprint(ActionEvent event) throws Exception {
-		ladeAltenSprint();
+		
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(
+					getClass().getResource("/scrumbo/de/gui/FXMLSprintBacklogLoadOldSprint.fxml"));
+			Parent root1 = (Parent) fxmlLoader.load();
+			Stage stage = new Stage();
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.setScene(new Scene(root1));
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent event) {
+					try {
+						initLoadOldSprint();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
+			stage.show();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@FXML
@@ -144,6 +190,7 @@ public class FXMLSprintBacklogController implements Initializable {
 		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
 		projektname.setText(CurrentScrumprojekt.projektname);
 		ladeAnzahlSprints();
+		initSprintBacklog();
 		
 		ScrollPane sp = new ScrollPane();
 		sp.setFitToHeight(true);
@@ -151,12 +198,10 @@ public class FXMLSprintBacklogController implements Initializable {
 		sp.setVisible(true);
 		
 		ladeSprint();
-		ladeProductBacklog(CurrentScrumprojekt.productbacklog.get(0).getId());
+		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.get(0).getId());
 		
-		initSprintBacklog();
-		
-		for (int i = 0; i < dataProductBacklog.size(); i++) {
-			UserStory userstory = dataProductBacklog.get(i);
+		for (int i = 0; i < dataSprintBacklog.size(); i++) {
+			UserStory userstory = dataSprintBacklog.get(i);
 			MyHBox hb = new MyHBox(userstory);
 			VBOXUserStories.getChildren().add(hb);
 		}
@@ -164,7 +209,7 @@ public class FXMLSprintBacklogController implements Initializable {
 		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
 	}
 	
-	void initSprintBacklog() {
+	private void initSprintBacklog() {
 		
 		HBox hbox = new HBox();
 		hbox.setMinHeight(30);
@@ -210,7 +255,7 @@ public class FXMLSprintBacklogController implements Initializable {
 		
 	}
 	
-	public void ladeProductBacklog(Integer id) {
+	public void ladeSprintBacklog(Integer id) {
 		String output = "";
 		Integer platz = -1;
 		try {
@@ -241,31 +286,17 @@ public class FXMLSprintBacklogController implements Initializable {
 		Type listType = new TypeToken<LinkedList<UserStory>>() {
 		}.getType();
 		List<UserStory> liste = gson.fromJson(output, listType);
-		dataProductBacklog.clear();
+		dataSprintBacklog.clear();
 		
 		if (!liste.isEmpty()) {
 			for (int i = 0; i < liste.size(); i++) {
-				dataProductBacklog.add(liste.get(i));
+				dataSprintBacklog.add(liste.get(i));
 			}
 		}
 		
 	}
 	
-	public void ladeAltenSprint() {
-		CurrentSprint.id = 1;
-		CurrentSprint.sprintnummer = 1;
-		ladeProductBacklog(CurrentScrumprojekt.productbacklog.get(0).getId());
-		
-		for (int i = 0; i < dataProductBacklog.size(); i++) {
-			UserStory userstory = dataProductBacklog.get(i);
-			MyHBox hb = new MyHBox(userstory);
-			VBOXUserStories.getChildren().add(hb);
-		}
-		
-		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
-	}
-	
-	public void ladeAnzahlSprints() {
+	public static void ladeAnzahlSprints() {
 		String output = "";
 		
 		try {
@@ -317,9 +348,79 @@ public class FXMLSprintBacklogController implements Initializable {
 		CurrentSprint.sprintnummer = sprint.getSprintnummer();
 	}
 	
-	public void reloadProductBacklog() throws IOException {
-		dataProductBacklog.clear();
-		ladeProductBacklog(CurrentScrumprojekt.productbacklog.get(0).getId());
+	public void ladeAltenSprint(Integer sprintnummer) {
+		String output = "";
+		try {
+			URL url = new URL(
+					"http://localhost:8080/ScrumBO_Server/rest/sprint/suche/" + CurrentScrumprojekt.scrumprojektID + "/"
+							+ sprintnummer + "/" + ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+			output = br.readLine();
+			conn.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Gson gson = new Gson();
+		Sprint sprint = gson.fromJson(output, Sprint.class);
+		CurrentSprint.id = sprint.getId();
+		CurrentSprint.sprintnummer = sprint.getSprintnummer();
+	}
+	
+	@FXML
+	public void handleButtonCreateNewSprint(ActionEvent event) {
+		String output = "";
+		try {
+			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/sprint/create/"
+					+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+			output = br.readLine();
+			conn.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Gson gson = new Gson();
+		Sprint sprint = gson.fromJson(output, Sprint.class);
+		CurrentSprint.id = sprint.getId();
+		CurrentSprint.sprintnummer = sprint.getSprintnummer();
+		
+		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.get(0).getId());
+		
+		for (int i = 1; i < VBOXUserStories.getChildren().size(); i++) {
+			VBOXUserStories.getChildren().remove(i);
+		}
+		
+		for (int i = 0; i < dataSprintBacklog.size(); i++) {
+			UserStory userstory = dataSprintBacklog.get(i);
+			MyHBox hb = new MyHBox(userstory);
+			VBOXUserStories.getChildren().add(hb);
+		}
+		
+		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
+	}
+	
+	public void reloadSprintBacklog() throws IOException {
+		dataSprintBacklog.clear();
+		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.get(0).getId());
 	}
 	
 }

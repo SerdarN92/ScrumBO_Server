@@ -39,6 +39,13 @@ public class SprintService {
 		return sprint;
 	}
 	
+	public Sprint findByProjectIdandSprintNumber(Integer scrumprojektid, Integer sprintnumber) {
+		sprintDao.openCurrentSession();
+		Sprint sprint = sprintDao.findByProjectIdandSprintNumber(scrumprojektid, sprintnumber);
+		sprintDao.closeCurrentSession();
+		return sprint;
+	}
+	
 	public void delete(Integer id) {
 		sprintDao.openCurrentSessionwithTransaction();
 		Sprint sprint = sprintDao.findById(id);
