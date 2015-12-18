@@ -5,19 +5,19 @@ import java.util.List;
 
 public class UserStory implements Serializable {
 	
-	private Integer	id;
-	private Integer	prioritaet;
-	private String	thema;
-	private String	beschreibung;
-	private Integer	aufwandintagen;
-	private String	akzeptanzkriterien;
-	private Integer	platzierung;
-	
+	private Integer					id;
+	private Integer					prioritaet;
+	private String					thema;
+	private String					beschreibung;
+	private Integer					aufwandintagen;
+	private String					akzeptanzkriterien;
+	private Integer					platzierung;
+									
 	private ProductBacklog			productbacklog;
-	private SprintBacklog			sprintbacklog;
+	private Sprint					sprint;
 	private List<UserStoryTask>		userstorytask;
 	private List<DefinitionOfDone>	definitionOfDone;
-	
+									
 	public UserStory() {
 	
 	}
@@ -106,12 +106,12 @@ public class UserStory implements Serializable {
 		this.productbacklog = productbacklog;
 	}
 	
-	public SprintBacklog getSprintbacklog() {
-		return sprintbacklog;
+	public Sprint getSprint() {
+		return sprint;
 	}
 	
-	public void setSprintbacklog(SprintBacklog sprintbacklog) {
-		this.sprintbacklog = sprintbacklog;
+	public void setSprint(Sprint sprint) {
+		this.sprint = sprint;
 	}
 	
 	public List<UserStoryTask> getUserstorytask() {

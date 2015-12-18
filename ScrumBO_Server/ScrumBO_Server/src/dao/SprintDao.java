@@ -15,7 +15,7 @@ public class SprintDao implements DaoInterface<Sprint, Integer> {
 	private Session			currentSession		= null;
 	private Transaction		currentTransaction	= null;
 	private static String	hibernateconfigfilename;
-	
+							
 	public SprintDao(String hibernateconfigfilename) {
 		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
@@ -77,6 +77,13 @@ public class SprintDao implements DaoInterface<Sprint, Integer> {
 		return sprint;
 	}
 	
+	public Sprint findByProjectIdandCount(Integer count, Integer scrumprojektid) {
+		Sprint sprint = (Sprint) getCurrentSession().createQuery(
+				"from Sprint where sprint_nummer like'" + count + "' AND scrumprojekt_id like'" + scrumprojektid + "'")
+				.uniqueResult();
+		return sprint;
+	}
+	
 	public void delete(Sprint entity) {
 		getCurrentSession().delete(entity);
 	}
@@ -91,6 +98,26 @@ public class SprintDao implements DaoInterface<Sprint, Integer> {
 		for (Sprint sprint : sprintListe) {
 			delete(sprint);
 		}
+	}
+	
+	public Integer countSprintsToProject(Integer scrumprojektid) {
+		Integer count = 0;
+		List<Sprint> sprintListe = (List<Sprint>) getCurrentSession()
+				.createQuery("from Sprint where scrumprojekt_id like'" + scrumprojektid + "'").list();
+		for (int i = 0; i < sprintListe.size(); i++) {
+			if (sprintListe.get(i).getSprintnummer() > count) {
+				count = sprintListe.get(i).getSprintnummer();
+			}
+		}
+		return count;
+	}
+	
+	public Integer countSprintsAnzahlToProject(Integer scrumprojektid) {
+		Integer count = 0;
+		List<Sprint> sprintListe = (List<Sprint>) getCurrentSession()
+				.createQuery("from Sprint where scrumprojekt_id like'" + scrumprojektid + "'").list();
+		count = sprintListe.size();
+		return count;
 	}
 	
 }

@@ -5,15 +5,17 @@ import java.io.Serializable;
 public class SprintDTO implements Serializable {
 	
 	private Integer				id;
+	private Integer				sprintnummer;
 	private ScrumprojektDTO		scrumprojekt;
 	private SprintBacklogDTO	sprintbacklog;
-	
+								
 	public SprintDTO() {
 	
 	}
 	
-	public SprintDTO(Integer id) {
+	public SprintDTO(Integer id, Integer sprintnummer) {
 		this.id = id;
+		this.sprintnummer = sprintnummer;
 	}
 	
 	public Integer getId() {
@@ -22,6 +24,14 @@ public class SprintDTO implements Serializable {
 	
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	
+	public Integer getSprintnummer() {
+		return sprintnummer;
+	}
+	
+	public void setSprintnummer(Integer sprintnummer) {
+		this.sprintnummer = sprintnummer;
 	}
 	
 	public ScrumprojektDTO getScrumprojekt() {

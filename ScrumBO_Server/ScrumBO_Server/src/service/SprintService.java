@@ -32,6 +32,13 @@ public class SprintService {
 		return sprint;
 	}
 	
+	public Sprint findByProjectIdandCount(Integer count, Integer scrumprojektid) {
+		sprintDao.openCurrentSession();
+		Sprint sprint = sprintDao.findByProjectIdandCount(count, scrumprojektid);
+		sprintDao.closeCurrentSession();
+		return sprint;
+	}
+	
 	public void delete(Integer id) {
 		sprintDao.openCurrentSessionwithTransaction();
 		Sprint sprint = sprintDao.findById(id);
@@ -54,6 +61,22 @@ public class SprintService {
 	
 	public SprintDao sprintDao() {
 		return sprintDao;
+	}
+	
+	public Integer countSprintsToProject(Integer scrumprojektid) {
+		Integer count = 0;
+		sprintDao.openCurrentSession();
+		count = sprintDao.countSprintsToProject(scrumprojektid);
+		sprintDao.closeCurrentSession();
+		return count;
+	}
+	
+	public Integer countSprintsAnzahlToProject(Integer scrumprojektid) {
+		Integer count = 0;
+		sprintDao.openCurrentSession();
+		count = sprintDao.countSprintsAnzahlToProject(scrumprojektid);
+		sprintDao.closeCurrentSession();
+		return count;
 	}
 	
 }

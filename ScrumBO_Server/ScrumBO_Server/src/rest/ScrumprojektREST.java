@@ -27,10 +27,14 @@ import model.Benutzer;
 import model.Benutzer_Benutzerrolle_Scrumprojekt;
 import model.ProductBacklog;
 import model.Scrumprojekt;
+import model.Sprint;
+import model.SprintBacklog;
 import service.BenutzerService;
 import service.Benutzer_Benutzerrolle_ScrumprojektService;
 import service.ProductBacklogService;
 import service.ScrumprojektService;
+import service.SprintBacklogService;
+import service.SprintService;
 
 @Path("/scrumprojekt")
 public class ScrumprojektREST {
@@ -207,33 +211,41 @@ public class ScrumprojektREST {
 		String projectdetails = b.toString();
 		
 		Gson gson = new Gson();
-		ScrumprojektDTO scrumprojektDTO = gson.fromJson(projectdetails, ScrumprojektDTO.class);
-		Scrumprojekt scrumprojekt = new Scrumprojekt();
-		BenutzerService benServ = new BenutzerService(hibernateconfigfilename);
-		List<Benutzer> benutzerListe = new LinkedList<Benutzer>();
-		// for (int i = 0; i < scrumprojektDTO.getBenutzer().size(); i++) {
-		// Benutzer benutzer = new Benutzer();
-		// benutzer =
-		// benServ.findById(scrumprojektDTO.getBenutzer().get(i).getId());
-		// benutzerListe.add(benutzer);
-		// }
-		List<ProductBacklog> productbacklogListe = new LinkedList<ProductBacklog>();
-		ProductBacklog productbacklog = new ProductBacklog();
-		productbacklog.setVersion(1);
-		scrumprojekt.setProjektname(scrumprojektDTO.getProjektname());
-		scrumprojekt.setPasswort(scrumprojektDTO.getPasswort());
-		// scrumprojekt.setBenutzer(benutzerListe);
-		productbacklog.setScrumprojekt(scrumprojekt);
-		productbacklogListe.add(productbacklog);
-		scrumprojekt.setProductbacklog(productbacklogListe);
 		
 		ScrumprojektService sps = new ScrumprojektService(hibernateconfigfilename);
 		BenutzerService bs = new BenutzerService(hibernateconfigfilename);
-		Benutzer benutzer = bs.findByEmail(email);
 		Benutzer_Benutzerrolle_ScrumprojektService bss = new Benutzer_Benutzerrolle_ScrumprojektService(
 				hibernateconfigfilename);
+		SprintBacklogService sprintbacklogService = new SprintBacklogService(hibernateconfigfilename);
+		SprintService sprintService = new SprintService(hibernateconfigfilename);
+		
+		ScrumprojektDTO scrumprojektDTO = gson.fromJson(projectdetails, ScrumprojektDTO.class);
+		
+		Scrumprojekt scrumprojekt = new Scrumprojekt();
+		Benutzer benutzer = bs.findByEmail(email);
+		ProductBacklog productbacklog = new ProductBacklog();
+		Benutzer_Benutzerrolle_Scrumprojekt bssmodel = new Benutzer_Benutzerrolle_Scrumprojekt();
+		SprintBacklog sprintbacklog = new SprintBacklog();
+		Sprint sprint = new Sprint();
+		
+		Integer sprintbacklogid = sprintbacklogService.findAll().size() + 1;
+		sprintbacklog.setId(sprintbacklogid);
+		sprintbacklogService.persist(sprintbacklog);
+		sprintbacklog = sprintbacklogService.findById(sprintbacklogid);
+		
+		List<ProductBacklog> productbacklogListe = new LinkedList<ProductBacklog>();
 		List<Benutzer_Benutzerrolle_Scrumprojekt> bssliste = bss.findAll();
-		Benutzer_Benutzerrolle_Scrumprojekt bssmodel = null;
+		
+		productbacklog.setVersion(1);
+		
+		scrumprojekt.setProjektname(scrumprojektDTO.getProjektname());
+		scrumprojekt.setPasswort(scrumprojektDTO.getPasswort());
+		
+		productbacklog.setScrumprojekt(scrumprojekt);
+		productbacklogListe.add(productbacklog);
+		
+		scrumprojekt.setProductbacklog(productbacklogListe);
+		
 		for (int i = 0; i < bssliste.size(); i++) {
 			if (bssliste.get(i).getPk().getBenutzerId() == benutzer.getId()
 					&& bssliste.get(i).getPk().getBenutzerrollenId() == 1) {
@@ -251,6 +263,11 @@ public class ScrumprojektREST {
 			pk.setScrumprojektId(projectid);
 			bssmodel.setPk(pk);
 			bss.persist(bssmodel);
+			
+			sprint.setSprintnummer(1);
+			sprint.setScrumprojekt(sps.findById(projectid));
+			sprint.setSprintbacklog(sprintbacklog);
+			sprintService.persist(sprint);
 			output = "Project erfolgreich erstellt";
 		} catch (Exception e) {
 			e.printStackTrace();

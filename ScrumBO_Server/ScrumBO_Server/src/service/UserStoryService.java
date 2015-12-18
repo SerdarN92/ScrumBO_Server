@@ -53,6 +53,13 @@ public class UserStoryService {
 		return userstoryListe;
 	}
 	
+	public List<UserStory> findAllBySprintId(Integer id) {
+		userstoryDao.openCurrentSession();
+		List<UserStory> userstoryListe = userstoryDao.findAllBySprintId(id);
+		userstoryDao.closeCurrentSession();
+		return userstoryListe;
+	}
+	
 	public void deleteAll() {
 		userstoryDao.openCurrentSessionwithTransaction();
 		userstoryDao.deleteAll();

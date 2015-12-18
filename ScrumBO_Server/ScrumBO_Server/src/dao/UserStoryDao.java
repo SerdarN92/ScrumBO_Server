@@ -15,7 +15,7 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 	private Session			currentSession		= null;
 	private Transaction		currentTransaction	= null;
 	private static String	hibernateconfigfilename;
-	
+							
 	public UserStoryDao(String hibernateconfigfilename) {
 		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
@@ -89,6 +89,12 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 	public List<UserStory> findAllByProductBacklogId(Integer id) {
 		List<UserStory> userstoryListe = (List<UserStory>) getCurrentSession()
 				.createQuery("from UserStory where productbacklog_id like'" + id + "'").list();
+		return userstoryListe;
+	}
+	
+	public List<UserStory> findAllBySprintId(Integer id) {
+		List<UserStory> userstoryListe = (List<UserStory>) getCurrentSession()
+				.createQuery("from UserStory where sprint_id like'" + id + "'").list();
 		return userstoryListe;
 	}
 	

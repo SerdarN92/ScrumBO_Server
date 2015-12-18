@@ -22,48 +22,48 @@ public class UserStory {
 	@Id
 	@GeneratedValue
 	@Column(name = "userstory_id", unique = true, nullable = false)
-	private Integer id;
-	
+	private Integer					id;
+									
 	@Column(name = "prioritaet", nullable = false)
-	private Integer prioritaet;
-	
+	private Integer					prioritaet;
+									
 	@Column(name = "thema", nullable = false)
-	private String thema;
-	
+	private String					thema;
+									
 	@Column(name = "beschreibung", nullable = false)
-	private String beschreibung;
-	
+	private String					beschreibung;
+									
 	@Column(name = "aufwandintagen", nullable = false)
-	private Integer aufwandintagen;
-	
+	private Integer					aufwandintagen;
+									
 	@Column(name = "akzeptanzkriterien", nullable = false)
-	private String akzeptanzkriterien;
-	
+	private String					akzeptanzkriterien;
+									
 	@Column(name = "platzierung", unique = true, nullable = true)
-	private Integer platzierung;
-	
+	private Integer					platzierung;
+									
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "productbacklog_id", nullable = true)
-	private ProductBacklog productbacklog;
-	
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "sprintbacklog_id", nullable = true)
-	private SprintBacklog sprintbacklog;
-	
+	private ProductBacklog			productbacklog;
+									
+	@ManyToOne(fetch = FetchType.EAGER)
+	@JoinColumn(name = "sprint_id", nullable = true)
+	private Sprint					sprint;
+									
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "userstory")
 	@Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE,
 			org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST,
 			org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
-	private List<UserStoryTask> userstorytask;
-	
+	private List<UserStoryTask>		userstorytask;
+									
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "userstory")
 	@Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE,
 			org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST,
 			org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
-	private List<DefinitionOfDone> definitionofdone;
-	
+	private List<DefinitionOfDone>	definitionofdone;
+									
 	public UserStory() {
 	
 	}
@@ -142,12 +142,12 @@ public class UserStory {
 		this.productbacklog = productbacklog;
 	}
 	
-	public SprintBacklog getSprintbacklog() {
-		return sprintbacklog;
+	public Sprint getSprint() {
+		return sprint;
 	}
 	
-	public void setSprintbacklog(SprintBacklog sprintbacklog) {
-		this.sprintbacklog = sprintbacklog;
+	public void setSprint(Sprint sprint) {
+		this.sprint = sprint;
 	}
 	
 	public List<UserStoryTask> getUserstorytask() {

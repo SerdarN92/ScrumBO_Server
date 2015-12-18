@@ -5,19 +5,19 @@ import java.util.List;
 
 public class UserStoryDTO implements Serializable {
 	
-	private Integer	id;
-	private Integer	prioritaet;
-	private String	thema;
-	private String	beschreibung;
-	private Integer	aufwandintagen;
-	private String	akzeptanzkriterien;
-	private Integer	platzierung;
-	
+	private Integer						id;
+	private Integer						prioritaet;
+	private String						thema;
+	private String						beschreibung;
+	private Integer						aufwandintagen;
+	private String						akzeptanzkriterien;
+	private Integer						platzierung;
+										
 	private ProductBacklogDTO			productbacklog;
-	private SprintBacklogDTO			sprintbacklog;
+	private SprintDTO					sprint;
 	private List<UserStoryTaskDTO>		userstorytask;
 	private List<DefinitionOfDoneDTO>	definitionOfDone;
-	
+										
 	public UserStoryDTO() {
 	
 	}
@@ -97,12 +97,12 @@ public class UserStoryDTO implements Serializable {
 		this.productbacklog = productbacklog;
 	}
 	
-	public SprintBacklogDTO getSprintbacklog() {
-		return sprintbacklog;
+	public SprintDTO getSprint() {
+		return sprint;
 	}
 	
-	public void setSprintbacklog(SprintBacklogDTO sprintbacklog) {
-		this.sprintbacklog = sprintbacklog;
+	public void setSprintbacklog(SprintDTO sprint) {
+		this.sprint = sprint;
 	}
 	
 	public List<UserStoryTaskDTO> getUserstorytask() {

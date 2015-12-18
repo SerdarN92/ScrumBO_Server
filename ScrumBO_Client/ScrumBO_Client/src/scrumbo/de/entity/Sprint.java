@@ -5,15 +5,17 @@ import java.io.Serializable;
 public class Sprint implements Serializable {
 	
 	private Integer			id;
+	private Integer			sprintnummer;
 	private Scrumprojekt	scrumprojekt;
 	private SprintBacklog	sprintbacklog;
-	
+							
 	public Sprint() {
 	
 	}
 	
-	public Sprint(Integer id) {
+	public Sprint(Integer id, Integer sprintnummer) {
 		this.id = id;
+		this.sprintnummer = sprintnummer;
 	}
 	
 	public Integer getId() {
@@ -22,6 +24,14 @@ public class Sprint implements Serializable {
 	
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	
+	public Integer getSprintnummer() {
+		return sprintnummer;
+	}
+	
+	public void setSprintnummer(Integer sprintnummer) {
+		this.sprintnummer = sprintnummer;
 	}
 	
 	public Scrumprojekt getScrumprojekt() {

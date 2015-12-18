@@ -3,7 +3,6 @@ package rest;
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.List;
 
 import javax.ws.rs.Consumes;
 import javax.ws.rs.POST;
@@ -14,9 +13,9 @@ import javax.ws.rs.core.Response;
 import com.google.gson.Gson;
 
 import dto.UserStoryTaskDTO;
-import model.Benutzer;
+import model.Taskstatus;
 import model.UserStoryTask;
-import service.BenutzerService;
+import service.TaskstatusService;
 import service.UserStoryTaskService;
 
 @Path("/userstorytask")
@@ -46,14 +45,22 @@ public class UserStoryTaskREST {
 		UserStoryTaskService userstorytaskService = new UserStoryTaskService(hibernateconfigfilename);
 		UserStoryTask userstorytask = new UserStoryTask();
 		userstorytask = userstorytaskService.findById(userstorytaskDTO.getId());
-		userstorytask.setAufwandinstunden(userstorytaskDTO.getAufwandinstunden());
-		BenutzerService benutzerService = new BenutzerService(hibernateconfigfilename);
-		Benutzer old = benutzerService.findById(userstorytaskDTO.getBenutzer().getId());
-		List<UserStoryTask> liste = old.getUserstorytask();
-		benutzerService.update(userstorytask.getBenutzer());
+		TaskstatusService taskstatusService = new TaskstatusService(hibernateconfigfilename);
+		Taskstatus taskstatusold = new Taskstatus();
+		Taskstatus taskstatusnew = new Taskstatus();
+		taskstatusold = taskstatusService.findById(userstorytask.getTaskstatus().getId());
+		taskstatusnew = taskstatusService.findById(userstorytaskDTO.getTaskstatus().getId());
+		System.out.println("Taskstatusold: " + taskstatusold.getId());
+		System.out.println("Taskstatusnew: " + taskstatusnew.getId());
+		if (taskstatusold.getId() != taskstatusnew.getId()) {
+			userstorytask.setTaskstatus(taskstatusnew);
+		}
+		
 		String output = "";
 		try {
-			userstorytaskService.update(userstorytask);
+			if (taskstatusold.getId() != taskstatusnew.getId()) {
+				userstorytaskService.update(userstorytask);
+			}
 			output = "User Story Task erfolgreich geupdated";
 		} catch (Exception e) {
 			e.printStackTrace();

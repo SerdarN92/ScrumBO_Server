@@ -79,7 +79,7 @@ public class FXMLUserCreateController implements Initializable {
 	private Text			passwordValidFail;
 	@FXML
 	private Text			roleValidFail;
-	
+							
 	@FXML
 	private void handleBackButtonCreateUser(ActionEvent event) throws IOException {
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/FXMLStartfenster.fxml"));
@@ -134,8 +134,8 @@ public class FXMLUserCreateController implements Initializable {
 					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 					conn.setDoOutput(true);
 					conn.setRequestProperty("Content-Type", "application/json");
-					conn.setConnectTimeout(5000);
-					conn.setReadTimeout(5000);
+					conn.setConnectTimeout(50000);
+					conn.setReadTimeout(50000);
 					conn.setRequestMethod("POST");
 					
 					OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());

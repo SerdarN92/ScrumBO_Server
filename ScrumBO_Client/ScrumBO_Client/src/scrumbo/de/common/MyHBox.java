@@ -40,7 +40,7 @@ public class MyHBox extends HBox {
 	private final StackPane	taskPane3		= new StackPane();
 	private Integer			bla				= 0;
 	private Pane			currentPane		= new Pane();
-	
+											
 	private void initMyHBox() {
 		prioritaet.setText(userstory.getPrioritaet().toString());
 		vboxprioritaet.setMinWidth(100);
@@ -332,8 +332,10 @@ public class MyHBox extends HBox {
 		
 		initMyHBox();
 		
-		for (int i = 0; i < userstory.getUserstorytask().size(); i++) {
-			addTask(userstory.getUserstorytask().get(i));
+		if (userstory.getUserstorytask() != null) {
+			for (int i = 0; i < userstory.getUserstorytask().size(); i++) {
+				addTask(userstory.getUserstorytask().get(i));
+			}
 		}
 		
 	}

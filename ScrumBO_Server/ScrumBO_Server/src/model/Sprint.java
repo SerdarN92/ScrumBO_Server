@@ -18,15 +18,18 @@ public class Sprint {
 	@Id
 	@GeneratedValue
 	@Column(name = "sprint_id", unique = true, nullable = false)
-	private Integer id;
-	
+	private Integer			id;
+							
+	@Column(name = "sprint_nummer", nullable = false)
+	private Integer			sprintnummer;
+							
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "scrumprojekt_id", nullable = false)
-	private Scrumprojekt scrumprojekt;
-	
+	private Scrumprojekt	scrumprojekt;
+							
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private SprintBacklog sprintbacklog;
-	
+	private SprintBacklog	sprintbacklog;
+							
 	public Sprint() {
 	
 	}
@@ -37,6 +40,14 @@ public class Sprint {
 	
 	public void setId(Integer id) {
 		this.id = id;
+	}
+	
+	public Integer getSprintnummer() {
+		return sprintnummer;
+	}
+	
+	public void setSprintnummer(Integer sprintnummer) {
+		this.sprintnummer = sprintnummer;
 	}
 	
 	public Scrumprojekt getScrumprojekt() {
