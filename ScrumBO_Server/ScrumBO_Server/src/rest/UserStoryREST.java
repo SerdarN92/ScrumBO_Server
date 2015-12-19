@@ -211,4 +211,46 @@ public class UserStoryREST {
 		return Response.status(200).entity(output).build();
 	}
 	
+	@Path("/sucheNULL/productbacklogid/{productbacklogid}/{hibernateconfigfilename}")
+	@GET
+	@Produces("application/json" + ";charset=utf-8")
+	public Response getUserStoryNULLByProductBacklogId(@PathParam("productbacklogid") Integer productbacklogid,
+			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
+		UserStoryService userstoryService = new UserStoryService(hibernateconfigfilename);
+		List<UserStory> userstoryListe = userstoryService.findAllNULLwithProductBacklogId(productbacklogid);
+		List<UserStoryDTO> userstoryDTOListe = new LinkedList<UserStoryDTO>();
+		for (int i = 0; i < userstoryListe.size(); i++) {
+			UserStoryDTO userstoryDTO = new UserStoryDTO();
+			userstoryDTO.setId(userstoryListe.get(i).getId());
+			userstoryDTO.setPrioritaet(userstoryListe.get(i).getPrioritaet());
+			userstoryDTO.setThema(userstoryListe.get(i).getThema());
+			userstoryDTO.setBeschreibung(userstoryListe.get(i).getBeschreibung());
+			userstoryDTO.setAkzeptanzkriterien(userstoryListe.get(i).getAkzeptanzkriterien());
+			userstoryDTO.setAufwandintagen(userstoryListe.get(i).getAufwandintagen());
+			List<UserStoryTaskDTO> userstoryTaskDTOListe = new LinkedList<UserStoryTaskDTO>();
+			for (int j = 0; j < userstoryListe.get(i).getUserstorytask().size(); j++) {
+				if (userstoryListe.get(i).getProductbacklog().getId() == productbacklogid) {
+					UserStoryTaskDTO userstoryTaskDTO = new UserStoryTaskDTO();
+					userstoryTaskDTO.setId(userstoryListe.get(i).getUserstorytask().get(j).getId());
+					userstoryTaskDTO.setBeschreibung(userstoryListe.get(i).getUserstorytask().get(j).getBeschreibung());
+					userstoryTaskDTO
+							.setAufwandinstunden(userstoryListe.get(i).getUserstorytask().get(j).getAufwandinstunden());
+					Benutzer benutzer = userstoryListe.get(i).getUserstorytask().get(j).getBenutzer();
+					BenutzerDTO benutzerDTO = new BenutzerDTO(benutzer.getId(), benutzer.getVorname(),
+							benutzer.getNachname(), benutzer.getPasswort(), benutzer.getEmail());
+					userstoryTaskDTO.setBenutzer(benutzerDTO);
+					Taskstatus taskstatus = userstoryListe.get(i).getUserstorytask().get(j).getTaskstatus();
+					TaskstatusDTO taskstatusDTO = new TaskstatusDTO(taskstatus.getId(), taskstatus.getBeschreibung());
+					userstoryTaskDTO.setTaskstatus(taskstatusDTO);
+					userstoryTaskDTOListe.add(userstoryTaskDTO);
+				}
+			}
+			userstoryDTO.setUserstorytask(userstoryTaskDTOListe);
+			userstoryDTOListe.add(userstoryDTO);
+		}
+		Gson gson = new Gson();
+		String output = gson.toJson(userstoryDTOListe);
+		return Response.status(200).entity(output).build();
+	}
+	
 }

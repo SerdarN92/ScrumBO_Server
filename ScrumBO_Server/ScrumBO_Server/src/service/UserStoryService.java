@@ -60,6 +60,13 @@ public class UserStoryService {
 		return userstoryListe;
 	}
 	
+	public List<UserStory> findAllNULLwithProductBacklogId(Integer productbacklogid) {
+		userstoryDao.openCurrentSession();
+		List<UserStory> userstoryListe = userstoryDao.findAllNULLwithProductBacklogId(productbacklogid);
+		userstoryDao.closeCurrentSession();
+		return userstoryListe;
+	}
+	
 	public void deleteAll() {
 		userstoryDao.openCurrentSessionwithTransaction();
 		userstoryDao.deleteAll();

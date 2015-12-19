@@ -57,6 +57,40 @@ public class BenutzerREST {
 		return Response.status(200).entity(listeBenutzerDTOJSON).build();
 	}
 	
+	@GET
+	@Path("/alle/scrumprojekt/{scrumprojektid}/{hibernateconfigfilename}")
+	@Produces("application/json" + ";charset=utf-8")
+	public Response getBenutzerOfProject(@PathParam("scrumprojektid") Integer scrumprojektid,
+			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) throws JSONException {
+		Benutzer_Benutzerrolle_ScrumprojektService bbsService = new Benutzer_Benutzerrolle_ScrumprojektService(
+				hibernateconfigfilename);
+				
+		BenutzerService bs = new BenutzerService(hibernateconfigfilename);
+		
+		List<Benutzer_Benutzerrolle_Scrumprojekt> listeAll = bbsService.findListByProjectId(scrumprojektid);
+		List<Benutzer> listeBenutzer = new LinkedList<Benutzer>();
+		for (int i = 0; i < listeAll.size(); i++) {
+			listeBenutzer.add(bs.findById(listeAll.get(i).getPk().getBenutzerId()));
+		}
+		
+		List<BenutzerDTO> listeBenutzerDTO = new LinkedList<BenutzerDTO>();
+		for (int i = 0; i < listeBenutzer.size(); i++) {
+			BenutzerDTO benutzerDTO = new BenutzerDTO();
+			benutzerDTO.setId(listeBenutzer.get(i).getId());
+			benutzerDTO.setVorname(listeBenutzer.get(i).getVorname());
+			benutzerDTO.setNachname(listeBenutzer.get(i).getNachname());
+			benutzerDTO.setPasswort(listeBenutzer.get(i).getPasswort());
+			benutzerDTO.setEmail(listeBenutzer.get(i).getEmail());
+			listeBenutzerDTO.add(benutzerDTO);
+		}
+		
+		JSONObject jsonObject = new JSONObject();
+		Gson gson = new Gson();
+		String listeBenutzerDTOJSON = gson.toJson(listeBenutzerDTO);
+		
+		return Response.status(200).entity(listeBenutzerDTOJSON).build();
+	}
+	
 	@Path("/suche/{email}/rolle/{hibernateconfigfilename}")
 	@GET
 	@Produces("application/json" + ";charset=utf-8")

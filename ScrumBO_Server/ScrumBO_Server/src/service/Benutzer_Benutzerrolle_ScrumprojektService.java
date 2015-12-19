@@ -39,6 +39,13 @@ public class Benutzer_Benutzerrolle_ScrumprojektService {
 		return benutzer;
 	}
 	
+	public List<Benutzer_Benutzerrolle_Scrumprojekt> findListByProjectId(Integer scrumprojektid) {
+		service.openCurrentSession();
+		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzer = service.findListByProjectId(scrumprojektid);
+		service.closeCurrentSession();
+		return benutzer;
+	}
+	
 	public void delete(Integer id) {
 		service.openCurrentSessionwithTransaction();
 		Benutzer_Benutzerrolle_Scrumprojekt benutzer = service.findById(id);

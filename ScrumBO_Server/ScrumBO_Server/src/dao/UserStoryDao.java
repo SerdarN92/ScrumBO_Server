@@ -98,6 +98,13 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 		return userstoryListe;
 	}
 	
+	public List<UserStory> findAllNULLwithProductBacklogId(Integer productbacklogid) {
+		List<UserStory> userstoryListe = (List<UserStory>) getCurrentSession().createQuery(
+				"from UserStory where productbacklog_id like'" + productbacklogid + "'" + "AND sprint_id IS NULL")
+				.list();
+		return userstoryListe;
+	}
+	
 	public void deleteAll() {
 		List<UserStory> userstoryListe = findAll();
 		for (UserStory userstory : userstoryListe) {

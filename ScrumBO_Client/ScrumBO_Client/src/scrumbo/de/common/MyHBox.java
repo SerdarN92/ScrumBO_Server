@@ -10,6 +10,7 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.input.ClipboardContent;
@@ -17,6 +18,7 @@ import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
@@ -274,7 +276,7 @@ public class MyHBox extends HBox {
 	}
 	
 	private void addTask(UserStoryTask userstorytask) {
-		final StackPane pane = new StackPane();
+		final GridPane pane = new GridPane();
 		pane.setMaxHeight(40);
 		pane.setMinHeight(40);
 		pane.setMaxWidth(150);
@@ -283,8 +285,16 @@ public class MyHBox extends HBox {
 				+ "-fx-border-color: black");
 				
 		Text taskText = new Text(userstorytask.getBeschreibung());
-		pane.getChildren().add(taskText);
-		pane.setAlignment(Pos.CENTER);
+		Text taskInfo = new Text("Benutzer: " + String.valueOf(userstorytask.getBenutzer().getVorname().charAt(0))
+				+ String.valueOf(userstorytask.getBenutzer().getNachname().charAt(0)) + ", Aufwand: "
+				+ userstorytask.getAufwandinstunden() + "h");
+		pane.setPadding(new Insets(1, 5, 1, 5));
+		pane.setVgap(2);
+		pane.addRow(0, taskText);
+		pane.addRow(1, taskInfo);
+		// pane.getChildren().add(taskText);
+		// pane.getChildren().add(taskInfo);
+		// pane.setAlignment(Pos.CENTER);
 		
 		pane.setOnDragDetected(new EventHandler<MouseEvent>() {
 			@Override

@@ -126,21 +126,21 @@ public class FXMLSprintBacklogController implements Initializable {
 	private void handleButtonAddUserStory(ActionEvent event) throws Exception {
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader(
-					getClass().getResource("/scrumbo/de/gui/FXMLSprintBacklogUserStory.fxml"));
+					getClass().getResource("/scrumbo/de/gui/FXMLSprintBacklogAddUserStory.fxml"));
 			Parent root1 = (Parent) fxmlLoader.load();
 			Stage stage = new Stage();
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.setScene(new Scene(root1));
-			// stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-			// @Override
-			// public void handle(WindowEvent event) {
-			// try {
-			// reload();
-			// } catch (IOException e) {
-			// e.printStackTrace();
-			// }
-			// }
-			// });
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent event) {
+					try {
+						reloadSprintBacklog();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				}
+			});
 			stage.show();
 		} catch (Exception e) {
 			e.printStackTrace();
