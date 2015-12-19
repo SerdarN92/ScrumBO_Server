@@ -49,8 +49,15 @@ public class MyHBox extends HBox {
 		vboxprioritaet.setAlignment(Pos.CENTER);
 		vboxprioritaet.getChildren().add(prioritaet);
 		vboxprioritaet.setStyle("-fx-border-style: solid;" + "-fx-border-width: 0.3;" + "-fx-border-color: black");
-		beschreibung.setText(userstory.getBeschreibung());
+		StringBuilder sb = new StringBuilder(userstory.getBeschreibung());
+		int i = 0;
+		while (i + 20 < sb.length() && (i = sb.lastIndexOf(" ", i + 20)) != -1) {
+			sb.replace(i, i + 1, "\n");
+		}
+		beschreibung.setText(sb.toString());
 		vboxuserstory.setMinWidth(183);
+		vboxuserstory.setMaxWidth(183);
+		beschreibung.setWrappingWidth(vboxuserstory.getWidth());
 		vboxuserstory.setAlignment(Pos.CENTER);
 		vboxuserstory.getChildren().add(beschreibung);
 		vboxuserstory.setStyle("-fx-border-style: solid;" + "-fx-border-width: 0.3;" + "-fx-border-color: black");
@@ -277,21 +284,32 @@ public class MyHBox extends HBox {
 	
 	private void addTask(UserStoryTask userstorytask) {
 		final GridPane pane = new GridPane();
-		pane.setMaxHeight(40);
 		pane.setMinHeight(40);
 		pane.setMaxWidth(150);
 		pane.setMinWidth(150);
 		pane.setStyle("-fx-border-radius: 10px; -fx-border-style: solid;" + "-fx-border-width: 0.3;"
 				+ "-fx-border-color: black");
 				
-		Text taskText = new Text(userstorytask.getBeschreibung());
 		Text taskInfo = new Text("Benutzer: " + String.valueOf(userstorytask.getBenutzer().getVorname().charAt(0))
 				+ String.valueOf(userstorytask.getBenutzer().getNachname().charAt(0)) + ", Aufwand: "
 				+ userstorytask.getAufwandinstunden() + "h");
 		pane.setPadding(new Insets(1, 5, 1, 5));
 		pane.setVgap(2);
-		pane.addRow(0, taskText);
-		pane.addRow(1, taskInfo);
+		StringBuilder sb = new StringBuilder(userstorytask.getBeschreibung());
+		int i = 0;
+		while (i + 20 < sb.length() && (i = sb.lastIndexOf(" ", i + 20)) != -1) {
+			sb.replace(i, i + 1, "\n");
+		}
+		String output = sb.toString();
+		String[] a = output.split("\n");
+		Integer zaehler = 0;
+		for (int j = 0; j < a.length; j++) {
+			Text text = new Text();
+			text.setText(a[j]);
+			pane.addRow(j, text);
+			zaehler = j;
+		}
+		pane.addRow(zaehler + 1, taskInfo);
 		// pane.getChildren().add(taskText);
 		// pane.getChildren().add(taskInfo);
 		// pane.setAlignment(Pos.CENTER);

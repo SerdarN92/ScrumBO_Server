@@ -42,36 +42,36 @@ import scrumbo.de.entity.UserStory;
 
 public class FXMLSprintBacklogController implements Initializable {
 	
-	Parent									root;
-	Scene									scene;
-	Stage									stage;
+	Parent								root;
+	Scene								scene;
+	Stage								stage;
 	@FXML
-	private Text							vorname;
+	private Text						vorname;
 	@FXML
-	private Text							nachname;
+	private Text						nachname;
 	@FXML
-	private Text							benutzerrolle;
+	private Text						benutzerrolle;
 	@FXML
-	private Text							projektname;
+	private Text						projektname;
 	@FXML
-	private Button							buttonLogout;
+	private Button						buttonLogout;
 	@FXML
-	private Button							buttonBack;
+	private Button						buttonBack;
 	@FXML
-	private Button							buttonAddUserStory;
+	private Button						buttonAddUserStory;
 	@FXML
-	private Button							buttonLoadSprint;
+	private Button						buttonLoadSprint;
 	@FXML
-	private Button							buttonCreateNewSprint;
+	private Button						buttonCreateNewSprint;
 	@FXML
-	private VBox							VBOXUserStories;
+	private VBox						VBOXUserStories;
 	@FXML
-	private Text							sprintNumber;
-											
-	public static ObservableList<UserStory>	dataSprintBacklog	= FXCollections.observableArrayList();
-	private static Integer					anzahlSprints		= 0;
-																
-	public static ObservableList<UserStory> getData() {
+	private Text						sprintNumber;
+										
+	public ObservableList<UserStory>	dataSprintBacklog	= FXCollections.observableArrayList();
+	private static Integer				anzahlSprints		= 0;
+															
+	public ObservableList<UserStory> getData() {
 		return dataSprintBacklog;
 	}
 	
@@ -81,13 +81,19 @@ public class FXMLSprintBacklogController implements Initializable {
 	
 	public void initLoadOldSprint() {
 		ladeAltenSprint(CurrentSprint.sprintnummer);
+		dataSprintBacklog.clear();
+		VBOXUserStories.getChildren().remove(0, VBOXUserStories.getChildren().size());
+		initSprintBacklog();
+		
+		ScrollPane sp = new ScrollPane();
+		sp.setFitToHeight(true);
+		sp.setContent(VBOXUserStories);
+		sp.setVisible(true);
+		
 		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.get(0).getId());
 		
-		for (int i = 1; i < VBOXUserStories.getChildren().size(); i++) {
-			VBOXUserStories.getChildren().remove(i);
-		}
-		
 		for (int i = 0; i < dataSprintBacklog.size(); i++) {
+			System.out.println(dataSprintBacklog.size());
 			UserStory userstory = dataSprintBacklog.get(i);
 			MyHBox hb = new MyHBox(userstory);
 			VBOXUserStories.getChildren().add(hb);
@@ -135,8 +141,11 @@ public class FXMLSprintBacklogController implements Initializable {
 				@Override
 				public void handle(WindowEvent event) {
 					try {
+						FXMLSprintBacklogAddUserStoryController.addedUserStoryTask = null;
+						FXMLSprintBacklogAddUserStoryController.currentUserStory = null;
 						reloadSprintBacklog();
-					} catch (IOException e) {
+						
+					} catch (Exception e) {
 						e.printStackTrace();
 					}
 				}
@@ -263,7 +272,6 @@ public class FXMLSprintBacklogController implements Initializable {
 				if (CurrentScrumprojekt.productbacklog.get(i).getId().equals(id))
 					platz = i;
 			}
-			System.out.println(CurrentSprint.id);
 			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstory/suche/sprintid/" + CurrentSprint.id
 					+ "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -418,9 +426,21 @@ public class FXMLSprintBacklogController implements Initializable {
 		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
 	}
 	
+	private Integer zaehler = 0;
+	
 	public void reloadSprintBacklog() throws IOException {
 		dataSprintBacklog.clear();
 		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.get(0).getId());
+		
+		for (int i = 1; i < VBOXUserStories.getChildren().size(); i++) {
+			VBOXUserStories.getChildren().remove(i);
+		}
+		
+		for (int i = 0; i < dataSprintBacklog.size(); i++) {
+			UserStory userstory = dataSprintBacklog.get(i);
+			MyHBox hb = new MyHBox(userstory);
+			VBOXUserStories.getChildren().add(hb);
+		}
 	}
 	
 }

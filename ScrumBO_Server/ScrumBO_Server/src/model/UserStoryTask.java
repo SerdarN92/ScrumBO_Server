@@ -17,30 +17,40 @@ public class UserStoryTask {
 	@Id
 	@GeneratedValue
 	@Column(name = "userstorytask_id", unique = true, nullable = false)
-	private Integer id;
-	
+	private Integer		id;
+						
 	@Column(name = "beschreibung", nullable = false)
-	private String beschreibung;
-	
+	private String		beschreibung;
+						
 	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "taskstatus_id", nullable = true)
-	private Taskstatus taskstatus;
-	
+	private Taskstatus	taskstatus;
+						
 	@Column(name = "aufwandinstunden", nullable = false)
-	private Integer aufwandinstunden;
-	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Integer		aufwandinstunden;
+						
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "benutzer_id", nullable = true, updatable = true)
-	private Benutzer benutzer;
-	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private Benutzer	benutzer;
+						
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "userstory_id", nullable = true, updatable = true)
-	private UserStory userstory;
-	
+	private UserStory	userstory;
+						
 	public UserStoryTask(String beschreibung, Taskstatus taskstatus, Integer aufwandinstunden) {
 		this.beschreibung = beschreibung;
 		this.taskstatus = taskstatus;
 		this.aufwandinstunden = aufwandinstunden;
+		
+	}
+	
+	public UserStoryTask(String beschreibung, Taskstatus taskstatus, Integer aufwandinstunden, Benutzer benutzer,
+			UserStory userstory) {
+		this.beschreibung = beschreibung;
+		this.taskstatus = taskstatus;
+		this.aufwandinstunden = aufwandinstunden;
+		this.benutzer = benutzer;
+		this.userstory = userstory;
 		
 	}
 	

@@ -50,8 +50,7 @@ public class UserStory {
 	@JoinColumn(name = "sprint_id", nullable = true)
 	private Sprint					sprint;
 									
-	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "userstory")
+	@OneToMany(fetch = FetchType.EAGER, mappedBy = "userstory")
 	@Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE,
 			org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST,
 			org.hibernate.annotations.CascadeType.DELETE_ORPHAN })

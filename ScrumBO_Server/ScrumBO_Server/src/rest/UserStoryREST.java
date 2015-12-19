@@ -22,10 +22,16 @@ import dto.UserStoryDTO;
 import dto.UserStoryTaskDTO;
 import model.Benutzer;
 import model.ProductBacklog;
+import model.Sprint;
 import model.Taskstatus;
 import model.UserStory;
+import model.UserStoryTask;
+import service.BenutzerService;
 import service.ProductBacklogService;
+import service.SprintService;
+import service.TaskstatusService;
 import service.UserStoryService;
+import service.UserStoryTaskService;
 
 @Path("/userstory")
 public class UserStoryREST {
@@ -176,6 +182,60 @@ public class UserStoryREST {
 		} catch (Exception e) {
 			e.printStackTrace();
 			output = "User Story wurde nicht erfolgreich geupdated";
+		}
+		return Response.status(200).entity(output).build();
+	}
+	
+	@POST
+	@Path("/updateTasks/{sprintid}/{hibernateconfigfilename}")
+	@Consumes("application/json" + ";charset=utf-8")
+	public Response updateUserStoryTasks(@PathParam("sprintid") Integer sprintId, InputStream input,
+			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
+		StringBuilder b = new StringBuilder();
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(input));
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				b.append(line);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String userstorydetails = b.toString();
+		Gson gson = new Gson();
+		UserStoryDTO userstoryDTO = gson.fromJson(userstorydetails, UserStoryDTO.class);
+		UserStoryService userstoryService = new UserStoryService(hibernateconfigfilename);
+		UserStory userstory = new UserStory();
+		userstory = userstoryService.findById(userstoryDTO.getId());
+		
+		UserStoryTaskService userstorytaskService = new UserStoryTaskService(hibernateconfigfilename);
+		TaskstatusService taskstatusService = new TaskstatusService(hibernateconfigfilename);
+		BenutzerService benutzerService = new BenutzerService(hibernateconfigfilename);
+		SprintService sprintService = new SprintService(hibernateconfigfilename);
+		Sprint sprint = new Sprint();
+		sprint = sprintService.findById(sprintId);
+		
+		for (int i = 0; i < userstoryDTO.getUserstorytask().size(); i++) {
+			if (!(userstory.getUserstorytask().contains(userstoryDTO.getUserstorytask().get(i)))) {
+				System.out.println(userstoryDTO.getUserstorytask().get(i).getBeschreibung());
+				UserStoryTask userstorytask = new UserStoryTask(
+						userstoryDTO.getUserstorytask().get(i).getBeschreibung(), taskstatusService.findById(1),
+						userstoryDTO.getUserstorytask().get(i).getAufwandinstunden(),
+						benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getBenutzer().getId()),
+						userstory);
+				userstorytaskService.persist(userstorytask);
+			}
+		}
+		
+		userstory.setSprint(sprint);
+		
+		String output = "";
+		try {
+			userstoryService.update(userstory);
+			output = "Tasks erfolgreich geupdated";
+		} catch (Exception e) {
+			e.printStackTrace();
+			output = "Tasks wurden nicht erfolgreich geupdated";
 		}
 		return Response.status(200).entity(output).build();
 	}

@@ -2,6 +2,7 @@ package scrumbo.de.controller;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.OutputStreamWriter;
 import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -9,6 +10,8 @@ import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import org.json.JSONObject;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -38,39 +41,49 @@ import javafx.util.Callback;
 import javafx.util.StringConverter;
 import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.CurrentSprint;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.entity.UserStoryTask;
 
 public class FXMLSprintBacklogAddUserStoryController implements Initializable {
 	
-	Parent										root;
-	Scene										scene;
+	Parent								root;
+	Scene								scene;
 	@FXML
-	private TextField							prioritaet;
+	private TextField					prioritaet;
 	@FXML
-	private TextField							thema;
+	private TextField					thema;
 	@FXML
-	private TextArea							beschreibung;
+	private TextArea					beschreibung;
 	@FXML
-	private TextArea							akzeptanzkriterien;
+	private TextArea					akzeptanzkriterien;
 	@FXML
-	private TextField							aufwandintagen;
+	private TextField					aufwandintagen;
 	@FXML
-	private Button								buttonAbbort;
+	private Button						buttonAbbort;
 	@FXML
-	private Button								buttonAddTask;
+	private Button						buttonAddTask;
 	@FXML
-	private ComboBox<UserStory>					comboBoxUserStory		= new ComboBox<>();
-																		
-	private List<UserStory>						userstoryList			= new LinkedList<UserStory>();
-	protected static UserStory					currentUserStory		= null;
+	private Button						buttonSave;
 	@FXML
-	protected static ListView<UserStoryTask>	listViewUserStoryTask	= new ListView<>();
-	private static UserStoryTask				selectedUserStoryTask	= new UserStoryTask();
-	protected static UserStoryTask				addedUserStoryTask		= new UserStoryTask();
-																		
+	private ComboBox<UserStory>			comboBoxUserStory		= new ComboBox<>();
+																
+	private List<UserStory>				userstoryList			= new LinkedList<UserStory>();
+	protected static UserStory			currentUserStory		= null;
+	@FXML
+	protected ListView<UserStoryTask>	listViewUserStoryTask	= new ListView<>();
+	private static UserStoryTask		selectedUserStoryTask	= new UserStoryTask();
+	protected static UserStoryTask		addedUserStoryTask		= new UserStoryTask();
+																
 	@FXML
 	private void handleButtonAbbort(ActionEvent event) throws Exception {
+		comboBoxUserStory = null;
+		userstoryList = null;
+		currentUserStory = null;
+		listViewUserStoryTask = null;
+		selectedUserStoryTask = null;
+		addedUserStoryTask = null;
+		
 		Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 	}
@@ -88,6 +101,7 @@ public class FXMLSprintBacklogAddUserStoryController implements Initializable {
 				public void handle(WindowEvent event) {
 					try {
 						listViewUserStoryTask.getItems().add(addedUserStoryTask);
+						currentUserStory.getUserstorytask().add(addedUserStoryTask);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -100,8 +114,39 @@ public class FXMLSprintBacklogAddUserStoryController implements Initializable {
 	}
 	
 	@FXML
-	private void handleButtonAdd(ActionEvent event) throws Exception {
-	
+	private void handleButtonSave(ActionEvent event) throws Exception {
+		Gson gson = new Gson();
+		String output = gson.toJson(currentUserStory);
+		System.out.println(currentUserStory.getId());
+		
+		JSONObject jsonObject = new JSONObject(output);
+		
+		try {
+			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstory/updateTasks/" + CurrentSprint.id
+					+ "/" + ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setDoOutput(true);
+			conn.setRequestProperty("Content-Type", "application/json");
+			conn.setConnectTimeout(50000);
+			conn.setReadTimeout(50000);
+			conn.setRequestMethod("POST");
+			
+			OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+			out.write(jsonObject.toString());
+			out.close();
+			
+			if (conn.getResponseMessage().equals("Tasks erfolgreich geupdated"))
+				System.out.println("\nRest Service Invoked Successfully..");
+			conn.disconnect();
+			
+			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
+			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+		} catch (Exception e) {
+			System.out.println("\nError while calling Rest service");
+			e.printStackTrace();
+			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
+			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+		}
 	}
 	
 	@Override
@@ -109,11 +154,10 @@ public class FXMLSprintBacklogAddUserStoryController implements Initializable {
 		buttonAddTask.setDisable(true);
 		ladeUserStory();
 		initComboBox();
-		
+		initListView();
 	}
 	
-	protected static void initListView() {
-		System.out.println("LISTVIEW");
+	protected void initListView() {
 		ObservableList<UserStoryTask> options = FXCollections.observableArrayList();
 		
 		if (currentUserStory != null) {
@@ -157,7 +201,6 @@ public class FXMLSprintBacklogAddUserStoryController implements Initializable {
 				
 				if (click.getClickCount() == 2) {
 					selectedUserStoryTask = listViewUserStoryTask.getSelectionModel().getSelectedItem();
-					System.out.println(selectedUserStoryTask.getBeschreibung());
 				}
 			}
 		});

@@ -23,29 +23,28 @@ public class Benutzer {
 	@Id
 	@GeneratedValue
 	@Column(name = "benutzer_id", unique = true, nullable = false)
-	private Integer id;
-	
+	private Integer				id;
+								
 	@Column(name = "vorname", nullable = false)
-	private String vorname;
-	
+	private String				vorname;
+								
 	@Column(name = "nachname", nullable = false)
-	private String nachname;
-	
+	private String				nachname;
+								
 	@Column(name = "passwort", nullable = false)
-	private String passwort;
-	
+	private String				passwort;
+								
 	@Column(name = "email", unique = true, nullable = false)
-	private String email;
-	
+	private String				email;
+								
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "benutzer")
-	@Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE,
-			org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST,
-			org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
+	@Cascade({ org.hibernate.annotations.CascadeType.DELETE, org.hibernate.annotations.CascadeType.MERGE,
+			org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
 	@JsonSerialize
 	@JsonDeserialize
-	private List<UserStoryTask> userstorytask;
-	
+	private List<UserStoryTask>	userstorytask;
+								
 	public Benutzer() {
 	
 	}
