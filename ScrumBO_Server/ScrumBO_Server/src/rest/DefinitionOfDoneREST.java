@@ -15,7 +15,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
@@ -36,22 +35,19 @@ public class DefinitionOfDoneREST {
 		DefinitionOfDoneService dodService = new DefinitionOfDoneService(hibernateconfigfilename);
 		UserStoryService userstoryService = new UserStoryService(hibernateconfigfilename);
 		UserStory userstory = userstoryService.findById(userstoryId);
-		List<DefinitionOfDone> dodliste = dodService.findByUserstoryId(userstoryId);
-		List<DefinitionOfDoneDTO> dodDTOliste = new LinkedList<DefinitionOfDoneDTO>();
-		for (int i = 0; i < dodliste.size(); i++) {
-			DefinitionOfDoneDTO dodDTO = new DefinitionOfDoneDTO();
-			dodDTO.setId(dodliste.get(i).getId());
-			dodDTO.setKriterium(dodliste.get(i).getKriterium());
-			dodDTO.setStatus(dodliste.get(i).getStatus());
-			dodDTOliste.add(dodDTO);
+		List<DefinitionOfDone> dodListe = dodService.findByUserstoryId(userstoryId);
+		List<DefinitionOfDoneDTO> dodDTOListe = new LinkedList<DefinitionOfDoneDTO>();
+		for (int i = 0; i < dodListe.size(); i++) {
+			DefinitionOfDoneDTO dodDTO = new DefinitionOfDoneDTO(dodListe.get(i).getId(),
+					dodListe.get(i).getKriterium(), dodListe.get(i).getStatus());
+			dodDTOListe.add(dodDTO);
 			
 		}
 		
-		JSONObject jsonObject = new JSONObject();
 		Gson gson = new Gson();
-		String ab = gson.toJson(dodDTOliste);
+		String output = gson.toJson(dodDTOListe);
 		
-		return Response.status(200).entity(ab).build();
+		return Response.status(200).entity(output).build();
 	}
 	
 	@POST
@@ -76,11 +72,8 @@ public class DefinitionOfDoneREST {
 		UserStoryService userstoryService = new UserStoryService(hibernateconfigfilename);
 		UserStory userstory = userstoryService.findById(definitionOfDoneDTO.getUserstory().getId());
 		DefinitionOfDoneService definitionOfDoneService = new DefinitionOfDoneService(hibernateconfigfilename);
-		DefinitionOfDone definitionOfDone = new DefinitionOfDone();
-		definitionOfDone.setKriterium(definitionOfDoneDTO.getKriterium());
-		definitionOfDone.setStatus(definitionOfDoneDTO.getStatus());
-		definitionOfDone.setUserstory(userstory);
-		
+		DefinitionOfDone definitionOfDone = new DefinitionOfDone(definitionOfDoneDTO.getKriterium(),
+				definitionOfDoneDTO.getStatus(), userstory);
 		definitionOfDoneService.persist(definitionOfDone);
 		
 		String output = "Definition Of Done erfolgreich erstellt";
@@ -106,15 +99,14 @@ public class DefinitionOfDoneREST {
 		}
 		String definitionOfDoneDetails = b.toString();
 		Gson gson = new Gson();
+		
 		DefinitionOfDoneDTO definitionOfDoneDTO = gson.fromJson(definitionOfDoneDetails, DefinitionOfDoneDTO.class);
-		DefinitionOfDone definitionOfDone = new DefinitionOfDone();
-		DefinitionOfDoneService service = new DefinitionOfDoneService(hibernateconfigfilename);
-		definitionOfDone = service.findById(definitionOfDoneDTO.getId());
-		definitionOfDone.setKriterium(definitionOfDoneDTO.getKriterium());
-		definitionOfDone.setStatus(definitionOfDoneDTO.getStatus());
+		DefinitionOfDoneService definitionOfDoneService = new DefinitionOfDoneService(hibernateconfigfilename);
+		DefinitionOfDone definitionOfDone = new DefinitionOfDone(definitionOfDoneDTO.getId(),
+				definitionOfDoneDTO.getKriterium(), definitionOfDoneDTO.getStatus());
 		String output = "";
 		try {
-			service.update(definitionOfDone);
+			definitionOfDoneService.update(definitionOfDone);
 			output = "Definition Of Done erfolgreich geupdated";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -141,11 +133,11 @@ public class DefinitionOfDoneREST {
 		String definitionOfDoneDetails = b.toString();
 		Gson gson = new Gson();
 		DefinitionOfDoneDTO definitionOfDoneDTO = gson.fromJson(definitionOfDoneDetails, DefinitionOfDoneDTO.class);
-		DefinitionOfDoneService service = new DefinitionOfDoneService(hibernateconfigfilename);
+		DefinitionOfDoneService definitionOfDoneService = new DefinitionOfDoneService(hibernateconfigfilename);
 		
 		String output = "";
 		try {
-			service.delete(definitionOfDoneDTO.getId());
+			definitionOfDoneService.delete(definitionOfDoneDTO.getId());
 			output = "Definition Of Done erfolgreich gelöscht";
 		} catch (Exception e) {
 			e.printStackTrace();

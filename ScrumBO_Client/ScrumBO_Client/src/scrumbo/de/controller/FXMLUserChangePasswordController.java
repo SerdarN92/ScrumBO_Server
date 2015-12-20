@@ -37,7 +37,7 @@ public class FXMLUserChangePasswordController implements Initializable {
 	private Text			txtName;
 	@FXML
 	private Text			txtPasswortValid;
-	
+							
 	@FXML
 	private void handleButtonSave(ActionEvent event) throws Exception {
 		if (passwordCheck()) {
@@ -53,8 +53,8 @@ public class FXMLUserChangePasswordController implements Initializable {
 			
 			JSONObject jsonObject = new JSONObject(output);
 			try {
-				URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/benutzer/update/" + CurrentBenutzer.email
-						+ "/" + ScrumBOClient.getDatabaseconfigfile());
+				URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/benutzer/updatePassword/"
+						+ CurrentBenutzer.email + "/" + ScrumBOClient.getDatabaseconfigfile());
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setDoOutput(true);
 				conn.setRequestProperty("Content-Type", "application/json");
@@ -66,7 +66,7 @@ public class FXMLUserChangePasswordController implements Initializable {
 				out.write(jsonObject.toString());
 				out.close();
 				
-				if (conn.getResponseMessage().equals("User geupdated"))
+				if (conn.getResponseMessage().equals("Passwort vom Benutzer geupdated"))
 					System.out.println("\nRest Service Invoked Successfully..");
 				conn.disconnect();
 				

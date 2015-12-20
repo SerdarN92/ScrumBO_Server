@@ -30,16 +30,6 @@ public class Scrumprojekt {
 	@Column(name = "passwort", nullable = false)
 	private String				passwort;
 								
-	// @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.MERGE,
-	// CascadeType.REFRESH,
-	// CascadeType.PERSIST }, fetch = FetchType.EAGER, targetEntity =
-	// Benutzer.class)
-	// @JoinTable(name = "benutzer_scrumprojekt", joinColumns = {
-	// @JoinColumn(name = "scrumprojekt_id", nullable = false, updatable =
-	// false) }, inverseJoinColumns = {
-	// @JoinColumn(name = "benutzer_id", nullable = false, updatable = false) })
-	// private List<Benutzer> benutzer = new LinkedList<Benutzer>();
-	
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "scrumprojekt")
 	@Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE,
@@ -89,14 +79,6 @@ public class Scrumprojekt {
 	public void setPasswort(String passwort) {
 		this.passwort = passwort;
 	}
-	
-	// public List<Benutzer> getBenutzer() {
-	// return benutzer;
-	// }
-	//
-	// public void setBenutzer(List<Benutzer> benutzer) {
-	// this.benutzer = benutzer;
-	// }
 	
 	public List<Sprint> getSprint() {
 		return sprint;

@@ -39,10 +39,10 @@ import scrumbo.de.entity.CurrentBenutzer;
  */
 public class FXMLUserLoginController implements Initializable {
 	
-	Parent		root;
-	Scene		scene;
-	Benutzer	benutzer	= null;
-	
+	Parent					root;
+	Scene					scene;
+	Benutzer				benutzer	= null;
+										
 	@FXML
 	private TextField		txtFieldEmail;
 	@FXML
@@ -55,7 +55,7 @@ public class FXMLUserLoginController implements Initializable {
 	private Button			buttonBack;
 	@FXML
 	private Button			buttonLoginUser;
-	
+							
 	@FXML
 	private void handleBackButton(ActionEvent event) throws IOException {
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/FXMLStartfenster.fxml"));
@@ -154,7 +154,7 @@ public class FXMLUserLoginController implements Initializable {
 			conn.disconnect();
 			
 			Gson gson = new Gson();
-			if (output.equals("User nicht vorhanden")) {
+			if (output.equals("User ist nicht vorhanden")) {
 				return false;
 				
 			} else {

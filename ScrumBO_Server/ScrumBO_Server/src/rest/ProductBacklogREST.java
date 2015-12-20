@@ -37,13 +37,12 @@ public class ProductBacklogREST {
 		productbacklogDTO.setId(productbacklog.getId());
 		List<UserStoryDTO> userstoryDTOListe = new LinkedList<UserStoryDTO>();
 		for (int i = 0; i < productbacklog.getUserstory().size(); i++) {
-			UserStoryDTO userstoryDTO = new UserStoryDTO();
-			userstoryDTO.setId(productbacklog.getUserstory().get(i).getId());
-			userstoryDTO.setPrioritaet(productbacklog.getUserstory().get(i).getPrioritaet());
-			userstoryDTO.setThema(productbacklog.getUserstory().get(i).getThema());
-			userstoryDTO.setBeschreibung(productbacklog.getUserstory().get(i).getBeschreibung());
-			userstoryDTO.setAkzeptanzkriterien(productbacklog.getUserstory().get(i).getAkzeptanzkriterien());
-			userstoryDTO.setAufwandintagen(productbacklog.getUserstory().get(i).getAufwandintagen());
+			UserStoryDTO userstoryDTO = new UserStoryDTO(productbacklog.getUserstory().get(i).getId(),
+					productbacklog.getUserstory().get(i).getPrioritaet(),
+					productbacklog.getUserstory().get(i).getThema(),
+					productbacklog.getUserstory().get(i).getBeschreibung(),
+					productbacklog.getUserstory().get(i).getAufwandintagen(),
+					productbacklog.getUserstory().get(i).getAkzeptanzkriterien());
 			userstoryDTOListe.add(userstoryDTO);
 		}
 		productbacklogDTO.setUserstory(userstoryDTOListe);
@@ -68,31 +67,32 @@ public class ProductBacklogREST {
 		List<UserStoryDTO> userstoryDTOListe = new LinkedList<UserStoryDTO>();
 		
 		for (int i = 0; i < productbacklog.getUserstory().size(); i++) {
-			UserStoryDTO userstoryDTO = new UserStoryDTO();
-			userstoryDTO.setId(productbacklog.getUserstory().get(i).getId());
-			userstoryDTO.setPrioritaet(productbacklog.getUserstory().get(i).getPrioritaet());
-			userstoryDTO.setThema(productbacklog.getUserstory().get(i).getThema());
-			userstoryDTO.setBeschreibung(productbacklog.getUserstory().get(i).getBeschreibung());
-			userstoryDTO.setAkzeptanzkriterien(productbacklog.getUserstory().get(i).getAkzeptanzkriterien());
-			userstoryDTO.setAufwandintagen(productbacklog.getUserstory().get(i).getAufwandintagen());
+			UserStoryDTO userstoryDTO = new UserStoryDTO(productbacklog.getUserstory().get(i).getId(),
+					productbacklog.getUserstory().get(i).getPrioritaet(),
+					productbacklog.getUserstory().get(i).getThema(),
+					productbacklog.getUserstory().get(i).getBeschreibung(),
+					productbacklog.getUserstory().get(i).getAufwandintagen(),
+					productbacklog.getUserstory().get(i).getAkzeptanzkriterien());
 			BenutzerService benutzerService = new BenutzerService(hibernateconfigfilename);
 			TaskstatusService taskstatusService = new TaskstatusService(hibernateconfigfilename);
 			List<UserStoryTaskDTO> userstoryTaskDTOListe = new LinkedList<UserStoryTaskDTO>();
 			for (int j = 0; j < productbacklog.getUserstory().get(i).getUserstorytask().size(); j++) {
 				if (productbacklog.getUserstory().get(i).getSprint().getId() == sprintid) {
+					Benutzer benutzer = productbacklog.getUserstory().get(i).getUserstorytask().get(j).getBenutzer();
+					BenutzerDTO benutzerDTO = new BenutzerDTO(benutzer.getId(), benutzer.getVorname(),
+							benutzer.getNachname(), benutzer.getPasswort(), benutzer.getEmail());
+					Taskstatus taskstatus = productbacklog.getUserstory().get(i).getUserstorytask().get(j)
+							.getTaskstatus();
+					TaskstatusDTO taskstatusDTO = new TaskstatusDTO(taskstatus.getId(), taskstatus.getBeschreibung());
 					UserStoryTaskDTO userstoryTaskDTO = new UserStoryTaskDTO();
 					userstoryTaskDTO.setId(productbacklog.getUserstory().get(i).getUserstorytask().get(j).getId());
 					userstoryTaskDTO.setBeschreibung(
 							productbacklog.getUserstory().get(i).getUserstorytask().get(j).getBeschreibung());
 					userstoryTaskDTO.setAufwandinstunden(
 							productbacklog.getUserstory().get(i).getUserstorytask().get(j).getAufwandinstunden());
-					Benutzer benutzer = productbacklog.getUserstory().get(i).getUserstorytask().get(j).getBenutzer();
-					BenutzerDTO benutzerDTO = new BenutzerDTO(benutzer.getId(), benutzer.getVorname(),
-							benutzer.getNachname(), benutzer.getPasswort(), benutzer.getEmail());
+							
 					userstoryTaskDTO.setBenutzer(benutzerDTO);
-					Taskstatus taskstatus = productbacklog.getUserstory().get(i).getUserstorytask().get(j)
-							.getTaskstatus();
-					TaskstatusDTO taskstatusDTO = new TaskstatusDTO(taskstatus.getId(), taskstatus.getBeschreibung());
+					
 					userstoryTaskDTO.setTaskstatus(taskstatusDTO);
 					userstoryTaskDTOListe.add(userstoryTaskDTO);
 				}

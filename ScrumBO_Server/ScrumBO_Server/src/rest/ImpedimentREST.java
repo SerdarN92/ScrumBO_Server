@@ -28,31 +28,28 @@ public class ImpedimentREST {
 	@Path("/suche/{scrumprojektid}/{hibernateconfigfilename}")
 	@GET
 	@Produces("application/json" + ";charset=utf-8")
-	public Response getImpedimentByScrumprojectId(@PathParam("scrumprojektid") Integer id,
+	public Response getImpedimentByScrumprojectId(@PathParam("scrumprojektid") Integer scrumprojektId,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
-		ImpedimentService service = new ImpedimentService(hibernateconfigfilename);
-		List<Impediment> impedimentList = service.findByProjectId(id);
-		List<ImpedimentDTO> impedimentDTOList = new LinkedList<ImpedimentDTO>();
-		for (int i = 0; i < impedimentList.size(); i++) {
-			ImpedimentDTO dto = new ImpedimentDTO();
-			dto.setId(impedimentList.get(i).getId());
-			dto.setPriorität(impedimentList.get(i).getPriorität());
-			dto.setBeschreibung(impedimentList.get(i).getBeschreibung());
-			dto.setMitarbeiter(impedimentList.get(i).getMitarbeiter());
-			dto.setDatumDesAuftretens(impedimentList.get(i).getDatumDesAuftretens());
-			dto.setDatumDerBehebung(impedimentList.get(i).getDatumDerBehebung());
-			dto.setKommentar(impedimentList.get(i).getKommentar());
-			impedimentDTOList.add(dto);
+		ImpedimentService impedimentService = new ImpedimentService(hibernateconfigfilename);
+		List<Impediment> impedimentListe = impedimentService.findByProjectId(scrumprojektId);
+		List<ImpedimentDTO> impedimentDTOListe = new LinkedList<ImpedimentDTO>();
+		for (int i = 0; i < impedimentListe.size(); i++) {
+			ImpedimentDTO impedimentDTO = new ImpedimentDTO(impedimentListe.get(i).getId(),
+					impedimentListe.get(i).getPriorität(), impedimentListe.get(i).getMitarbeiter(),
+					impedimentListe.get(i).getBeschreibung(), impedimentListe.get(i).getDatumDesAuftretens(),
+					impedimentListe.get(i).getDatumDerBehebung(), impedimentListe.get(i).getKommentar());
+			impedimentDTOListe.add(impedimentDTO);
 		}
 		Gson gson = new Gson();
-		String output = gson.toJson(impedimentDTOList);
+		String output = gson.toJson(impedimentDTOListe);
+		
 		return Response.status(200).entity(output).build();
 	}
 	
 	@POST
 	@Path("/create/{scrumprojektid}/{hibernateconfigfilename}")
 	@Consumes("application/json" + ";charset=utf-8")
-	public Response createImpediment(@PathParam("scrumprojektid") Integer id,
+	public Response createImpediment(@PathParam("scrumprojektid") Integer scrumprojektId,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename, InputStream input) {
 		StringBuilder b = new StringBuilder();
 		try {
@@ -67,16 +64,12 @@ public class ImpedimentREST {
 		String impedimentdetails = b.toString();
 		Gson gson = new Gson();
 		ImpedimentDTO impedimentDTO = gson.fromJson(impedimentdetails, ImpedimentDTO.class);
-		Impediment impediment = new Impediment();
 		ImpedimentService impedimentService = new ImpedimentService(hibernateconfigfilename);
-		
-		impediment.setPriorität(impedimentDTO.getPriorität());
-		impediment.setMitarbeiter(impedimentDTO.getMitarbeiter());
-		impediment.setBeschreibung(impedimentDTO.getBeschreibung());
-		impediment.setDatumDesAuftretens(impedimentDTO.getDatumDesAuftretens());
-		
+		Impediment impediment = new Impediment(impedimentDTO.getPriorität(), impedimentDTO.getMitarbeiter(),
+				impedimentDTO.getBeschreibung(), impedimentDTO.getDatumDesAuftretens());
+				
 		ScrumprojektService scrumprojektService = new ScrumprojektService(hibernateconfigfilename);
-		Scrumprojekt scrumprojekt = scrumprojektService.findById(id);
+		Scrumprojekt scrumprojekt = scrumprojektService.findById(scrumprojektId);
 		impediment.setScrumprojekt(scrumprojekt);
 		
 		String output = "";
@@ -106,11 +99,13 @@ public class ImpedimentREST {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String impedimentdetails = b.toString();
+		String impedimentDetails = b.toString();
 		Gson gson = new Gson();
-		ImpedimentDTO impedimentDTO = gson.fromJson(impedimentdetails, ImpedimentDTO.class);
-		Impediment impediment = new Impediment();
+		
+		ImpedimentDTO impedimentDTO = gson.fromJson(impedimentDetails, ImpedimentDTO.class);
 		ImpedimentService impedimentService = new ImpedimentService(hibernateconfigfilename);
+		
+		Impediment impediment = new Impediment();
 		impediment = impedimentService.findById(impedimentDTO.getId());
 		impediment.setPriorität(impedimentDTO.getPriorität());
 		impediment.setBeschreibung(impedimentDTO.getBeschreibung());

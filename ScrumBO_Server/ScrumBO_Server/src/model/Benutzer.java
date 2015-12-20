@@ -49,6 +49,14 @@ public class Benutzer {
 	
 	}
 	
+	public Benutzer(Integer id, String vorname, String nachname, String passwort, String email) {
+		this.id = id;
+		this.vorname = vorname;
+		this.nachname = nachname;
+		this.passwort = passwort;
+		this.email = email;
+	}
+	
 	public Benutzer(String vorname, String nachname, String passwort, String email) {
 		this.vorname = vorname;
 		this.nachname = nachname;
@@ -95,22 +103,6 @@ public class Benutzer {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	// public Benutzerrolle getBenutzerrolle() {
-	// return benutzerrolle;
-	// }
-	//
-	// public void setBenutzerrolle(Benutzerrolle benutzerrolle) {
-	// this.benutzerrolle = benutzerrolle;
-	// }
-	
-	// public List<Scrumprojekt> getScrumprojekte() {
-	// return scrumprojekte;
-	// }
-	//
-	// public void setScrumprojekte(List<Scrumprojekt> scrumprojekte) {
-	// this.scrumprojekte = scrumprojekte;
-	// }
 	
 	public List<UserStoryTask> getUserstorytask() {
 		return userstorytask;

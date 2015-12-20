@@ -16,20 +16,33 @@ public class DefinitionOfDone {
 	@Id
 	@GeneratedValue
 	@Column(name = "definitionofdone_id", unique = true, nullable = false)
-	private Integer id;
-	
+	private Integer		id;
+						
 	@Column(name = "kriterium", nullable = true)
-	private String kriterium;
-	
+	private String		kriterium;
+						
 	@Column(name = "status")
-	private boolean status;
-	
+	private boolean		status;
+						
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "userstory_id", nullable = true)
-	private UserStory userstory;
-	
+	private UserStory	userstory;
+						
 	public DefinitionOfDone() {
 	
+	}
+	
+	public DefinitionOfDone(Integer id, String kriterium, boolean status) {
+		this.id = id;
+		this.kriterium = kriterium;
+		this.status = status;
+		
+	}
+	
+	public DefinitionOfDone(String kriterium, boolean status, UserStory userstory) {
+		this.kriterium = kriterium;
+		this.status = status;
+		this.userstory = userstory;
 	}
 	
 	public Integer getId() {

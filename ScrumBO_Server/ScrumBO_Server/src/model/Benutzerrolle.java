@@ -13,23 +13,11 @@ public class Benutzerrolle {
 	@Id
 	@GeneratedValue
 	@Column(name = "benutzerrollen_id", unique = true, nullable = false)
-	private Integer benutzerrollenid;
-	
+	private Integer	benutzerrollenid;
+					
 	@Column(name = "bezeichnung", unique = true, nullable = false)
-	private String bezeichnung;
-	
-	// @OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-	// CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy =
-	// "benutzerrolle")
-	// @Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE,
-	// org.hibernate.annotations.CascadeType.DELETE,
-	// org.hibernate.annotations.CascadeType.MERGE,
-	// org.hibernate.annotations.CascadeType.PERSIST,
-	// org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
-	// @JsonSerialize
-	// @JsonDeserialize
-	// private List<Benutzer> benutzer;
-	
+	private String	bezeichnung;
+					
 	public Benutzerrolle() {
 	
 	}
@@ -53,14 +41,6 @@ public class Benutzerrolle {
 	public void setBezeichnung(String bezeichnung) {
 		this.bezeichnung = bezeichnung;
 	}
-	
-	// public List<Benutzer> getBenutzer() {
-	// return benutzer;
-	// }
-	//
-	// public void setBenutzer(List<Benutzer> benutzer) {
-	// this.benutzer = benutzer;
-	// }
 	
 	@Override
 	public int hashCode() {

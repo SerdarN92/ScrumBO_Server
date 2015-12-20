@@ -10,7 +10,7 @@ public class UserStoryTaskDTO implements Serializable {
 	private Integer			aufwandinstunden;
 	private BenutzerDTO		benutzer;
 	private UserStoryDTO	userstory;
-	
+							
 	public UserStoryTaskDTO() {
 	
 	}
@@ -19,6 +19,16 @@ public class UserStoryTaskDTO implements Serializable {
 		this.id = id;
 		this.beschreibung = beschreibung;
 		this.aufwandinstunden = aufwandinstunden;
+	}
+	
+	public UserStoryTaskDTO(Integer id, String beschreibung, Integer aufwandinstunden, TaskstatusDTO taskstatus,
+			BenutzerDTO benutzer, UserStoryDTO userstory) {
+		this.id = id;
+		this.beschreibung = beschreibung;
+		this.aufwandinstunden = aufwandinstunden;
+		this.taskstatus = taskstatus;
+		this.benutzer = benutzer;
+		this.userstory = userstory;
 	}
 	
 	public Integer getId() {

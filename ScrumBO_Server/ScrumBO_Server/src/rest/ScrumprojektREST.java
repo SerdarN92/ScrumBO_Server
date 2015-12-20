@@ -18,7 +18,6 @@ import org.json.JSONException;
 
 import com.google.gson.Gson;
 
-import dto.BenutzerDTO;
 import dto.ImpedimentDTO;
 import dto.ProductBacklogDTO;
 import dto.ScrumprojektDTO;
@@ -48,37 +47,14 @@ public class ScrumprojektREST {
 		Scrumprojekt scrumprojekt = scrumprojektService.findByProjectname(projectname);
 		String output = "Projekt nicht vorhanden";
 		if (scrumprojekt != null) {
-			ScrumprojektDTO scrumprojektDTO = new ScrumprojektDTO();
-			scrumprojektDTO.setId(scrumprojekt.getId());
-			scrumprojektDTO.setProjektname(scrumprojekt.getProjektname());
-			scrumprojektDTO.setPasswort(scrumprojekt.getPasswort());
-			// List<BenutzerDTO> benutzerDTOListe = new
-			// LinkedList<BenutzerDTO>();
-			// for (int i = 0; i < scrumprojekt.getBenutzer().size(); i++) {
-			// BenutzerDTO benutzerDTO = new BenutzerDTO();
-			// benutzerDTO.setId(scrumprojekt.getBenutzer().get(i).getId());
-			// benutzerDTO.setVorname(scrumprojekt.getBenutzer().get(i).getVorname());
-			// benutzerDTO.setNachname(scrumprojekt.getBenutzer().get(i).getNachname());
-			// benutzerDTO.setPasswort(scrumprojekt.getBenutzer().get(i).getPasswort());
-			// benutzerDTO.setEmail(scrumprojekt.getBenutzer().get(i).getEmail());
-			// BenutzerrolleDTO benutzerrolleDTO = new BenutzerrolleDTO();
-			// benutzerrolleDTO.setId(scrumprojekt.getBenutzer().get(i).getBenutzerrolle().getBenutzerrollenid());
-			// benutzerrolleDTO.setBezeichnung(scrumprojekt.getBenutzer().get(i).getBenutzerrolle().getBezeichnung());
-			// benutzerDTO.setBenutzerrolle(benutzerrolleDTO);
-			// benutzerDTOListe.add(benutzerDTO);
-			// }
-			// scrumprojektDTO.setBenutzer(benutzerDTOListe);
+			ScrumprojektDTO scrumprojektDTO = new ScrumprojektDTO(scrumprojekt.getId(), scrumprojekt.getProjektname(),
+					scrumprojekt.getPasswort());
 			List<ImpedimentDTO> impedimentDTOListe = new LinkedList<ImpedimentDTO>();
 			for (int i = 0; i < scrumprojekt.getImpediment().size(); i++) {
 				ImpedimentDTO impedimentDTO = new ImpedimentDTO();
 				impedimentDTO.setId(scrumprojekt.getImpediment().get(i).getId());
-				// impedimentDTO.setBeschreibung(scrumprojekt.getImpediment().get(i).getBeschreibung());
-				// impedimentDTO.setDatumDesAuftretens(scrumprojekt.getImpediment().get(i).getDatumDesAuftretens());
-				// impedimentDTO.setDatumDerBehebung(scrumprojekt.getImpediment().get(i).getDatumDerBehebung());
-				// impedimentDTOListe.add(impedimentDTO);
 			}
 			scrumprojektDTO.setImpediment(impedimentDTOListe);
-			// UserStoryService userstoryService = new UserStoryService();
 			ProductBacklogDTO productbacklogDTO = new ProductBacklogDTO();
 			productbacklogDTO.setId(scrumprojekt.getProductbacklog().getId());
 			scrumprojektDTO.setProductbacklog(productbacklogDTO);
@@ -110,25 +86,9 @@ public class ScrumprojektREST {
 			scrumprojektDTO.setId(scrumprojektListe.get(i).getId());
 			scrumprojektDTO.setProjektname(scrumprojektListe.get(i).getProjektname());
 			scrumprojektDTO.setPasswort(scrumprojektListe.get(i).getPasswort());
-			List<BenutzerDTO> benutzerDTOListe = new LinkedList<BenutzerDTO>();
 			List<SprintDTO> sprintDTOListe = new LinkedList<SprintDTO>();
 			List<ImpedimentDTO> impedimentDTOListe = new LinkedList<ImpedimentDTO>();
-			// for (int j = 0; j <
-			// scrumprojektListe.get(i).getBenutzer().size(); j++) {
-			// BenutzerDTO benutzerDTO = new BenutzerDTO();
-			// benutzerDTO.setId(scrumprojektListe.get(i).getBenutzer().get(j).getId());
-			// benutzerDTO.setVorname(scrumprojektListe.get(i).getBenutzer().get(j).getVorname());
-			// benutzerDTO.setNachname(scrumprojektListe.get(i).getBenutzer().get(j).getNachname());
-			// benutzerDTO.setPasswort(scrumprojektListe.get(i).getBenutzer().get(j).getPasswort());
-			// benutzerDTO.setEmail(scrumprojektListe.get(i).getBenutzer().get(j).getEmail());
-			// BenutzerrolleDTO benutzerrolleDTO = new BenutzerrolleDTO();
-			// benutzerrolleDTO
-			// .setId(scrumprojektListe.get(i).getBenutzer().get(j).getBenutzerrolle().getBenutzerrollenid());
-			// benutzerrolleDTO.setBezeichnung(
-			// scrumprojektListe.get(i).getBenutzer().get(j).getBenutzerrolle().getBezeichnung());
-			// benutzerDTO.setBenutzerrolle(benutzerrolleDTO);
-			// benutzerDTOListe.add(benutzerDTO);
-			// }
+			
 			for (int j = 0; j < scrumprojektListe.get(i).getSprint().size(); j++) {
 				SprintDTO sprintDTO = new SprintDTO();
 				sprintDTO.setId(scrumprojektListe.get(i).getSprint().get(j).getId());
@@ -137,29 +97,13 @@ public class ScrumprojektREST {
 			for (int j = 0; j < scrumprojektListe.get(i).getImpediment().size(); j++) {
 				ImpedimentDTO impedimentDTO = new ImpedimentDTO();
 				impedimentDTO.setId(scrumprojektListe.get(i).getImpediment().get(j).getId());
-				// impedimentDTO.setBeschreibung(scrumprojektListe.get(i).getImpediment().get(j).getBeschreibung());
-				// impedimentDTO
-				// .setDatumDesAuftretens(scrumprojektListe.get(i).getImpediment().get(j).getDatumDesAuftretens());
-				// impedimentDTO
-				// .setDatumDerBehebung(scrumprojektListe.get(i).getImpediment().get(j).getDatumDerBehebung());
+				
 				impedimentDTOListe.add(impedimentDTO);
 			}
-			// UserStoryService userstoryService = new UserStoryService();
+			
 			ProductBacklogDTO productbacklogDTO = new ProductBacklogDTO();
 			productbacklogDTO.setId(scrumprojektListe.get(i).getProductbacklog().getId());
-			// List<UserStoryDTO> list = new LinkedList<UserStoryDTO>();
-			// for (int m = 0; m < userstoryService.findAll().size(); m++) {
-			// UserStoryDTO userstoryDTO = new UserStoryDTO();
-			// userstoryDTO.setId(userstoryService.findAll().get(m).getId());
-			// userstoryDTO.setThema(userstoryService.findAll().get(m).getThema());
-			// userstoryDTO.setBeschreibung(userstoryService.findAll().get(m).getBeschreibung());
-			// userstoryDTO.setAkzeptanzkriterien(userstoryService.findAll().get(m).getAkzeptanzkriterien());
-			// userstoryDTO.setAufwandintagen(userstoryService.findAll().get(m).getAufwandintagen());
-			// list.add(userstoryDTO);
-			// }
-			// productbacklogDTO.setUserstory(list);
 			
-			// scrumprojektDTO.setBenutzer(benutzerDTOListe);
 			scrumprojektDTO.setSprint(sprintDTOListe);
 			scrumprojektDTO.setImpediment(impedimentDTOListe);
 			scrumprojektDTO.setProductbacklog(productbacklogDTO);

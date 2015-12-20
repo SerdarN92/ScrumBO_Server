@@ -16,32 +16,51 @@ public class Impediment {
 	@Id
 	@GeneratedValue
 	@Column(name = "impediment_id", unique = true, nullable = false)
-	private Integer id;
-	
+	private Integer			id;
+							
 	@Column(name = "priorität", nullable = false)
-	private Integer priorität;
-	
+	private Integer			priorität;
+							
 	@Column(name = "mitarbeiter", nullable = false)
-	private String mitarbeiter;
-	
+	private String			mitarbeiter;
+							
 	@Column(name = "beschreibung", nullable = false)
-	private String beschreibung;
-	
+	private String			beschreibung;
+							
 	@Column(name = "datumdesauftretens", nullable = false)
-	private String datumDesAuftretens;
-	
+	private String			datumDesAuftretens;
+							
 	@Column(name = "datumderbehebung", nullable = true)
-	private String datumDerBehebung;
-	
+	private String			datumDerBehebung;
+							
 	@Column(name = "kommentar", nullable = true)
-	private String kommentar;
-	
+	private String			kommentar;
+							
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "scrumprojekt_id", nullable = true)
-	private Scrumprojekt scrumprojekt;
-	
+	private Scrumprojekt	scrumprojekt;
+							
 	public Impediment() {
 	
+	}
+	
+	public Impediment(Integer prioritaet, String mitarbeiter, String beschreibung, String datumDesAuftretens) {
+		this.priorität = prioritaet;
+		this.mitarbeiter = mitarbeiter;
+		this.beschreibung = beschreibung;
+		this.datumDesAuftretens = datumDesAuftretens;
+		
+	}
+	
+	public Impediment(Integer id, Integer priorität, String mitarbeiter, String beschreibung, String datumDesAuftretens,
+			String datumDerBehebung, String kommentar) {
+		this.id = id;
+		this.priorität = priorität;
+		this.mitarbeiter = mitarbeiter;
+		this.beschreibung = beschreibung;
+		this.datumDesAuftretens = datumDesAuftretens;
+		this.datumDerBehebung = datumDerBehebung;
+		this.kommentar = kommentar;
 	}
 	
 	public Integer getId() {

@@ -11,7 +11,7 @@ public class SprintBacklogDTO implements Serializable {
 	}
 	
 	public SprintBacklogDTO(Integer id) {
-	
+		this.id = id;
 	}
 	
 	public Integer getId() {

@@ -10,7 +10,6 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.core.Response;
 
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import com.google.gson.Gson;
 
@@ -30,17 +29,15 @@ public class BenutzerrolleREST {
 		List<Benutzerrolle> benutzerrolle = benutzerrolleService.findAll();
 		List<BenutzerrolleDTO> benutzerrolleDTOListe = new LinkedList<>();
 		for (int i = 0; i < benutzerrolle.size(); i++) {
-			BenutzerrolleDTO benutzerrolleDTO = new BenutzerrolleDTO();
-			benutzerrolleDTO.setId(benutzerrolle.get(i).getBenutzerrollenid());
-			benutzerrolleDTO.setBezeichnung(benutzerrolle.get(i).getBezeichnung());
+			BenutzerrolleDTO benutzerrolleDTO = new BenutzerrolleDTO(benutzerrolle.get(i).getBenutzerrollenid(),
+					benutzerrolle.get(i).getBezeichnung());
 			benutzerrolleDTOListe.add(benutzerrolleDTO);
 		}
 		
-		JSONObject jsonObject = new JSONObject();
 		Gson gson = new Gson();
-		String ab = gson.toJson(benutzerrolleDTOListe);
+		String output = gson.toJson(benutzerrolleDTOListe);
 		
-		return Response.status(200).entity(ab).build();
+		return Response.status(200).entity(output).build();
 	}
 	
 }

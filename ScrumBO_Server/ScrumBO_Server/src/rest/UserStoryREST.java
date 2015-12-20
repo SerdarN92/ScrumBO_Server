@@ -129,18 +129,12 @@ public class UserStoryREST {
 		userstory.setAkzeptanzkriterien(userstoryDTO.getAkzeptanzkriterien());
 		userstory.setAufwandintagen(userstoryDTO.getAufwandintagen());
 		userstory.setProductbacklog(productbacklog);
-		// DefinitionOfDone dod = new DefinitionOfDone();
-		// DefinitionOfDoneService dodService = new
-		// DefinitionOfDoneService(hibernateconfigfilename);
 		
 		productbacklog.getUserstory().add(userstory);
 		String output = "";
 		try {
 			userstoryService.persist(userstory);
 			productbacklogService.update(productbacklog);
-			// dodService.persist(dod);
-			// dod.setUserstory(userstory);
-			// dodService.update(dod);
 			output = "User Story erfolgreich erstellt";
 		} catch (Exception e) {
 			e.printStackTrace();

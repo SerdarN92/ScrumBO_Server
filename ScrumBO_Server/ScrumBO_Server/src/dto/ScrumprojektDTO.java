@@ -9,7 +9,6 @@ public class ScrumprojektDTO implements Serializable {
 	private Integer				id;
 	private String				projektname;
 	private String				passwort;
-	// private List<BenutzerDTO> benutzer = new LinkedList<BenutzerDTO>();
 	private List<SprintDTO>		sprint			= new LinkedList<SprintDTO>();
 	private List<ImpedimentDTO>	impediment		= new LinkedList<ImpedimentDTO>();
 	private ProductBacklogDTO	productbacklog	= new ProductBacklogDTO();
@@ -47,14 +46,6 @@ public class ScrumprojektDTO implements Serializable {
 	public void setPasswort(String passwort) {
 		this.passwort = passwort;
 	}
-	
-	// public List<BenutzerDTO> getBenutzer() {
-	// return benutzer;
-	// }
-	//
-	// public void setBenutzer(List<BenutzerDTO> benutzer) {
-	// this.benutzer = benutzer;
-	// }
 	
 	public List<SprintDTO> getSprint() {
 		return sprint;

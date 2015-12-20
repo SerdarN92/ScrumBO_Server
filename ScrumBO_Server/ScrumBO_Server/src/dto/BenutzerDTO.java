@@ -9,8 +9,7 @@ public class BenutzerDTO implements Serializable {
 	private String	nachname;
 	private String	passwort;
 	private String	email;
-	// private BenutzerrolleDTO benutzerrolle;
-	
+					
 	public BenutzerDTO() {
 	}
 	
@@ -20,7 +19,6 @@ public class BenutzerDTO implements Serializable {
 		this.nachname = nachname;
 		this.passwort = passwort;
 		this.email = email;
-		// this.benutzerrolle = benutzerrolle;
 	}
 	
 	public Integer getId() {
@@ -66,14 +64,6 @@ public class BenutzerDTO implements Serializable {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
-	// public BenutzerrolleDTO getBenutzerrolle() {
-	// return benutzerrolle;
-	// }
-	//
-	// public void setBenutzerrolle(BenutzerrolleDTO benutzerrolle) {
-	// this.benutzerrolle = benutzerrolle;
-	// }
 	
 	@Override
 	public int hashCode() {

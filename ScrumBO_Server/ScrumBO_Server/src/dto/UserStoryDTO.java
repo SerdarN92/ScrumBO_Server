@@ -23,14 +23,13 @@ public class UserStoryDTO implements Serializable {
 	}
 	
 	public UserStoryDTO(Integer id, Integer prioritaet, String thema, String beschreibung, Integer aufwandintagen,
-			String akzeptanzkriterien, Integer platzierung) {
+			String akzeptanzkriterien) {
 		this.id = id;
 		this.prioritaet = prioritaet;
 		this.thema = thema;
 		this.beschreibung = beschreibung;
 		this.aufwandintagen = aufwandintagen;
 		this.akzeptanzkriterien = akzeptanzkriterien;
-		this.platzierung = platzierung;
 	}
 	
 	public Integer getId() {
