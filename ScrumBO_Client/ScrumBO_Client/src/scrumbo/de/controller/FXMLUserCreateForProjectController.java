@@ -74,7 +74,7 @@ public class FXMLUserCreateForProjectController implements Initializable {
 	private Text			lastnameValidFail;
 	@FXML
 	private Text			roleValidFail;
-	
+							
 	@FXML
 	private void handleBackButtonCreateUser(ActionEvent event) throws IOException {
 		if (CurrentBenutzer.isSM) {
@@ -263,7 +263,7 @@ public class FXMLUserCreateForProjectController implements Initializable {
 			
 			Gson gson = new Gson();
 			Benutzer a = null;
-			if (output.equals("User nicht vorhanden")) {
+			if (output.equals("User ist nicht vorhanden")) {
 				return false;
 				
 			} else {

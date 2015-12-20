@@ -12,10 +12,10 @@ import model.Impediment;
 
 public class ImpedimentDao implements DaoInterface<Impediment, Integer> {
 	
-	private Session		currentSession			= null;
-	private Transaction	currentTransaction		= null;
-	private String		hibernateconfigfilename	= "";
-												
+	private Session			currentSession			= null;
+	private Transaction		currentTransaction		= null;
+	private static String	hibernateconfigfilename	= "";
+													
 	public ImpedimentDao(String hibernateconfigfilename) {
 		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
@@ -42,7 +42,7 @@ public class ImpedimentDao implements DaoInterface<Impediment, Integer> {
 		getSessionFactory().close();
 	}
 	
-	public SessionFactory getSessionFactory() {
+	public static SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());

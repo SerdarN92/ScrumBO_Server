@@ -28,11 +28,12 @@
       <Text fx:id="projektname" layoutX="367.0" layoutY="579.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="129.13671875" />
       <TableView fx:id="tableViewProductBacklog" editable="true" layoutX="75.0" layoutY="173.0" prefHeight="373.0" prefWidth="883.0">
          <columns>
+            <TableColumn fx:id="tableColumnStatus" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" resizable="false" text="Status" />
             <TableColumn fx:id="tableColumnPrioritaet" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" resizable="false" text="Priorität" />
             <TableColumn fx:id="tableColumnThema" maxWidth="125.0" minWidth="125.0" prefWidth="125.0" resizable="false" sortable="false" text="Thema" />
-            <TableColumn fx:id="tableColumnBeschreibung" maxWidth="284.0" minWidth="284.0" prefWidth="284.0" resizable="false" sortable="false" text="Beschreibung" />
-            <TableColumn fx:id="tableColumnAkzeptanzkriterien" maxWidth="274.0" minWidth="274.0" prefWidth="274.0" resizable="false" sortable="false" text="Akzeptanzkriterien" />
-            <TableColumn fx:id="tableColumnAufwand" maxWidth="124.0" minWidth="124.0" prefWidth="124.0" resizable="false" sortable="false" text="Aufwand (in Tagen)" />
+            <TableColumn fx:id="tableColumnBeschreibung" maxWidth="284.0" minWidth="226.0" prefWidth="246.0" resizable="false" sortable="false" text="Beschreibung" />
+            <TableColumn fx:id="tableColumnAkzeptanzkriterien" maxWidth="332.0" minWidth="176.0" prefWidth="242.0" resizable="false" sortable="false" text="Akzeptanzkriterien" />
+            <TableColumn fx:id="tableColumnAufwand" maxWidth="278.0" minWidth="117.0" prefWidth="119.0" resizable="false" sortable="false" text="Aufwand (in Tagen)" />
          </columns></TableView>
       <Label layoutX="392.0" layoutY="54.0" text="Product Backlog">
          <font>

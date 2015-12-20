@@ -11,7 +11,7 @@ public class UserStory implements Serializable {
 	private String					beschreibung;
 	private Integer					aufwandintagen;
 	private String					akzeptanzkriterien;
-	private Integer					platzierung;
+	private Integer					status;
 									
 	private ProductBacklog			productbacklog;
 	private Sprint					sprint;
@@ -23,14 +23,14 @@ public class UserStory implements Serializable {
 	}
 	
 	public UserStory(Integer id, Integer prioritaet, String thema, String beschreibung, Integer aufwandintagen,
-			String akzeptanzkriterien, Integer platzierung) {
+			String akzeptanzkriterien, Integer status) {
 		this.id = id;
 		this.prioritaet = prioritaet;
 		this.thema = thema;
 		this.beschreibung = beschreibung;
 		this.aufwandintagen = aufwandintagen;
 		this.akzeptanzkriterien = akzeptanzkriterien;
-		this.platzierung = platzierung;
+		this.status = status;
 	}
 	
 	public UserStory(Integer prioritaet, String thema, String beschreibung, String akzeptanzkriterien,
@@ -90,12 +90,12 @@ public class UserStory implements Serializable {
 		this.akzeptanzkriterien = akzeptanzkriterien;
 	}
 	
-	public Integer getPlatzierung() {
-		return platzierung;
+	public Integer getStatus() {
+		return status;
 	}
 	
-	public void setPlatzierung(Integer platzierung) {
-		this.platzierung = platzierung;
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	
 	public ProductBacklog getProductbacklog() {

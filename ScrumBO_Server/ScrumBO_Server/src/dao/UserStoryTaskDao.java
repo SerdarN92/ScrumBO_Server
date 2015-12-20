@@ -12,10 +12,10 @@ import model.UserStoryTask;
 
 public class UserStoryTaskDao implements DaoInterface<UserStoryTask, Integer> {
 	
-	private Session		currentSession			= null;
-	private Transaction	currentTransaction		= null;
-	private String		hibernateconfigfilename	= "";
-												
+	private Session			currentSession			= null;
+	private Transaction		currentTransaction		= null;
+	private static String	hibernateconfigfilename	= "";
+													
 	public UserStoryTaskDao(String hibernateconfigfilename) {
 		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
@@ -42,7 +42,7 @@ public class UserStoryTaskDao implements DaoInterface<UserStoryTask, Integer> {
 		getSessionFactory().close();
 	}
 	
-	public SessionFactory getSessionFactory() {
+	public static SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());
@@ -86,6 +86,12 @@ public class UserStoryTaskDao implements DaoInterface<UserStoryTask, Integer> {
 	public List<UserStoryTask> findAll() {
 		List<UserStoryTask> userstorytaskListe = (List<UserStoryTask>) getCurrentSession()
 				.createQuery("from UserStoryTask").list();
+		return userstorytaskListe;
+	}
+	
+	public List<UserStoryTask> findAllByUserStoryId(Integer userstoryId) {
+		List<UserStoryTask> userstorytaskListe = (List<UserStoryTask>) getCurrentSession()
+				.createQuery("from UserStoryTask WHERE userstory_id like '" + userstoryId + "'").list();
 		return userstorytaskListe;
 	}
 	

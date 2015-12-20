@@ -42,7 +42,9 @@ public class ProductBacklogREST {
 					productbacklog.getUserstory().get(i).getThema(),
 					productbacklog.getUserstory().get(i).getBeschreibung(),
 					productbacklog.getUserstory().get(i).getAufwandintagen(),
-					productbacklog.getUserstory().get(i).getAkzeptanzkriterien());
+					productbacklog.getUserstory().get(i).getAkzeptanzkriterien(),
+					productbacklog.getUserstory().get(i).getStatus());
+			System.out.println("STATUS:" + productbacklog.getUserstory().get(i).getStatus());
 			userstoryDTOListe.add(userstoryDTO);
 		}
 		productbacklogDTO.setUserstory(userstoryDTOListe);
@@ -72,7 +74,9 @@ public class ProductBacklogREST {
 					productbacklog.getUserstory().get(i).getThema(),
 					productbacklog.getUserstory().get(i).getBeschreibung(),
 					productbacklog.getUserstory().get(i).getAufwandintagen(),
-					productbacklog.getUserstory().get(i).getAkzeptanzkriterien());
+					productbacklog.getUserstory().get(i).getAkzeptanzkriterien(),
+					productbacklog.getUserstory().get(i).getStatus());
+			System.out.println("STATUS:" + productbacklog.getUserstory().get(i).getStatus());
 			BenutzerService benutzerService = new BenutzerService(hibernateconfigfilename);
 			TaskstatusService taskstatusService = new TaskstatusService(hibernateconfigfilename);
 			List<UserStoryTaskDTO> userstoryTaskDTOListe = new LinkedList<UserStoryTaskDTO>();

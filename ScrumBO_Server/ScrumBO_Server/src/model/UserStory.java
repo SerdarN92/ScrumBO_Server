@@ -39,8 +39,8 @@ public class UserStory {
 	@Column(name = "akzeptanzkriterien", nullable = false)
 	private String					akzeptanzkriterien;
 									
-	@Column(name = "platzierung", unique = true, nullable = true)
-	private Integer					platzierung;
+	@Column(name = "status", unique = false, nullable = true)
+	private Integer					status;
 									
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "productbacklog_id", nullable = true)
@@ -68,13 +68,13 @@ public class UserStory {
 	}
 	
 	public UserStory(Integer priortaet, String thema, String beschreibung, Integer aufwandintagen,
-			String akzeptanzkriterien, Integer platzierung) {
+			String akzeptanzkriterien, Integer status) {
 		this.prioritaet = priortaet;
 		this.thema = thema;
 		this.beschreibung = beschreibung;
 		this.aufwandintagen = aufwandintagen;
 		this.akzeptanzkriterien = akzeptanzkriterien;
-		this.platzierung = platzierung;
+		this.status = status;
 	}
 	
 	public Integer getId() {
@@ -125,12 +125,12 @@ public class UserStory {
 		this.akzeptanzkriterien = akzeptanzkriterien;
 	}
 	
-	public Integer getPlatzierung() {
-		return platzierung;
+	public Integer getStatus() {
+		return status;
 	}
 	
-	public void setPlatzierung(Integer platzierung) {
-		this.platzierung = platzierung;
+	public void setStatus(Integer status) {
+		this.status = status;
 	}
 	
 	public ProductBacklog getProductbacklog() {

@@ -22,18 +22,15 @@ public class CurrentBenutzer {
 	public static String					benutzerrolle;
 	public static ArrayList<Scrumprojekt>	projekte;
 	public static Boolean					isSM	= false;
-	
+	public static Boolean					isPO	= false;
+	public static Boolean					isDev	= false;
+													
 	public CurrentBenutzer(Benutzer benutzer) {
 		CurrentBenutzer.benutzerID = benutzer.getId();
 		CurrentBenutzer.vorname = benutzer.getVorname();
 		CurrentBenutzer.nachname = benutzer.getNachname();
 		CurrentBenutzer.email = benutzer.getEmail();
 		CurrentBenutzer.passwort = benutzer.getPasswort();
-		// CurrentBenutzer.benutzerrollenID =
-		// benutzer.getBenutzerrolle().getId();
-		// CurrentBenutzer.benutzerrolle =
-		// benutzer.getBenutzerrolle().getBezeichnung();
-		// CurrentBenutzer.projekte = benutzer.getScrumProjekte();
 	}
 	
 	public CurrentBenutzer() {

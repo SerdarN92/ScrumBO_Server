@@ -12,10 +12,10 @@ import model.Benutzer;
 
 public class BenutzerDao implements DaoInterface<Benutzer, Integer> {
 	
-	private Session		currentSession			= null;
-	private Transaction	currentTransaction		= null;
-	private String		hibernateconfigfilename	= "";
-												
+	private Session			currentSession			= null;
+	private Transaction		currentTransaction		= null;
+	private static String	hibernateconfigfilename	= "";
+													
 	public BenutzerDao() {
 	
 	}
@@ -46,7 +46,7 @@ public class BenutzerDao implements DaoInterface<Benutzer, Integer> {
 		getSessionFactory().close();
 	}
 	
-	public SessionFactory getSessionFactory() {
+	public static SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());

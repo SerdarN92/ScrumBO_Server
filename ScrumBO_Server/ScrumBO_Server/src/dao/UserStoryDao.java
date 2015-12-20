@@ -12,10 +12,10 @@ import model.UserStory;
 
 public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 	
-	private Session		currentSession			= null;
-	private Transaction	currentTransaction		= null;
-	private String		hibernateconfigfilename	= "";
-												
+	private Session			currentSession			= null;
+	private Transaction		currentTransaction		= null;
+	private static String	hibernateconfigfilename	= "";
+													
 	public UserStoryDao(String hibernateconfigfilename) {
 		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
@@ -42,7 +42,7 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 		getSessionFactory().close();
 	}
 	
-	public SessionFactory getSessionFactory() {
+	public static SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());
@@ -105,6 +105,12 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 				"from UserStory where productbacklog_id like'" + productbacklogid + "'" + "AND sprint_id IS NULL")
 				.list();
 		return userstoryListe;
+	}
+	
+	public Integer getUserStoryStatus(Integer userstoryId) {
+		UserStory userstory = (UserStory) getCurrentSession()
+				.createQuery("FROM UserStory where userstory_id like '" + userstoryId + "'").uniqueResult();
+		return userstory.getStatus();
 	}
 	
 	public void deleteAll() {

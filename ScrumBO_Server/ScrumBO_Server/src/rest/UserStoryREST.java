@@ -52,6 +52,7 @@ public class UserStoryREST {
 			userstoryDTO.setBeschreibung(userstoryListe.get(i).getBeschreibung());
 			userstoryDTO.setAkzeptanzkriterien(userstoryListe.get(i).getAkzeptanzkriterien());
 			userstoryDTO.setAufwandintagen(userstoryListe.get(i).getAufwandintagen());
+			userstoryDTO.setStatus(userstoryListe.get(i).getStatus());
 			userstoryDTOListe.add(userstoryDTO);
 		}
 		Gson gson = new Gson();
@@ -75,6 +76,7 @@ public class UserStoryREST {
 			userstoryDTO.setBeschreibung(userstoryListe.get(i).getBeschreibung());
 			userstoryDTO.setAkzeptanzkriterien(userstoryListe.get(i).getAkzeptanzkriterien());
 			userstoryDTO.setAufwandintagen(userstoryListe.get(i).getAufwandintagen());
+			userstoryDTO.setStatus(userstoryListe.get(i).getStatus());
 			List<UserStoryTaskDTO> userstoryTaskDTOListe = new LinkedList<UserStoryTaskDTO>();
 			for (int j = 0; j < userstoryListe.get(i).getUserstorytask().size(); j++) {
 				if (userstoryListe.get(i).getSprint().getId() == sprintid) {
@@ -128,6 +130,7 @@ public class UserStoryREST {
 		userstory.setBeschreibung(userstoryDTO.getBeschreibung());
 		userstory.setAkzeptanzkriterien(userstoryDTO.getAkzeptanzkriterien());
 		userstory.setAufwandintagen(userstoryDTO.getAufwandintagen());
+		userstory.setStatus(0);
 		userstory.setProductbacklog(productbacklog);
 		
 		productbacklog.getUserstory().add(userstory);
@@ -169,6 +172,7 @@ public class UserStoryREST {
 		userstory.setBeschreibung(userstoryDTO.getBeschreibung());
 		userstory.setAkzeptanzkriterien(userstoryDTO.getAkzeptanzkriterien());
 		userstory.setAufwandintagen(userstoryDTO.getAufwandintagen());
+		userstory.setStatus(userstoryDTO.getStatus());
 		String output = "";
 		try {
 			userstoryService.update(userstory);
@@ -240,6 +244,34 @@ public class UserStoryREST {
 				
 			}
 		}
+		
+		// List<UserStoryTask> userstorytaskListe =
+		// userstorytaskService.findAllByUserStoryId(userstory.getId());
+		// boolean open = false;
+		// boolean inwork = false;
+		// boolean done = false;
+		//
+		// for (int i = 0; i < userstorytaskListe.size(); i++) {
+		// if (userstorytaskListe.get(i).getTaskstatus().getId() == 1)
+		// open = true;
+		// if (userstorytaskListe.get(i).getTaskstatus().getId() == 2)
+		// inwork = true;
+		// if (userstorytaskListe.get(i).getTaskstatus().getId() == 3)
+		// done = true;
+		// }
+		//
+		// if (open && !inwork && !done)
+		// userstory.setStatus(0);
+		// if (!open && inwork && !done)
+		// userstory.setStatus(1);
+		// if (!open && !inwork && done)
+		// userstory.setStatus(2);
+		// if (open && inwork && !done)
+		// userstory.setStatus(1);
+		// if (open && inwork && done)
+		// userstory.setStatus(1);
+		// if (!open && inwork && done)
+		// userstory.setStatus(1);
 		
 		userstory.setSprint(sprint);
 		

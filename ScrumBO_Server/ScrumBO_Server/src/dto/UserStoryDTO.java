@@ -11,7 +11,7 @@ public class UserStoryDTO implements Serializable {
 	private String						beschreibung;
 	private Integer						aufwandintagen;
 	private String						akzeptanzkriterien;
-	private Integer						platzierung;
+	private Integer						status;
 										
 	private ProductBacklogDTO			productbacklog;
 	private SprintDTO					sprint;
@@ -23,13 +23,14 @@ public class UserStoryDTO implements Serializable {
 	}
 	
 	public UserStoryDTO(Integer id, Integer prioritaet, String thema, String beschreibung, Integer aufwandintagen,
-			String akzeptanzkriterien) {
+			String akzeptanzkriterien, Integer status) {
 		this.id = id;
 		this.prioritaet = prioritaet;
 		this.thema = thema;
 		this.beschreibung = beschreibung;
 		this.aufwandintagen = aufwandintagen;
 		this.akzeptanzkriterien = akzeptanzkriterien;
+		this.status = status;
 	}
 	
 	public Integer getId() {
@@ -80,12 +81,12 @@ public class UserStoryDTO implements Serializable {
 		this.akzeptanzkriterien = akzeptanzkriterien;
 	}
 	
-	public Integer getPlatzierung() {
-		return platzierung;
+	public Integer getStatus() {
+		return status;
 	}
 	
-	public void setPlatzierung(Integer platzierung) {
-		this.platzierung = platzierung;
+	public void setStatus(Integer platziestatusrung) {
+		this.status = status;
 	}
 	
 	public ProductBacklogDTO getProductbacklog() {

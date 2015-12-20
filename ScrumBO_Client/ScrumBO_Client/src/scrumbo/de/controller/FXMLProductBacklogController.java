@@ -17,6 +17,7 @@ import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
@@ -25,6 +26,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -60,6 +63,8 @@ public class FXMLProductBacklogController implements Initializable {
 	private Button							buttonReload;
 	@FXML
 	private TableView<UserStory>			tableViewProductBacklog;
+	@FXML
+	private TableColumn<UserStory, Integer>	tableColumnStatus;
 	@FXML
 	private TableColumn<UserStory, Integer>	tableColumnPrioritaet;
 	@FXML
@@ -150,40 +155,83 @@ public class FXMLProductBacklogController implements Initializable {
 		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
 		projektname.setText(CurrentScrumprojekt.projektname);
 		
+		if (!CurrentBenutzer.isPO)
+			buttonCreateUserStory.setDisable(true);
+			
 		tableViewProductBacklog.setRowFactory(tv -> {
 			TableRow<UserStory> row = new TableRow<>();
-			row.setOnMouseClicked(event -> {
-				if (event.getClickCount() == 1 && (!row.isEmpty())) {
-					rowData = row.getItem();
-					try {
-						FXMLLoader fxmlLoader = new FXMLLoader(
-								getClass().getResource("/scrumbo/de/gui/FXMLUserStoryEdit.fxml"));
-						Parent root1 = (Parent) fxmlLoader.load();
-						Stage stage = new Stage();
-						stage.initModality(Modality.APPLICATION_MODAL);
-						stage.setScene(new Scene(root1));
-						stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-							@Override
-							public void handle(WindowEvent event) {
-								try {
-									data.clear();
-									reload();
-								} catch (IOException e) {
-									e.printStackTrace();
+			if (CurrentBenutzer.isPO) {
+				row.setOnMouseClicked(event -> {
+					if (event.getClickCount() == 1 && (!row.isEmpty())) {
+						rowData = row.getItem();
+						try {
+							FXMLLoader fxmlLoader = new FXMLLoader(
+									getClass().getResource("/scrumbo/de/gui/FXMLUserStoryEdit.fxml"));
+							Parent root1 = (Parent) fxmlLoader.load();
+							Stage stage = new Stage();
+							stage.initModality(Modality.APPLICATION_MODAL);
+							stage.setScene(new Scene(root1));
+							stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+								@Override
+								public void handle(WindowEvent event) {
+									try {
+										data.clear();
+										reload();
+									} catch (IOException e) {
+										e.printStackTrace();
+									}
 								}
-							}
-						});
-						stage.show();
-					} catch (Exception e) {
-						e.printStackTrace();
+							});
+							stage.show();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
-				}
-			});
+				});
+			}
 			return row;
 		});
 		
 		ladeProductBacklog(CurrentScrumprojekt.productbacklog.getId());
 		
+		tableColumnStatus.setCellValueFactory(new PropertyValueFactory<UserStory, Integer>("status"));
+		tableColumnStatus
+				.setCellFactory(new Callback<TableColumn<UserStory, Integer>, TableCell<UserStory, Integer>>() {
+					@Override
+					public TableCell<UserStory, Integer> call(TableColumn<UserStory, Integer> param) {
+						final TableCell<UserStory, Integer> cell = new TableCell<UserStory, Integer>() {
+							private Integer status;
+							
+							@Override
+							public void updateItem(Integer item, boolean empty) {
+								super.updateItem(item, empty);
+								Circle circle = null;
+								if (!isEmpty()) {
+									
+									status = item;
+									
+									System.out.println(status);
+									
+									if (item == 0) {
+										circle = new Circle(10, Color.BLUE);
+									}
+									if (item == 1) {
+										circle = new Circle(10, Color.YELLOW);
+									}
+									if (item == 2) {
+										circle = new Circle(10, Color.GREEN);
+									}
+									
+									setGraphic(circle);
+								} else {
+									setGraphic(null);
+								}
+							}
+						};
+						cell.setAlignment(Pos.CENTER);
+						return cell;
+					}
+				});
 		tableColumnPrioritaet.setCellValueFactory(new PropertyValueFactory<UserStory, Integer>("prioritaet"));
 		tableColumnThema.setCellValueFactory(new PropertyValueFactory<UserStory, String>("thema"));
 		tableColumnBeschreibung.setCellValueFactory(new PropertyValueFactory<UserStory, String>("beschreibung"));

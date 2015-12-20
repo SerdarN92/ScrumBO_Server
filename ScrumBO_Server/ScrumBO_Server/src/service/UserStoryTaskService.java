@@ -46,6 +46,13 @@ public class UserStoryTaskService {
 		return userstorytaskListe;
 	}
 	
+	public List<UserStoryTask> findAllByUserStoryId(Integer userstoryId) {
+		userstorytaskDao.openCurrentSession();
+		List<UserStoryTask> userstorytaskListe = userstorytaskDao.findAllByUserStoryId(userstoryId);
+		userstorytaskDao.closeCurrentSession();
+		return userstorytaskListe;
+	}
+	
 	public void deleteAll() {
 		userstorytaskDao.openCurrentSessionwithTransaction();
 		userstorytaskDao.deleteAll();

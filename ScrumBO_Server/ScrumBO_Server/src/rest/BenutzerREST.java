@@ -94,6 +94,10 @@ public class BenutzerREST {
 			for (int i = 0; i < bbsListe.size(); i++) {
 				if (bbsListe.get(i).getPk().getBenutzerrollenId() == 1)
 					output = "User ist Scrum Master";
+				if (bbsListe.get(i).getPk().getBenutzerrollenId() == 2)
+					output = "User ist Product Owner";
+				if (bbsListe.get(i).getPk().getBenutzerrollenId() == 3)
+					output = "User ist Entwickler";
 			}
 		}
 		return Response.status(200).entity(output).build();

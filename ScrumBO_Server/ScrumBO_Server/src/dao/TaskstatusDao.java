@@ -12,10 +12,10 @@ import model.Taskstatus;
 
 public class TaskstatusDao implements DaoInterface<Taskstatus, Integer> {
 	
-	private Session		currentSession			= null;
-	private Transaction	currentTransaction		= null;
-	private String		hibernateconfigfilename	= "";
-												
+	private Session			currentSession			= null;
+	private Transaction		currentTransaction		= null;
+	private static String	hibernateconfigfilename	= "";
+													
 	public TaskstatusDao(String hibernateconfigfilename) {
 		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
@@ -42,7 +42,7 @@ public class TaskstatusDao implements DaoInterface<Taskstatus, Integer> {
 		getSessionFactory().close();
 	}
 	
-	public SessionFactory getSessionFactory() {
+	public static SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());

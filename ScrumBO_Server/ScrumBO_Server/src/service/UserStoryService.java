@@ -67,6 +67,13 @@ public class UserStoryService {
 		return userstoryListe;
 	}
 	
+	public Integer getUserStoryStatus(Integer userstoryId) {
+		userstoryDao.openCurrentSession();
+		Integer status = userstoryDao.getUserStoryStatus(userstoryId);
+		userstoryDao.closeCurrentSession();
+		return status;
+	}
+	
 	public void deleteAll() {
 		userstoryDao.openCurrentSessionwithTransaction();
 		userstoryDao.deleteAll();

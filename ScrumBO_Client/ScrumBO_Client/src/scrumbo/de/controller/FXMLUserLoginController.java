@@ -195,6 +195,13 @@ public class FXMLUserLoginController implements Initializable {
 			if (output.equals("User ist Scrum Master")) {
 				CurrentBenutzer.isSM = true;
 			}
+			if (output.equals("User ist Product Owner")) {
+				CurrentBenutzer.isPO = true;
+			}
+			if (output.equals("User ist Entwickler")) {
+				CurrentBenutzer.isDev = true;
+			}
+			
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
 		} catch (IOException e) {
