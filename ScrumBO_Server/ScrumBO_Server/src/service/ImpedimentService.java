@@ -7,7 +7,7 @@ import model.Impediment;
 
 public class ImpedimentService {
 	
-	private static ImpedimentDao impedimentDao;
+	private ImpedimentDao impedimentDao;
 	
 	public ImpedimentService(String hibernateconfigfilename) {
 		impedimentDao = new ImpedimentDao(hibernateconfigfilename);
@@ -32,9 +32,9 @@ public class ImpedimentService {
 		return impediment;
 	}
 	
-	public List<Impediment> findByProjectId(Integer id) {
+	public List<Impediment> findByProjectId(Integer projectId) {
 		impedimentDao.openCurrentSession();
-		List<Impediment> impedimentListe = impedimentDao.findByProjectId(id);
+		List<Impediment> impedimentListe = impedimentDao.findByProjectId(projectId);
 		impedimentDao.closeCurrentSession();
 		return impedimentListe;
 	}

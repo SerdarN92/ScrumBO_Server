@@ -54,7 +54,7 @@ public class FXMLProjectLoginController implements Initializable {
 	private Text		projectnameValidFail;
 	@FXML
 	private Text		passwordValidFail;
-	
+						
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
 		CurrentBenutzer.benutzerID = -1;
@@ -245,9 +245,7 @@ public class FXMLProjectLoginController implements Initializable {
 		}
 		
 		Gson gson = new Gson();
-		Type listType = new TypeToken<LinkedList<ProductBacklog>>() {
-		}.getType();
-		List<ProductBacklog> liste = gson.fromJson(output, listType);
+		ProductBacklog liste = gson.fromJson(output, ProductBacklog.class);
 		CurrentScrumprojekt.productbacklog = liste;
 	}
 	

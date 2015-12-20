@@ -24,10 +24,10 @@ public class SprintREST {
 		SprintService sprintService = new SprintService(hibernateconfigfilename);
 		Sprint sprint = null;
 		SprintDTO sprintDTO = null;
-		Integer count = 0;
-		count = sprintService.countSprintsToProject(scrumprojektid);
-		if (count > 0) {
-			sprint = sprintService.findByProjectIdandCount(count, scrumprojektid);
+		Integer sprintnummer = 0;
+		sprintnummer = sprintService.countSprintsToProject(scrumprojektid);
+		if (sprintnummer > 0) {
+			sprint = sprintService.findByProjectIdandSprintNumber(scrumprojektid, sprintnummer);
 			sprintDTO = new SprintDTO(sprint.getId(), sprint.getSprintnummer());
 		}
 		
@@ -79,13 +79,13 @@ public class SprintREST {
 		ScrumprojektService scrumprojektService = new ScrumprojektService(hibernateconfigfilename);
 		Sprint sprint = null;
 		SprintDTO sprintDTO = null;
-		Integer count = 0;
-		count = sprintService.countSprintsAnzahlToProject(scrumprojektid);
+		Integer sprintnummer = 0;
+		sprintnummer = sprintService.countSprintsAnzahlToProject(scrumprojektid);
 		sprint = new Sprint();
-		sprint.setSprintnummer(count + 1);
+		sprint.setSprintnummer(sprintnummer + 1);
 		sprint.setScrumprojekt(scrumprojektService.findById(scrumprojektid));
 		sprintService.persist(sprint);
-		sprint = sprintService.findByProjectIdandCount(count + 1, scrumprojektid);
+		sprint = sprintService.findByProjectIdandSprintNumber(scrumprojektid, sprintnummer + 1);
 		System.out.println("SPRINTID:" + sprint.getId());
 		sprintDTO = new SprintDTO(sprint.getId(), sprint.getSprintnummer());
 		

@@ -79,27 +79,9 @@ public class ScrumprojektREST {
 			}
 			scrumprojektDTO.setImpediment(impedimentDTOListe);
 			// UserStoryService userstoryService = new UserStoryService();
-			List<ProductBacklogDTO> productbacklogDTOListe = new LinkedList<ProductBacklogDTO>();
-			for (int i = 0; i < scrumprojekt.getProductbacklog().size(); i++) {
-				ProductBacklogDTO productbacklogDTO = new ProductBacklogDTO();
-				productbacklogDTO.setId(scrumprojekt.getProductbacklog().get(i).getId());
-				productbacklogDTO.setVersion(scrumprojekt.getProductbacklog().get(i).getVersion());
-				// List<UserStoryDTO> userstoryDTOList = new
-				// LinkedList<UserStoryDTO>();
-				// for (int m = 0; m < userstoryService.findAll().size(); m++) {
-				// UserStoryDTO userstoryDTO = new UserStoryDTO();
-				// userstoryDTO.setId(userstoryService.findAll().get(m).getId());
-				// userstoryDTO.setPrioritaet(userstoryService.findAll().get(m).getPrioritaet());
-				// userstoryDTO.setThema(userstoryService.findAll().get(m).getThema());
-				// userstoryDTO.setBeschreibung(userstoryService.findAll().get(m).getBeschreibung());
-				// userstoryDTO.setAkzeptanzkriterien(userstoryService.findAll().get(m).getAkzeptanzkriterien());
-				// userstoryDTO.setAufwandintagen(userstoryService.findAll().get(m).getAufwandintagen());
-				// userstoryDTOList.add(userstoryDTO);
-				// }
-				// productbacklogDTO.setUserstory(userstoryDTOList);
-				productbacklogDTOListe.add(productbacklogDTO);
-			}
-			scrumprojektDTO.setProductbacklog(productbacklogDTOListe);
+			ProductBacklogDTO productbacklogDTO = new ProductBacklogDTO();
+			productbacklogDTO.setId(scrumprojekt.getProductbacklog().getId());
+			scrumprojektDTO.setProductbacklog(productbacklogDTO);
 			List<SprintDTO> sprintDTOListe = new LinkedList<SprintDTO>();
 			for (int i = 0; i < scrumprojekt.getSprint().size(); i++) {
 				SprintDTO sprintDTO = new SprintDTO();
@@ -131,7 +113,6 @@ public class ScrumprojektREST {
 			List<BenutzerDTO> benutzerDTOListe = new LinkedList<BenutzerDTO>();
 			List<SprintDTO> sprintDTOListe = new LinkedList<SprintDTO>();
 			List<ImpedimentDTO> impedimentDTOListe = new LinkedList<ImpedimentDTO>();
-			List<ProductBacklogDTO> productbacklogDTOListe = new LinkedList<ProductBacklogDTO>();
 			// for (int j = 0; j <
 			// scrumprojektListe.get(i).getBenutzer().size(); j++) {
 			// BenutzerDTO benutzerDTO = new BenutzerDTO();
@@ -164,26 +145,24 @@ public class ScrumprojektREST {
 				impedimentDTOListe.add(impedimentDTO);
 			}
 			// UserStoryService userstoryService = new UserStoryService();
-			for (int j = 0; j < scrumprojektListe.get(i).getProductbacklog().size(); j++) {
-				ProductBacklogDTO productbacklogDTO = new ProductBacklogDTO();
-				productbacklogDTO.setId(scrumprojektListe.get(i).getProductbacklog().get(j).getId());
-				// List<UserStoryDTO> list = new LinkedList<UserStoryDTO>();
-				// for (int m = 0; m < userstoryService.findAll().size(); m++) {
-				// UserStoryDTO userstoryDTO = new UserStoryDTO();
-				// userstoryDTO.setId(userstoryService.findAll().get(m).getId());
-				// userstoryDTO.setThema(userstoryService.findAll().get(m).getThema());
-				// userstoryDTO.setBeschreibung(userstoryService.findAll().get(m).getBeschreibung());
-				// userstoryDTO.setAkzeptanzkriterien(userstoryService.findAll().get(m).getAkzeptanzkriterien());
-				// userstoryDTO.setAufwandintagen(userstoryService.findAll().get(m).getAufwandintagen());
-				// list.add(userstoryDTO);
-				// }
-				// productbacklogDTO.setUserstory(list);
-				productbacklogDTOListe.add(productbacklogDTO);
-			}
+			ProductBacklogDTO productbacklogDTO = new ProductBacklogDTO();
+			productbacklogDTO.setId(scrumprojektListe.get(i).getProductbacklog().getId());
+			// List<UserStoryDTO> list = new LinkedList<UserStoryDTO>();
+			// for (int m = 0; m < userstoryService.findAll().size(); m++) {
+			// UserStoryDTO userstoryDTO = new UserStoryDTO();
+			// userstoryDTO.setId(userstoryService.findAll().get(m).getId());
+			// userstoryDTO.setThema(userstoryService.findAll().get(m).getThema());
+			// userstoryDTO.setBeschreibung(userstoryService.findAll().get(m).getBeschreibung());
+			// userstoryDTO.setAkzeptanzkriterien(userstoryService.findAll().get(m).getAkzeptanzkriterien());
+			// userstoryDTO.setAufwandintagen(userstoryService.findAll().get(m).getAufwandintagen());
+			// list.add(userstoryDTO);
+			// }
+			// productbacklogDTO.setUserstory(list);
+			
 			// scrumprojektDTO.setBenutzer(benutzerDTOListe);
 			scrumprojektDTO.setSprint(sprintDTOListe);
 			scrumprojektDTO.setImpediment(impedimentDTOListe);
-			scrumprojektDTO.setProductbacklog(productbacklogDTOListe);
+			scrumprojektDTO.setProductbacklog(productbacklogDTO);
 			scrumprojektDTOListe.add(scrumprojektDTO);
 		}
 		
@@ -233,18 +212,11 @@ public class ScrumprojektREST {
 		sprintbacklogService.persist(sprintbacklog);
 		sprintbacklog = sprintbacklogService.findById(sprintbacklogid);
 		
-		List<ProductBacklog> productbacklogListe = new LinkedList<ProductBacklog>();
 		List<Benutzer_Benutzerrolle_Scrumprojekt> bssliste = bss.findAll();
-		
-		productbacklog.setVersion(1);
 		
 		scrumprojekt.setProjektname(scrumprojektDTO.getProjektname());
 		scrumprojekt.setPasswort(scrumprojektDTO.getPasswort());
-		
-		productbacklog.setScrumprojekt(scrumprojekt);
-		productbacklogListe.add(productbacklog);
-		
-		scrumprojekt.setProductbacklog(productbacklogListe);
+		scrumprojekt.setProductbacklog(productbacklog);
 		
 		for (int i = 0; i < bssliste.size(); i++) {
 			if (bssliste.get(i).getPk().getBenutzerId() == benutzer.getId()
@@ -285,18 +257,16 @@ public class ScrumprojektREST {
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
 		ScrumprojektService scrumprojektService = new ScrumprojektService(hibernateconfigfilename);
 		Scrumprojekt scrumprojekt = scrumprojektService.findById(projectid);
+		Integer productbacklogid = scrumprojekt.getProductbacklog().getId();
 		ProductBacklogService productbacklogService = new ProductBacklogService(hibernateconfigfilename);
-		List<ProductBacklog> productbacklogList = productbacklogService.findAllByProjectId(projectid);
-		List<ProductBacklogDTO> productbacklogDTOList = new LinkedList<ProductBacklogDTO>();
-		for (int i = 0; i < productbacklogList.size(); i++) {
-			ProductBacklogDTO productbacklogDTO = new ProductBacklogDTO();
-			productbacklogDTO.setId(productbacklogList.get(i).getId());
-			productbacklogDTO.setVersion(productbacklogList.get(i).getVersion());
-			productbacklogDTOList.add(productbacklogDTO);
-		}
+		ProductBacklog productbacklog = new ProductBacklog();
+		productbacklog = productbacklogService.findById(productbacklogid);
+		
+		ProductBacklogDTO productbacklogDTO = new ProductBacklogDTO();
+		productbacklogDTO.setId(productbacklog.getId());
 		
 		Gson gson = new Gson();
-		String output = gson.toJson(productbacklogDTOList);
+		String output = gson.toJson(productbacklogDTO);
 		
 		return Response.status(200).entity(output).build();
 		

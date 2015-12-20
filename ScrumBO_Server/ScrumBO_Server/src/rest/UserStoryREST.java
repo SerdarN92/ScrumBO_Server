@@ -215,15 +215,35 @@ public class UserStoryREST {
 		Sprint sprint = new Sprint();
 		sprint = sprintService.findById(sprintId);
 		
-		for (int i = 0; i < userstoryDTO.getUserstorytask().size(); i++) {
-			if (!(userstory.getUserstorytask().contains(userstoryDTO.getUserstorytask().get(i)))) {
-				System.out.println(userstoryDTO.getUserstorytask().get(i).getBeschreibung());
-				UserStoryTask userstorytask = new UserStoryTask(
-						userstoryDTO.getUserstorytask().get(i).getBeschreibung(), taskstatusService.findById(1),
-						userstoryDTO.getUserstorytask().get(i).getAufwandinstunden(),
-						benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getBenutzer().getId()),
-						userstory);
-				userstorytaskService.persist(userstorytask);
+		if (userstory.getUserstorytask().size() > 0) {
+			for (int i = 0; i < userstoryDTO.getUserstorytask().size(); i++) {
+				for (int j = 0; j < userstory.getUserstorytask().size(); j++) {
+					if (!userstory.getUserstorytask().get(j).getBeschreibung()
+							.equals(userstoryDTO.getUserstorytask().get(i).getBeschreibung())) {
+						if (!(userstory.getUserstorytask().contains(userstoryDTO.getUserstorytask().get(i)))) {
+							UserStoryTask userstorytask = new UserStoryTask(
+									userstoryDTO.getUserstorytask().get(i).getBeschreibung(),
+									taskstatusService.findById(1),
+									userstoryDTO.getUserstorytask().get(i).getAufwandinstunden(), benutzerService
+											.findById(userstoryDTO.getUserstorytask().get(i).getBenutzer().getId()),
+									userstory);
+							userstorytaskService.persist(userstorytask);
+						}
+					}
+				}
+				
+			}
+		} else {
+			for (int i = 0; i < userstoryDTO.getUserstorytask().size(); i++) {
+				if (!(userstory.getUserstorytask().contains(userstoryDTO.getUserstorytask().get(i)))) {
+					UserStoryTask userstorytask = new UserStoryTask(
+							userstoryDTO.getUserstorytask().get(i).getBeschreibung(), taskstatusService.findById(1),
+							userstoryDTO.getUserstorytask().get(i).getAufwandinstunden(),
+							benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getBenutzer().getId()),
+							userstory);
+					userstorytaskService.persist(userstorytask);
+				}
+				
 			}
 		}
 		

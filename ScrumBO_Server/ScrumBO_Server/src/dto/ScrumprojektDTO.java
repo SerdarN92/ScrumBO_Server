@@ -6,14 +6,14 @@ import java.util.List;
 
 public class ScrumprojektDTO implements Serializable {
 	
-	private Integer					id;
-	private String					projektname;
-	private String					passwort;
+	private Integer				id;
+	private String				projektname;
+	private String				passwort;
 	// private List<BenutzerDTO> benutzer = new LinkedList<BenutzerDTO>();
-	private List<SprintDTO>			sprint			= new LinkedList<SprintDTO>();
-	private List<ImpedimentDTO>		impediment		= new LinkedList<ImpedimentDTO>();
-	private List<ProductBacklogDTO>	productbacklog	= new LinkedList<ProductBacklogDTO>();
-	
+	private List<SprintDTO>		sprint			= new LinkedList<SprintDTO>();
+	private List<ImpedimentDTO>	impediment		= new LinkedList<ImpedimentDTO>();
+	private ProductBacklogDTO	productbacklog	= new ProductBacklogDTO();
+												
 	public ScrumprojektDTO() {
 	
 	}
@@ -72,11 +72,11 @@ public class ScrumprojektDTO implements Serializable {
 		this.impediment = impediment;
 	}
 	
-	public List<ProductBacklogDTO> getProductbacklog() {
+	public ProductBacklogDTO getProductbacklog() {
 		return productbacklog;
 	}
 	
-	public void setProductbacklog(List<ProductBacklogDTO> productbacklog) {
+	public void setProductbacklog(ProductBacklogDTO productbacklog) {
 		this.productbacklog = productbacklog;
 	}
 	

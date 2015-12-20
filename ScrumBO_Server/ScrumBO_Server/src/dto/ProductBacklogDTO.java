@@ -6,17 +6,14 @@ import java.util.List;
 public class ProductBacklogDTO implements Serializable {
 	
 	private Integer				id;
-	private Integer				version;
-	private ScrumprojektDTO		scrumprojekt;
 	private List<UserStoryDTO>	userstory;
-	
+								
 	public ProductBacklogDTO() {
 	
 	}
 	
-	public ProductBacklogDTO(Integer id, Integer version) {
+	public ProductBacklogDTO(Integer id) {
 		this.id = id;
-		this.version = version;
 	}
 	
 	public Integer getId() {
@@ -25,22 +22,6 @@ public class ProductBacklogDTO implements Serializable {
 	
 	public void setId(Integer id) {
 		this.id = id;
-	}
-	
-	public Integer getVersion() {
-		return version;
-	}
-	
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-	
-	public ScrumprojektDTO getScrumprojekt() {
-		return scrumprojekt;
-	}
-	
-	public void setScrumprojekt(ScrumprojektDTO scrumprojekt) {
-		this.scrumprojekt = scrumprojekt;
 	}
 	
 	public List<UserStoryDTO> getUserstory() {

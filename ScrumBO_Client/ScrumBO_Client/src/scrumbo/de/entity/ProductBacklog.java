@@ -6,17 +6,14 @@ import java.util.List;
 public class ProductBacklog implements Serializable {
 	
 	private Integer			id;
-	private Integer			version;
-	private Scrumprojekt	scrumprojekt;
 	private List<UserStory>	userstory;
-	
+							
 	public ProductBacklog() {
 	
 	}
 	
-	public ProductBacklog(Integer id, Integer version) {
+	public ProductBacklog(Integer id) {
 		this.id = id;
-		this.version = version;
 	}
 	
 	public Integer getId() {
@@ -25,22 +22,6 @@ public class ProductBacklog implements Serializable {
 	
 	public void setId(Integer id) {
 		this.id = id;
-	}
-	
-	public Integer getVersion() {
-		return version;
-	}
-	
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-	
-	public Scrumprojekt getScrumprojekt() {
-		return scrumprojekt;
-	}
-	
-	public void setScrumprojekt(Scrumprojekt scrumprojekt) {
-		this.scrumprojekt = scrumprojekt;
 	}
 	
 	public List<UserStory> getUserstory() {

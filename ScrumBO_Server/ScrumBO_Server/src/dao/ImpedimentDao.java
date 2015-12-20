@@ -12,10 +12,10 @@ import model.Impediment;
 
 public class ImpedimentDao implements DaoInterface<Impediment, Integer> {
 	
-	private Session			currentSession		= null;
-	private Transaction		currentTransaction	= null;
-	private static String	hibernateconfigfilename;
-	
+	private Session		currentSession			= null;
+	private Transaction	currentTransaction		= null;
+	private String		hibernateconfigfilename	= "";
+												
 	public ImpedimentDao(String hibernateconfigfilename) {
 		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
@@ -33,14 +33,16 @@ public class ImpedimentDao implements DaoInterface<Impediment, Integer> {
 	
 	public void closeCurrentSession() {
 		currentSession.close();
+		getSessionFactory().close();
 	}
 	
 	public void closeCurrentSessionwithTransaction() {
 		currentTransaction.commit();
 		currentSession.close();
+		getSessionFactory().close();
 	}
 	
-	public static SessionFactory getSessionFactory() {
+	public SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());
@@ -77,9 +79,9 @@ public class ImpedimentDao implements DaoInterface<Impediment, Integer> {
 		return impediment;
 	}
 	
-	public List<Impediment> findByProjectId(Integer id) {
+	public List<Impediment> findByProjectId(Integer projectId) {
 		List<Impediment> impedimentListe = (List<Impediment>) getCurrentSession()
-				.createQuery("from Impediment where scrumprojekt_id like'" + id + "'").list();
+				.createQuery("from Impediment where scrumprojekt_id like'" + projectId + "'").list();
 		return impedimentListe;
 	}
 	

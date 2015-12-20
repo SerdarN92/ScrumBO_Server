@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
@@ -22,28 +20,17 @@ public class ProductBacklog {
 	@Id
 	@GeneratedValue
 	@Column(name = "productbacklog_id", unique = true, nullable = false)
-	private Integer id;
-	
-	@Column(name = "version", nullable = false)
-	private Integer version;
-	
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "scrumprojekt_id", nullable = true)
-	private Scrumprojekt scrumprojekt;
-	
+	private Integer			id;
+							
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "productbacklog")
 	@Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE,
 			org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST,
 			org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
-	private List<UserStory> userstory;
-	
+	private List<UserStory>	userstory;
+							
 	public ProductBacklog() {
 	
-	}
-	
-	public ProductBacklog(Integer version) {
-		this.version = version;
 	}
 	
 	public Integer getId() {
@@ -52,22 +39,6 @@ public class ProductBacklog {
 	
 	public void setId(Integer id) {
 		this.id = id;
-	}
-	
-	public Integer getVersion() {
-		return version;
-	}
-	
-	public void setVersion(Integer version) {
-		this.version = version;
-	}
-	
-	public Scrumprojekt getScrumprojekt() {
-		return scrumprojekt;
-	}
-	
-	public void setScrumprojekt(Scrumprojekt scrumprojekt) {
-		this.scrumprojekt = scrumprojekt;
 	}
 	
 	public List<UserStory> getUserstory() {

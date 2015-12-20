@@ -10,12 +10,16 @@ import org.json.JSONObject;
 import com.google.gson.Gson;
 
 import javafx.event.EventHandler;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.effect.BlendMode;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.Dragboard;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.TransferMode;
 import javafx.scene.layout.GridPane;
@@ -24,13 +28,16 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.entity.UserStoryTask;
 
 public class MyHBox extends HBox {
 	
-	private UserStory		userstory		= new UserStory();
+	public UserStory		userstory		= new UserStory();
 	private Text			prioritaet		= new Text();
 	private Text			beschreibung	= new Text();
 	private VBox			vboxprioritaet	= new VBox();
@@ -43,6 +50,12 @@ public class MyHBox extends HBox {
 	private Integer			bla				= 0;
 	private Pane			currentPane		= new Pane();
 											
+	public static UserStory	blabla			= new UserStory();
+											
+	public static void setUserStory(UserStory userstory) {
+		blabla = userstory;
+	}
+	
 	private void initMyHBox() {
 		prioritaet.setText(userstory.getPrioritaet().toString());
 		vboxprioritaet.setMinWidth(100);
@@ -275,6 +288,41 @@ public class MyHBox extends HBox {
 		
 		this.setStyle("-fx-border-style: solid;" + "-fx-border-width: 1;" + "-fx-border-color: black");
 		
+		this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				setUserStory(userstory);
+			}
+		});
+		this.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				if (event.getButton().equals(MouseButton.PRIMARY)) {
+					if (event.getClickCount() == 2) {
+						try {
+							FXMLLoader fxmlLoader = new FXMLLoader(
+									getClass().getResource("/scrumbo/de/gui/FXMLSprintBacklogEditUserStory.fxml"));
+							Parent root1 = (Parent) fxmlLoader.load();
+							Stage stage = new Stage();
+							stage.initModality(Modality.APPLICATION_MODAL);
+							stage.setScene(new Scene(root1));
+							stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+								@Override
+								public void handle(WindowEvent event) {
+									try {
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							});
+							stage.show();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				}
+			}
+		});
 		this.getChildren().add(vboxprioritaet);
 		this.getChildren().add(vboxuserstory);
 		this.getChildren().add(vboxopentasks);

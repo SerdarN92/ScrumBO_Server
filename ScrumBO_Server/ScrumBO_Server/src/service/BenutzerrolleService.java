@@ -5,13 +5,9 @@ import java.util.List;
 import dao.BenutzerrolleDao;
 import model.Benutzerrolle;
 
-/*
- * Dieser Service wird genutzt, um Zugriff über das Data Access Object der Benutzerrolle
- * auf der Datenbank Zugriff auf die Tabelle Benutzerrolle zu haben.
- */
 public class BenutzerrolleService {
 	
-	private static BenutzerrolleDao BenutzerrolleDao;
+	private BenutzerrolleDao BenutzerrolleDao;
 	
 	public BenutzerrolleService(String hibernateconfigfilename) {
 		BenutzerrolleDao = new BenutzerrolleDao(hibernateconfigfilename);

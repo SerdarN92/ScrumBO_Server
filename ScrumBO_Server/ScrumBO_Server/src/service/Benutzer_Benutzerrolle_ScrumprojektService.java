@@ -7,7 +7,7 @@ import model.Benutzer_Benutzerrolle_Scrumprojekt;
 
 public class Benutzer_Benutzerrolle_ScrumprojektService {
 	
-	private static Benutzer_Benutzerrolle_ScrumprojektDao service;
+	private Benutzer_Benutzerrolle_ScrumprojektDao service;
 	
 	public Benutzer_Benutzerrolle_ScrumprojektService(String hibernateconfigfilename) {
 		service = new Benutzer_Benutzerrolle_ScrumprojektDao(hibernateconfigfilename);
@@ -32,9 +32,9 @@ public class Benutzer_Benutzerrolle_ScrumprojektService {
 		return benutzer;
 	}
 	
-	public List<Benutzer_Benutzerrolle_Scrumprojekt> findListById(Integer id) {
+	public List<Benutzer_Benutzerrolle_Scrumprojekt> findListByBenutzerId(Integer benutzerId) {
 		service.openCurrentSession();
-		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzer = service.findListById(id);
+		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzer = service.findListByBenutzerId(benutzerId);
 		service.closeCurrentSession();
 		return benutzer;
 	}

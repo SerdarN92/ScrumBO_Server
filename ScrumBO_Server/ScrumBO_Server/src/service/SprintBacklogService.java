@@ -7,7 +7,7 @@ import model.SprintBacklog;
 
 public class SprintBacklogService {
 	
-	private static SprintBacklogDao sprintbacklogDao;
+	private SprintBacklogDao sprintbacklogDao;
 	
 	public SprintBacklogService(String hibernateconfigfilename) {
 		sprintbacklogDao = new SprintBacklogDao(hibernateconfigfilename);

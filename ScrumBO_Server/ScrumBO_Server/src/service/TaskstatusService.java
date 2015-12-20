@@ -7,7 +7,7 @@ import model.Taskstatus;
 
 public class TaskstatusService {
 	
-	private static TaskstatusDao taskstatusDao;
+	private TaskstatusDao taskstatusDao;
 	
 	public TaskstatusService(String hibernateconfigfilename) {
 		taskstatusDao = new TaskstatusDao(hibernateconfigfilename);

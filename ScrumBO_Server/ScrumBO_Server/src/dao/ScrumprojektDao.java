@@ -12,10 +12,10 @@ import model.Scrumprojekt;
 
 public class ScrumprojektDao implements DaoInterface<Scrumprojekt, Integer> {
 	
-	private Session			currentSession		= null;
-	private Transaction		currentTransaction	= null;
-	private static String	hibernateconfigfilename;
-	
+	private Session		currentSession			= null;
+	private Transaction	currentTransaction		= null;
+	private String		hibernateconfigfilename	= "";
+												
 	public ScrumprojektDao(String hibernateconfigfilename) {
 		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
@@ -33,14 +33,16 @@ public class ScrumprojektDao implements DaoInterface<Scrumprojekt, Integer> {
 	
 	public void closeCurrentSession() {
 		currentSession.close();
+		getSessionFactory().close();
 	}
 	
 	public void closeCurrentSessionwithTransaction() {
 		currentTransaction.commit();
 		currentSession.close();
+		getSessionFactory().close();
 	}
 	
-	public static SessionFactory getSessionFactory() {
+	public SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());

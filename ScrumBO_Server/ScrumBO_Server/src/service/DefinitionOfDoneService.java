@@ -7,7 +7,7 @@ import model.DefinitionOfDone;
 
 public class DefinitionOfDoneService {
 	
-	private static DefinitionOfDoneDao definitionofdoneDao;
+	private DefinitionOfDoneDao definitionofdoneDao;
 	
 	public DefinitionOfDoneService(String hibernateconfigfilename) {
 		definitionofdoneDao = new DefinitionOfDoneDao(hibernateconfigfilename);
@@ -32,9 +32,9 @@ public class DefinitionOfDoneService {
 		return definitionofdone;
 	}
 	
-	public List<DefinitionOfDone> findByUserstoryId(Integer id) {
+	public List<DefinitionOfDone> findByUserstoryId(Integer userstoryId) {
 		definitionofdoneDao.openCurrentSession();
-		List<DefinitionOfDone> definitionofdoneListe = definitionofdoneDao.findByUserstoryId(id);
+		List<DefinitionOfDone> definitionofdoneListe = definitionofdoneDao.findByUserstoryId(userstoryId);
 		definitionofdoneDao.closeCurrentSession();
 		return definitionofdoneListe;
 	}

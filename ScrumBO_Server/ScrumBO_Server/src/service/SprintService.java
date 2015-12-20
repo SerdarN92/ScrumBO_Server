@@ -7,7 +7,7 @@ import model.Sprint;
 
 public class SprintService {
 	
-	private static SprintDao sprintDao;
+	private SprintDao sprintDao;
 	
 	public SprintService(String hibernateconfigfilename) {
 		sprintDao = new SprintDao(hibernateconfigfilename);
@@ -28,13 +28,6 @@ public class SprintService {
 	public Sprint findById(Integer id) {
 		sprintDao.openCurrentSession();
 		Sprint sprint = sprintDao.findById(id);
-		sprintDao.closeCurrentSession();
-		return sprint;
-	}
-	
-	public Sprint findByProjectIdandCount(Integer count, Integer scrumprojektid) {
-		sprintDao.openCurrentSession();
-		Sprint sprint = sprintDao.findByProjectIdandCount(count, scrumprojektid);
 		sprintDao.closeCurrentSession();
 		return sprint;
 	}

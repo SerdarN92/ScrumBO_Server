@@ -61,7 +61,7 @@ public class FXMLUserStoryEditController implements Initializable {
 	@FXML
 	private Text			textaufwandintagen;
 	private UserStory		data	= null;
-	
+									
 	private Boolean checkPrioritaet() {
 		if (prioritaet.getText().isEmpty()) {
 			textprioritaet.setText("Bitte eine Priorität eingeben");
@@ -160,7 +160,7 @@ public class FXMLUserStoryEditController implements Initializable {
 	
 	@FXML
 	private void handleButtonDelete(ActionEvent event) throws Exception {
-		List<UserStory> userstoryList = CurrentScrumprojekt.productbacklog.get(0).getUserstory();
+		List<UserStory> userstoryList = CurrentScrumprojekt.productbacklog.getUserstory();
 		UserStory userstory = new UserStory();
 		userstory.setId(data.getId());
 		
@@ -212,7 +212,7 @@ public class FXMLUserStoryEditController implements Initializable {
 					|| !(data.getBeschreibung().equals(beschreibung.getText()))
 					|| !(data.getAkzeptanzkriterien().equals(akzeptanzkriterien.getText()))
 					|| !(data.getAufwandintagen().equals(Integer.parseInt(aufwandintagen.getText())))) {
-				List<UserStory> userstoryList = CurrentScrumprojekt.productbacklog.get(0).getUserstory();
+				List<UserStory> userstoryList = CurrentScrumprojekt.productbacklog.getUserstory();
 				UserStory userstory = null;
 				for (int i = 0; i < userstoryList.size(); i++) {
 					if (userstoryList.get(i).getId().equals(data.getId())) {

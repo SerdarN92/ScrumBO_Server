@@ -12,10 +12,10 @@ import model.UserStory;
 
 public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 	
-	private Session			currentSession		= null;
-	private Transaction		currentTransaction	= null;
-	private static String	hibernateconfigfilename;
-							
+	private Session		currentSession			= null;
+	private Transaction	currentTransaction		= null;
+	private String		hibernateconfigfilename	= "";
+												
 	public UserStoryDao(String hibernateconfigfilename) {
 		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
@@ -33,14 +33,16 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 	
 	public void closeCurrentSession() {
 		currentSession.close();
+		getSessionFactory().close();
 	}
 	
 	public void closeCurrentSessionwithTransaction() {
 		currentTransaction.commit();
 		currentSession.close();
+		getSessionFactory().close();
 	}
 	
-	public static SessionFactory getSessionFactory() {
+	public SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());
@@ -86,15 +88,15 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 		return userstoryListe;
 	}
 	
-	public List<UserStory> findAllByProductBacklogId(Integer id) {
+	public List<UserStory> findAllByProductBacklogId(Integer productbacklogId) {
 		List<UserStory> userstoryListe = (List<UserStory>) getCurrentSession()
-				.createQuery("from UserStory where productbacklog_id like'" + id + "'").list();
+				.createQuery("from UserStory where productbacklog_id like'" + productbacklogId + "'").list();
 		return userstoryListe;
 	}
 	
-	public List<UserStory> findAllBySprintId(Integer id) {
+	public List<UserStory> findAllBySprintId(Integer sprintId) {
 		List<UserStory> userstoryListe = (List<UserStory>) getCurrentSession()
-				.createQuery("from UserStory where sprint_id like'" + id + "'").list();
+				.createQuery("from UserStory where sprint_id like'" + sprintId + "'").list();
 		return userstoryListe;
 	}
 	

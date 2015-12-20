@@ -10,6 +10,7 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
@@ -21,14 +22,14 @@ public class Scrumprojekt {
 	@Id
 	@GeneratedValue
 	@Column(name = "scrumprojekt_id", unique = true, nullable = false)
-	private Integer id;
-	
+	private Integer				id;
+								
 	@Column(name = "projektname", unique = true, nullable = false)
-	private String projektname;
-	
+	private String				projektname;
+								
 	@Column(name = "passwort", nullable = false)
-	private String passwort;
-	
+	private String				passwort;
+								
 	// @ManyToMany(cascade = { CascadeType.DETACH, CascadeType.MERGE,
 	// CascadeType.REFRESH,
 	// CascadeType.PERSIST }, fetch = FetchType.EAGER, targetEntity =
@@ -44,22 +45,18 @@ public class Scrumprojekt {
 	@Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE,
 			org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST,
 			org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
-	private List<Sprint> sprint = new LinkedList<Sprint>();
-	
+	private List<Sprint>		sprint	= new LinkedList<Sprint>();
+										
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "scrumprojekt")
 	@Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE,
 			org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST,
 			org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
-	private List<Impediment> impediment;
-	
-	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "scrumprojekt")
-	@Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE,
-			org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST,
-			org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
-	private List<ProductBacklog> productbacklog;
-	
+	private List<Impediment>	impediment;
+								
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private ProductBacklog		productbacklog;
+								
 	public Scrumprojekt() {
 	
 	}
@@ -117,11 +114,11 @@ public class Scrumprojekt {
 		this.impediment = impediment;
 	}
 	
-	public List<ProductBacklog> getProductbacklog() {
+	public ProductBacklog getProductbacklog() {
 		return productbacklog;
 	}
 	
-	public void setProductbacklog(List<ProductBacklog> productbacklog) {
+	public void setProductbacklog(ProductBacklog productbacklog) {
 		this.productbacklog = productbacklog;
 	}
 	

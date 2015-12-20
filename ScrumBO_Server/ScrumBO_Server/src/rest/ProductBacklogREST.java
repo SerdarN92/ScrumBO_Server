@@ -35,7 +35,6 @@ public class ProductBacklogREST {
 		ProductBacklog productbacklog = productbacklogService.findById(productbacklogid);
 		ProductBacklogDTO productbacklogDTO = new ProductBacklogDTO();
 		productbacklogDTO.setId(productbacklog.getId());
-		productbacklogDTO.setVersion(productbacklog.getVersion());
 		List<UserStoryDTO> userstoryDTOListe = new LinkedList<UserStoryDTO>();
 		for (int i = 0; i < productbacklog.getUserstory().size(); i++) {
 			UserStoryDTO userstoryDTO = new UserStoryDTO();
@@ -66,7 +65,6 @@ public class ProductBacklogREST {
 		ProductBacklog productbacklog = productbacklogService.findById(productbacklogid);
 		ProductBacklogDTO productbacklogDTO = new ProductBacklogDTO();
 		productbacklogDTO.setId(productbacklog.getId());
-		productbacklogDTO.setVersion(productbacklog.getVersion());
 		List<UserStoryDTO> userstoryDTOListe = new LinkedList<UserStoryDTO>();
 		
 		for (int i = 0; i < productbacklog.getUserstory().size(); i++) {

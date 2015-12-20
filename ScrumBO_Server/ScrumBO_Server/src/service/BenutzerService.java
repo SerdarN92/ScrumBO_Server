@@ -7,7 +7,7 @@ import model.Benutzer;
 
 public class BenutzerService {
 	
-	private static BenutzerDao benutzerDao;
+	private BenutzerDao benutzerDao;
 	
 	public BenutzerService(String hibernateconfigfilename) {
 		benutzerDao = new BenutzerDao(hibernateconfigfilename);

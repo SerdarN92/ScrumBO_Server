@@ -7,7 +7,7 @@ import model.Scrumprojekt;
 
 public class ScrumprojektService {
 	
-	private static ScrumprojektDao scrumprojektDao;
+	private ScrumprojektDao scrumprojektDao;
 	
 	public ScrumprojektService(String hibernateconfigfilename) {
 		scrumprojektDao = new ScrumprojektDao(hibernateconfigfilename);

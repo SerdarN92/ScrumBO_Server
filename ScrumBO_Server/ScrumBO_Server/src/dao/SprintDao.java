@@ -12,10 +12,10 @@ import model.Sprint;
 
 public class SprintDao implements DaoInterface<Sprint, Integer> {
 	
-	private Session			currentSession		= null;
-	private Transaction		currentTransaction	= null;
-	private static String	hibernateconfigfilename;
-							
+	private Session		currentSession			= null;
+	private Transaction	currentTransaction		= null;
+	private String		hibernateconfigfilename	= "";
+												
 	public SprintDao(String hibernateconfigfilename) {
 		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
@@ -33,14 +33,16 @@ public class SprintDao implements DaoInterface<Sprint, Integer> {
 	
 	public void closeCurrentSession() {
 		currentSession.close();
+		getSessionFactory().close();
 	}
 	
 	public void closeCurrentSessionwithTransaction() {
 		currentTransaction.commit();
 		currentSession.close();
+		getSessionFactory().close();
 	}
 	
-	public static SessionFactory getSessionFactory() {
+	public SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());
@@ -77,13 +79,6 @@ public class SprintDao implements DaoInterface<Sprint, Integer> {
 		return sprint;
 	}
 	
-	public Sprint findByProjectIdandCount(Integer count, Integer scrumprojektid) {
-		Sprint sprint = (Sprint) getCurrentSession().createQuery(
-				"from Sprint where sprint_nummer like'" + count + "' AND scrumprojekt_id like'" + scrumprojektid + "'")
-				.uniqueResult();
-		return sprint;
-	}
-	
 	public Sprint findByProjectIdandSprintNumber(Integer scrumprojektid, Integer sprintnumber) {
 		Sprint sprint = (Sprint) getCurrentSession().createQuery("from Sprint where scrumprojekt_id like '"
 				+ scrumprojektid + "' AND sprint_nummer like'" + sprintnumber + "'").uniqueResult();
@@ -106,18 +101,20 @@ public class SprintDao implements DaoInterface<Sprint, Integer> {
 		}
 	}
 	
+	// Gibt die höchste SprintNummer eines Projekts zurück
 	public Integer countSprintsToProject(Integer scrumprojektid) {
-		Integer count = 0;
+		Integer sprintnummer = 0;
 		List<Sprint> sprintListe = (List<Sprint>) getCurrentSession()
 				.createQuery("from Sprint where scrumprojekt_id like'" + scrumprojektid + "'").list();
 		for (int i = 0; i < sprintListe.size(); i++) {
-			if (sprintListe.get(i).getSprintnummer() > count) {
-				count = sprintListe.get(i).getSprintnummer();
+			if (sprintListe.get(i).getSprintnummer() > sprintnummer) {
+				sprintnummer = sprintListe.get(i).getSprintnummer();
 			}
 		}
-		return count;
+		return sprintnummer;
 	}
 	
+	// Gibt die Anzahl von Sprints eines Projekts zurück
 	public Integer countSprintsAnzahlToProject(Integer scrumprojektid) {
 		Integer count = 0;
 		List<Sprint> sprintListe = (List<Sprint>) getCurrentSession()

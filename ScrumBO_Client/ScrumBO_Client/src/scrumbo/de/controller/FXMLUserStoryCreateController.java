@@ -53,7 +53,7 @@ public class FXMLUserStoryCreateController implements Initializable {
 	private Text		textakzeptanzkriterien;
 	@FXML
 	private Text		textaufwandintagen;
-	
+						
 	private Boolean checkPrioritaet() {
 		if (prioritaet.getText().isEmpty()) {
 			textprioritaet.setText("Bitte eine Priorität eingeben");
@@ -158,7 +158,7 @@ public class FXMLUserStoryCreateController implements Initializable {
 			userstory.setBeschreibung(beschreibung.getText());
 			userstory.setAkzeptanzkriterien(akzeptanzkriterien.getText());
 			userstory.setAufwandintagen(Integer.parseInt(aufwandintagen.getText()));
-			List<UserStory> userstoryList = CurrentScrumprojekt.productbacklog.get(0).getUserstory();
+			List<UserStory> userstoryList = CurrentScrumprojekt.productbacklog.getUserstory();
 			userstoryList.add(userstory);
 			
 			Gson gson = new Gson();
@@ -168,8 +168,7 @@ public class FXMLUserStoryCreateController implements Initializable {
 			
 			try {
 				URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstory/create/"
-						+ CurrentScrumprojekt.productbacklog.get(0).getId() + "/"
-						+ ScrumBOClient.getDatabaseconfigfile());
+						+ CurrentScrumprojekt.productbacklog.getId() + "/" + ScrumBOClient.getDatabaseconfigfile());
 				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 				conn.setDoOutput(true);
 				conn.setRequestProperty("Content-Type", "application/json");

@@ -6,8 +6,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 import com.google.gson.Gson;
@@ -72,9 +70,9 @@ public class FXMLProductBacklogController implements Initializable {
 	private TableColumn<UserStory, String>	tableColumnAkzeptanzkriterien;
 	@FXML
 	private TableColumn<UserStory, Integer>	tableColumnAufwand;
-	
-	public static ObservableList<UserStory> data = FXCollections.observableArrayList();
-	
+											
+	public static ObservableList<UserStory>	data	= FXCollections.observableArrayList();
+													
 	public static ObservableList<UserStory> getData() {
 		return data;
 	}
@@ -184,7 +182,7 @@ public class FXMLProductBacklogController implements Initializable {
 			return row;
 		});
 		
-		ladeProductBacklog(CurrentScrumprojekt.productbacklog.get(0).getId());
+		ladeProductBacklog(CurrentScrumprojekt.productbacklog.getId());
 		
 		tableColumnPrioritaet.setCellValueFactory(new PropertyValueFactory<UserStory, Integer>("prioritaet"));
 		tableColumnThema.setCellValueFactory(new PropertyValueFactory<UserStory, String>("thema"));
@@ -249,13 +247,9 @@ public class FXMLProductBacklogController implements Initializable {
 		String output = "";
 		Integer platz = -1;
 		try {
-			for (int i = 0; i < CurrentScrumprojekt.productbacklog.size(); i++) {
-				if (CurrentScrumprojekt.productbacklog.get(i).getId().equals(id))
-					platz = i;
-			}
+			
 			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/productbacklog/suche/"
-					+ CurrentScrumprojekt.productbacklog.get(platz).getId() + "/"
-					+ ScrumBOClient.getDatabaseconfigfile());
+					+ CurrentScrumprojekt.productbacklog.getId() + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
@@ -274,19 +268,17 @@ public class FXMLProductBacklogController implements Initializable {
 		
 		Gson gson = new Gson();
 		ProductBacklog a = gson.fromJson(output, ProductBacklog.class);
-		List<ProductBacklog> list = new LinkedList<ProductBacklog>();
-		list.add(a);
-		CurrentScrumprojekt.productbacklog = list;
+		CurrentScrumprojekt.productbacklog = a;
 		
-		for (int i = 0; i < CurrentScrumprojekt.productbacklog.get(0).getUserstory().size(); i++) {
-			data.add(CurrentScrumprojekt.productbacklog.get(0).getUserstory().get(i));
+		for (int i = 0; i < CurrentScrumprojekt.productbacklog.getUserstory().size(); i++) {
+			data.add(CurrentScrumprojekt.productbacklog.getUserstory().get(i));
 		}
 		
 	}
 	
 	public void reload() throws IOException {
 		tableViewProductBacklog.getItems().clear();
-		ladeProductBacklog(CurrentScrumprojekt.productbacklog.get(0).getId());
+		ladeProductBacklog(CurrentScrumprojekt.productbacklog.getId());
 	}
 	
 }

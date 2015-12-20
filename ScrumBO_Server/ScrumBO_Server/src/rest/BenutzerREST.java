@@ -110,7 +110,7 @@ public class BenutzerREST {
 			
 			Benutzer_Benutzerrolle_ScrumprojektService bbs = new Benutzer_Benutzerrolle_ScrumprojektService(
 					hibernateconfigfilename);
-			List<Benutzer_Benutzerrolle_Scrumprojekt> list = bbs.findListById(benutzer.getId());
+			List<Benutzer_Benutzerrolle_Scrumprojekt> list = bbs.findListByBenutzerId(benutzer.getId());
 			for (int i = 0; i < list.size(); i++) {
 				if (list.get(i).getPk().getBenutzerrollenId() == 1)
 					output = "User ist Scrum Master";

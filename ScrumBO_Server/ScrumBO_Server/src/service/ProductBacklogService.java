@@ -7,7 +7,7 @@ import model.ProductBacklog;
 
 public class ProductBacklogService {
 	
-	private static ProductBacklogDao productbacklogDao;
+	private ProductBacklogDao productbacklogDao;
 	
 	public ProductBacklogService(String hibernateconfigfilename) {
 		productbacklogDao = new ProductBacklogDao(hibernateconfigfilename);

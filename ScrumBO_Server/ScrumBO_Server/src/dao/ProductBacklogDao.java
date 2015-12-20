@@ -15,10 +15,10 @@ import model.UserStory;
 
 public class ProductBacklogDao implements DaoInterface<ProductBacklog, Integer> {
 	
-	private Session			currentSession		= null;
-	private Transaction		currentTransaction	= null;
-	private static String	hibernateconfigfilename;
-	
+	private Session		currentSession			= null;
+	private Transaction	currentTransaction		= null;
+	private String		hibernateconfigfilename	= "";
+												
 	public ProductBacklogDao(String hibernateconfigfilename) {
 		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
@@ -36,14 +36,16 @@ public class ProductBacklogDao implements DaoInterface<ProductBacklog, Integer> 
 	
 	public void closeCurrentSession() {
 		currentSession.close();
+		getSessionFactory().close();
 	}
 	
 	public void closeCurrentSessionwithTransaction() {
 		currentTransaction.commit();
 		currentSession.close();
+		getSessionFactory().close();
 	}
 	
-	public static SessionFactory getSessionFactory() {
+	public SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());
@@ -75,6 +77,8 @@ public class ProductBacklogDao implements DaoInterface<ProductBacklog, Integer> 
 		getCurrentSession().update(entity);
 	}
 	
+	// LinkedHashSet, damit keine doppelten UserStorys in der Liste vorhanden
+	// sind
 	public ProductBacklog findById(Integer id) {
 		ProductBacklog productbacklog = (ProductBacklog) getCurrentSession().get(ProductBacklog.class, id);
 		List<UserStory> liste = productbacklog.getUserstory();
@@ -93,9 +97,9 @@ public class ProductBacklogDao implements DaoInterface<ProductBacklog, Integer> 
 		return productbacklogListe;
 	}
 	
-	public List<ProductBacklog> findAllByProjectId(Integer id) {
+	public List<ProductBacklog> findAllByProjectId(Integer projectId) {
 		List<ProductBacklog> productbacklogListe = (List<ProductBacklog>) getCurrentSession()
-				.createQuery("from ProductBacklog where scrumprojekt_id like'" + id + "'").list();
+				.createQuery("from ProductBacklog where scrumprojekt_id like'" + projectId + "'").list();
 		return productbacklogListe;
 	}
 	

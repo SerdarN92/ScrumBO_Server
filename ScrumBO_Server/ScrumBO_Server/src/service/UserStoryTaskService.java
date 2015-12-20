@@ -7,7 +7,7 @@ import model.UserStoryTask;
 
 public class UserStoryTaskService {
 	
-	private static UserStoryTaskDao userstorytaskDao;
+	private UserStoryTaskDao userstorytaskDao;
 	
 	public UserStoryTaskService(String hibernateconfigfilename) {
 		userstorytaskDao = new UserStoryTaskDao(hibernateconfigfilename);

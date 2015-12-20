@@ -90,7 +90,7 @@ public class FXMLSprintBacklogController implements Initializable {
 		sp.setContent(VBOXUserStories);
 		sp.setVisible(true);
 		
-		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.get(0).getId());
+		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.getId());
 		
 		for (int i = 0; i < dataSprintBacklog.size(); i++) {
 			System.out.println(dataSprintBacklog.size());
@@ -207,7 +207,7 @@ public class FXMLSprintBacklogController implements Initializable {
 		sp.setVisible(true);
 		
 		ladeSprint();
-		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.get(0).getId());
+		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.getId());
 		
 		for (int i = 0; i < dataSprintBacklog.size(); i++) {
 			UserStory userstory = dataSprintBacklog.get(i);
@@ -268,10 +268,6 @@ public class FXMLSprintBacklogController implements Initializable {
 		String output = "";
 		Integer platz = -1;
 		try {
-			for (int i = 0; i < CurrentScrumprojekt.productbacklog.size(); i++) {
-				if (CurrentScrumprojekt.productbacklog.get(i).getId().equals(id))
-					platz = i;
-			}
 			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstory/suche/sprintid/" + CurrentSprint.id
 					+ "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
@@ -411,7 +407,7 @@ public class FXMLSprintBacklogController implements Initializable {
 		CurrentSprint.id = sprint.getId();
 		CurrentSprint.sprintnummer = sprint.getSprintnummer();
 		
-		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.get(0).getId());
+		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.getId());
 		
 		for (int i = 1; i < VBOXUserStories.getChildren().size(); i++) {
 			VBOXUserStories.getChildren().remove(i);
@@ -430,7 +426,7 @@ public class FXMLSprintBacklogController implements Initializable {
 	
 	public void reloadSprintBacklog() throws IOException {
 		dataSprintBacklog.clear();
-		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.get(0).getId());
+		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.getId());
 		
 		for (int i = 1; i < VBOXUserStories.getChildren().size(); i++) {
 			VBOXUserStories.getChildren().remove(i);

@@ -13,10 +13,10 @@ import model.Benutzer_Benutzerrolle_Scrumprojekt;
 public class Benutzer_Benutzerrolle_ScrumprojektDao
 		implements DaoInterface<Benutzer_Benutzerrolle_Scrumprojekt, Integer> {
 		
-	private Session			currentSession			= null;
-	private Transaction		currentTransaction		= null;
-	private static String	hibernateconfigfilename	= "";
-													
+	private Session		currentSession			= null;
+	private Transaction	currentTransaction		= null;
+	private String		hibernateconfigfilename	= "";
+												
 	public Benutzer_Benutzerrolle_ScrumprojektDao(String hibernateconfigfilename) {
 		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
@@ -34,14 +34,16 @@ public class Benutzer_Benutzerrolle_ScrumprojektDao
 	
 	public void closeCurrentSession() {
 		currentSession.close();
+		getSessionFactory().close();
 	}
 	
 	public void closeCurrentSessionwithTransaction() {
 		currentTransaction.commit();
 		currentSession.close();
+		getSessionFactory().close();
 	}
 	
-	public static SessionFactory getSessionFactory() {
+	public SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());
@@ -77,18 +79,19 @@ public class Benutzer_Benutzerrolle_ScrumprojektDao
 		
 	}
 	
-	public List<Benutzer_Benutzerrolle_Scrumprojekt> findListById(Integer id) {
-		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzerListe = (List<Benutzer_Benutzerrolle_Scrumprojekt>) getCurrentSession()
-				.createQuery("from Benutzer_Benutzerrolle_Scrumprojekt where benutzerId like'" + id + "'").list();
-		return benutzerListe;
+	public List<Benutzer_Benutzerrolle_Scrumprojekt> findListByBenutzerId(Integer benutzerId) {
+		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzer_benutzerrolle_scrumprojekt_Liste = (List<Benutzer_Benutzerrolle_Scrumprojekt>) getCurrentSession()
+				.createQuery("FROM Benutzer_Benutzerrolle_Scrumprojekt WHERE benutzerId LIKE'" + benutzerId + "'")
+				.list();
+		return benutzer_benutzerrolle_scrumprojekt_Liste;
 	}
 	
 	public List<Benutzer_Benutzerrolle_Scrumprojekt> findListByProjectId(Integer scrumprojektid) {
-		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzerListe = (List<Benutzer_Benutzerrolle_Scrumprojekt>) getCurrentSession()
+		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzer_benutzerrolle_scrumprojekt_Liste = (List<Benutzer_Benutzerrolle_Scrumprojekt>) getCurrentSession()
 				.createQuery(
 						"from Benutzer_Benutzerrolle_Scrumprojekt where scrumprojektId like'" + scrumprojektid + "'")
 				.list();
-		return benutzerListe;
+		return benutzer_benutzerrolle_scrumprojekt_Liste;
 	}
 	
 	@Override

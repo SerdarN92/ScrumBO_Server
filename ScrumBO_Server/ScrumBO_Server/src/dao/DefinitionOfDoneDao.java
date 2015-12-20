@@ -12,10 +12,10 @@ import model.DefinitionOfDone;
 
 public class DefinitionOfDoneDao implements DaoInterface<DefinitionOfDone, Integer> {
 	
-	private Session			currentSession		= null;
-	private Transaction		currentTransaction	= null;
-	private static String	hibernateconfigfilename;
-	
+	private Session		currentSession			= null;
+	private Transaction	currentTransaction		= null;
+	private String		hibernateconfigfilename	= "";
+												
 	public DefinitionOfDoneDao(String hibernateconfigfilename) {
 		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
@@ -33,14 +33,16 @@ public class DefinitionOfDoneDao implements DaoInterface<DefinitionOfDone, Integ
 	
 	public void closeCurrentSession() {
 		currentSession.close();
+		getSessionFactory().close();
 	}
 	
 	public void closeCurrentSessionwithTransaction() {
 		currentTransaction.commit();
 		currentSession.close();
+		getSessionFactory().close();
 	}
 	
-	public static SessionFactory getSessionFactory() {
+	public SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());
@@ -77,9 +79,9 @@ public class DefinitionOfDoneDao implements DaoInterface<DefinitionOfDone, Integ
 		return definitionofdone;
 	}
 	
-	public List<DefinitionOfDone> findByUserstoryId(Integer id) {
+	public List<DefinitionOfDone> findByUserstoryId(Integer userstoryId) {
 		List<DefinitionOfDone> definitionofdoneListe = (List<DefinitionOfDone>) getCurrentSession()
-				.createQuery("from DefinitionOfDone where userstory_id like '" + id + "'").list();
+				.createQuery("from DefinitionOfDone where userstory_id like '" + userstoryId + "'").list();
 		return definitionofdoneListe;
 	}
 	

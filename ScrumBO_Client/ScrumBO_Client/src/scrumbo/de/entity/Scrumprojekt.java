@@ -15,14 +15,14 @@ import java.util.List;
  */
 public class Scrumprojekt implements Serializable {
 	
-	private Integer					id;
-	private String					projektname;
-	private String					passwort;
-	private List<Benutzer>			benutzer;
-	private List<Sprint>			sprint			= new LinkedList<Sprint>();
-	private List<Impediment>		impediment		= new LinkedList<Impediment>();
-	private List<ProductBacklog>	productbacklog	= new LinkedList<ProductBacklog>();
-	
+	private Integer				id;
+	private String				projektname;
+	private String				passwort;
+	private List<Benutzer>		benutzer;
+	private List<Sprint>		sprint			= new LinkedList<Sprint>();
+	private List<Impediment>	impediment		= new LinkedList<Impediment>();
+	private ProductBacklog		productbacklog	= new ProductBacklog();
+												
 	public Scrumprojekt() {
 	}
 	
@@ -91,11 +91,11 @@ public class Scrumprojekt implements Serializable {
 		this.impediment = impediment;
 	}
 	
-	public List<ProductBacklog> getProductbacklog() {
+	public ProductBacklog getProductbacklog() {
 		return productbacklog;
 	}
 	
-	public void setProductbacklog(List<ProductBacklog> productbacklog) {
+	public void setProductbacklog(ProductBacklog productbacklog) {
 		this.productbacklog = productbacklog;
 	}
 	
