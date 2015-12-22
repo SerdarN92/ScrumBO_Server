@@ -1,19 +1,9 @@
 package scrumbo.de.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.Date;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.ResourceBundle;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,16 +23,17 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.entity.CurrentBenutzer;
 import scrumbo.de.entity.CurrentScrumprojekt;
 import scrumbo.de.entity.Impediment;
+import scrumbo.de.service.ImpedimentService;
 
 public class FXMLImpedimentBacklogController implements Initializable {
 	
 	Parent										root;
 	Scene										scene;
 	Stage										stage;
+	ImpedimentService							impedimentService	= null;
 	public static Impediment					rowData;
 	@FXML
 	private Text								vorname;
@@ -72,9 +63,9 @@ public class FXMLImpedimentBacklogController implements Initializable {
 	private TableColumn<Impediment, Date>		tableColumnBehobenAm;
 	@FXML
 	private TableColumn<Impediment, String>		tableColumnKommentar;
-	
-	public static ObservableList<Impediment> data = FXCollections.observableArrayList();
-	
+												
+	public static ObservableList<Impediment>	data				= FXCollections.observableArrayList();
+																	
 	public static ObservableList<Impediment> getData() {
 		return data;
 	}
@@ -143,20 +134,21 @@ public class FXMLImpedimentBacklogController implements Initializable {
 		}
 	}
 	
-	// public void ladeImpedimentBacklog() {
-	// for (int i = 0; i < CurrentScrumprojekt.impedimentbacklog.size(); i++) {
-	// data.add(CurrentScrumprojekt.impedimentbacklog.get(i));
-	// }
-	//
-	// }
-	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		impedimentService = FXMLStartController.getImpedimentService();
 		vorname.setText(CurrentBenutzer.vorname);
 		nachname.setText(CurrentBenutzer.nachname);
 		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
 		projektname.setText(CurrentScrumprojekt.projektname);
-		ladeImpedimentBacklog(CurrentScrumprojekt.scrumprojektID);
+		
+		impedimentService.getImpedimentBacklog();
+		
+		data.clear();
+		
+		for (int i = 0; i < CurrentScrumprojekt.impedimentbacklog.size(); i++) {
+			data.add(CurrentScrumprojekt.impedimentbacklog.get(i));
+		}
 		
 		tableViewImpedimentBacklog.setRowFactory(tv -> {
 			TableRow<Impediment> row = new TableRow<>();
@@ -208,35 +200,7 @@ public class FXMLImpedimentBacklogController implements Initializable {
 	
 	private void reload() throws Exception {
 		tableViewImpedimentBacklog.getItems().clear();
-		ladeImpedimentBacklog(CurrentScrumprojekt.scrumprojektID);
-	}
-	
-	public void ladeImpedimentBacklog(Integer id) {
-		String output = "";
-		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/impedimentbacklog/suche/"
-					+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
-			
-			if (conn.getResponseCode() != 200) {
-				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
-			}
-			
-			BufferedReader br = new BufferedReader(
-					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-			output = br.readLine();
-			conn.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		Gson gson = new Gson();
-		Type listType = new TypeToken<LinkedList<Impediment>>() {
-		}.getType();
-		List<Impediment> liste = gson.fromJson(output, listType);
-		CurrentScrumprojekt.impedimentbacklog = liste;
+		impedimentService.getImpedimentBacklog();
 		
 		data.clear();
 		

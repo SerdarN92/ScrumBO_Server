@@ -1,17 +1,7 @@
 package scrumbo.de.controller;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.ResourceBundle;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,38 +13,40 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.entity.CurrentBenutzer;
 import scrumbo.de.entity.CurrentScrumprojekt;
-import scrumbo.de.entity.Impediment;
-import scrumbo.de.entity.ProductBacklog;
-import scrumbo.de.entity.Scrumprojekt;
+import scrumbo.de.service.ImpedimentService;
+import scrumbo.de.service.ProductbacklogService;
+import scrumbo.de.service.ScrumprojektService;
 
 public class FXMLProjectLoginController implements Initializable {
 	
-	Parent				root;
-	Scene				scene;
+	Parent					root;
+	Scene					scene;
+	ScrumprojektService		scrumprojektService		= null;
+	ImpedimentService		impedimentService		= null;
+	ProductbacklogService	productbacklogService	= null;
 	@FXML
-	private Text		vorname;
+	private Text			vorname;
 	@FXML
-	private Text		nachname;
+	private Text			nachname;
 	@FXML
-	private Text		benutzerrolle;
+	private Text			benutzerrolle;
 	@FXML
-	private Button		buttonLogout;
+	private Button			buttonLogout;
 	@FXML
-	private Button		buttonBack;
+	private Button			buttonBack;
 	@FXML
-	private Button		buttonOpenProject;
+	private Button			buttonOpenProject;
 	@FXML
-	private TextField	txtFieldProjectname;
+	private TextField		txtFieldProjectname;
 	@FXML
-	private TextField	pswtFieldPassword;
+	private TextField		pswtFieldPassword;
 	@FXML
-	private Text		projectnameValidFail;
+	private Text			projectnameValidFail;
 	@FXML
-	private Text		passwordValidFail;
-						
+	private Text			passwordValidFail;
+							
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
 		CurrentBenutzer.benutzerID = -1;
@@ -95,7 +87,12 @@ public class FXMLProjectLoginController implements Initializable {
 	@FXML
 	private void handleButtonOpenProject(ActionEvent event) throws Exception {
 		if (checkProjectname() && checkPassword()) {
-			if (checkIfProjectnameExists()) {
+			if (scrumprojektService.checkIfProjectnameExists(txtFieldProjectname.getText().toString())) {
+				projectnameValidFail.setVisible(false);
+				CurrentScrumprojekt.scrumprojektID = scrumprojektService.getScrumproject().getScrumProjektID();
+				CurrentScrumprojekt.projektname = scrumprojektService.getScrumproject().getProjektname();
+				productbacklogService.getProductbacklog();
+				impedimentService.getImpedimentBacklog();
 				if (CurrentBenutzer.isSM) {
 					this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/FXMLScrumSM.fxml"));
 					this.scene = new Scene(root);
@@ -107,6 +104,9 @@ public class FXMLProjectLoginController implements Initializable {
 					Stage stage = (Stage) buttonLogout.getScene().getWindow();
 					stage.setScene(scene);
 				}
+			} else {
+				projectnameValidFail.setText("Projekt mit diesem Namen existiert nicht.");
+				projectnameValidFail.setVisible(true);
 			}
 		}
 	}
@@ -141,112 +141,12 @@ public class FXMLProjectLoginController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		scrumprojektService = FXMLStartController.getScrumprojektService();
+		productbacklogService = FXMLStartController.getProductbacklogService();
+		impedimentService = FXMLStartController.getImpedimentService();
 		vorname.setText(CurrentBenutzer.vorname);
 		nachname.setText(CurrentBenutzer.nachname);
 		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
-		// ArrayList<Scrumprojekt> a = CurrentBenutzer.projekte;
-	}
-	
-	private Boolean checkIfProjectnameExists() throws Exception {
-		String projectname = txtFieldProjectname.getText();
-		String output = "";
-		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/scrumprojekt/suche/" + projectname + "/"
-					+ ScrumBOClient.getDatabaseconfigfile());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
-			
-			if (conn.getResponseCode() != 200) {
-				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
-			}
-			
-			BufferedReader br = new BufferedReader(
-					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-			output = br.readLine();
-			conn.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		Gson gson = new Gson();
-		Scrumprojekt a = null;
-		if (output.equals("Projekt nicht vorhanden")) {
-			projectnameValidFail.setText("Projekt mit diesem Namen existiert nicht.");
-			projectnameValidFail.setVisible(true);
-			return false;
-			
-		} else {
-			a = gson.fromJson(output, Scrumprojekt.class);
-			if (projectname.equals(a.getProjektname())) {
-				projectnameValidFail.setVisible(false);
-				CurrentScrumprojekt.scrumprojektID = a.getScrumProjektID();
-				CurrentScrumprojekt.projektname = a.getProjektname();
-				getProductbacklog();
-				getImpedimentBacklog();
-				return true;
-			} else {
-				projectnameValidFail.setText("Projekt mit diesem Namen existiert nicht.");
-				projectnameValidFail.setVisible(true);
-				return false;
-			}
-		}
-		
-	}
-	
-	public static void getImpedimentBacklog() {
-		String output = "";
-		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/impedimentbacklog/suche/"
-					+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
-			
-			if (conn.getResponseCode() != 200) {
-				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
-			}
-			
-			BufferedReader br = new BufferedReader(
-					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-			output = br.readLine();
-			conn.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		Gson gson = new Gson();
-		Type listType = new TypeToken<LinkedList<Impediment>>() {
-		}.getType();
-		List<Impediment> liste = gson.fromJson(output, listType);
-		CurrentScrumprojekt.impedimentbacklog = liste;
-	}
-	
-	private void getProductbacklog() {
-		String output = "";
-		try {
-			URL url = new URL(
-					"http://localhost:8080/ScrumBO_Server/rest/scrumprojekt/suche/" + CurrentScrumprojekt.scrumprojektID
-							+ "/productbacklog" + "/" + ScrumBOClient.getDatabaseconfigfile());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
-			
-			if (conn.getResponseCode() != 200) {
-				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
-			}
-			
-			BufferedReader br = new BufferedReader(
-					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-			output = br.readLine();
-			conn.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		Gson gson = new Gson();
-		ProductBacklog liste = gson.fromJson(output, ProductBacklog.class);
-		CurrentScrumprojekt.productbacklog = liste;
 	}
 	
 }

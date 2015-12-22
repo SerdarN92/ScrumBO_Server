@@ -1,13 +1,7 @@
 package scrumbo.de.controller;
 
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import org.json.JSONObject;
-
-import com.google.gson.Gson;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -19,14 +13,15 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.entity.Benutzer;
 import scrumbo.de.entity.CurrentBenutzer;
+import scrumbo.de.service.BenutzerService;
 
 public class FXMLUserChangePasswordController implements Initializable {
 	
 	Parent					root;
 	Scene					scene;
+	BenutzerService			benutzerService	= null;
 	@FXML
 	private Button			buttonSave;
 	@FXML
@@ -48,28 +43,7 @@ public class FXMLUserChangePasswordController implements Initializable {
 			benutzer.setEmail(CurrentBenutzer.email);
 			benutzer.setPasswort(txtPassword.getText());
 			
-			Gson gson = new Gson();
-			String output = gson.toJson(benutzer);
-			
-			JSONObject jsonObject = new JSONObject(output);
-			try {
-				URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/benutzer/updatePassword/"
-						+ CurrentBenutzer.email + "/" + ScrumBOClient.getDatabaseconfigfile());
-				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-				conn.setDoOutput(true);
-				conn.setRequestProperty("Content-Type", "application/json");
-				conn.setConnectTimeout(5000);
-				conn.setReadTimeout(5000);
-				conn.setRequestMethod("POST");
-				
-				OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-				out.write(jsonObject.toString());
-				out.close();
-				
-				if (conn.getResponseMessage().equals("Passwort vom Benutzer geupdated"))
-					System.out.println("\nRest Service Invoked Successfully..");
-				conn.disconnect();
-				
+			if (benutzerService.changeDefaultPassword(benutzer)) {
 				if (CurrentBenutzer.isSM) {
 					this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/FXMLProject.fxml"));
 					this.scene = new Scene(root);
@@ -81,16 +55,9 @@ public class FXMLUserChangePasswordController implements Initializable {
 					Stage stage = (Stage) buttonSave.getScene().getWindow();
 					stage.setScene(scene);
 				}
-			} catch (Exception e) {
-				System.out.println("\nError while calling Rest service");
-				e.printStackTrace();
-				// this.root =
-				// FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/FXMLUserCreateMasterFail.fxml"));
-				// this.scene = new Scene(root);
-				// Stage stage = (Stage) buttonAbbort.getScene().getWindow();
-				// stage.setScene(scene);
+			} else {
+				System.out.println("FEHLER");
 			}
-			
 		}
 	}
 	
@@ -125,6 +92,7 @@ public class FXMLUserChangePasswordController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		benutzerService = FXMLStartController.getBenutzerService();
 		txtName.setText(CurrentBenutzer.vorname + " " + CurrentBenutzer.nachname + ",");
 		
 	}

@@ -28,7 +28,7 @@ public class FXMLProjectCreateSuccessController implements Initializable {
 	private Button	buttonLogout;
 	@FXML
 	private Button	buttonForward;
-	
+					
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
 		CurrentBenutzer.benutzerID = -1;
@@ -61,7 +61,6 @@ public class FXMLProjectCreateSuccessController implements Initializable {
 		vorname.setText(CurrentBenutzer.vorname);
 		nachname.setText(CurrentBenutzer.nachname);
 		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
-		// ArrayList<Scrumprojekt> a = CurrentBenutzer.projekte;
 	}
 	
 }

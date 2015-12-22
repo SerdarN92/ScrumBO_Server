@@ -1,13 +1,7 @@
 package scrumbo.de.controller;
 
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ResourceBundle;
-
-import org.json.JSONObject;
-
-import com.google.gson.Gson;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,14 +15,14 @@ import javafx.scene.control.ToggleGroup;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.entity.DefinitionOfDone;
+import scrumbo.de.service.DefinitionOfDoneService;
 
 public class FXMLDefinitionOfDoneEditController implements Initializable {
 	
 	Parent						root;
 	Scene						scene;
-	private static Integer		id		= -1;
+	DefinitionOfDoneService		definitionofdoneService	= null;
 	@FXML
 	private TextField			kriterium;
 	@FXML
@@ -43,9 +37,9 @@ public class FXMLDefinitionOfDoneEditController implements Initializable {
 	private Button				buttonSave;
 	@FXML
 	private Text				txtKriterium;
-	private DefinitionOfDone	data	= null;
-	private final ToggleGroup	group	= new ToggleGroup();
-	
+	private DefinitionOfDone	data					= null;
+	private final ToggleGroup	group					= new ToggleGroup();
+														
 	private Boolean checkKriterium() {
 		if (kriterium.getText().isEmpty()) {
 			txtKriterium.setText("Bitte ein Kriterium eingeben");
@@ -65,33 +59,10 @@ public class FXMLDefinitionOfDoneEditController implements Initializable {
 	@FXML
 	private void handleButtonDelete(ActionEvent event) throws Exception {
 		DefinitionOfDone definitionOfDone = data;
-		Gson gson = new Gson();
-		String output = gson.toJson(definitionOfDone);
-		
-		JSONObject jsonObject = new JSONObject(output);
-		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/definitionofdone/delete/"
-					+ ScrumBOClient.getDatabaseconfigfile());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setRequestProperty("Content-Type", "application/json");
-			conn.setConnectTimeout(5000);
-			conn.setReadTimeout(5000);
-			conn.setRequestMethod("POST");
-			
-			OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-			out.write(jsonObject.toString());
-			out.close();
-			
-			if (conn.getResponseMessage().equals("Definition Of Done erfolgreich gelöscht"))
-				System.out.println("\nRest Service Invoked Successfully..");
-			conn.disconnect();
-			
+		if (definitionofdoneService.deleteDefinitionOfDone(definitionOfDone)) {
 			Stage stage = (Stage) buttonDelete.getScene().getWindow();
 			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
-		} catch (Exception e) {
-			System.out.println("\nError while calling Rest service");
-			e.printStackTrace();
+		} else {
 			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 			stage.close();
 		}
@@ -109,33 +80,10 @@ public class FXMLDefinitionOfDoneEditController implements Initializable {
 				definitionOfDone.setStatus(false);
 			}
 			
-			Gson gson = new Gson();
-			String output = gson.toJson(definitionOfDone);
-			
-			JSONObject jsonObject = new JSONObject(output);
-			try {
-				URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/definitionofdone/update/"
-						+ ScrumBOClient.getDatabaseconfigfile());
-				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-				conn.setDoOutput(true);
-				conn.setRequestProperty("Content-Type", "application/json");
-				conn.setConnectTimeout(5000);
-				conn.setReadTimeout(5000);
-				conn.setRequestMethod("POST");
-				
-				OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-				out.write(jsonObject.toString());
-				out.close();
-				
-				if (conn.getResponseMessage().equals("Definition Of Done erfolgreich geupdated"))
-					System.out.println("\nRest Service Invoked Successfully..");
-				conn.disconnect();
-				
+			if (definitionofdoneService.updateDefinitionOfDone(definitionOfDone)) {
 				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
-			} catch (Exception e) {
-				System.out.println("\nError while calling Rest service");
-				e.printStackTrace();
+			} else {
 				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 				stage.close();
 			}
@@ -144,6 +92,7 @@ public class FXMLDefinitionOfDoneEditController implements Initializable {
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		definitionofdoneService = FXMLStartController.getDefinitionofdoneService();
 		data = FXMLDefinitionOfDoneController.rowData;
 		System.out.println(data.getKriterium());
 		System.out.println("Hallo");

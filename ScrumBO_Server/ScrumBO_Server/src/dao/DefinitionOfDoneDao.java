@@ -12,10 +12,10 @@ import model.DefinitionOfDone;
 
 public class DefinitionOfDoneDao implements DaoInterface<DefinitionOfDone, Integer> {
 	
-	private Session			currentSession			= null;
-	private Transaction		currentTransaction		= null;
-	private static String	hibernateconfigfilename	= "";
-													
+	private Session		currentSession			= null;
+	private Transaction	currentTransaction		= null;
+	private String		hibernateconfigfilename	= "";
+												
 	public DefinitionOfDoneDao(String hibernateconfigfilename) {
 		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
@@ -42,7 +42,7 @@ public class DefinitionOfDoneDao implements DaoInterface<DefinitionOfDone, Integ
 		getSessionFactory().close();
 	}
 	
-	public static SessionFactory getSessionFactory() {
+	public SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());

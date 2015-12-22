@@ -1,17 +1,11 @@
 package scrumbo.de.controller;
 
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import org.json.JSONObject;
-
-import com.google.gson.Gson;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -25,14 +19,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.entity.CurrentScrumprojekt;
 import scrumbo.de.entity.Impediment;
+import scrumbo.de.service.ImpedimentService;
 
 public class FXMLImpedimentCreatController implements Initializable {
 	
 	Parent				root;
 	Scene				scene;
+	ImpedimentService	impedimentService	= null;
 	@FXML
 	private Button		buttonAbbort;
 	@FXML
@@ -53,7 +48,7 @@ public class FXMLImpedimentCreatController implements Initializable {
 	private Text		textAngelegtVon;
 	@FXML
 	private Text		textDatumAufgetretenAm;
-	
+						
 	@FXML
 	private void handleButtonAbbort(ActionEvent event) throws Exception {
 		Stage stage = (Stage) buttonAbbort.getScene().getWindow();
@@ -74,36 +69,14 @@ public class FXMLImpedimentCreatController implements Initializable {
 			List<Impediment> liste = CurrentScrumprojekt.impedimentbacklog;
 			liste.add(impediment);
 			
-			Gson gson = new Gson();
-			String output = gson.toJson(impediment);
-			
-			JSONObject jsonObject = new JSONObject(output);
-			try {
-				URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/impedimentbacklog/create/"
-						+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
-				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-				conn.setDoOutput(true);
-				conn.setRequestProperty("Content-Type", "application/json");
-				conn.setConnectTimeout(5000);
-				conn.setReadTimeout(5000);
-				conn.setRequestMethod("POST");
-				
-				OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-				out.write(jsonObject.toString());
-				out.close();
-				
-				if (conn.getResponseMessage().equals("Impediment erfolgreich erstellt"))
-					System.out.println("\nRest Service Invoked Successfully..");
-				conn.disconnect();
-				
+			if (impedimentService.createImpediment(impediment)) {
 				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
-			} catch (Exception e) {
-				System.out.println("\nError while calling Rest service");
-				e.printStackTrace();
+			} else {
 				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 				stage.close();
 			}
+			
 		}
 	}
 	
@@ -180,8 +153,7 @@ public class FXMLImpedimentCreatController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		// TODO Auto-generated method stub
-		
+		impedimentService = FXMLStartController.getImpedimentService();
 	}
 	
 }

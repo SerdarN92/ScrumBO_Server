@@ -1,18 +1,9 @@
 package scrumbo.de.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -32,19 +23,20 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.common.MyHBox;
 import scrumbo.de.entity.CurrentBenutzer;
 import scrumbo.de.entity.CurrentScrumprojekt;
 import scrumbo.de.entity.CurrentSprint;
 import scrumbo.de.entity.Sprint;
 import scrumbo.de.entity.UserStory;
+import scrumbo.de.service.SprintbacklogService;
 
 public class FXMLSprintBacklogController implements Initializable {
 	
 	Parent								root;
 	Scene								scene;
 	Stage								stage;
+	SprintbacklogService				sprintbacklogService	= null;
 	@FXML
 	private Text						vorname;
 	@FXML
@@ -68,9 +60,9 @@ public class FXMLSprintBacklogController implements Initializable {
 	@FXML
 	private Text						sprintNumber;
 										
-	public ObservableList<UserStory>	dataSprintBacklog	= FXCollections.observableArrayList();
-	private static Integer				anzahlSprints		= 0;
-															
+	public ObservableList<UserStory>	dataSprintBacklog		= FXCollections.observableArrayList();
+	private static Integer				anzahlSprints			= 0;
+																
 	public ObservableList<UserStory> getData() {
 		return dataSprintBacklog;
 	}
@@ -80,7 +72,7 @@ public class FXMLSprintBacklogController implements Initializable {
 	}
 	
 	public void initLoadOldSprint() {
-		ladeAltenSprint(CurrentSprint.sprintnummer);
+		sprintbacklogService.ladeAltenSprint(CurrentSprint.sprintnummer);
 		dataSprintBacklog.clear();
 		VBOXUserStories.getChildren().remove(0, VBOXUserStories.getChildren().size());
 		initSprintBacklog();
@@ -194,11 +186,13 @@ public class FXMLSprintBacklogController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		sprintbacklogService = FXMLStartController.getSprintbacklogService();
+		
 		vorname.setText(CurrentBenutzer.vorname);
 		nachname.setText(CurrentBenutzer.nachname);
 		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
 		projektname.setText(CurrentScrumprojekt.projektname);
-		ladeAnzahlSprints();
+		anzahlSprints = sprintbacklogService.ladeAnzahlSprints();
 		initSprintBacklog();
 		
 		ScrollPane sp = new ScrollPane();
@@ -206,7 +200,7 @@ public class FXMLSprintBacklogController implements Initializable {
 		sp.setContent(VBOXUserStories);
 		sp.setVisible(true);
 		
-		ladeSprint();
+		sprintbacklogService.ladeSprint();
 		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.getId());
 		
 		for (int i = 0; i < dataSprintBacklog.size(); i++) {
@@ -265,31 +259,7 @@ public class FXMLSprintBacklogController implements Initializable {
 	}
 	
 	public void ladeSprintBacklog(Integer id) {
-		String output = "";
-		Integer platz = -1;
-		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstory/suche/sprintid/" + CurrentSprint.id
-					+ "/" + ScrumBOClient.getDatabaseconfigfile());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
-			
-			if (conn.getResponseCode() != 200) {
-				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
-			}
-			
-			BufferedReader br = new BufferedReader(
-					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-			output = br.readLine();
-			conn.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		Gson gson = new Gson();
-		Type listType = new TypeToken<LinkedList<UserStory>>() {
-		}.getType();
-		List<UserStory> liste = gson.fromJson(output, listType);
+		List<UserStory> liste = sprintbacklogService.ladeSprintBacklog();
 		dataSprintBacklog.clear();
 		
 		if (!liste.isEmpty()) {
@@ -300,110 +270,9 @@ public class FXMLSprintBacklogController implements Initializable {
 		
 	}
 	
-	public static void ladeAnzahlSprints() {
-		String output = "";
-		
-		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/sprint/suche/"
-					+ CurrentScrumprojekt.scrumprojektID + "/anzahl/" + ScrumBOClient.getDatabaseconfigfile());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
-			
-			if (conn.getResponseCode() != 200) {
-				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
-			}
-			
-			BufferedReader br = new BufferedReader(
-					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-			output = br.readLine();
-			conn.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		anzahlSprints = Integer.parseInt(output);
-		
-	}
-	
-	public void ladeSprint() {
-		String output = "";
-		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/sprint/suche/"
-					+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
-			
-			if (conn.getResponseCode() != 200) {
-				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
-			}
-			
-			BufferedReader br = new BufferedReader(
-					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-			output = br.readLine();
-			conn.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		Gson gson = new Gson();
-		Sprint sprint = gson.fromJson(output, Sprint.class);
-		CurrentSprint.id = sprint.getId();
-		CurrentSprint.sprintnummer = sprint.getSprintnummer();
-	}
-	
-	public void ladeAltenSprint(Integer sprintnummer) {
-		String output = "";
-		try {
-			URL url = new URL(
-					"http://localhost:8080/ScrumBO_Server/rest/sprint/suche/" + CurrentScrumprojekt.scrumprojektID + "/"
-							+ sprintnummer + "/" + ScrumBOClient.getDatabaseconfigfile());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
-			
-			if (conn.getResponseCode() != 200) {
-				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
-			}
-			
-			BufferedReader br = new BufferedReader(
-					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-			output = br.readLine();
-			conn.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		Gson gson = new Gson();
-		Sprint sprint = gson.fromJson(output, Sprint.class);
-		CurrentSprint.id = sprint.getId();
-		CurrentSprint.sprintnummer = sprint.getSprintnummer();
-	}
-	
 	@FXML
 	public void handleButtonCreateNewSprint(ActionEvent event) {
-		String output = "";
-		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/sprint/create/"
-					+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
-			
-			if (conn.getResponseCode() != 200) {
-				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
-			}
-			
-			BufferedReader br = new BufferedReader(
-					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-			output = br.readLine();
-			conn.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		Gson gson = new Gson();
-		Sprint sprint = gson.fromJson(output, Sprint.class);
+		Sprint sprint = sprintbacklogService.addNewSprintToSprintBacklog();
 		CurrentSprint.id = sprint.getId();
 		CurrentSprint.sprintnummer = sprint.getSprintnummer();
 		
@@ -421,8 +290,6 @@ public class FXMLSprintBacklogController implements Initializable {
 		
 		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
 	}
-	
-	private Integer zaehler = 0;
 	
 	public void reloadSprintBacklog() throws IOException {
 		dataSprintBacklog.clear();

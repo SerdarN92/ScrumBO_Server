@@ -1,23 +1,10 @@
 package scrumbo.de.controller;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-import org.json.JSONObject;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -35,17 +22,16 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.common.MyHBox;
-import scrumbo.de.entity.CurrentScrumprojekt;
-import scrumbo.de.entity.CurrentSprint;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.entity.UserStoryTask;
+import scrumbo.de.service.UserstoryService;
 
 public class FXMLSprintBacklogEditUserStoryController implements Initializable {
 	
 	Parent								root;
 	Scene								scene;
+	UserstoryService					userstoryService		= null;
 	@FXML
 	private TextField					prioritaet;
 	@FXML
@@ -110,33 +96,10 @@ public class FXMLSprintBacklogEditUserStoryController implements Initializable {
 	
 	@FXML
 	private void handleButtonSave(ActionEvent event) throws Exception {
-		Gson gson = new Gson();
-		String output = gson.toJson(currentUserStory);
-		JSONObject jsonObject = new JSONObject(output);
-		
-		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstory/updateTasks/" + CurrentSprint.id
-					+ "/" + ScrumBOClient.getDatabaseconfigfile());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setRequestProperty("Content-Type", "application/json");
-			conn.setConnectTimeout(50000);
-			conn.setReadTimeout(50000);
-			conn.setRequestMethod("POST");
-			
-			OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-			out.write(jsonObject.toString());
-			out.close();
-			
-			if (conn.getResponseMessage().equals("Tasks erfolgreich geupdated"))
-				System.out.println("\nRest Service Invoked Successfully..");
-			conn.disconnect();
-			
+		if (userstoryService.updateTask(currentUserStory)) {
 			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
-		} catch (Exception e) {
-			System.out.println("\nError while calling Rest service");
-			e.printStackTrace();
+		} else {
 			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 		}
@@ -144,31 +107,24 @@ public class FXMLSprintBacklogEditUserStoryController implements Initializable {
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		userstoryService = FXMLStartController.getUserstoryService();
 		currentUserStory = MyHBox.blabla;
 		prioritaet.setText(currentUserStory.getPrioritaet().toString());
 		thema.setText(currentUserStory.getThema());
 		beschreibung.setText(currentUserStory.getBeschreibung());
 		akzeptanzkriterien.setText(currentUserStory.getAkzeptanzkriterien());
 		aufwandintagen.setText(currentUserStory.getAufwandintagen().toString());
-		ladeUserStory();
+		userstoryList = userstoryService.ladeUserStory();
 		initListView();
 	}
 	
 	protected void initListView() {
-		ObservableList<UserStoryTask> options = FXCollections.observableArrayList();
 		
 		if (currentUserStory != null) {
 			for (int i = 0; i < currentUserStory.getUserstorytask().size(); i++) {
 				listViewUserStoryTask.getItems().add(currentUserStory.getUserstorytask().get(i));
 			}
 		}
-		// listViewUserStoryTask.setOnMousePressed(new
-		// EventHandler<MouseEvent>() {
-		// @Override
-		// public void handle(MouseEvent event) {
-		// listViewUserStoryTask.requestFocus();
-		// }
-		// });
 		
 		listViewUserStoryTask.setCellFactory(new Callback<ListView<UserStoryTask>, ListCell<UserStoryTask>>() {
 			
@@ -201,34 +157,6 @@ public class FXMLSprintBacklogEditUserStoryController implements Initializable {
 				}
 			}
 		});
-		
-	}
-	
-	private void ladeUserStory() {
-		String output = "";
-		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstory/sucheNULL/productbacklogid/"
-					+ CurrentScrumprojekt.productbacklog.getId() + "/" + ScrumBOClient.getDatabaseconfigfile());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
-			
-			if (conn.getResponseCode() != 200) {
-				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
-			}
-			
-			BufferedReader br = new BufferedReader(
-					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-			output = br.readLine();
-			conn.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		Gson gson = new Gson();
-		Type listType = new TypeToken<LinkedList<UserStory>>() {
-		}.getType();
-		userstoryList = gson.fromJson(output, listType);
 		
 	}
 	

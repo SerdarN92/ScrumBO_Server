@@ -1,14 +1,8 @@
 package scrumbo.de.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
 import java.util.ResourceBundle;
-
-import com.google.gson.Gson;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -33,17 +27,17 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.entity.CurrentBenutzer;
 import scrumbo.de.entity.CurrentScrumprojekt;
-import scrumbo.de.entity.ProductBacklog;
 import scrumbo.de.entity.UserStory;
+import scrumbo.de.service.ProductbacklogService;
 
 public class FXMLProductBacklogController implements Initializable {
 	
 	Parent									root;
 	Scene									scene;
 	Stage									stage;
+	ProductbacklogService					productbacklogService	= null;
 	public static UserStory					rowData;
 	@FXML
 	private Text							vorname;
@@ -76,8 +70,8 @@ public class FXMLProductBacklogController implements Initializable {
 	@FXML
 	private TableColumn<UserStory, Integer>	tableColumnAufwand;
 											
-	public static ObservableList<UserStory>	data	= FXCollections.observableArrayList();
-													
+	public static ObservableList<UserStory>	data					= FXCollections.observableArrayList();
+																	
 	public static ObservableList<UserStory> getData() {
 		return data;
 	}
@@ -150,6 +144,7 @@ public class FXMLProductBacklogController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		productbacklogService = FXMLStartController.getProductbacklogService();
 		vorname.setText(CurrentBenutzer.vorname);
 		nachname.setText(CurrentBenutzer.nachname);
 		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
@@ -158,6 +153,11 @@ public class FXMLProductBacklogController implements Initializable {
 		if (!CurrentBenutzer.isPO)
 			buttonCreateUserStory.setDisable(true);
 			
+		initTableView();
+		
+	}
+	
+	public void initTableView() {
 		tableViewProductBacklog.setRowFactory(tv -> {
 			TableRow<UserStory> row = new TableRow<>();
 			if (CurrentBenutzer.isPO) {
@@ -192,7 +192,11 @@ public class FXMLProductBacklogController implements Initializable {
 			return row;
 		});
 		
-		ladeProductBacklog(CurrentScrumprojekt.productbacklog.getId());
+		productbacklogService.loadProductBacklog();
+		
+		for (int i = 0; i < CurrentScrumprojekt.productbacklog.getUserstory().size(); i++) {
+			data.add(CurrentScrumprojekt.productbacklog.getUserstory().get(i));
+		}
 		
 		tableColumnStatus.setCellValueFactory(new PropertyValueFactory<UserStory, Integer>("status"));
 		tableColumnStatus
@@ -288,45 +292,14 @@ public class FXMLProductBacklogController implements Initializable {
 		tableColumnAufwand.setCellValueFactory(new PropertyValueFactory<UserStory, Integer>("aufwandintagen"));
 		
 		tableViewProductBacklog.setItems(data);
-		
-	}
-	
-	public void ladeProductBacklog(Integer id) {
-		String output = "";
-		Integer platz = -1;
-		try {
-			
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/productbacklog/suche/"
-					+ CurrentScrumprojekt.productbacklog.getId() + "/" + ScrumBOClient.getDatabaseconfigfile());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
-			
-			if (conn.getResponseCode() != 200) {
-				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
-			}
-			
-			BufferedReader br = new BufferedReader(
-					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-			output = br.readLine();
-			conn.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		Gson gson = new Gson();
-		ProductBacklog a = gson.fromJson(output, ProductBacklog.class);
-		CurrentScrumprojekt.productbacklog = a;
-		
-		for (int i = 0; i < CurrentScrumprojekt.productbacklog.getUserstory().size(); i++) {
-			data.add(CurrentScrumprojekt.productbacklog.getUserstory().get(i));
-		}
-		
 	}
 	
 	public void reload() throws IOException {
 		tableViewProductBacklog.getItems().clear();
-		ladeProductBacklog(CurrentScrumprojekt.productbacklog.getId());
+		productbacklogService.loadProductBacklog();
+		for (int i = 0; i < CurrentScrumprojekt.productbacklog.getUserstory().size(); i++) {
+			data.add(CurrentScrumprojekt.productbacklog.getUserstory().get(i));
+		}
 	}
 	
 }

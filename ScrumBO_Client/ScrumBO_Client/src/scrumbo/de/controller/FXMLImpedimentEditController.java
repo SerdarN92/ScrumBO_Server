@@ -1,7 +1,5 @@
 package scrumbo.de.controller;
 
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,10 +8,6 @@ import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import org.json.JSONObject;
-
-import com.google.gson.Gson;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -27,15 +21,16 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.entity.CurrentScrumprojekt;
 import scrumbo.de.entity.Impediment;
+import scrumbo.de.service.ImpedimentService;
 
 public class FXMLImpedimentEditController implements Initializable {
 	
 	Parent				root;
 	Scene				scene;
-	private Integer		id		= -1;
+	ImpedimentService	impedimentService	= null;
+	private Integer		id					= -1;
 	@FXML
 	private Button		buttonAbbort;
 	@FXML
@@ -64,8 +59,8 @@ public class FXMLImpedimentEditController implements Initializable {
 	private Text		textDatumBehobenAm;
 	@FXML
 	private Text		textDatumAufgetretenAm;
-	private Impediment	data	= null;
-	
+	private Impediment	data				= null;
+											
 	@FXML
 	private void handleButtonAbbort(ActionEvent event) throws Exception {
 		Stage stage = (Stage) buttonAbbort.getScene().getWindow();
@@ -75,33 +70,10 @@ public class FXMLImpedimentEditController implements Initializable {
 	@FXML
 	private void handleButtonDelete(ActionEvent event) throws Exception {
 		Impediment impediment = data;
-		Gson gson = new Gson();
-		String output = gson.toJson(impediment);
-		
-		JSONObject jsonObject = new JSONObject(output);
-		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/impedimentbacklog/delete/"
-					+ ScrumBOClient.getDatabaseconfigfile());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setRequestProperty("Content-Type", "application/json");
-			conn.setConnectTimeout(5000);
-			conn.setReadTimeout(5000);
-			conn.setRequestMethod("POST");
-			
-			OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-			out.write(jsonObject.toString());
-			out.close();
-			
-			if (conn.getResponseMessage().equals("Impediment erfolgreich gelöscht"))
-				System.out.println("\nRest Service Invoked Successfully..");
-			conn.disconnect();
-			
+		if (impedimentService.deleteImpediment(impediment)) {
 			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
-		} catch (Exception e) {
-			System.out.println("\nError while calling Rest service");
-			e.printStackTrace();
+		} else {
 			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 			stage.close();
 		}
@@ -130,33 +102,10 @@ public class FXMLImpedimentEditController implements Initializable {
 			List<Impediment> liste = CurrentScrumprojekt.impedimentbacklog;
 			liste.add(impediment);
 			
-			Gson gson = new Gson();
-			String output = gson.toJson(impediment);
-			
-			JSONObject jsonObject = new JSONObject(output);
-			try {
-				URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/impedimentbacklog/update/"
-						+ ScrumBOClient.getDatabaseconfigfile());
-				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-				conn.setDoOutput(true);
-				conn.setRequestProperty("Content-Type", "application/json");
-				conn.setConnectTimeout(5000);
-				conn.setReadTimeout(5000);
-				conn.setRequestMethod("POST");
-				
-				OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-				out.write(jsonObject.toString());
-				out.close();
-				
-				if (conn.getResponseMessage().equals("Impediment erfolgreich geupdated"))
-					System.out.println("\nRest Service Invoked Successfully..");
-				conn.disconnect();
-				
+			if (impedimentService.updateImpediment(impediment)) {
 				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
-			} catch (Exception e) {
-				System.out.println("\nError while calling Rest service");
-				e.printStackTrace();
+			} else {
 				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 				stage.close();
 			}
@@ -236,6 +185,7 @@ public class FXMLImpedimentEditController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		impedimentService = FXMLStartController.getImpedimentService();
 		data = FXMLImpedimentBacklogController.rowData;
 		prioritaet.setText(data.getPriorität().toString());
 		angelegtVon.setText(data.getMitarbeiter());

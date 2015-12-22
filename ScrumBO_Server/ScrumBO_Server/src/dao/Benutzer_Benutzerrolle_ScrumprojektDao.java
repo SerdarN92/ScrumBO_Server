@@ -13,10 +13,10 @@ import model.Benutzer_Benutzerrolle_Scrumprojekt;
 public class Benutzer_Benutzerrolle_ScrumprojektDao
 		implements DaoInterface<Benutzer_Benutzerrolle_Scrumprojekt, Integer> {
 		
-	private Session			currentSession			= null;
-	private Transaction		currentTransaction		= null;
-	private static String	hibernateconfigfilename	= "";
-													
+	private Session		currentSession			= null;
+	private Transaction	currentTransaction		= null;
+	private String		hibernateconfigfilename	= "";
+												
 	public Benutzer_Benutzerrolle_ScrumprojektDao(String hibernateconfigfilename) {
 		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
@@ -43,7 +43,7 @@ public class Benutzer_Benutzerrolle_ScrumprojektDao
 		getSessionFactory().close();
 	}
 	
-	public static SessionFactory getSessionFactory() {
+	public SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());

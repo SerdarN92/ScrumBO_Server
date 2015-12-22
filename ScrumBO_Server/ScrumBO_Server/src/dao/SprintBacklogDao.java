@@ -12,10 +12,10 @@ import model.SprintBacklog;
 
 public class SprintBacklogDao implements DaoInterface<SprintBacklog, Integer> {
 	
-	private Session			currentSession			= null;
-	private Transaction		currentTransaction		= null;
-	private static String	hibernateconfigfilename	= "";
-													
+	private Session		currentSession			= null;
+	private Transaction	currentTransaction		= null;
+	private String		hibernateconfigfilename	= "";
+												
 	public SprintBacklogDao(String hibernateconfigfilename) {
 		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
@@ -42,7 +42,7 @@ public class SprintBacklogDao implements DaoInterface<SprintBacklog, Integer> {
 		getSessionFactory().close();
 	}
 	
-	public static SessionFactory getSessionFactory() {
+	public SessionFactory getSessionFactory() {
 		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
 		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
 				.applySettings(configuration.getProperties());

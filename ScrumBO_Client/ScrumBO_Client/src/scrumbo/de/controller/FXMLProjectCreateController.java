@@ -1,17 +1,9 @@
 package scrumbo.de.controller;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import org.json.JSONObject;
-
-import com.google.gson.Gson;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,15 +15,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.entity.Benutzer;
 import scrumbo.de.entity.CurrentBenutzer;
 import scrumbo.de.entity.Scrumprojekt;
+import scrumbo.de.service.ScrumprojektService;
 
 public class FXMLProjectCreateController implements Initializable {
 	
 	Parent				root;
 	Scene				scene;
+	ScrumprojektService	scrumprojektService	= null;
 	@FXML
 	private Text		vorname;
 	@FXML
@@ -52,7 +45,7 @@ public class FXMLProjectCreateController implements Initializable {
 	private Text		projectnameValidFail;
 	@FXML
 	private Text		passwordValidFail;
-	
+						
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
 		CurrentBenutzer.benutzerID = -1;
@@ -83,7 +76,8 @@ public class FXMLProjectCreateController implements Initializable {
 	@FXML
 	private void handleButtonCreateProject(ActionEvent event) throws Exception {
 		if (checkProjectname() && checkPassword()) {
-			if (!checkIfProjectnameExists()) {
+			if (!scrumprojektService.checkIfProjectnameExists(txtFieldProjectname.getText().toString())) {
+				projectnameValidFail.setVisible(false);
 				Scrumprojekt scrumproject = new Scrumprojekt();
 				scrumproject.setProjektname(txtFieldProjectname.getText());
 				scrumproject.setPasswort(pswtFieldPassword.getText());
@@ -93,42 +87,22 @@ public class FXMLProjectCreateController implements Initializable {
 				benutzerliste.add(currBen);
 				scrumproject.setBenutzer(benutzerliste);
 				
-				Gson gson = new Gson();
-				String output = gson.toJson(scrumproject);
-				
-				JSONObject jsonObject = new JSONObject(output);
-				
-				try {
-					URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/scrumprojekt/create/"
-							+ CurrentBenutzer.email + "/" + ScrumBOClient.getDatabaseconfigfile());
-					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-					conn.setDoOutput(true);
-					conn.setRequestProperty("Content-Type", "application/json");
-					conn.setConnectTimeout(5000);
-					conn.setReadTimeout(5000);
-					conn.setRequestMethod("POST");
-					
-					OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-					out.write(jsonObject.toString());
-					out.close();
-					
-					if (conn.getResponseMessage().equals("Project erfolgreich erstellt"))
-						System.out.println("\nRest Service Invoked Successfully..");
-					conn.disconnect();
-					
+				if (scrumprojektService.createProject(scrumproject)) {
 					this.root = FXMLLoader
 							.load(getClass().getResource("/scrumbo/de/gui/FXMLProjectCreateSuccess.fxml"));
 					this.scene = new Scene(root);
 					Stage stage = (Stage) buttonLogout.getScene().getWindow();
 					stage.setScene(scene);
-				} catch (Exception e) {
-					System.out.println("\nError while calling Rest service");
-					e.printStackTrace();
+				} else {
 					this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/FXMLProjectCreateFail.fxml"));
 					this.scene = new Scene(root);
 					Stage stage = (Stage) buttonLogout.getScene().getWindow();
 					stage.setScene(scene);
 				}
+				
+			} else {
+				projectnameValidFail.setText("Projekt mit diesem Namen existiert bereits.");
+				projectnameValidFail.setVisible(true);
 			}
 		}
 	}
@@ -161,47 +135,12 @@ public class FXMLProjectCreateController implements Initializable {
 		}
 	}
 	
-	private Boolean checkIfProjectnameExists() throws Exception {
-		String projectname = txtFieldProjectname.getText();
-		URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/scrumprojekt/suche/" + projectname + "/"
-				+ ScrumBOClient.getDatabaseconfigfile());
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("GET");
-		conn.setRequestProperty("Accept", "application/json");
-		
-		if (conn.getResponseCode() != 200) {
-			throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
-		}
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-		String output = br.readLine();
-		conn.disconnect();
-		
-		Gson gson = new Gson();
-		Scrumprojekt scrumproject = null;
-		if (output.equals("Projekt nicht vorhanden")) {
-			projectnameValidFail.setVisible(false);
-			return false;
-			
-		} else {
-			scrumproject = gson.fromJson(output, Scrumprojekt.class);
-			if (projectname.equals(scrumproject.getProjektname())) {
-				projectnameValidFail.setText("Projekt mit diesem Namen existiert bereits.");
-				projectnameValidFail.setVisible(true);
-				return true;
-			} else {
-				projectnameValidFail.setVisible(false);
-				return false;
-			}
-		}
-	}
-	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		scrumprojektService = FXMLStartController.getScrumprojektService();
 		vorname.setText(CurrentBenutzer.vorname);
 		nachname.setText(CurrentBenutzer.nachname);
 		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
-		// ArrayList<Scrumprojekt> a = CurrentBenutzer.projekte;
 	}
 	
 }

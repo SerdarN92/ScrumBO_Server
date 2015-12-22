@@ -1,14 +1,8 @@
 package scrumbo.de.controller;
 
-import java.io.OutputStreamWriter;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-
-import org.json.JSONObject;
-
-import com.google.gson.Gson;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -21,14 +15,15 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.entity.CurrentScrumprojekt;
 import scrumbo.de.entity.UserStory;
+import scrumbo.de.service.UserstoryService;
 
 public class FXMLUserStoryCreateController implements Initializable {
 	
 	Parent				root;
 	Scene				scene;
+	UserstoryService	userstoryService	= null;
 	@FXML
 	private TextField	prioritaet;
 	@FXML
@@ -161,34 +156,10 @@ public class FXMLUserStoryCreateController implements Initializable {
 			List<UserStory> userstoryList = CurrentScrumprojekt.productbacklog.getUserstory();
 			userstoryList.add(userstory);
 			
-			Gson gson = new Gson();
-			String output = gson.toJson(userstory);
-			
-			JSONObject jsonObject = new JSONObject(output);
-			
-			try {
-				URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstory/create/"
-						+ CurrentScrumprojekt.productbacklog.getId() + "/" + ScrumBOClient.getDatabaseconfigfile());
-				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-				conn.setDoOutput(true);
-				conn.setRequestProperty("Content-Type", "application/json");
-				conn.setConnectTimeout(5000);
-				conn.setReadTimeout(5000);
-				conn.setRequestMethod("POST");
-				
-				OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-				out.write(jsonObject.toString());
-				out.close();
-				
-				if (conn.getResponseMessage().equals("User Story erfolgreich erstellt"))
-					System.out.println("\nRest Service Invoked Successfully..");
-				conn.disconnect();
-				
+			if (userstoryService.createUserStory(userstory)) {
 				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
-			} catch (Exception e) {
-				System.out.println("\nError while calling Rest service");
-				e.printStackTrace();
+			} else {
 				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 				stage.close();
 			}
@@ -198,7 +169,7 @@ public class FXMLUserStoryCreateController implements Initializable {
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		// TODO Auto-generated method stub
+		userstoryService = FXMLStartController.getUserstoryService();
 		
 	}
 	

@@ -1,18 +1,8 @@
 package scrumbo.de.controller;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.net.HttpURLConnection;
 import java.net.URL;
-import java.nio.charset.StandardCharsets;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.ResourceBundle;
-
-import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -31,15 +21,16 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.entity.CurrentUserStory;
 import scrumbo.de.entity.DefinitionOfDone;
+import scrumbo.de.service.DefinitionOfDoneService;
 
 public class FXMLDefinitionOfDoneController implements Initializable {
 	
 	Parent											root;
 	Scene											scene;
 	Stage											stage;
+	DefinitionOfDoneService							definitionofdoneService	= null;
 	public static DefinitionOfDone					rowData;
 	@FXML
 	private Button									buttonBack;
@@ -53,9 +44,9 @@ public class FXMLDefinitionOfDoneController implements Initializable {
 	private TableColumn<DefinitionOfDone, String>	tableColumnKriterien;
 	@FXML
 	private TableColumn<DefinitionOfDone, Boolean>	tableColumnStatus;
-	
-	public static ObservableList<DefinitionOfDone> data = FXCollections.observableArrayList();
-	
+													
+	public static ObservableList<DefinitionOfDone>	data					= FXCollections.observableArrayList();
+																			
 	public static ObservableList<DefinitionOfDone> getData() {
 		return data;
 	}
@@ -107,31 +98,7 @@ public class FXMLDefinitionOfDoneController implements Initializable {
 	}
 	
 	public void ladeDefinitionOfDone() {
-		String output = "";
-		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/definitionofdone/"
-					+ CurrentUserStory.userstoryID + "/" + ScrumBOClient.getDatabaseconfigfile());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setRequestMethod("GET");
-			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
-			
-			if (conn.getResponseCode() != 200) {
-				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
-			}
-			
-			BufferedReader br = new BufferedReader(
-					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
-			output = br.readLine();
-			conn.disconnect();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		Gson gson = new Gson();
-		Type listType = new TypeToken<LinkedList<DefinitionOfDone>>() {
-		}.getType();
-		List<DefinitionOfDone> liste = gson.fromJson(output, listType);
-		CurrentUserStory.dod = liste;
+		definitionofdoneService.ladeDefinitionOfDone();
 		
 		data.clear();
 		
@@ -143,6 +110,7 @@ public class FXMLDefinitionOfDoneController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		definitionofdoneService = FXMLStartController.getDefinitionofdoneService();
 		tableViewDefinitionOfDone.setRowFactory(tv -> {
 			TableRow<DefinitionOfDone> row = new TableRow<>();
 			row.setOnMouseClicked(event -> {
