@@ -3,89 +3,61 @@ package dao;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 
+import hibernate.HibernateUtil;
 import model.SprintBacklog;
 
 public class SprintBacklogDao implements DaoInterface<SprintBacklog, Integer> {
 	
-	private Session		currentSession			= null;
-	private Transaction	currentTransaction		= null;
-	private String		hibernateconfigfilename	= "";
-												
+	private String			hibernateconfig	= "";
+	private HibernateUtil	hibernateutil	= null;
+											
 	public SprintBacklogDao(String hibernateconfigfilename) {
-		this.hibernateconfigfilename = hibernateconfigfilename;
-	}
-	
-	public Session openCurrentSession() {
-		currentSession = getSessionFactory().openSession();
-		return currentSession;
-	}
-	
-	public Session openCurrentSessionwithTransaction() {
-		currentSession = getSessionFactory().openSession();
-		currentTransaction = currentSession.beginTransaction();
-		return currentSession;
-	}
-	
-	public void closeCurrentSession() {
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public void closeCurrentSessionwithTransaction() {
-		currentTransaction.commit();
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public SessionFactory getSessionFactory() {
-		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
-		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties());
-		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
-		return sessionFactory;
-	}
-	
-	public Session getCurrentSession() {
-		return currentSession;
-	}
-	
-	public void setCurrentSession(Session currentSession) {
-		this.currentSession = currentSession;
-	}
-	
-	public Transaction getCurrentTransaction() {
-		return currentTransaction;
-	}
-	
-	public void setCurrentTransaction(Transaction currentTransaction) {
-		this.currentTransaction = currentTransaction;
+		this.hibernateconfig = hibernateconfig;
+		this.hibernateutil = new HibernateUtil(hibernateconfig);
 	}
 	
 	public void persist(SprintBacklog entity) {
-		getCurrentSession().save(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.save(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public void update(SprintBacklog entity) {
-		getCurrentSession().update(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.update(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public SprintBacklog findById(Integer id) {
-		SprintBacklog sprintbacklog = (SprintBacklog) getCurrentSession().get(SprintBacklog.class, id);
+		SprintBacklog sprintbacklog = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		sprintbacklog = (SprintBacklog) s.get(SprintBacklog.class, id);
+		s.getTransaction().commit();
+		s.close();
 		return sprintbacklog;
 	}
 	
 	public void delete(SprintBacklog entity) {
-		getCurrentSession().delete(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.delete(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public List<SprintBacklog> findAll() {
-		List<SprintBacklog> sprintbacklogListe = (List<SprintBacklog>) getCurrentSession()
-				.createQuery("from SprintBacklog").list();
+		List<SprintBacklog> sprintbacklogListe = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		sprintbacklogListe = (List<SprintBacklog>) s.createQuery("from SprintBacklog").list();
+		s.getTransaction().commit();
+		s.close();
 		return sprintbacklogListe;
 	}
 	

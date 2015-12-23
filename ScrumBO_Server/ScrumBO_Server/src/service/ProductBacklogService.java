@@ -10,53 +10,67 @@ public class ProductBacklogService {
 	private ProductBacklogDao productbacklogDao;
 	
 	public ProductBacklogService(String hibernateconfigfilename) {
-		productbacklogDao = new ProductBacklogDao(hibernateconfigfilename);
+		this.productbacklogDao = new ProductBacklogDao(hibernateconfigfilename);
 	}
 	
 	public void persist(ProductBacklog entity) {
-		productbacklogDao.openCurrentSessionwithTransaction();
-		productbacklogDao.persist(entity);
-		productbacklogDao.closeCurrentSessionwithTransaction();
+		try {
+			productbacklogDao.persist(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void update(ProductBacklog entity) {
-		productbacklogDao.openCurrentSessionwithTransaction();
-		productbacklogDao.update(entity);
-		productbacklogDao.closeCurrentSessionwithTransaction();
+		try {
+			productbacklogDao.update(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public ProductBacklog findById(Integer id) {
-		productbacklogDao.openCurrentSession();
-		ProductBacklog productbacklog = productbacklogDao.findById(id);
-		productbacklogDao.closeCurrentSession();
-		return productbacklog;
+		try {
+			return productbacklogDao.findById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void delete(Integer id) {
-		productbacklogDao.openCurrentSessionwithTransaction();
-		ProductBacklog productbacklog = productbacklogDao.findById(id);
-		productbacklogDao.delete(productbacklog);
-		productbacklogDao.closeCurrentSessionwithTransaction();
+		try {
+			ProductBacklog productbacklog = productbacklogDao.findById(id);
+			productbacklogDao.delete(productbacklog);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<ProductBacklog> findAll() {
-		productbacklogDao.openCurrentSession();
-		List<ProductBacklog> productbacklogListe = productbacklogDao.findAll();
-		productbacklogDao.closeCurrentSession();
-		return productbacklogListe;
+		try {
+			return productbacklogDao.findAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public List<ProductBacklog> findAllByProjectId(Integer id) {
-		productbacklogDao.openCurrentSession();
-		List<ProductBacklog> productbacklogListe = productbacklogDao.findAllByProjectId(id);
-		productbacklogDao.closeCurrentSession();
-		return productbacklogListe;
+		try {
+			return productbacklogDao.findAllByProjectId(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void deleteAll() {
-		productbacklogDao.openCurrentSessionwithTransaction();
-		productbacklogDao.deleteAll();
-		productbacklogDao.closeCurrentSessionwithTransaction();
+		try {
+			productbacklogDao.deleteAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public ProductBacklogDao productbacklogDao() {

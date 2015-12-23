@@ -10,53 +10,68 @@ public class ScrumprojektService {
 	private ScrumprojektDao scrumprojektDao;
 	
 	public ScrumprojektService(String hibernateconfigfilename) {
-		scrumprojektDao = new ScrumprojektDao(hibernateconfigfilename);
+		this.scrumprojektDao = new ScrumprojektDao(hibernateconfigfilename);
 	}
 	
 	public void persist(Scrumprojekt entity) {
-		scrumprojektDao.openCurrentSessionwithTransaction();
-		scrumprojektDao.persist(entity);
-		scrumprojektDao.closeCurrentSessionwithTransaction();
+		try {
+			scrumprojektDao.persist(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void update(Scrumprojekt entity) {
-		scrumprojektDao.openCurrentSessionwithTransaction();
-		scrumprojektDao.update(entity);
-		scrumprojektDao.closeCurrentSessionwithTransaction();
+		try {
+			scrumprojektDao.update(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Scrumprojekt findById(Integer id) {
-		scrumprojektDao.openCurrentSession();
-		Scrumprojekt scrumprojekt = scrumprojektDao.findById(id);
-		scrumprojektDao.closeCurrentSession();
-		return scrumprojekt;
+		try {
+			return scrumprojektDao.findById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public Scrumprojekt findByProjectname(String projectname) {
-		scrumprojektDao.openCurrentSession();
-		Scrumprojekt scrumprojekt = scrumprojektDao.findByProjectname(projectname);
-		scrumprojektDao.closeCurrentSession();
-		return scrumprojekt;
+		try {
+			return scrumprojektDao.findByProjectname(projectname);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+		
 	}
 	
 	public void delete(Integer id) {
-		scrumprojektDao.openCurrentSessionwithTransaction();
-		Scrumprojekt scrumprojekt = scrumprojektDao.findById(id);
-		scrumprojektDao.delete(scrumprojekt);
-		scrumprojektDao.closeCurrentSessionwithTransaction();
+		try {
+			Scrumprojekt scrumprojekt = scrumprojektDao.findById(id);
+			scrumprojektDao.delete(scrumprojekt);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<Scrumprojekt> findAll() {
-		scrumprojektDao.openCurrentSession();
-		List<Scrumprojekt> scrumprojektListe = scrumprojektDao.findAll();
-		scrumprojektDao.closeCurrentSession();
-		return scrumprojektListe;
+		try {
+			return scrumprojektDao.findAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void deleteAll() {
-		scrumprojektDao.openCurrentSessionwithTransaction();
-		scrumprojektDao.deleteAll();
-		scrumprojektDao.closeCurrentSessionwithTransaction();
+		try {
+			scrumprojektDao.deleteAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public ScrumprojektDao ScrumprojektDao() {

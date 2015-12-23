@@ -7,60 +7,74 @@ import model.DefinitionOfDone;
 
 public class DefinitionOfDoneService {
 	
-	private DefinitionOfDoneDao definitionofdoneDao;
+	private DefinitionOfDoneDao dodDao = null;
 	
 	public DefinitionOfDoneService(String hibernateconfigfilename) {
-		definitionofdoneDao = new DefinitionOfDoneDao(hibernateconfigfilename);
+		this.dodDao = new DefinitionOfDoneDao(hibernateconfigfilename);
 	}
 	
 	public void persist(DefinitionOfDone entity) {
-		definitionofdoneDao.openCurrentSessionwithTransaction();
-		definitionofdoneDao.persist(entity);
-		definitionofdoneDao.closeCurrentSessionwithTransaction();
+		try {
+			dodDao.persist(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void update(DefinitionOfDone entity) {
-		definitionofdoneDao.openCurrentSessionwithTransaction();
-		definitionofdoneDao.update(entity);
-		definitionofdoneDao.closeCurrentSessionwithTransaction();
+		try {
+			dodDao.update(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public DefinitionOfDone findById(Integer id) {
-		definitionofdoneDao.openCurrentSession();
-		DefinitionOfDone definitionofdone = definitionofdoneDao.findById(id);
-		definitionofdoneDao.closeCurrentSession();
-		return definitionofdone;
+		try {
+			return dodDao.findById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public List<DefinitionOfDone> findByUserstoryId(Integer userstoryId) {
-		definitionofdoneDao.openCurrentSession();
-		List<DefinitionOfDone> definitionofdoneListe = definitionofdoneDao.findByUserstoryId(userstoryId);
-		definitionofdoneDao.closeCurrentSession();
-		return definitionofdoneListe;
+		try {
+			return dodDao.findByUserstoryId(userstoryId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void delete(Integer id) {
-		definitionofdoneDao.openCurrentSessionwithTransaction();
-		DefinitionOfDone definitionofdone = definitionofdoneDao.findById(id);
-		definitionofdoneDao.delete(definitionofdone);
-		definitionofdoneDao.closeCurrentSessionwithTransaction();
+		try {
+			DefinitionOfDone dod = dodDao.findById(id);
+			dodDao.delete(dod);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<DefinitionOfDone> findAll() {
-		definitionofdoneDao.openCurrentSession();
-		List<DefinitionOfDone> definitionofdoneListe = definitionofdoneDao.findAll();
-		definitionofdoneDao.closeCurrentSession();
-		return definitionofdoneListe;
+		try {
+			return dodDao.findAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void deleteAll() {
-		definitionofdoneDao.openCurrentSessionwithTransaction();
-		definitionofdoneDao.deleteAll();
-		definitionofdoneDao.closeCurrentSessionwithTransaction();
+		try {
+			dodDao.deleteAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public DefinitionOfDoneDao definitionofdoneDao() {
-		return definitionofdoneDao;
+	public DefinitionOfDoneDao getDodDao() {
+		return dodDao;
 	}
 	
 }

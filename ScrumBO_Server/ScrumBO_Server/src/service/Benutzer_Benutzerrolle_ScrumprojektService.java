@@ -7,67 +7,84 @@ import model.Benutzer_Benutzerrolle_Scrumprojekt;
 
 public class Benutzer_Benutzerrolle_ScrumprojektService {
 	
-	private Benutzer_Benutzerrolle_ScrumprojektDao service;
+	private Benutzer_Benutzerrolle_ScrumprojektDao bbsDao = null;
 	
 	public Benutzer_Benutzerrolle_ScrumprojektService(String hibernateconfigfilename) {
-		service = new Benutzer_Benutzerrolle_ScrumprojektDao(hibernateconfigfilename);
+		this.bbsDao = new Benutzer_Benutzerrolle_ScrumprojektDao(hibernateconfigfilename);
 	}
 	
 	public void persist(Benutzer_Benutzerrolle_Scrumprojekt entity) {
-		service.openCurrentSessionwithTransaction();
-		service.persist(entity);
-		service.closeCurrentSessionwithTransaction();
+		try {
+			bbsDao.persist(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void update(Benutzer_Benutzerrolle_Scrumprojekt entity) {
-		service.openCurrentSessionwithTransaction();
-		service.update(entity);
-		service.closeCurrentSessionwithTransaction();
+		try {
+			bbsDao.update(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Benutzer_Benutzerrolle_Scrumprojekt findById(Integer id) {
-		service.openCurrentSession();
-		Benutzer_Benutzerrolle_Scrumprojekt benutzer = service.findById(id);
-		service.closeCurrentSession();
-		return benutzer;
+		try {
+			return bbsDao.findById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public List<Benutzer_Benutzerrolle_Scrumprojekt> findListByBenutzerId(Integer benutzerId) {
-		service.openCurrentSession();
-		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzer = service.findListByBenutzerId(benutzerId);
-		service.closeCurrentSession();
-		return benutzer;
+		
+		try {
+			return bbsDao.findListByBenutzerId(benutzerId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public List<Benutzer_Benutzerrolle_Scrumprojekt> findListByProjectId(Integer scrumprojektid) {
-		service.openCurrentSession();
-		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzer = service.findListByProjectId(scrumprojektid);
-		service.closeCurrentSession();
-		return benutzer;
+		try {
+			return bbsDao.findListByProjectId(scrumprojektid);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void delete(Integer id) {
-		service.openCurrentSessionwithTransaction();
-		Benutzer_Benutzerrolle_Scrumprojekt benutzer = service.findById(id);
-		service.delete(benutzer);
-		service.closeCurrentSessionwithTransaction();
+		try {
+			Benutzer_Benutzerrolle_Scrumprojekt entity = bbsDao.findById(id);
+			bbsDao.delete(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<Benutzer_Benutzerrolle_Scrumprojekt> findAll() {
-		service.openCurrentSession();
-		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzerListe = service.findAll();
-		service.closeCurrentSession();
-		return benutzerListe;
+		try {
+			return bbsDao.findAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void deleteAll() {
-		service.openCurrentSessionwithTransaction();
-		service.deleteAll();
-		service.closeCurrentSessionwithTransaction();
+		try {
+			bbsDao.deleteAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public Benutzer_Benutzerrolle_ScrumprojektDao serviceDao() {
-		return service;
+	public Benutzer_Benutzerrolle_ScrumprojektDao bbsdaoDao() {
+		return bbsDao;
 	}
 	
 }

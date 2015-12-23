@@ -5,82 +5,46 @@ import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 
+import hibernate.HibernateUtil;
 import model.ProductBacklog;
 import model.UserStory;
 
 public class ProductBacklogDao implements DaoInterface<ProductBacklog, Integer> {
 	
-	private Session		currentSession			= null;
-	private Transaction	currentTransaction		= null;
-	private String		hibernateconfigfilename	= "";
-												
+	private String			hibernateconfig	= "";
+	private HibernateUtil	hibernateutil	= null;
+											
 	public ProductBacklogDao(String hibernateconfigfilename) {
-		this.hibernateconfigfilename = hibernateconfigfilename;
-	}
-	
-	public Session openCurrentSession() {
-		currentSession = getSessionFactory().openSession();
-		return currentSession;
-	}
-	
-	public Session openCurrentSessionwithTransaction() {
-		currentSession = getSessionFactory().openSession();
-		currentTransaction = currentSession.beginTransaction();
-		return currentSession;
-	}
-	
-	public void closeCurrentSession() {
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public void closeCurrentSessionwithTransaction() {
-		currentTransaction.commit();
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public SessionFactory getSessionFactory() {
-		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
-		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties());
-		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
-		return sessionFactory;
-	}
-	
-	public Session getCurrentSession() {
-		return currentSession;
-	}
-	
-	public void setCurrentSession(Session currentSession) {
-		this.currentSession = currentSession;
-	}
-	
-	public Transaction getCurrentTransaction() {
-		return currentTransaction;
-	}
-	
-	public void setCurrentTransaction(Transaction currentTransaction) {
-		this.currentTransaction = currentTransaction;
+		this.hibernateconfig = hibernateconfig;
+		this.hibernateutil = new HibernateUtil(hibernateconfig);
 	}
 	
 	public void persist(ProductBacklog entity) {
-		getCurrentSession().save(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.save(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public void update(ProductBacklog entity) {
-		getCurrentSession().update(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.update(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	// LinkedHashSet, damit keine doppelten UserStorys in der Liste vorhanden
 	// sind
 	public ProductBacklog findById(Integer id) {
-		ProductBacklog productbacklog = (ProductBacklog) getCurrentSession().get(ProductBacklog.class, id);
+		ProductBacklog productbacklog = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		productbacklog = (ProductBacklog) s.get(ProductBacklog.class, id);
+		s.getTransaction().commit();
+		s.close();
 		List<UserStory> liste = productbacklog.getUserstory();
 		List<UserStory> liste2 = new ArrayList<UserStory>(new LinkedHashSet<UserStory>(liste));
 		productbacklog.setUserstory(liste2);
@@ -88,18 +52,34 @@ public class ProductBacklogDao implements DaoInterface<ProductBacklog, Integer> 
 	}
 	
 	public void delete(ProductBacklog entity) {
-		getCurrentSession().delete(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.delete(entity);
+		s.getTransaction().commit();
+		s.close();
+		
 	}
 	
 	public List<ProductBacklog> findAll() {
-		List<ProductBacklog> productbacklogListe = (List<ProductBacklog>) getCurrentSession()
-				.createQuery("from ProductBacklog").list();
+		List<ProductBacklog> productbacklogListe = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		productbacklogListe = (List<ProductBacklog>) s.createQuery("from ProductBacklog").list();
+		s.getTransaction().commit();
+		s.close();
+		
 		return productbacklogListe;
 	}
 	
 	public List<ProductBacklog> findAllByProjectId(Integer projectId) {
-		List<ProductBacklog> productbacklogListe = (List<ProductBacklog>) getCurrentSession()
+		List<ProductBacklog> productbacklogListe = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		productbacklogListe = (List<ProductBacklog>) s
 				.createQuery("from ProductBacklog where scrumprojekt_id like'" + projectId + "'").list();
+		s.getTransaction().commit();
+		s.close();
+		
 		return productbacklogListe;
 	}
 	

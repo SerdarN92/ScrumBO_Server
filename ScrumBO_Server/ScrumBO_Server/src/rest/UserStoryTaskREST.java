@@ -106,6 +106,7 @@ public class UserStoryTaskREST {
 			e.printStackTrace();
 			output = "User Story Task wurde nicht erfolgreich geupdated";
 		}
+		
 		return Response.status(200).entity(output).build();
 	}
 	

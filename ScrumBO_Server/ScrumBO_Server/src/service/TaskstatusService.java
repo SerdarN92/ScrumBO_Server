@@ -14,42 +14,55 @@ public class TaskstatusService {
 	}
 	
 	public void persist(Taskstatus entity) {
-		taskstatusDao.openCurrentSessionwithTransaction();
-		taskstatusDao.persist(entity);
-		taskstatusDao.closeCurrentSessionwithTransaction();
+		try {
+			taskstatusDao.persist(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void update(Taskstatus entity) {
-		taskstatusDao.openCurrentSessionwithTransaction();
-		taskstatusDao.update(entity);
-		taskstatusDao.closeCurrentSessionwithTransaction();
+		try {
+			taskstatusDao.update(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Taskstatus findById(Integer id) {
-		taskstatusDao.openCurrentSession();
-		Taskstatus taskstatus = taskstatusDao.findById(id);
-		taskstatusDao.closeCurrentSession();
+		Taskstatus taskstatus = null;
+		try {
+			taskstatus = taskstatusDao.findById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return taskstatus;
 	}
 	
 	public void delete(Integer id) {
-		taskstatusDao.openCurrentSessionwithTransaction();
-		Taskstatus taskstatus = taskstatusDao.findById(id);
-		taskstatusDao.delete(taskstatus);
-		taskstatusDao.closeCurrentSessionwithTransaction();
+		try {
+			Taskstatus taskstatus = taskstatusDao.findById(id);
+			taskstatusDao.delete(taskstatus);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<Taskstatus> findAll() {
-		taskstatusDao.openCurrentSession();
-		List<Taskstatus> taskstatusListe = taskstatusDao.findAll();
-		taskstatusDao.closeCurrentSession();
-		return taskstatusListe;
+		try {
+			return taskstatusDao.findAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void deleteAll() {
-		taskstatusDao.openCurrentSessionwithTransaction();
-		taskstatusDao.deleteAll();
-		taskstatusDao.closeCurrentSessionwithTransaction();
+		try {
+			taskstatusDao.deleteAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public TaskstatusDao taskstatusDao() {

@@ -7,53 +7,65 @@ import model.Benutzerrolle;
 
 public class BenutzerrolleService {
 	
-	private BenutzerrolleDao BenutzerrolleDao;
+	private BenutzerrolleDao benutzerrolleDao = null;
 	
 	public BenutzerrolleService(String hibernateconfigfilename) {
-		BenutzerrolleDao = new BenutzerrolleDao(hibernateconfigfilename);
+		this.benutzerrolleDao = new BenutzerrolleDao(hibernateconfigfilename);
 	}
 	
 	public void persist(Benutzerrolle entity) {
-		BenutzerrolleDao.openCurrentSessionwithTransaction();
-		BenutzerrolleDao.persist(entity);
-		BenutzerrolleDao.closeCurrentSessionwithTransaction();
+		try {
+			benutzerrolleDao.persist(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void update(Benutzerrolle entity) {
-		BenutzerrolleDao.openCurrentSessionwithTransaction();
-		BenutzerrolleDao.update(entity);
-		BenutzerrolleDao.closeCurrentSessionwithTransaction();
+		try {
+			benutzerrolleDao.update(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Benutzerrolle findById(Integer id) {
-		BenutzerrolleDao.openCurrentSession();
-		Benutzerrolle Benutzerrolle = BenutzerrolleDao.findById(id);
-		BenutzerrolleDao.closeCurrentSession();
-		return Benutzerrolle;
+		try {
+			return benutzerrolleDao.findById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void delete(Integer id) {
-		BenutzerrolleDao.openCurrentSessionwithTransaction();
-		Benutzerrolle Benutzerrolle = BenutzerrolleDao.findById(id);
-		BenutzerrolleDao.delete(Benutzerrolle);
-		BenutzerrolleDao.closeCurrentSessionwithTransaction();
+		try {
+			Benutzerrolle benutzerrolle = benutzerrolleDao.findById(id);
+			benutzerrolleDao.delete(benutzerrolle);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<Benutzerrolle> findAll() {
-		BenutzerrolleDao.openCurrentSession();
-		List<Benutzerrolle> BenutzerrolleListe = BenutzerrolleDao.findAll();
-		BenutzerrolleDao.closeCurrentSession();
-		return BenutzerrolleListe;
+		try {
+			return benutzerrolleDao.findAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void deleteAll() {
-		BenutzerrolleDao.openCurrentSessionwithTransaction();
-		BenutzerrolleDao.deleteAll();
-		BenutzerrolleDao.closeCurrentSessionwithTransaction();
+		try {
+			benutzerrolleDao.deleteAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
-	public BenutzerrolleDao BenutzerrolleDao() {
-		return BenutzerrolleDao;
+	public BenutzerrolleDao benutzerrolleDao() {
+		return benutzerrolleDao;
 	}
 	
 }

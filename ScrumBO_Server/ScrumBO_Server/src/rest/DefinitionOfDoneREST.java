@@ -46,7 +46,6 @@ public class DefinitionOfDoneREST {
 		
 		Gson gson = new Gson();
 		String output = gson.toJson(dodDTOListe);
-		
 		return Response.status(200).entity(output).build();
 	}
 	
@@ -77,7 +76,6 @@ public class DefinitionOfDoneREST {
 		definitionOfDoneService.persist(definitionOfDone);
 		
 		String output = "Definition Of Done erfolgreich erstellt";
-		
 		return Response.status(200).entity(output).build();
 		
 	}

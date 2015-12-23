@@ -3,102 +3,76 @@ package dao;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 
+import hibernate.HibernateUtil;
 import model.Benutzer;
 
 public class BenutzerDao implements DaoInterface<Benutzer, Integer> {
 	
-	private Session		currentSession			= null;
-	private Transaction	currentTransaction		= null;
-	private String		hibernateconfigfilename	= "";
-												
-	public BenutzerDao() {
-	
-	}
-	
-	public BenutzerDao(String hibernateconfigfilename) {
-		this.hibernateconfigfilename = hibernateconfigfilename;
-	}
-	
-	public Session openCurrentSession() {
-		currentSession = getSessionFactory().openSession();
-		return currentSession;
-	}
-	
-	public Session openCurrentSessionwithTransaction() {
-		currentSession = getSessionFactory().openSession();
-		currentTransaction = currentSession.beginTransaction();
-		return currentSession;
-	}
-	
-	public void closeCurrentSession() {
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public void closeCurrentSessionwithTransaction() {
-		currentTransaction.commit();
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public SessionFactory getSessionFactory() {
-		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
-		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties());
-		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
-		return sessionFactory;
-	}
-	
-	public Session getCurrentSession() {
-		return currentSession;
-	}
-	
-	public void setCurrentSession(Session currentSession) {
-		this.currentSession = currentSession;
-	}
-	
-	public Transaction getCurrentTransaction() {
-		return currentTransaction;
-	}
-	
-	public void setCurrentTransaction(Transaction currentTransaction) {
-		this.currentTransaction = currentTransaction;
+	private String			hibernateconfig	= "";
+	private HibernateUtil	hibernateutil	= null;
+											
+	public BenutzerDao(String hibernateconfig) {
+		this.hibernateconfig = hibernateconfig;
+		this.hibernateutil = new HibernateUtil(hibernateconfig);
 	}
 	
 	public void persist(Benutzer entity) {
-		getCurrentSession().save(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.save(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public void update(Benutzer entity) {
-		getCurrentSession().update(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.update(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public Benutzer findById(Integer id) {
-		Benutzer benutzer = (Benutzer) getCurrentSession().get(Benutzer.class, id);
+		Benutzer benutzer = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		benutzer = (Benutzer) s.get(Benutzer.class, id);
+		s.getTransaction().commit();
+		s.close();
 		return benutzer;
 	}
 	
 	public Benutzer findByEmail(String email) {
-		List<Benutzer> benutzerList = findAll();
-		Benutzer a = null;
+		List<Benutzer> benutzerList = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		benutzerList = findAll();
+		s.getTransaction().commit();
+		s.close();
+		Benutzer benutzer = null;
 		for (int i = 0; i < benutzerList.size(); i++) {
 			if (benutzerList.get(i).getEmail().equals(email))
-				a = benutzerList.get(i);
+				benutzer = benutzerList.get(i);
 		}
-		return a;
+		return benutzer;
 	}
 	
 	public void delete(Benutzer entity) {
-		getCurrentSession().delete(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.delete(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public List<Benutzer> findAll() {
-		List<Benutzer> benutzerListe = (List<Benutzer>) getCurrentSession().createQuery("from Benutzer").list();
+		List<Benutzer> benutzerListe = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		benutzerListe = (List<Benutzer>) s.createQuery("from Benutzer").list();
+		s.getTransaction().commit();
+		s.close();
 		return benutzerListe;
 	}
 	

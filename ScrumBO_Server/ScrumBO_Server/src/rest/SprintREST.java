@@ -33,7 +33,6 @@ public class SprintREST {
 		
 		Gson gson = new Gson();
 		String output = gson.toJson(sprintDTO);
-		
 		return Response.status(200).entity(output).build();
 	}
 	
@@ -46,7 +45,6 @@ public class SprintREST {
 		Integer count = 0;
 		count = sprintService.countSprintsAnzahlToProject(scrumprojektid);
 		String output = count.toString();
-		
 		return Response.status(200).entity(output).build();
 	}
 	
@@ -66,7 +64,6 @@ public class SprintREST {
 		
 		Gson gson = new Gson();
 		String output = gson.toJson(sprintDTO);
-		
 		return Response.status(200).entity(output).build();
 	}
 	
@@ -91,7 +88,6 @@ public class SprintREST {
 		
 		Gson gson = new Gson();
 		String output = gson.toJson(sprintDTO);
-		
 		return Response.status(200).entity(output).build();
 	}
 	

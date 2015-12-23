@@ -3,88 +3,61 @@ package dao;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 
+import hibernate.HibernateUtil;
 import model.Taskstatus;
 
 public class TaskstatusDao implements DaoInterface<Taskstatus, Integer> {
 	
-	private Session		currentSession			= null;
-	private Transaction	currentTransaction		= null;
-	private String		hibernateconfigfilename	= "";
-												
+	private String			hibernateconfig	= "";
+	private HibernateUtil	hibernateutil	= null;
+											
 	public TaskstatusDao(String hibernateconfigfilename) {
-		this.hibernateconfigfilename = hibernateconfigfilename;
-	}
-	
-	public Session openCurrentSession() {
-		currentSession = getSessionFactory().openSession();
-		return currentSession;
-	}
-	
-	public Session openCurrentSessionwithTransaction() {
-		currentSession = getSessionFactory().openSession();
-		currentTransaction = currentSession.beginTransaction();
-		return currentSession;
-	}
-	
-	public void closeCurrentSession() {
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public void closeCurrentSessionwithTransaction() {
-		currentTransaction.commit();
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public SessionFactory getSessionFactory() {
-		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
-		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties());
-		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
-		return sessionFactory;
-	}
-	
-	public Session getCurrentSession() {
-		return currentSession;
-	}
-	
-	public void setCurrentSession(Session currentSession) {
-		this.currentSession = currentSession;
-	}
-	
-	public Transaction getCurrentTransaction() {
-		return currentTransaction;
-	}
-	
-	public void setCurrentTransaction(Transaction currentTransaction) {
-		this.currentTransaction = currentTransaction;
+		this.hibernateconfig = hibernateconfig;
+		this.hibernateutil = new HibernateUtil(hibernateconfig);
 	}
 	
 	public void persist(Taskstatus entity) {
-		getCurrentSession().save(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.save(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public void update(Taskstatus entity) {
-		getCurrentSession().update(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.update(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public Taskstatus findById(Integer id) {
-		Taskstatus taskstatus = (Taskstatus) getCurrentSession().get(Taskstatus.class, id);
+		Taskstatus taskstatus = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		taskstatus = (Taskstatus) s.get(Taskstatus.class, id);
+		s.getTransaction().commit();
+		s.close();
 		return taskstatus;
 	}
 	
 	public void delete(Taskstatus entity) {
-		getCurrentSession().delete(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.delete(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public List<Taskstatus> findAll() {
-		List<Taskstatus> taskstatusListe = (List<Taskstatus>) getCurrentSession().createQuery("from Taskstatus").list();
+		List<Taskstatus> taskstatusListe = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		taskstatusListe = (List<Taskstatus>) s.createQuery("from Taskstatus").list();
+		s.getTransaction().commit();
+		s.close();
 		return taskstatusListe;
 	}
 	

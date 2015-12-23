@@ -10,46 +10,58 @@ public class SprintBacklogService {
 	private SprintBacklogDao sprintbacklogDao;
 	
 	public SprintBacklogService(String hibernateconfigfilename) {
-		sprintbacklogDao = new SprintBacklogDao(hibernateconfigfilename);
+		this.sprintbacklogDao = new SprintBacklogDao(hibernateconfigfilename);
 	}
 	
 	public void persist(SprintBacklog entity) {
-		sprintbacklogDao.openCurrentSessionwithTransaction();
-		sprintbacklogDao.persist(entity);
-		sprintbacklogDao.closeCurrentSessionwithTransaction();
+		try {
+			sprintbacklogDao.persist(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void update(SprintBacklog entity) {
-		sprintbacklogDao.openCurrentSessionwithTransaction();
-		sprintbacklogDao.update(entity);
-		sprintbacklogDao.closeCurrentSessionwithTransaction();
+		try {
+			sprintbacklogDao.update(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public SprintBacklog findById(Integer id) {
-		sprintbacklogDao.openCurrentSession();
-		SprintBacklog sprintbacklog = sprintbacklogDao.findById(id);
-		sprintbacklogDao.closeCurrentSession();
-		return sprintbacklog;
+		try {
+			return sprintbacklogDao.findById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void delete(Integer id) {
-		sprintbacklogDao.openCurrentSessionwithTransaction();
-		SprintBacklog sprintbacklog = sprintbacklogDao.findById(id);
-		sprintbacklogDao.delete(sprintbacklog);
-		sprintbacklogDao.closeCurrentSessionwithTransaction();
+		try {
+			SprintBacklog sprintbacklog = sprintbacklogDao.findById(id);
+			sprintbacklogDao.delete(sprintbacklog);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<SprintBacklog> findAll() {
-		sprintbacklogDao.openCurrentSession();
-		List<SprintBacklog> sprintbacklogListe = sprintbacklogDao.findAll();
-		sprintbacklogDao.closeCurrentSession();
-		return sprintbacklogListe;
+		try {
+			return sprintbacklogDao.findAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void deleteAll() {
-		sprintbacklogDao.openCurrentSessionwithTransaction();
-		sprintbacklogDao.deleteAll();
-		sprintbacklogDao.closeCurrentSessionwithTransaction();
+		try {
+			sprintbacklogDao.deleteAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public SprintBacklogDao sprintbacklogDao() {

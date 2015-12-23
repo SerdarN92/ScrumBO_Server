@@ -57,6 +57,7 @@ public class UserStoryREST {
 		}
 		Gson gson = new Gson();
 		String output = gson.toJson(userstoryDTOListe);
+		
 		return Response.status(200).entity(output).build();
 	}
 	
@@ -100,6 +101,7 @@ public class UserStoryREST {
 		}
 		Gson gson = new Gson();
 		String output = gson.toJson(userstoryDTOListe);
+		
 		return Response.status(200).entity(output).build();
 	}
 	
@@ -143,6 +145,7 @@ public class UserStoryREST {
 			e.printStackTrace();
 			output = "User Story wurde nicht erfolgreich erstellt";
 		}
+		
 		return Response.status(200).entity(output).build();
 	}
 	
@@ -181,6 +184,7 @@ public class UserStoryREST {
 			e.printStackTrace();
 			output = "User Story wurde nicht erfolgreich geupdated";
 		}
+		
 		return Response.status(200).entity(output).build();
 	}
 	
@@ -245,34 +249,6 @@ public class UserStoryREST {
 			}
 		}
 		
-		// List<UserStoryTask> userstorytaskListe =
-		// userstorytaskService.findAllByUserStoryId(userstory.getId());
-		// boolean open = false;
-		// boolean inwork = false;
-		// boolean done = false;
-		//
-		// for (int i = 0; i < userstorytaskListe.size(); i++) {
-		// if (userstorytaskListe.get(i).getTaskstatus().getId() == 1)
-		// open = true;
-		// if (userstorytaskListe.get(i).getTaskstatus().getId() == 2)
-		// inwork = true;
-		// if (userstorytaskListe.get(i).getTaskstatus().getId() == 3)
-		// done = true;
-		// }
-		//
-		// if (open && !inwork && !done)
-		// userstory.setStatus(0);
-		// if (!open && inwork && !done)
-		// userstory.setStatus(1);
-		// if (!open && !inwork && done)
-		// userstory.setStatus(2);
-		// if (open && inwork && !done)
-		// userstory.setStatus(1);
-		// if (open && inwork && done)
-		// userstory.setStatus(1);
-		// if (!open && inwork && done)
-		// userstory.setStatus(1);
-		
 		userstory.setSprint(sprint);
 		
 		String output = "";
@@ -283,6 +259,7 @@ public class UserStoryREST {
 			e.printStackTrace();
 			output = "Tasks wurden nicht erfolgreich geupdated";
 		}
+		
 		return Response.status(200).entity(output).build();
 	}
 	
@@ -314,6 +291,7 @@ public class UserStoryREST {
 			e.printStackTrace();
 			output = "User Story wurde nicht erfolgreich gelöscht";
 		}
+		
 		return Response.status(200).entity(output).build();
 	}
 	
@@ -356,6 +334,7 @@ public class UserStoryREST {
 		}
 		Gson gson = new Gson();
 		String output = gson.toJson(userstoryDTOListe);
+		
 		return Response.status(200).entity(output).build();
 	}
 	

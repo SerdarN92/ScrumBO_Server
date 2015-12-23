@@ -3,107 +3,84 @@ package dao;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 
+import hibernate.HibernateUtil;
 import model.Benutzer_Benutzerrolle_Scrumprojekt;
 
 public class Benutzer_Benutzerrolle_ScrumprojektDao
 		implements DaoInterface<Benutzer_Benutzerrolle_Scrumprojekt, Integer> {
 		
-	private Session		currentSession			= null;
-	private Transaction	currentTransaction		= null;
-	private String		hibernateconfigfilename	= "";
-												
+	private String			hibernateconfig	= "";
+	private HibernateUtil	hibernateutil	= null;
+											
 	public Benutzer_Benutzerrolle_ScrumprojektDao(String hibernateconfigfilename) {
-		this.hibernateconfigfilename = hibernateconfigfilename;
-	}
-	
-	public Session openCurrentSession() {
-		currentSession = getSessionFactory().openSession();
-		return currentSession;
-	}
-	
-	public Session openCurrentSessionwithTransaction() {
-		currentSession = getSessionFactory().openSession();
-		currentTransaction = currentSession.beginTransaction();
-		return currentSession;
-	}
-	
-	public void closeCurrentSession() {
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public void closeCurrentSessionwithTransaction() {
-		currentTransaction.commit();
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public SessionFactory getSessionFactory() {
-		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
-		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties());
-		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
-		return sessionFactory;
-	}
-	
-	public Session getCurrentSession() {
-		return currentSession;
-	}
-	
-	public void setCurrentSession(Session currentSession) {
-		this.currentSession = currentSession;
-	}
-	
-	public Transaction getCurrentTransaction() {
-		return currentTransaction;
-	}
-	
-	public void setCurrentTransaction(Transaction currentTransaction) {
-		this.currentTransaction = currentTransaction;
+		this.hibernateconfig = hibernateconfig;
+		this.hibernateutil = new HibernateUtil(hibernateconfig);
 	}
 	
 	@Override
 	public void persist(Benutzer_Benutzerrolle_Scrumprojekt entity) {
-		getCurrentSession().save(entity);
-		
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.save(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	@Override
 	public void update(Benutzer_Benutzerrolle_Scrumprojekt entity) {
-		getCurrentSession().update(entity);
-		
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.update(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public List<Benutzer_Benutzerrolle_Scrumprojekt> findListByBenutzerId(Integer benutzerId) {
-		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzer_benutzerrolle_scrumprojekt_Liste = (List<Benutzer_Benutzerrolle_Scrumprojekt>) getCurrentSession()
+		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzer_benutzerrolle_scrumprojekt_Liste = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		benutzer_benutzerrolle_scrumprojekt_Liste = (List<Benutzer_Benutzerrolle_Scrumprojekt>) s
 				.createQuery("FROM Benutzer_Benutzerrolle_Scrumprojekt WHERE benutzerId LIKE'" + benutzerId + "'")
 				.list();
+		s.getTransaction().commit();
+		s.close();
 		return benutzer_benutzerrolle_scrumprojekt_Liste;
 	}
 	
 	public List<Benutzer_Benutzerrolle_Scrumprojekt> findListByProjectId(Integer scrumprojektid) {
-		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzer_benutzerrolle_scrumprojekt_Liste = (List<Benutzer_Benutzerrolle_Scrumprojekt>) getCurrentSession()
+		
+		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzer_benutzerrolle_scrumprojekt_Liste = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		benutzer_benutzerrolle_scrumprojekt_Liste = (List<Benutzer_Benutzerrolle_Scrumprojekt>) s
 				.createQuery(
 						"from Benutzer_Benutzerrolle_Scrumprojekt where scrumprojektId like'" + scrumprojektid + "'")
 				.list();
+		s.getTransaction().commit();
+		s.close();
 		return benutzer_benutzerrolle_scrumprojekt_Liste;
 	}
 	
 	@Override
 	public void delete(Benutzer_Benutzerrolle_Scrumprojekt entity) {
-		getCurrentSession().delete(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.delete(entity);
+		s.getTransaction().commit();
+		s.close();
 		
 	}
 	
 	@Override
 	public List<Benutzer_Benutzerrolle_Scrumprojekt> findAll() {
-		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzerListe = (List<Benutzer_Benutzerrolle_Scrumprojekt>) getCurrentSession()
+		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzerListe = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		benutzerListe = (List<Benutzer_Benutzerrolle_Scrumprojekt>) s
 				.createQuery("from Benutzer_Benutzerrolle_Scrumprojekt").list();
+		s.getTransaction().commit();
+		s.close();
 		return benutzerListe;
 	}
 	
@@ -117,8 +94,12 @@ public class Benutzer_Benutzerrolle_ScrumprojektDao
 	
 	@Override
 	public Benutzer_Benutzerrolle_Scrumprojekt findById(Integer id) {
-		Benutzer_Benutzerrolle_Scrumprojekt benutzer = (Benutzer_Benutzerrolle_Scrumprojekt) getCurrentSession()
-				.get(Benutzer_Benutzerrolle_Scrumprojekt.class, id);
+		Benutzer_Benutzerrolle_Scrumprojekt benutzer = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		benutzer = (Benutzer_Benutzerrolle_Scrumprojekt) s.get(Benutzer_Benutzerrolle_Scrumprojekt.class, id);
+		s.getTransaction().commit();
+		s.close();
 		return benutzer;
 	}
 	

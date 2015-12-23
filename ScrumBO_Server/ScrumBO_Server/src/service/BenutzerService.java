@@ -7,56 +7,70 @@ import model.Benutzer;
 
 public class BenutzerService {
 	
-	private BenutzerDao benutzerDao;
+	private BenutzerDao benutzerDao = null;
 	
-	public BenutzerService(String hibernateconfigfilename) {
-		benutzerDao = new BenutzerDao(hibernateconfigfilename);
+	public BenutzerService(String hibernateconfig) {
+		this.benutzerDao = new BenutzerDao(hibernateconfig);
 	}
 	
 	public void persist(Benutzer entity) {
-		benutzerDao.openCurrentSessionwithTransaction();
-		benutzerDao.persist(entity);
-		benutzerDao.closeCurrentSessionwithTransaction();
+		try {
+			benutzerDao.persist(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void update(Benutzer entity) {
-		benutzerDao.openCurrentSessionwithTransaction();
-		benutzerDao.update(entity);
-		benutzerDao.closeCurrentSessionwithTransaction();
+		try {
+			benutzerDao.update(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Benutzer findById(Integer id) {
-		benutzerDao.openCurrentSession();
-		Benutzer benutzer = benutzerDao.findById(id);
-		benutzerDao.closeCurrentSession();
-		return benutzer;
+		try {
+			return benutzerDao.findById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public Benutzer findByEmail(String email) {
-		benutzerDao.openCurrentSession();
-		Benutzer a = benutzerDao.findByEmail(email);
-		benutzerDao.closeCurrentSession();
-		return a;
+		try {
+			return benutzerDao.findByEmail(email);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void delete(Integer id) {
-		benutzerDao.openCurrentSessionwithTransaction();
-		Benutzer benutzer = benutzerDao.findById(id);
-		benutzerDao.delete(benutzer);
-		benutzerDao.closeCurrentSessionwithTransaction();
+		try {
+			Benutzer benutzer = benutzerDao.findById(id);
+			benutzerDao.delete(benutzer);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<Benutzer> findAll() {
-		benutzerDao.openCurrentSession();
-		List<Benutzer> benutzerListe = benutzerDao.findAll();
-		benutzerDao.closeCurrentSession();
-		return benutzerListe;
+		try {
+			return benutzerDao.findAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void deleteAll() {
-		benutzerDao.openCurrentSessionwithTransaction();
-		benutzerDao.deleteAll();
-		benutzerDao.closeCurrentSessionwithTransaction();
+		try {
+			benutzerDao.deleteAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public BenutzerDao benutzerDao() {

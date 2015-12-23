@@ -3,113 +3,106 @@ package dao;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 
+import hibernate.HibernateUtil;
 import model.UserStory;
 
 public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 	
-	private Session		currentSession			= null;
-	private Transaction	currentTransaction		= null;
-	private String		hibernateconfigfilename	= "";
-												
+	private String			hibernateconfig	= "";
+	private HibernateUtil	hibernateutil	= null;
+											
 	public UserStoryDao(String hibernateconfigfilename) {
-		this.hibernateconfigfilename = hibernateconfigfilename;
-	}
-	
-	public Session openCurrentSession() {
-		currentSession = getSessionFactory().openSession();
-		return currentSession;
-	}
-	
-	public Session openCurrentSessionwithTransaction() {
-		currentSession = getSessionFactory().openSession();
-		currentTransaction = currentSession.beginTransaction();
-		return currentSession;
-	}
-	
-	public void closeCurrentSession() {
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public void closeCurrentSessionwithTransaction() {
-		currentTransaction.commit();
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public SessionFactory getSessionFactory() {
-		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
-		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties());
-		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
-		return sessionFactory;
-	}
-	
-	public Session getCurrentSession() {
-		return currentSession;
-	}
-	
-	public void setCurrentSession(Session currentSession) {
-		this.currentSession = currentSession;
-	}
-	
-	public Transaction getCurrentTransaction() {
-		return currentTransaction;
-	}
-	
-	public void setCurrentTransaction(Transaction currentTransaction) {
-		this.currentTransaction = currentTransaction;
+		this.hibernateconfig = hibernateconfig;
+		this.hibernateutil = new HibernateUtil(hibernateconfig);
 	}
 	
 	public void persist(UserStory entity) {
-		getCurrentSession().save(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.save(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public void update(UserStory entity) {
-		getCurrentSession().update(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.update(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public UserStory findById(Integer id) {
-		UserStory userstory = (UserStory) getCurrentSession().get(UserStory.class, id);
+		UserStory userstory = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		userstory = (UserStory) s.get(UserStory.class, id);
+		s.getTransaction().commit();
+		s.close();
 		return userstory;
 	}
 	
 	public void delete(UserStory entity) {
-		getCurrentSession().delete(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.delete(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public List<UserStory> findAll() {
-		List<UserStory> userstoryListe = (List<UserStory>) getCurrentSession().createQuery("from UserStory").list();
+		List<UserStory> userstoryListe = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		userstoryListe = (List<UserStory>) s.createQuery("from UserStory").list();
+		s.getTransaction().commit();
+		s.close();
 		return userstoryListe;
 	}
 	
 	public List<UserStory> findAllByProductBacklogId(Integer productbacklogId) {
-		List<UserStory> userstoryListe = (List<UserStory>) getCurrentSession()
+		List<UserStory> userstoryListe = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		userstoryListe = (List<UserStory>) s
 				.createQuery("from UserStory where productbacklog_id like'" + productbacklogId + "'").list();
+		s.getTransaction().commit();
+		s.close();
 		return userstoryListe;
 	}
 	
 	public List<UserStory> findAllBySprintId(Integer sprintId) {
-		List<UserStory> userstoryListe = (List<UserStory>) getCurrentSession()
-				.createQuery("from UserStory where sprint_id like'" + sprintId + "'").list();
+		List<UserStory> userstoryListe = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		userstoryListe = (List<UserStory>) s.createQuery("from UserStory where sprint_id like'" + sprintId + "'")
+				.list();
+		s.getTransaction().commit();
+		s.close();
 		return userstoryListe;
 	}
 	
 	public List<UserStory> findAllNULLwithProductBacklogId(Integer productbacklogid) {
-		List<UserStory> userstoryListe = (List<UserStory>) getCurrentSession().createQuery(
+		List<UserStory> userstoryListe = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		userstoryListe = (List<UserStory>) s.createQuery(
 				"from UserStory where productbacklog_id like'" + productbacklogid + "'" + "AND sprint_id IS NULL")
 				.list();
+		s.getTransaction().commit();
+		s.close();
 		return userstoryListe;
 	}
 	
 	public Integer getUserStoryStatus(Integer userstoryId) {
-		UserStory userstory = (UserStory) getCurrentSession()
-				.createQuery("FROM UserStory where userstory_id like '" + userstoryId + "'").uniqueResult();
+		UserStory userstory = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		userstory = (UserStory) s.createQuery("FROM UserStory where userstory_id like '" + userstoryId + "'")
+				.uniqueResult();
+		s.getTransaction().commit();
+		s.close();
 		return userstory.getStatus();
 	}
 	

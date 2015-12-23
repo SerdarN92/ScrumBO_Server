@@ -3,79 +3,43 @@ package dao;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 
+import hibernate.HibernateUtil;
 import model.Scrumprojekt;
 
 public class ScrumprojektDao implements DaoInterface<Scrumprojekt, Integer> {
 	
-	private Session		currentSession			= null;
-	private Transaction	currentTransaction		= null;
-	private String		hibernateconfigfilename	= "";
-												
+	private String			hibernateconfig	= "";
+	private HibernateUtil	hibernateutil	= null;
+											
 	public ScrumprojektDao(String hibernateconfigfilename) {
-		this.hibernateconfigfilename = hibernateconfigfilename;
-	}
-	
-	public Session openCurrentSession() {
-		currentSession = getSessionFactory().openSession();
-		return currentSession;
-	}
-	
-	public Session openCurrentSessionwithTransaction() {
-		currentSession = getSessionFactory().openSession();
-		currentTransaction = currentSession.beginTransaction();
-		return currentSession;
-	}
-	
-	public void closeCurrentSession() {
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public void closeCurrentSessionwithTransaction() {
-		currentTransaction.commit();
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public SessionFactory getSessionFactory() {
-		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
-		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties());
-		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
-		return sessionFactory;
-	}
-	
-	public Session getCurrentSession() {
-		return currentSession;
-	}
-	
-	public void setCurrentSession(Session currentSession) {
-		this.currentSession = currentSession;
-	}
-	
-	public Transaction getCurrentTransaction() {
-		return currentTransaction;
-	}
-	
-	public void setCurrentTransaction(Transaction currentTransaction) {
-		this.currentTransaction = currentTransaction;
+		this.hibernateconfig = hibernateconfig;
+		this.hibernateutil = new HibernateUtil(hibernateconfig);
 	}
 	
 	public void persist(Scrumprojekt entity) {
-		getCurrentSession().save(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.save(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public void update(Scrumprojekt entity) {
-		getCurrentSession().update(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.update(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public Scrumprojekt findById(Integer id) {
-		Scrumprojekt scrumprojekt = (Scrumprojekt) getCurrentSession().get(Scrumprojekt.class, id);
+		Scrumprojekt scrumprojekt = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		scrumprojekt = (Scrumprojekt) s.get(Scrumprojekt.class, id);
+		s.getTransaction().commit();
+		s.close();
 		return scrumprojekt;
 	}
 	
@@ -90,12 +54,20 @@ public class ScrumprojektDao implements DaoInterface<Scrumprojekt, Integer> {
 	}
 	
 	public void delete(Scrumprojekt entity) {
-		getCurrentSession().delete(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.delete(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public List<Scrumprojekt> findAll() {
-		List<Scrumprojekt> scrumprojektListe = (List<Scrumprojekt>) getCurrentSession().createQuery("from Scrumprojekt")
-				.list();
+		List<Scrumprojekt> scrumprojektListe = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		scrumprojektListe = (List<Scrumprojekt>) s.createQuery("from Scrumprojekt").list();
+		s.getTransaction().commit();
+		s.close();
 		return scrumprojektListe;
 	}
 	

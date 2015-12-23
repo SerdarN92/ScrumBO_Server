@@ -3,90 +3,62 @@ package dao;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 
+import hibernate.HibernateUtil;
 import model.Benutzerrolle;
 
 public class BenutzerrolleDao implements DaoInterface<Benutzerrolle, Integer> {
 	
-	private Session		currentSession			= null;
-	private Transaction	currentTransaction		= null;
-	private String		hibernateconfigfilename	= "";
-												
+	private String			hibernateconfig	= "";
+	private HibernateUtil	hibernateutil	= null;
+											
 	public BenutzerrolleDao(String hibernateconfigfilename) {
-		this.hibernateconfigfilename = hibernateconfigfilename;
-	}
-	
-	public Session openCurrentSession() {
-		currentSession = getSessionFactory().openSession();
-		return currentSession;
-	}
-	
-	public Session openCurrentSessionwithTransaction() {
-		currentSession = getSessionFactory().openSession();
-		currentTransaction = currentSession.beginTransaction();
-		return currentSession;
-	}
-	
-	public void closeCurrentSession() {
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public void closeCurrentSessionwithTransaction() {
-		currentTransaction.commit();
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public SessionFactory getSessionFactory() {
-		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
-		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties());
-		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
-		return sessionFactory;
-	}
-	
-	public Session getCurrentSession() {
-		return currentSession;
-	}
-	
-	public void setCurrentSession(Session currentSession) {
-		this.currentSession = currentSession;
-	}
-	
-	public Transaction getCurrentTransaction() {
-		return currentTransaction;
-	}
-	
-	public void setCurrentTransaction(Transaction currentTransaction) {
-		this.currentTransaction = currentTransaction;
+		this.hibernateconfig = hibernateconfig;
+		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
 	}
 	
 	public void persist(Benutzerrolle entity) {
-		getCurrentSession().save(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.save(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public void update(Benutzerrolle entity) {
-		getCurrentSession().update(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.update(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public Benutzerrolle findById(Integer id) {
-		Benutzerrolle Benutzerrolle = (Benutzerrolle) getCurrentSession().get(Benutzerrolle.class, id);
-		return Benutzerrolle;
+		Benutzerrolle benutzerrolle = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		benutzerrolle = (Benutzerrolle) s.get(Benutzerrolle.class, id);
+		s.getTransaction().commit();
+		s.close();
+		return benutzerrolle;
 	}
 	
 	public void delete(Benutzerrolle entity) {
-		getCurrentSession().delete(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.delete(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public List<Benutzerrolle> findAll() {
-		List<Benutzerrolle> BenutzerrolleListe = (List<Benutzerrolle>) getCurrentSession()
-				.createQuery("from Benutzerrolle").list();
-		return BenutzerrolleListe;
+		List<Benutzerrolle> benutzerrolleListe = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		benutzerrolleListe = (List<Benutzerrolle>) s.createQuery("from Benutzerrolle").list();
+		s.getTransaction().commit();
+		s.close();
+		return benutzerrolleListe;
 	}
 	
 	public void deleteAll() {

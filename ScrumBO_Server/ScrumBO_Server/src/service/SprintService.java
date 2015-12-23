@@ -10,53 +10,74 @@ public class SprintService {
 	private SprintDao sprintDao;
 	
 	public SprintService(String hibernateconfigfilename) {
-		sprintDao = new SprintDao(hibernateconfigfilename);
+		this.sprintDao = new SprintDao(hibernateconfigfilename);
 	}
 	
 	public void persist(Sprint entity) {
-		sprintDao.openCurrentSessionwithTransaction();
-		sprintDao.persist(entity);
-		sprintDao.closeCurrentSessionwithTransaction();
+		try {
+			sprintDao.persist(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public void update(Sprint entity) {
-		sprintDao.openCurrentSessionwithTransaction();
-		sprintDao.update(entity);
-		sprintDao.closeCurrentSessionwithTransaction();
+		try {
+			sprintDao.update(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public Sprint findById(Integer id) {
-		sprintDao.openCurrentSession();
-		Sprint sprint = sprintDao.findById(id);
-		sprintDao.closeCurrentSession();
-		return sprint;
+		try {
+			return sprintDao.findById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+		
 	}
 	
 	public Sprint findByProjectIdandSprintNumber(Integer scrumprojektid, Integer sprintnumber) {
-		sprintDao.openCurrentSession();
-		Sprint sprint = sprintDao.findByProjectIdandSprintNumber(scrumprojektid, sprintnumber);
-		sprintDao.closeCurrentSession();
-		return sprint;
+		try {
+			return sprintDao.findByProjectIdandSprintNumber(scrumprojektid, sprintnumber);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+		
 	}
 	
 	public void delete(Integer id) {
-		sprintDao.openCurrentSessionwithTransaction();
-		Sprint sprint = sprintDao.findById(id);
-		sprintDao.delete(sprint);
-		sprintDao.closeCurrentSessionwithTransaction();
+		try {
+			Sprint sprint = sprintDao.findById(id);
+			sprintDao.delete(sprint);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public List<Sprint> findAll() {
-		sprintDao.openCurrentSession();
-		List<Sprint> sprintListe = sprintDao.findAll();
-		sprintDao.closeCurrentSession();
-		return sprintListe;
+		try {
+			return sprintDao.findAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+		
 	}
 	
 	public void deleteAll() {
-		sprintDao.openCurrentSessionwithTransaction();
-		sprintDao.deleteAll();
-		sprintDao.closeCurrentSessionwithTransaction();
+		try {
+			sprintDao.deleteAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public SprintDao sprintDao() {
@@ -65,17 +86,21 @@ public class SprintService {
 	
 	public Integer countSprintsToProject(Integer scrumprojektid) {
 		Integer count = 0;
-		sprintDao.openCurrentSession();
-		count = sprintDao.countSprintsToProject(scrumprojektid);
-		sprintDao.closeCurrentSession();
+		try {
+			count = sprintDao.countSprintsToProject(scrumprojektid);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return count;
 	}
 	
 	public Integer countSprintsAnzahlToProject(Integer scrumprojektid) {
 		Integer count = 0;
-		sprintDao.openCurrentSession();
-		count = sprintDao.countSprintsAnzahlToProject(scrumprojektid);
-		sprintDao.closeCurrentSession();
+		try {
+			count = sprintDao.countSprintsAnzahlToProject(scrumprojektid);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return count;
 	}
 	

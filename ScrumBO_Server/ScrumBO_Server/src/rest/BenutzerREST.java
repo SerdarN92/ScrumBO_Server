@@ -75,7 +75,6 @@ public class BenutzerREST {
 		
 		Gson gson = new Gson();
 		String output = gson.toJson(benutzerDTOListe);
-		
 		return Response.status(200).entity(output).build();
 	}
 	
@@ -147,7 +146,6 @@ public class BenutzerREST {
 		benutzerService.update(benutzer);
 		
 		String output = "Passwort vom Benutzer geupdated";
-		
 		return Response.status(200).entity(output).build();
 	}
 	
@@ -189,7 +187,6 @@ public class BenutzerREST {
 		bbsService.persist(bbs);
 		
 		String output = "User erfolgreich erstellt";
-		
 		return Response.status(200).entity(output).build();
 		
 	}
@@ -234,7 +231,6 @@ public class BenutzerREST {
 		bbsService.persist(bbs);
 		
 		String output = "User erfolgreich erstellt";
-		
 		return Response.status(200).entity(output).build();
 		
 	}

@@ -3,95 +3,72 @@ package dao;
 import java.util.List;
 
 import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
-import org.hibernate.cfg.Configuration;
 
+import hibernate.HibernateUtil;
 import model.DefinitionOfDone;
 
 public class DefinitionOfDoneDao implements DaoInterface<DefinitionOfDone, Integer> {
 	
-	private Session		currentSession			= null;
-	private Transaction	currentTransaction		= null;
-	private String		hibernateconfigfilename	= "";
-												
+	private String			hibernateconfig	= "";
+	private HibernateUtil	hibernateutil	= null;
+											
 	public DefinitionOfDoneDao(String hibernateconfigfilename) {
-		this.hibernateconfigfilename = hibernateconfigfilename;
-	}
-	
-	public Session openCurrentSession() {
-		currentSession = getSessionFactory().openSession();
-		return currentSession;
-	}
-	
-	public Session openCurrentSessionwithTransaction() {
-		currentSession = getSessionFactory().openSession();
-		currentTransaction = currentSession.beginTransaction();
-		return currentSession;
-	}
-	
-	public void closeCurrentSession() {
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public void closeCurrentSessionwithTransaction() {
-		currentTransaction.commit();
-		currentSession.close();
-		getSessionFactory().close();
-	}
-	
-	public SessionFactory getSessionFactory() {
-		Configuration configuration = new Configuration().configure(hibernateconfigfilename);
-		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties());
-		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
-		return sessionFactory;
-	}
-	
-	public Session getCurrentSession() {
-		return currentSession;
-	}
-	
-	public void setCurrentSession(Session currentSession) {
-		this.currentSession = currentSession;
-	}
-	
-	public Transaction getCurrentTransaction() {
-		return currentTransaction;
-	}
-	
-	public void setCurrentTransaction(Transaction currentTransaction) {
-		this.currentTransaction = currentTransaction;
+		this.hibernateconfig = hibernateconfig;
+		this.hibernateutil = new HibernateUtil(hibernateconfig);
 	}
 	
 	public void persist(DefinitionOfDone entity) {
-		getCurrentSession().save(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.save(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public void update(DefinitionOfDone entity) {
-		getCurrentSession().update(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.update(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public DefinitionOfDone findById(Integer id) {
-		DefinitionOfDone definitionofdone = (DefinitionOfDone) getCurrentSession().get(DefinitionOfDone.class, id);
+		DefinitionOfDone definitionofdone = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		definitionofdone = (DefinitionOfDone) s.get(DefinitionOfDone.class, id);
+		s.getTransaction().commit();
+		s.close();
 		return definitionofdone;
 	}
 	
 	public List<DefinitionOfDone> findByUserstoryId(Integer userstoryId) {
-		List<DefinitionOfDone> definitionofdoneListe = (List<DefinitionOfDone>) getCurrentSession()
+		List<DefinitionOfDone> definitionofdoneListe = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		definitionofdoneListe = (List<DefinitionOfDone>) s
 				.createQuery("from DefinitionOfDone where userstory_id like '" + userstoryId + "'").list();
+		s.getTransaction().commit();
+		s.close();
 		return definitionofdoneListe;
 	}
 	
 	public void delete(DefinitionOfDone entity) {
-		getCurrentSession().delete(entity);
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		s.delete(entity);
+		s.getTransaction().commit();
+		s.close();
 	}
 	
 	public List<DefinitionOfDone> findAll() {
-		List<DefinitionOfDone> definitionofdoneListe = (List<DefinitionOfDone>) getCurrentSession()
-				.createQuery("from DefinitionOfDone").list();
+		List<DefinitionOfDone> definitionofdoneListe = null;
+		Session s = HibernateUtil.openSession();
+		s.beginTransaction();
+		definitionofdoneListe = (List<DefinitionOfDone>) s.createQuery("from DefinitionOfDone").list();
+		s.getTransaction().commit();
+		s.close();
 		return definitionofdoneListe;
 	}
 	

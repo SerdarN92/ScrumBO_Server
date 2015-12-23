@@ -10,53 +10,68 @@ public class UserStoryTaskService {
 	private UserStoryTaskDao userstorytaskDao;
 	
 	public UserStoryTaskService(String hibernateconfigfilename) {
-		userstorytaskDao = new UserStoryTaskDao(hibernateconfigfilename);
+		this.userstorytaskDao = new UserStoryTaskDao(hibernateconfigfilename);
 	}
 	
 	public void persist(UserStoryTask entity) {
-		userstorytaskDao.openCurrentSessionwithTransaction();
-		userstorytaskDao.persist(entity);
-		userstorytaskDao.closeCurrentSessionwithTransaction();
+		try {
+			userstorytaskDao.persist(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void update(UserStoryTask entity) {
-		userstorytaskDao.openCurrentSessionwithTransaction();
-		userstorytaskDao.update(entity);
-		userstorytaskDao.closeCurrentSessionwithTransaction();
+		try {
+			userstorytaskDao.update(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public UserStoryTask findById(Integer id) {
-		userstorytaskDao.openCurrentSession();
-		UserStoryTask userstorytask = userstorytaskDao.findById(id);
-		userstorytaskDao.closeCurrentSession();
+		UserStoryTask userstorytask = null;
+		try {
+			userstorytask = userstorytaskDao.findById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return userstorytask;
 	}
 	
 	public void delete(Integer id) {
-		userstorytaskDao.openCurrentSessionwithTransaction();
-		UserStoryTask userstorytask = userstorytaskDao.findById(id);
-		userstorytaskDao.delete(userstorytask);
-		userstorytaskDao.closeCurrentSessionwithTransaction();
+		try {
+			UserStoryTask userstorytask = userstorytaskDao.findById(id);
+			userstorytaskDao.delete(userstorytask);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<UserStoryTask> findAll() {
-		userstorytaskDao.openCurrentSession();
-		List<UserStoryTask> userstorytaskListe = userstorytaskDao.findAll();
-		userstorytaskDao.closeCurrentSession();
-		return userstorytaskListe;
+		try {
+			return userstorytaskDao.findAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public List<UserStoryTask> findAllByUserStoryId(Integer userstoryId) {
-		userstorytaskDao.openCurrentSession();
-		List<UserStoryTask> userstorytaskListe = userstorytaskDao.findAllByUserStoryId(userstoryId);
-		userstorytaskDao.closeCurrentSession();
-		return userstorytaskListe;
+		try {
+			return userstorytaskDao.findAllByUserStoryId(userstoryId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void deleteAll() {
-		userstorytaskDao.openCurrentSessionwithTransaction();
-		userstorytaskDao.deleteAll();
-		userstorytaskDao.closeCurrentSessionwithTransaction();
+		try {
+			userstorytaskDao.deleteAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public UserStoryTaskDao userstorytaskDao() {

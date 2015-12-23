@@ -7,56 +7,70 @@ import model.Impediment;
 
 public class ImpedimentService {
 	
-	private ImpedimentDao impedimentDao;
+	private ImpedimentDao impedimentDao = null;
 	
 	public ImpedimentService(String hibernateconfigfilename) {
-		impedimentDao = new ImpedimentDao(hibernateconfigfilename);
+		this.impedimentDao = new ImpedimentDao(hibernateconfigfilename);
 	}
 	
 	public void persist(Impediment entity) {
-		impedimentDao.openCurrentSessionwithTransaction();
-		impedimentDao.persist(entity);
-		impedimentDao.closeCurrentSessionwithTransaction();
+		try {
+			impedimentDao.persist(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void update(Impediment entity) {
-		impedimentDao.openCurrentSessionwithTransaction();
-		impedimentDao.update(entity);
-		impedimentDao.closeCurrentSessionwithTransaction();
+		try {
+			impedimentDao.update(entity);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Impediment findById(Integer id) {
-		impedimentDao.openCurrentSession();
-		Impediment impediment = impedimentDao.findById(id);
-		impedimentDao.closeCurrentSession();
-		return impediment;
+		try {
+			return impedimentDao.findById(id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public List<Impediment> findByProjectId(Integer projectId) {
-		impedimentDao.openCurrentSession();
-		List<Impediment> impedimentListe = impedimentDao.findByProjectId(projectId);
-		impedimentDao.closeCurrentSession();
-		return impedimentListe;
+		try {
+			return impedimentDao.findByProjectId(projectId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void delete(Integer id) {
-		impedimentDao.openCurrentSessionwithTransaction();
-		Impediment impediment = impedimentDao.findById(id);
-		impedimentDao.delete(impediment);
-		impedimentDao.closeCurrentSessionwithTransaction();
+		try {
+			Impediment impediment = impedimentDao.findById(id);
+			impedimentDao.delete(impediment);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<Impediment> findAll() {
-		impedimentDao.openCurrentSession();
-		List<Impediment> impedimentListe = impedimentDao.findAll();
-		impedimentDao.closeCurrentSession();
-		return impedimentListe;
+		try {
+			return impedimentDao.findAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 	
 	public void deleteAll() {
-		impedimentDao.openCurrentSessionwithTransaction();
-		impedimentDao.deleteAll();
-		impedimentDao.closeCurrentSessionwithTransaction();
+		try {
+			impedimentDao.deleteAll();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public ImpedimentDao impedimentDao() {

@@ -37,6 +37,8 @@ public class BenutzerrolleREST {
 		Gson gson = new Gson();
 		String output = gson.toJson(benutzerrolleDTOListe);
 		
+		System.out.println("OUTPUT:" + output);
+		
 		return Response.status(200).entity(output).build();
 	}
 	
