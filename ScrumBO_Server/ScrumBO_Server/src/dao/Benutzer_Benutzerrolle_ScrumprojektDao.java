@@ -15,7 +15,7 @@ public class Benutzer_Benutzerrolle_ScrumprojektDao
 											
 	public Benutzer_Benutzerrolle_ScrumprojektDao(String hibernateconfigfilename) {
 		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfig);
+		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
 	}
 	
 	@Override
@@ -171,6 +171,31 @@ public class Benutzer_Benutzerrolle_ScrumprojektDao
 			e.printStackTrace();
 		}
 		return benutzer;
+	}
+	
+	public boolean checkAdmission(Integer benutzerId, Integer scrumprojektId) {
+		Benutzer_Benutzerrolle_Scrumprojekt benutzer = null;
+		boolean admission = false;
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				benutzer = (Benutzer_Benutzerrolle_Scrumprojekt) s
+						.createQuery("from Benutzer_Benutzerrolle_Scrumprojekt WHERE benutzerId LIKE '" + benutzerId
+								+ "' AND scrumprojektId LIKE '" + scrumprojektId + "'")
+						.uniqueResult();
+				s.getTransaction().commit();
+				s.close();
+				if (benutzer != null)
+					admission = true;
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return admission;
 	}
 	
 }

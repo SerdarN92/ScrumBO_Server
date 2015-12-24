@@ -14,7 +14,7 @@ public class ImpedimentDao implements DaoInterface<Impediment, Integer> {
 											
 	public ImpedimentDao(String hibernateconfigfilename) {
 		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfig);
+		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
 	}
 	
 	public void persist(Impediment entity) {

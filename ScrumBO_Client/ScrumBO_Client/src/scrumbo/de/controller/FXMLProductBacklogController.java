@@ -214,8 +214,6 @@ public class FXMLProductBacklogController implements Initializable {
 									
 									status = item;
 									
-									System.out.println(status);
-									
 									if (item == 0) {
 										circle = new Circle(10, Color.BLUE);
 									}

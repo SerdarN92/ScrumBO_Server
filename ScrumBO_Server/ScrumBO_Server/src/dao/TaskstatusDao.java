@@ -14,7 +14,7 @@ public class TaskstatusDao implements DaoInterface<Taskstatus, Integer> {
 											
 	public TaskstatusDao(String hibernateconfigfilename) {
 		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfig);
+		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
 	}
 	
 	public void persist(Taskstatus entity) {

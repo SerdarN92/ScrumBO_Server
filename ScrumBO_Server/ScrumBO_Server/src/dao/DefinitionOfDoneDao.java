@@ -14,7 +14,7 @@ public class DefinitionOfDoneDao implements DaoInterface<DefinitionOfDone, Integ
 											
 	public DefinitionOfDoneDao(String hibernateconfigfilename) {
 		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfig);
+		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
 	}
 	
 	public void persist(DefinitionOfDone entity) {

@@ -69,10 +69,10 @@ public class FXMLSprintBacklogAddUserStoryController implements Initializable {
 	private ComboBox<UserStory>			comboBoxUserStory		= new ComboBox<>();
 																
 	private List<UserStory>				userstoryList			= new LinkedList<UserStory>();
-	protected static UserStory			currentUserStory		= null;
+	protected UserStory					currentUserStory		= null;
 	@FXML
 	protected ListView<UserStoryTask>	listViewUserStoryTask	= new ListView<>();
-	private static UserStoryTask		selectedUserStoryTask	= new UserStoryTask();
+	private UserStoryTask				selectedUserStoryTask	= new UserStoryTask();
 	protected static UserStoryTask		addedUserStoryTask		= new UserStoryTask();
 																
 	@FXML
@@ -117,7 +117,6 @@ public class FXMLSprintBacklogAddUserStoryController implements Initializable {
 	private void handleButtonSave(ActionEvent event) throws Exception {
 		Gson gson = new Gson();
 		String output = gson.toJson(currentUserStory);
-		System.out.println(currentUserStory.getId());
 		
 		JSONObject jsonObject = new JSONObject(output);
 		

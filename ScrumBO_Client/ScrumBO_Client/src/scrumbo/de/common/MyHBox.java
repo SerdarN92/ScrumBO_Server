@@ -180,7 +180,6 @@ public class MyHBox extends HBox {
 				int userstorytaskid = Integer.parseInt(pane);
 				int platz = -1;
 				if (bla == 2) {
-					System.out.println("VBOXOPENTASK von 2");
 					for (int i = 0; i < vboxtasksinwork.getChildren().size(); i++) {
 						if (vboxtasksinwork.getChildren().get(i).equals(currentPane)) {
 							platz = i;
@@ -197,7 +196,6 @@ public class MyHBox extends HBox {
 					}
 				}
 				if (bla == 3) {
-					System.out.println("VBOXOPENTASK von 3");
 					for (int i = 0; i < vboxdonetasks.getChildren().size(); i++) {
 						if (vboxdonetasks.getChildren().get(i).equals(currentPane)) {
 							platz = i;
@@ -310,6 +308,7 @@ public class MyHBox extends HBox {
 								@Override
 								public void handle(WindowEvent event) {
 									try {
+									
 									} catch (Exception e) {
 										e.printStackTrace();
 									}

@@ -15,6 +15,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import scrumbo.de.entity.CurrentBenutzer;
 import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.service.BenutzerService;
 import scrumbo.de.service.ImpedimentService;
 import scrumbo.de.service.ProductbacklogService;
 import scrumbo.de.service.ScrumprojektService;
@@ -26,6 +27,7 @@ public class FXMLProjectLoginController implements Initializable {
 	ScrumprojektService		scrumprojektService		= null;
 	ImpedimentService		impedimentService		= null;
 	ProductbacklogService	productbacklogService	= null;
+	BenutzerService			benutzerService			= null;
 	@FXML
 	private Text			vorname;
 	@FXML
@@ -91,18 +93,23 @@ public class FXMLProjectLoginController implements Initializable {
 				projectnameValidFail.setVisible(false);
 				CurrentScrumprojekt.scrumprojektID = scrumprojektService.getScrumproject().getScrumProjektID();
 				CurrentScrumprojekt.projektname = scrumprojektService.getScrumproject().getProjektname();
-				productbacklogService.getProductbacklog();
-				impedimentService.getImpedimentBacklog();
-				if (CurrentBenutzer.isSM) {
-					this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/FXMLScrumSM.fxml"));
-					this.scene = new Scene(root);
-					Stage stage = (Stage) buttonLogout.getScene().getWindow();
-					stage.setScene(scene);
+				if (benutzerService.checkAdmission()) {
+					productbacklogService.getProductbacklog();
+					impedimentService.getImpedimentBacklog();
+					if (CurrentBenutzer.isSM) {
+						this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/FXMLScrumSM.fxml"));
+						this.scene = new Scene(root);
+						Stage stage = (Stage) buttonLogout.getScene().getWindow();
+						stage.setScene(scene);
+					} else {
+						this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/FXMLScrum.fxml"));
+						this.scene = new Scene(root);
+						Stage stage = (Stage) buttonLogout.getScene().getWindow();
+						stage.setScene(scene);
+					}
 				} else {
-					this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/FXMLScrum.fxml"));
-					this.scene = new Scene(root);
-					Stage stage = (Stage) buttonLogout.getScene().getWindow();
-					stage.setScene(scene);
+					projectnameValidFail.setText("Sie haben keine Zugriffsrechte auf dieses Projekt");
+					projectnameValidFail.setVisible(true);
 				}
 			} else {
 				projectnameValidFail.setText("Projekt mit diesem Namen existiert nicht.");
@@ -144,6 +151,7 @@ public class FXMLProjectLoginController implements Initializable {
 		scrumprojektService = FXMLStartController.getScrumprojektService();
 		productbacklogService = FXMLStartController.getProductbacklogService();
 		impedimentService = FXMLStartController.getImpedimentService();
+		benutzerService = FXMLStartController.getBenutzerService();
 		vorname.setText(CurrentBenutzer.vorname);
 		nachname.setText(CurrentBenutzer.nachname);
 		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);

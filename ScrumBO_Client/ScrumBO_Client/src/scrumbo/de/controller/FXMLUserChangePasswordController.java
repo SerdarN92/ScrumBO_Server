@@ -56,7 +56,6 @@ public class FXMLUserChangePasswordController implements Initializable {
 					stage.setScene(scene);
 				}
 			} else {
-				System.out.println("FEHLER");
 			}
 		}
 	}

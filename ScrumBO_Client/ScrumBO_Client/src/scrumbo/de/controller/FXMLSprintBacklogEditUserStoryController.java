@@ -43,6 +43,8 @@ public class FXMLSprintBacklogEditUserStoryController implements Initializable {
 	@FXML
 	private TextField					aufwandintagen;
 	@FXML
+	private Button						buttonDelete;
+	@FXML
 	private Button						buttonAbbort;
 	@FXML
 	private Button						buttonAddTask;
@@ -50,12 +52,24 @@ public class FXMLSprintBacklogEditUserStoryController implements Initializable {
 	private Button						buttonSave;
 										
 	private List<UserStory>				userstoryList			= new LinkedList<UserStory>();
-	protected static UserStory			currentUserStory		= null;
+	protected UserStory					currentUserStory		= null;
 	@FXML
 	protected ListView<UserStoryTask>	listViewUserStoryTask	= new ListView<>();
-	private static UserStoryTask		selectedUserStoryTask	= new UserStoryTask();
+	protected static UserStoryTask		selectedUserStoryTask	= new UserStoryTask();
 	protected static UserStoryTask		addedUserStoryTask		= new UserStoryTask();
 																
+	@FXML
+	private void handleButtonDelete(ActionEvent event) throws Exception {
+		try {
+			if (userstoryService.setSprintNull(currentUserStory.getId())) {
+				Stage stage = (Stage) buttonDelete.getScene().getWindow();
+				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@FXML
 	private void handleButtonAbbort(ActionEvent event) throws Exception {
 		userstoryList = null;
@@ -107,6 +121,7 @@ public class FXMLSprintBacklogEditUserStoryController implements Initializable {
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		
 		userstoryService = FXMLStartController.getUserstoryService();
 		currentUserStory = MyHBox.blabla;
 		prioritaet.setText(currentUserStory.getPrioritaet().toString());
@@ -154,6 +169,29 @@ public class FXMLSprintBacklogEditUserStoryController implements Initializable {
 				
 				if (click.getClickCount() == 2) {
 					selectedUserStoryTask = listViewUserStoryTask.getSelectionModel().getSelectedItem();
+					try {
+						FXMLLoader fxmlLoader = new FXMLLoader(
+								getClass().getResource("/scrumbo/de/gui/FXMLTaskEdit.fxml"));
+						Parent root1 = (Parent) fxmlLoader.load();
+						Stage stage = new Stage();
+						stage.initModality(Modality.APPLICATION_MODAL);
+						stage.setScene(new Scene(root1));
+						stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+							@Override
+							public void handle(WindowEvent event) {
+								try {
+									listViewUserStoryTask.getItems().add(addedUserStoryTask);
+									currentUserStory.getUserstorytask().add(addedUserStoryTask);
+									
+								} catch (Exception e) {
+									e.printStackTrace();
+								}
+							}
+						});
+						stage.show();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
 				}
 			}
 		});

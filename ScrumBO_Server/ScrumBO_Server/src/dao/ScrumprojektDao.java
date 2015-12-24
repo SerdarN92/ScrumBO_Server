@@ -14,7 +14,7 @@ public class ScrumprojektDao implements DaoInterface<Scrumprojekt, Integer> {
 											
 	public ScrumprojektDao(String hibernateconfigfilename) {
 		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfig);
+		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
 	}
 	
 	public void persist(Scrumprojekt entity) {

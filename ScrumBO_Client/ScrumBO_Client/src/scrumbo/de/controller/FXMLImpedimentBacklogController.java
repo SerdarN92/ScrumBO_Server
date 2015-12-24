@@ -23,6 +23,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Callback;
 import scrumbo.de.entity.CurrentBenutzer;
 import scrumbo.de.entity.CurrentScrumprojekt;
 import scrumbo.de.entity.Impediment;
@@ -150,36 +151,51 @@ public class FXMLImpedimentBacklogController implements Initializable {
 			data.add(CurrentScrumprojekt.impedimentbacklog.get(i));
 		}
 		
-		tableViewImpedimentBacklog.setRowFactory(tv -> {
-			TableRow<Impediment> row = new TableRow<>();
-			row.setOnMouseClicked(event -> {
-				if (event.getClickCount() == 1 && (!row.isEmpty())) {
-					rowData = row.getItem();
-					try {
-						FXMLLoader fxmlLoader = new FXMLLoader(
-								getClass().getResource("/scrumbo/de/gui/FXMLImpedimentEdit.fxml"));
-						Parent root1 = (Parent) fxmlLoader.load();
-						Stage stage = new Stage();
-						stage.initModality(Modality.APPLICATION_MODAL);
-						stage.setScene(new Scene(root1));
-						stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-							@Override
-							public void handle(WindowEvent event) {
-								try {
-									data.clear();
-									reload();
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
+		tableViewImpedimentBacklog.setRowFactory(new Callback<TableView<Impediment>, TableRow<Impediment>>() {
+			@Override
+			public TableRow<Impediment> call(TableView<Impediment> tableViewImpedimentBacklog) {
+				final TableRow<Impediment> row = new TableRow<Impediment>() {
+					@Override
+					protected void updateItem(Impediment impediment, boolean empty) {
+						super.updateItem(impediment, empty);
+						if (impediment != null) {
+							if (impediment.getDatumDerBehebung() == null) {
+								setStyle("-fx-background-color: #FE6B6B;");
+							} else {
+								setStyle("-fx-background-color: #90FE74;");
 							}
-						});
-						stage.show();
-					} catch (Exception e) {
-						e.printStackTrace();
+						}
 					}
-				}
-			});
-			return row;
+				};
+				row.setOnMouseClicked(event -> {
+					if (event.getClickCount() == 2 && (!row.isEmpty())) {
+						rowData = row.getItem();
+						try {
+							FXMLLoader fxmlLoader = new FXMLLoader(
+									getClass().getResource("/scrumbo/de/gui/FXMLImpedimentEdit.fxml"));
+							Parent root1 = (Parent) fxmlLoader.load();
+							Stage stage = new Stage();
+							stage.initModality(Modality.APPLICATION_MODAL);
+							stage.setScene(new Scene(root1));
+							stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+								@Override
+								public void handle(WindowEvent event) {
+									try {
+										data.clear();
+										reload();
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
+								}
+							});
+							stage.show();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
+					}
+				});
+				return row;
+			}
 		});
 		
 		tableColumnPrioritaet.setCellValueFactory(new PropertyValueFactory<Impediment, Integer>("priorität"));

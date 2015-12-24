@@ -35,7 +35,7 @@ public class FXMLSprintBacklogController implements Initializable {
 	
 	Parent								root;
 	Scene								scene;
-	Stage								stage;
+	Stage								stage					= null;
 	SprintbacklogService				sprintbacklogService	= null;
 	@FXML
 	private Text						vorname;
@@ -85,13 +85,21 @@ public class FXMLSprintBacklogController implements Initializable {
 		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.getId());
 		
 		for (int i = 0; i < dataSprintBacklog.size(); i++) {
-			System.out.println(dataSprintBacklog.size());
 			UserStory userstory = dataSprintBacklog.get(i);
 			MyHBox hb = new MyHBox(userstory);
 			VBOXUserStories.getChildren().add(hb);
 		}
 		
 		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
+	}
+	
+	@FXML
+	private void handleButtonReload(ActionEvent event) throws Exception {
+		try {
+			reloadSprintBacklog();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@FXML
@@ -133,10 +141,7 @@ public class FXMLSprintBacklogController implements Initializable {
 				@Override
 				public void handle(WindowEvent event) {
 					try {
-						FXMLSprintBacklogAddUserStoryController.addedUserStoryTask = null;
-						FXMLSprintBacklogAddUserStoryController.currentUserStory = null;
 						reloadSprintBacklog();
-						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -186,6 +191,7 @@ public class FXMLSprintBacklogController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		
 		sprintbacklogService = FXMLStartController.getSprintbacklogService();
 		
 		vorname.setText(CurrentBenutzer.vorname);
@@ -261,6 +267,7 @@ public class FXMLSprintBacklogController implements Initializable {
 	public void ladeSprintBacklog(Integer id) {
 		List<UserStory> liste = sprintbacklogService.ladeSprintBacklog();
 		dataSprintBacklog.clear();
+		dataSprintBacklog.removeAll(getData());
 		
 		if (!liste.isEmpty()) {
 			for (int i = 0; i < liste.size(); i++) {
@@ -271,16 +278,26 @@ public class FXMLSprintBacklogController implements Initializable {
 	}
 	
 	@FXML
-	public void handleButtonCreateNewSprint(ActionEvent event) {
+	public void handleButtonCreateNewSprint(ActionEvent event) throws IOException {
 		Sprint sprint = sprintbacklogService.addNewSprintToSprintBacklog();
 		CurrentSprint.id = sprint.getId();
 		CurrentSprint.sprintnummer = sprint.getSprintnummer();
 		
-		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.getId());
+		reloadSprintBacklog();
+	}
+	
+	public void reloadSprintBacklog() throws IOException {
+		VBOXUserStories.getChildren().clear();
 		
-		for (int i = 1; i < VBOXUserStories.getChildren().size(); i++) {
-			VBOXUserStories.getChildren().remove(i);
-		}
+		initSprintBacklog();
+		
+		ScrollPane sp = new ScrollPane();
+		sp.setFitToHeight(true);
+		sp.setContent(VBOXUserStories);
+		sp.setVisible(true);
+		
+		sprintbacklogService.ladeSprint();
+		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.getId());
 		
 		for (int i = 0; i < dataSprintBacklog.size(); i++) {
 			UserStory userstory = dataSprintBacklog.get(i);
@@ -289,21 +306,6 @@ public class FXMLSprintBacklogController implements Initializable {
 		}
 		
 		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
-	}
-	
-	public void reloadSprintBacklog() throws IOException {
-		dataSprintBacklog.clear();
-		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.getId());
-		
-		for (int i = 1; i < VBOXUserStories.getChildren().size(); i++) {
-			VBOXUserStories.getChildren().remove(i);
-		}
-		
-		for (int i = 0; i < dataSprintBacklog.size(); i++) {
-			UserStory userstory = dataSprintBacklog.get(i);
-			MyHBox hb = new MyHBox(userstory);
-			VBOXUserStories.getChildren().add(hb);
-		}
 	}
 	
 }

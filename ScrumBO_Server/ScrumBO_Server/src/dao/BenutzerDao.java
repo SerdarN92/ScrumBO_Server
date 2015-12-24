@@ -9,12 +9,12 @@ import model.Benutzer;
 
 public class BenutzerDao implements DaoInterface<Benutzer, Integer> {
 	
-	private String			hibernateconfig	= "";
-	private HibernateUtil	hibernateutil	= null;
-											
-	public BenutzerDao(String hibernateconfig) {
-		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfig);
+	private String			hibernateconfigfilename	= "";
+	private HibernateUtil	hibernateutil			= null;
+													
+	public BenutzerDao(String hibernateconfigfilename) {
+		this.hibernateconfigfilename = hibernateconfigfilename;
+		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
 	}
 	
 	public void persist(Benutzer entity) {

@@ -87,4 +87,16 @@ public class Benutzer_Benutzerrolle_ScrumprojektService {
 		return bbsDao;
 	}
 	
+	public boolean checkAdmission(Integer benutzerId, Integer scrumprojektId) {
+		boolean admission = false;
+		try {
+			if (bbsDao.checkAdmission(benutzerId, scrumprojektId)) {
+				admission = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return admission;
+	}
+	
 }

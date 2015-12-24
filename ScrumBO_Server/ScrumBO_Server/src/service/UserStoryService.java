@@ -29,6 +29,15 @@ public class UserStoryService {
 		}
 	}
 	
+	public boolean setSprintNull(Integer userstoryId) {
+		try {
+			return userstoryDao.setSprintNull(userstoryId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	public UserStory findById(Integer id) {
 		UserStory userstory = null;
 		try {

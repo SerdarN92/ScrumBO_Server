@@ -1,6 +1,5 @@
 package model;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -22,7 +21,7 @@ public class UserStoryTask {
 	@Column(name = "beschreibung", nullable = false)
 	private String		beschreibung;
 						
-	@ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "taskstatus_id", nullable = true)
 	private Taskstatus	taskstatus;
 						

@@ -168,4 +168,28 @@ public class UserstoryService {
 		}
 		return status;
 	}
+	
+	public boolean setSprintNull(Integer userstoryid) {
+		boolean status = false;
+		
+		try {
+			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstory/deleteFromSprint/" + userstoryid
+					+ "/" + ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setDoOutput(true);
+			conn.setRequestProperty("Content-Type", "application/json");
+			conn.setConnectTimeout(50000);
+			conn.setReadTimeout(50000);
+			conn.setRequestMethod("GET");
+			
+			if (conn.getResponseMessage().equals("OK"))
+				status = true;
+			conn.disconnect();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+		return status;
+	}
 }

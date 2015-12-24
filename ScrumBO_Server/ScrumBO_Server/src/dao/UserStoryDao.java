@@ -5,6 +5,7 @@ import java.util.List;
 import org.hibernate.Session;
 
 import hibernate.HibernateUtil;
+import model.Sprint;
 import model.UserStory;
 
 public class UserStoryDao implements DaoInterface<UserStory, Integer> {
@@ -14,7 +15,7 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 											
 	public UserStoryDao(String hibernateconfigfilename) {
 		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfig);
+		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
 	}
 	
 	public void persist(UserStory entity) {
@@ -51,6 +52,30 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public boolean setSprintNull(Integer userstoryId) {
+		boolean status = false;
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				UserStory userstory = (UserStory) s.get(UserStory.class, userstoryId);
+				Sprint sprint = null;
+				userstory.setSprint(sprint);
+				s.update(userstory);
+				s.getTransaction().commit();
+				s.close();
+				status = true;
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return status;
 	}
 	
 	public UserStory findById(Integer id) {

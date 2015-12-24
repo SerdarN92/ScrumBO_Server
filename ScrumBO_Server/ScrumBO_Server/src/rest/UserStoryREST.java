@@ -217,27 +217,21 @@ public class UserStoryREST {
 		Sprint sprint = new Sprint();
 		sprint = sprintService.findById(sprintId);
 		
+		List<UserStoryTask> oldList = new LinkedList<UserStoryTask>();
+		
 		if (userstory.getUserstorytask().size() > 0) {
-			for (int i = 0; i < userstoryDTO.getUserstorytask().size(); i++) {
-				for (int j = 0; j < userstory.getUserstorytask().size(); j++) {
-					if (!userstory.getUserstorytask().get(j).getBeschreibung()
-							.equals(userstoryDTO.getUserstorytask().get(i).getBeschreibung())) {
-						if (!(userstory.getUserstorytask().contains(userstoryDTO.getUserstorytask().get(i)))) {
-							UserStoryTask userstorytask = new UserStoryTask(
-									userstoryDTO.getUserstorytask().get(i).getBeschreibung(),
-									taskstatusService.findById(1),
-									userstoryDTO.getUserstorytask().get(i).getAufwandinstunden(), benutzerService
-											.findById(userstoryDTO.getUserstorytask().get(i).getBenutzer().getId()),
-									userstory);
-							userstorytaskService.persist(userstorytask);
-						}
-					}
-				}
-				
+			for (int j = 0; j < userstory.getUserstorytask().size(); j++) {
+				oldList.add(userstory.getUserstorytask().get(j));
 			}
-		} else {
 			for (int i = 0; i < userstoryDTO.getUserstorytask().size(); i++) {
-				if (!(userstory.getUserstorytask().contains(userstoryDTO.getUserstorytask().get(i)))) {
+				boolean status = false;
+				for (int j = 0; j < oldList.size(); j++) {
+					if (userstoryDTO.getUserstorytask().get(i).getBeschreibung()
+							.equals(oldList.get(j).getBeschreibung()))
+						status = true;
+						
+				}
+				if (!status) {
 					UserStoryTask userstorytask = new UserStoryTask(
 							userstoryDTO.getUserstorytask().get(i).getBeschreibung(), taskstatusService.findById(1),
 							userstoryDTO.getUserstorytask().get(i).getAufwandinstunden(),
@@ -247,6 +241,16 @@ public class UserStoryREST {
 				}
 				
 			}
+		} else {
+			for (int i = 0; i < userstoryDTO.getUserstorytask().size(); i++) {
+				UserStoryTask userstorytask = new UserStoryTask(
+						userstoryDTO.getUserstorytask().get(i).getBeschreibung(), taskstatusService.findById(1),
+						userstoryDTO.getUserstorytask().get(i).getAufwandinstunden(),
+						benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getBenutzer().getId()),
+						userstory);
+				userstorytaskService.persist(userstorytask);
+			}
+			
 		}
 		
 		userstory.setSprint(sprint);
@@ -334,6 +338,30 @@ public class UserStoryREST {
 		}
 		Gson gson = new Gson();
 		String output = gson.toJson(userstoryDTOListe);
+		
+		return Response.status(200).entity(output).build();
+	}
+	
+	@Path("/deleteFromSprint/{userstoryid}/{hibernateconfigfilename}")
+	@GET
+	@Produces("application/json" + ";charset=utf-8")
+	public Response deleteUserStoryFromSprint(@PathParam("userstoryid") Integer userstoryId,
+			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
+		String output = "Fehler";
+		UserStoryTaskService userstorytaskService = new UserStoryTaskService(hibernateconfigfilename);
+		UserStoryService userstoryService = new UserStoryService(hibernateconfigfilename);
+		UserStory userstory = null;
+		try {
+			userstory = userstoryService.findById(userstoryId);
+			for (int i = 0; i < userstory.getUserstorytask().size(); i++) {
+				userstorytaskService.delete(userstory.getUserstorytask().get(i).getId());
+			}
+			
+			if (userstoryService.setSprintNull(userstoryId))
+				output = "User Story aus Sprint entfernt";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return Response.status(200).entity(output).build();
 	}

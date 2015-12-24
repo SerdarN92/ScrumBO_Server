@@ -17,7 +17,7 @@ public class ProductBacklogDao implements DaoInterface<ProductBacklog, Integer> 
 											
 	public ProductBacklogDao(String hibernateconfigfilename) {
 		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfig);
+		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
 	}
 	
 	public void persist(ProductBacklog entity) {

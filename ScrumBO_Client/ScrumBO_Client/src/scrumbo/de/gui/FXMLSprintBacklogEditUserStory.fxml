@@ -21,12 +21,12 @@
          </font>
       </Label>
       <ListView fx:id="listViewUserStoryTask" layoutX="165.0" layoutY="485.0" prefHeight="189.0" prefWidth="388.0" />
-      <Button fx:id="buttonAddTask" layoutX="448.0" layoutY="684.0" mnemonicParsing="false" onAction="#handleButtonAddTask" text="Task hinzufügen" />
-      <Button fx:id="buttonSave" layoutX="461.0" layoutY="718.0" mnemonicParsing="false" onAction="#handleButtonSave" text="Speichern">
+      <Button fx:id="buttonAddTask" layoutX="454.0" layoutY="684.0" mnemonicParsing="false" onAction="#handleButtonAddTask" text="Task hinzufügen" />
+      <Button fx:id="buttonSave" layoutX="442.0" layoutY="718.0" mnemonicParsing="false" onAction="#handleButtonSave" text="Übernehmen">
          <font>
             <Font size="16.0" />
          </font></Button>
-      <Button fx:id="buttonAbbort" layoutX="336.0" layoutY="718.0" mnemonicParsing="false" onAction="#handleButtonAbbort" text="Abbrechen">
+      <Button fx:id="buttonAbbort" layoutX="327.0" layoutY="718.0" mnemonicParsing="false" onAction="#handleButtonAbbort" text="Abbrechen">
          <font>
             <Font size="16.0" />
          </font></Button>
@@ -60,7 +60,7 @@
       <TextArea fx:id="beschreibung" editable="false" layoutX="328.0" layoutY="260.0" prefHeight="79.0" prefWidth="222.0" />
       <TextArea fx:id="akzeptanzkriterien" editable="false" layoutX="328.0" layoutY="352.0" prefHeight="79.0" prefWidth="222.0" />
       <TextField fx:id="aufwandintagen" editable="false" layoutX="328.0" layoutY="444.0" />
-      <Button fx:id="buttonDelete" layoutX="221.0" layoutY="718.0" mnemonicParsing="false" text="Löschen">
+      <Button fx:id="buttonDelete" layoutX="221.0" layoutY="718.0" mnemonicParsing="false" onAction="#handleButtonDelete" text="Entfernen">
          <font>
             <Font size="16.0" />
          </font>

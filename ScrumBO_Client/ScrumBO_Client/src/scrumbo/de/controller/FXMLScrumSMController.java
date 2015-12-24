@@ -19,21 +19,22 @@ import scrumbo.de.entity.CurrentScrumprojekt;
 
 public class FXMLScrumSMController implements Initializable {
 	
-	Parent			root;
-	Scene			scene;
+	Parent						root;
+	Scene						scene;
+	FXMLSprintBacklogController	controller	= null;
 	@FXML
-	private Text	vorname;
+	private Text				vorname;
 	@FXML
-	private Text	nachname;
+	private Text				nachname;
 	@FXML
-	private Text	benutzerrolle;
+	private Text				benutzerrolle;
 	@FXML
-	private Text	projektname;
+	private Text				projektname;
 	@FXML
-	private Button	buttonLogout;
+	private Button				buttonLogout;
 	@FXML
-	private Button	buttonAddProjectUser;
-	
+	private Button				buttonAddProjectUser;
+								
 	@FXML
 	private void handleButtonAddProjectUser(ActionEvent event) throws Exception {
 		try {
@@ -82,8 +83,16 @@ public class FXMLScrumSMController implements Initializable {
 	private void handleImageSprintbacklog(MouseEvent event) throws Exception {
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/FXMLSprintBacklog2.fxml"));
 		this.scene = new Scene(root);
+		// FXMLLoader fxmlloader = new FXMLLoader();
+		// URL location =
+		// getClass().getResource("/scrumbo/de/gui/FXMLSprintBacklog2.fxml");
+		// fxmlloader.setLocation(location);
+		// AnchorPane pane = fxmlloader.load();
+		// controller = (FXMLSprintBacklogController)
+		// fxmlloader.getController();
 		Stage stage = (Stage) buttonLogout.getScene().getWindow();
 		stage.setScene(scene);
+		
 	}
 	
 	@FXML

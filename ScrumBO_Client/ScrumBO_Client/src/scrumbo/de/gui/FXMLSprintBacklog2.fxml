@@ -40,7 +40,7 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <Button fx:id="buttonReload" layoutX="74.0" layoutY="143.0" mnemonicParsing="false" text="Neu laden" />
+      <Button fx:id="buttonReload" layoutX="74.0" layoutY="143.0" mnemonicParsing="false" onAction="#handleButtonReload" text="Neu laden" />
       <ScrollPane hbarPolicy="NEVER" layoutX="73.0" layoutY="183.0" prefHeight="368.0" prefWidth="885.0">
          <content>
             <VBox fx:id="VBOXUserStories" prefHeight="365.0" prefWidth="883.0" />

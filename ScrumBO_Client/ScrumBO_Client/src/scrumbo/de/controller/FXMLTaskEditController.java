@@ -47,10 +47,10 @@ public class FXMLTaskEditController implements Initializable {
 													
 	@FXML
 	private void handleButtonAdd(ActionEvent event) throws Exception {
-		task.setBeschreibung(taskbeschreibung.getText());
-		task.setAufwandinstunden(Integer.parseInt(aufwandinstunden.getText()));
-		task.setBenutzer(currentBenutzer);
-		FXMLSprintBacklogEditUserStoryController.addedUserStoryTask = task;
+		FXMLSprintBacklogEditUserStoryController.selectedUserStoryTask.setBeschreibung(taskbeschreibung.getText());
+		FXMLSprintBacklogEditUserStoryController.selectedUserStoryTask
+				.setAufwandinstunden(Integer.parseInt(aufwandinstunden.getText()));
+		FXMLSprintBacklogEditUserStoryController.selectedUserStoryTask.setBenutzer(currentBenutzer);
 		Stage stage = (Stage) buttonAdd.getScene().getWindow();
 		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 	}
@@ -60,6 +60,18 @@ public class FXMLTaskEditController implements Initializable {
 		benutzerService = FXMLStartController.getBenutzerService();
 		benutzerList = benutzerService.ladeBenutzerVomAktuellenProjekt();
 		initComboBox();
+		
+		taskbeschreibung.setText(FXMLSprintBacklogEditUserStoryController.selectedUserStoryTask.getBeschreibung());
+		aufwandinstunden.setText(
+				FXMLSprintBacklogEditUserStoryController.selectedUserStoryTask.getAufwandinstunden().toString());
+		Integer platz = 0;
+		for (int i = 0; i < benutzerList.size(); i++) {
+			if (benutzerList.get(i).getEmail()
+					.equals(FXMLSprintBacklogEditUserStoryController.selectedUserStoryTask.getBenutzer().getEmail()))
+				platz = i;
+		}
+		
+		benutzerList.set(platz, benutzerList.get(platz));
 	}
 	
 	public void initComboBox() {

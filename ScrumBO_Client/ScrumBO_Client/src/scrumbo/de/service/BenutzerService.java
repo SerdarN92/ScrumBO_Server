@@ -165,4 +165,38 @@ public class BenutzerService {
 		
 		return benutzerList;
 	}
+	
+	public Boolean checkAdmission() throws JSONException {
+		try {
+			URL url = new URL(
+					"http://localhost:8080/ScrumBO_Server/rest/benutzer/checkAdmission/" + CurrentBenutzer.benutzerID
+							+ "/" + CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setReadTimeout(5000);
+			conn.setRequestProperty("Accept", "application/json");
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+			String output = br.readLine();
+			conn.disconnect();
+			
+			Gson gson = new Gson();
+			if (output.equals("Ja")) {
+				return true;
+				
+			} else {
+				return false;
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
 }

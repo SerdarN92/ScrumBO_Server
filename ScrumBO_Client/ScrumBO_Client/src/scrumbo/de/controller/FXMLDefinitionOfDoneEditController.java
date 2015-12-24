@@ -94,8 +94,6 @@ public class FXMLDefinitionOfDoneEditController implements Initializable {
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		definitionofdoneService = FXMLStartController.getDefinitionofdoneService();
 		data = FXMLDefinitionOfDoneController.rowData;
-		System.out.println(data.getKriterium());
-		System.out.println("Hallo");
 		kriterium.setText(data.getKriterium());
 		if (data.isStatus()) {
 			erfuellt.setSelected(true);

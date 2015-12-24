@@ -14,7 +14,7 @@ public class UserStoryTaskDao implements DaoInterface<UserStoryTask, Integer> {
 											
 	public UserStoryTaskDao(String hibernateconfigfilename) {
 		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfig);
+		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
 	}
 	
 	public void persist(UserStoryTask entity) {

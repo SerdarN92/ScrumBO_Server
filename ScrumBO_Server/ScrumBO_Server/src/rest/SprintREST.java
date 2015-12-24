@@ -83,7 +83,6 @@ public class SprintREST {
 		sprint.setScrumprojekt(scrumprojektService.findById(scrumprojektid));
 		sprintService.persist(sprint);
 		sprint = sprintService.findByProjectIdandSprintNumber(scrumprojektid, sprintnummer + 1);
-		System.out.println("SPRINTID:" + sprint.getId());
 		sprintDTO = new SprintDTO(sprint.getId(), sprint.getSprintnummer());
 		
 		Gson gson = new Gson();
