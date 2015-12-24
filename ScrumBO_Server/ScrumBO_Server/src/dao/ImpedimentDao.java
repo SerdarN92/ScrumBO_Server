@@ -18,57 +18,117 @@ public class ImpedimentDao implements DaoInterface<Impediment, Integer> {
 	}
 	
 	public void persist(Impediment entity) {
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		s.save(entity);
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				s.save(entity);
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void update(Impediment entity) {
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		s.update(entity);
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				s.update(entity);
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Impediment findById(Integer id) {
 		Impediment impediment = null;
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		impediment = (Impediment) s.get(Impediment.class, id);
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				impediment = (Impediment) s.get(Impediment.class, id);
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return impediment;
 	}
 	
 	public List<Impediment> findByProjectId(Integer projectId) {
 		List<Impediment> impedimentListe = null;
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		impedimentListe = (List<Impediment>) s
-				.createQuery("from Impediment where scrumprojekt_id like'" + projectId + "'").list();
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				impedimentListe = (List<Impediment>) s
+						.createQuery("from Impediment where scrumprojekt_id like'" + projectId + "'").list();
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return impedimentListe;
 	}
 	
 	public void delete(Impediment entity) {
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		s.delete(entity);
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				s.delete(entity);
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<Impediment> findAll() {
 		List<Impediment> impedimentListe = null;
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		impedimentListe = (List<Impediment>) s.createQuery("from Impediment").list();
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				impedimentListe = (List<Impediment>) s.createQuery("from Impediment").list();
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return impedimentListe;
 	}
 	

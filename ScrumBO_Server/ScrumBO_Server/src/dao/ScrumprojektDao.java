@@ -18,28 +18,58 @@ public class ScrumprojektDao implements DaoInterface<Scrumprojekt, Integer> {
 	}
 	
 	public void persist(Scrumprojekt entity) {
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		s.save(entity);
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				s.save(entity);
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void update(Scrumprojekt entity) {
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		s.update(entity);
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				s.update(entity);
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Scrumprojekt findById(Integer id) {
 		Scrumprojekt scrumprojekt = null;
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		scrumprojekt = (Scrumprojekt) s.get(Scrumprojekt.class, id);
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				scrumprojekt = (Scrumprojekt) s.get(Scrumprojekt.class, id);
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return scrumprojekt;
 	}
 	
@@ -54,20 +84,40 @@ public class ScrumprojektDao implements DaoInterface<Scrumprojekt, Integer> {
 	}
 	
 	public void delete(Scrumprojekt entity) {
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		s.delete(entity);
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				s.delete(entity);
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<Scrumprojekt> findAll() {
 		List<Scrumprojekt> scrumprojektListe = null;
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		scrumprojektListe = (List<Scrumprojekt>) s.createQuery("from Scrumprojekt").list();
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				scrumprojektListe = (List<Scrumprojekt>) s.createQuery("from Scrumprojekt").list();
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return scrumprojektListe;
 	}
 	

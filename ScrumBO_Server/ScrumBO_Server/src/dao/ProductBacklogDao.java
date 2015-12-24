@@ -21,30 +21,60 @@ public class ProductBacklogDao implements DaoInterface<ProductBacklog, Integer> 
 	}
 	
 	public void persist(ProductBacklog entity) {
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		s.save(entity);
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				s.save(entity);
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void update(ProductBacklog entity) {
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		s.update(entity);
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				s.update(entity);
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// LinkedHashSet, damit keine doppelten UserStorys in der Liste vorhanden
 	// sind
 	public ProductBacklog findById(Integer id) {
 		ProductBacklog productbacklog = null;
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		productbacklog = (ProductBacklog) s.get(ProductBacklog.class, id);
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				productbacklog = (ProductBacklog) s.get(ProductBacklog.class, id);
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		List<UserStory> liste = productbacklog.getUserstory();
 		List<UserStory> liste2 = new ArrayList<UserStory>(new LinkedHashSet<UserStory>(liste));
 		productbacklog.setUserstory(liste2);
@@ -52,33 +82,63 @@ public class ProductBacklogDao implements DaoInterface<ProductBacklog, Integer> 
 	}
 	
 	public void delete(ProductBacklog entity) {
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		s.delete(entity);
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				s.delete(entity);
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 	}
 	
 	public List<ProductBacklog> findAll() {
 		List<ProductBacklog> productbacklogListe = null;
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		productbacklogListe = (List<ProductBacklog>) s.createQuery("from ProductBacklog").list();
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				productbacklogListe = (List<ProductBacklog>) s.createQuery("from ProductBacklog").list();
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return productbacklogListe;
 	}
 	
 	public List<ProductBacklog> findAllByProjectId(Integer projectId) {
 		List<ProductBacklog> productbacklogListe = null;
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		productbacklogListe = (List<ProductBacklog>) s
-				.createQuery("from ProductBacklog where scrumprojekt_id like'" + projectId + "'").list();
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				productbacklogListe = (List<ProductBacklog>) s
+						.createQuery("from ProductBacklog where scrumprojekt_id like'" + projectId + "'").list();
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		
 		return productbacklogListe;
 	}

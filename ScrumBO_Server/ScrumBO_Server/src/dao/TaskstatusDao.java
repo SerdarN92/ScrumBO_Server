@@ -18,46 +18,96 @@ public class TaskstatusDao implements DaoInterface<Taskstatus, Integer> {
 	}
 	
 	public void persist(Taskstatus entity) {
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		s.save(entity);
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				s.save(entity);
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void update(Taskstatus entity) {
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		s.update(entity);
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				s.update(entity);
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public Taskstatus findById(Integer id) {
 		Taskstatus taskstatus = null;
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		taskstatus = (Taskstatus) s.get(Taskstatus.class, id);
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				taskstatus = (Taskstatus) s.get(Taskstatus.class, id);
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return taskstatus;
 	}
 	
 	public void delete(Taskstatus entity) {
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		s.delete(entity);
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				s.delete(entity);
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public List<Taskstatus> findAll() {
 		List<Taskstatus> taskstatusListe = null;
-		Session s = HibernateUtil.openSession();
-		s.beginTransaction();
-		taskstatusListe = (List<Taskstatus>) s.createQuery("from Taskstatus").list();
-		s.getTransaction().commit();
-		s.close();
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				taskstatusListe = (List<Taskstatus>) s.createQuery("from Taskstatus").list();
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		return taskstatusListe;
 	}
 	
