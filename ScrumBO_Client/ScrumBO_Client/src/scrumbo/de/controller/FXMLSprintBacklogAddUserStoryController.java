@@ -33,6 +33,8 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -66,13 +68,15 @@ public class FXMLSprintBacklogAddUserStoryController implements Initializable {
 	@FXML
 	private Button						buttonSave;
 	@FXML
+	private Button						buttonRemoveTask;
+	@FXML
 	private ComboBox<UserStory>			comboBoxUserStory		= new ComboBox<>();
 																
 	private List<UserStory>				userstoryList			= new LinkedList<UserStory>();
 	protected UserStory					currentUserStory		= null;
 	@FXML
 	protected ListView<UserStoryTask>	listViewUserStoryTask	= new ListView<>();
-	private UserStoryTask				selectedUserStoryTask	= new UserStoryTask();
+	protected static UserStoryTask		selectedUserStoryTask	= new UserStoryTask();
 	protected static UserStoryTask		addedUserStoryTask		= new UserStoryTask();
 																
 	@FXML
@@ -89,6 +93,17 @@ public class FXMLSprintBacklogAddUserStoryController implements Initializable {
 	}
 	
 	@FXML
+	private void handleButtonRemoveTask(ActionEvent event) throws Exception {
+		listViewUserStoryTask.getItems().remove(selectedUserStoryTask);
+		currentUserStory.getUserstorytask().remove(selectedUserStoryTask);
+		buttonRemoveTask.setDisable(true);
+		
+		if (currentUserStory.getUserstorytask().isEmpty()) {
+			buttonSave.setDisable(true);
+		}
+	}
+	
+	@FXML
 	private void handleButtonAddTask(ActionEvent event) throws Exception {
 		try {
 			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/scrumbo/de/gui/FXMLTaskCreate.fxml"));
@@ -102,6 +117,7 @@ public class FXMLSprintBacklogAddUserStoryController implements Initializable {
 					try {
 						listViewUserStoryTask.getItems().add(addedUserStoryTask);
 						currentUserStory.getUserstorytask().add(addedUserStoryTask);
+						buttonSave.setDisable(false);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -151,6 +167,8 @@ public class FXMLSprintBacklogAddUserStoryController implements Initializable {
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
 		buttonAddTask.setDisable(true);
+		buttonRemoveTask.setDisable(true);
+		buttonSave.setDisable(true);
 		ladeUserStory();
 		initComboBox();
 		initListView();
@@ -164,13 +182,6 @@ public class FXMLSprintBacklogAddUserStoryController implements Initializable {
 				listViewUserStoryTask.getItems().add(currentUserStory.getUserstorytask().get(i));
 			}
 		}
-		// listViewUserStoryTask.setOnMousePressed(new
-		// EventHandler<MouseEvent>() {
-		// @Override
-		// public void handle(MouseEvent event) {
-		// listViewUserStoryTask.requestFocus();
-		// }
-		// });
 		
 		listViewUserStoryTask.setCellFactory(new Callback<ListView<UserStoryTask>, ListCell<UserStoryTask>>() {
 			
@@ -198,8 +209,20 @@ public class FXMLSprintBacklogAddUserStoryController implements Initializable {
 			@Override
 			public void handle(MouseEvent click) {
 				
-				if (click.getClickCount() == 2) {
+				if (click.getClickCount() == 1) {
 					selectedUserStoryTask = listViewUserStoryTask.getSelectionModel().getSelectedItem();
+					System.out.println(selectedUserStoryTask.getBeschreibung());
+					buttonRemoveTask.setDisable(false);
+					
+					listViewUserStoryTask.setOnKeyPressed(new EventHandler<KeyEvent>() {
+						@Override
+						public void handle(KeyEvent event) {
+							if (event.getCode().equals(KeyCode.DELETE)) {
+								listViewUserStoryTask.getItems().remove(selectedUserStoryTask);
+								currentUserStory.getUserstorytask().remove(selectedUserStoryTask);
+							}
+						}
+					});
 				}
 			}
 		});

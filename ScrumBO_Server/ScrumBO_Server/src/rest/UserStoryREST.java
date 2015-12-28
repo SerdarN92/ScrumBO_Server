@@ -223,24 +223,33 @@ public class UserStoryREST {
 			for (int j = 0; j < userstory.getUserstorytask().size(); j++) {
 				oldList.add(userstory.getUserstorytask().get(j));
 			}
-			for (int i = 0; i < userstoryDTO.getUserstorytask().size(); i++) {
-				boolean status = false;
-				for (int j = 0; j < oldList.size(); j++) {
-					if (userstoryDTO.getUserstorytask().get(i).getBeschreibung()
-							.equals(oldList.get(j).getBeschreibung()))
-						status = true;
-						
+			if (userstoryDTO.getUserstorytask().isEmpty()) {
+				for (int i = 0; i < userstory.getUserstorytask().size(); i++) {
+					userstorytaskService.delete(userstory.getUserstorytask().get(i).getId());
+					userstory.getUserstorytask().remove(i);
 				}
-				if (!status) {
-					UserStoryTask userstorytask = new UserStoryTask(
-							userstoryDTO.getUserstorytask().get(i).getBeschreibung(), taskstatusService.findById(1),
-							userstoryDTO.getUserstorytask().get(i).getAufwandinstunden(),
-							benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getBenutzer().getId()),
-							userstory);
-					userstorytaskService.persist(userstorytask);
+			} else {
+				for (int i = 0; i < userstoryDTO.getUserstorytask().size(); i++) {
+					for (int j = 0; j < userstory.getUserstorytask().size(); j++) {
+						if (userstoryDTO.getUserstorytask().get(i).getId() == userstory.getUserstorytask().get(j)
+								.getId()) {
+							userstory.getUserstorytask().get(j)
+									.setBeschreibung(userstoryDTO.getUserstorytask().get(i).getBeschreibung());
+							userstory.getUserstorytask().get(j).setTaskstatus(taskstatusService
+									.findById(userstoryDTO.getUserstorytask().get(i).getTaskstatus().getId()));
+							userstory.getUserstorytask().get(j)
+									.setAufwandinstunden(userstoryDTO.getUserstorytask().get(i).getAufwandinstunden());
+							userstory.getUserstorytask().get(j).setBenutzer(benutzerService
+									.findById(userstoryDTO.getUserstorytask().get(i).getBenutzer().getId()));
+							userstorytaskService.update(userstory.getUserstorytask().get(j));
+						} else {
+							userstorytaskService.delete(userstory.getUserstorytask().get(j).getId());
+							userstory.getUserstorytask().remove(j);
+						}
+					}
 				}
-				
 			}
+			
 		} else {
 			for (int i = 0; i < userstoryDTO.getUserstorytask().size(); i++) {
 				UserStoryTask userstorytask = new UserStoryTask(
@@ -248,6 +257,7 @@ public class UserStoryREST {
 						userstoryDTO.getUserstorytask().get(i).getAufwandinstunden(),
 						benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getBenutzer().getId()),
 						userstory);
+				userstory.getUserstorytask().add(userstorytask);
 				userstorytaskService.persist(userstorytask);
 			}
 			
@@ -257,7 +267,9 @@ public class UserStoryREST {
 		
 		String output = "";
 		try {
-			userstoryService.update(userstory);
+			if (!userstory.getUserstorytask().isEmpty()) {
+				userstoryService.update(userstory);
+			}
 			output = "Tasks erfolgreich geupdated";
 		} catch (Exception e) {
 			e.printStackTrace();

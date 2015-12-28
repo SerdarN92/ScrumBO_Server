@@ -65,6 +65,7 @@
             <Font size="16.0" />
          </font>
       </Button>
+      <Button fx:id="buttonRemoveTask" layoutX="331.0" layoutY="684.0" mnemonicParsing="false" onAction="#handleButtonRemoveTask" text="Task entfernen" />
    </children>
    <cursor>
       <Cursor fx:constant="DEFAULT" />

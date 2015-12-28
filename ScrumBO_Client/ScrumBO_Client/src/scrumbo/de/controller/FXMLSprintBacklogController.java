@@ -33,36 +33,38 @@ import scrumbo.de.service.SprintbacklogService;
 
 public class FXMLSprintBacklogController implements Initializable {
 	
-	Parent								root;
-	Scene								scene;
-	Stage								stage					= null;
-	SprintbacklogService				sprintbacklogService	= null;
+	Parent										root;
+	Scene										scene;
+	Stage										stage					= null;
+	SprintbacklogService						sprintbacklogService	= null;
 	@FXML
-	private Text						vorname;
+	private Text								vorname;
 	@FXML
-	private Text						nachname;
+	private Text								nachname;
 	@FXML
-	private Text						benutzerrolle;
+	private Text								benutzerrolle;
 	@FXML
-	private Text						projektname;
+	private Text								projektname;
 	@FXML
-	private Button						buttonLogout;
+	private Button								buttonLogout;
 	@FXML
-	private Button						buttonBack;
+	private Button								buttonBack;
 	@FXML
-	private Button						buttonAddUserStory;
+	private Button								buttonAddUserStory;
 	@FXML
-	private Button						buttonLoadSprint;
+	private Button								buttonLoadSprint;
 	@FXML
-	private Button						buttonCreateNewSprint;
+	private Button								buttonCreateNewSprint;
 	@FXML
-	private VBox						VBOXUserStories;
+	private VBox								VBOXUserStories;
 	@FXML
-	private Text						sprintNumber;
-										
-	public ObservableList<UserStory>	dataSprintBacklog		= FXCollections.observableArrayList();
-	private static Integer				anzahlSprints			= 0;
-																
+	private Text								sprintNumber;
+												
+	public ObservableList<UserStory>			dataSprintBacklog		= FXCollections.observableArrayList();
+	private static Integer						anzahlSprints			= 0;
+																		
+	public static FXMLSprintBacklogController	controller				= null;
+																		
 	public ObservableList<UserStory> getData() {
 		return dataSprintBacklog;
 	}
@@ -191,7 +193,6 @@ public class FXMLSprintBacklogController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		
 		sprintbacklogService = FXMLStartController.getSprintbacklogService();
 		
 		vorname.setText(CurrentBenutzer.vorname);
@@ -216,6 +217,8 @@ public class FXMLSprintBacklogController implements Initializable {
 		}
 		
 		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
+		
+		controller = this;
 	}
 	
 	private void initSprintBacklog() {

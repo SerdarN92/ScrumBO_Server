@@ -32,6 +32,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import scrumbo.de.app.ScrumBOClient;
+import scrumbo.de.controller.FXMLSprintBacklogController;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.entity.UserStoryTask;
 
@@ -308,7 +309,7 @@ public class MyHBox extends HBox {
 								@Override
 								public void handle(WindowEvent event) {
 									try {
-									
+										FXMLSprintBacklogController.controller.reloadSprintBacklog();
 									} catch (Exception e) {
 										e.printStackTrace();
 									}

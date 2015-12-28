@@ -9,6 +9,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.ContentDisplay;
+import javafx.scene.control.Label;
+import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
@@ -39,6 +42,8 @@ public class FXMLStartController implements Initializable {
 	private ImageView						adminImage;
 	@FXML
 	private ImageView						loginUserImage;
+	@FXML
+	private ImageView						informationImage;
 											
 	@FXML
 	private void handleCreateUserAction(MouseEvent event) throws IOException {
@@ -77,6 +82,12 @@ public class FXMLStartController implements Initializable {
 		if (definitionofdoneService == null) {
 			definitionofdoneService = new DefinitionOfDoneService();
 		}
+		
+		Tooltip tooltip = new Tooltip("Herzlichn Willkommen zum ScrumBO!");
+		Label label = new Label();
+		label.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
+		label.setTooltip(tooltip);
+		label.setGraphic(informationImage);
 	}
 	
 	public static BenutzerService getBenutzerService() {

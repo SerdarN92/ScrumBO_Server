@@ -17,6 +17,8 @@ import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -50,6 +52,8 @@ public class FXMLSprintBacklogEditUserStoryController implements Initializable {
 	private Button						buttonAddTask;
 	@FXML
 	private Button						buttonSave;
+	@FXML
+	private Button						buttonRemoveTask;
 										
 	private List<UserStory>				userstoryList			= new LinkedList<UserStory>();
 	protected UserStory					currentUserStory		= null;
@@ -83,9 +87,17 @@ public class FXMLSprintBacklogEditUserStoryController implements Initializable {
 	}
 	
 	@FXML
+	private void handleButtonRemoveTask(ActionEvent event) throws Exception {
+		listViewUserStoryTask.getItems().remove(selectedUserStoryTask);
+		currentUserStory.getUserstorytask().remove(selectedUserStoryTask);
+		buttonRemoveTask.setDisable(true);
+		
+	}
+	
+	@FXML
 	private void handleButtonAddTask(ActionEvent event) throws Exception {
 		try {
-			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/scrumbo/de/gui/FXMLTaskEdit.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/scrumbo/de/gui/FXMLTaskCreate2.fxml"));
 			Parent root1 = (Parent) fxmlLoader.load();
 			Stage stage = new Stage();
 			stage.initModality(Modality.APPLICATION_MODAL);
@@ -96,7 +108,6 @@ public class FXMLSprintBacklogEditUserStoryController implements Initializable {
 					try {
 						listViewUserStoryTask.getItems().add(addedUserStoryTask);
 						currentUserStory.getUserstorytask().add(addedUserStoryTask);
-						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -110,7 +121,7 @@ public class FXMLSprintBacklogEditUserStoryController implements Initializable {
 	
 	@FXML
 	private void handleButtonSave(ActionEvent event) throws Exception {
-		if (userstoryService.updateTask(currentUserStory)) {
+		if (userstoryService.updateTask(currentUserStory) && !(currentUserStory.getUserstorytask().isEmpty())) {
 			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 		} else {
@@ -121,7 +132,7 @@ public class FXMLSprintBacklogEditUserStoryController implements Initializable {
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
-		
+		buttonRemoveTask.setDisable(true);
 		userstoryService = FXMLStartController.getUserstoryService();
 		currentUserStory = MyHBox.blabla;
 		prioritaet.setText(currentUserStory.getPrioritaet().toString());
@@ -167,31 +178,18 @@ public class FXMLSprintBacklogEditUserStoryController implements Initializable {
 			@Override
 			public void handle(MouseEvent click) {
 				
-				if (click.getClickCount() == 2) {
+				if (click.getClickCount() == 1) {
 					selectedUserStoryTask = listViewUserStoryTask.getSelectionModel().getSelectedItem();
-					try {
-						FXMLLoader fxmlLoader = new FXMLLoader(
-								getClass().getResource("/scrumbo/de/gui/FXMLTaskEdit.fxml"));
-						Parent root1 = (Parent) fxmlLoader.load();
-						Stage stage = new Stage();
-						stage.initModality(Modality.APPLICATION_MODAL);
-						stage.setScene(new Scene(root1));
-						stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-							@Override
-							public void handle(WindowEvent event) {
-								try {
-									listViewUserStoryTask.getItems().add(addedUserStoryTask);
-									currentUserStory.getUserstorytask().add(addedUserStoryTask);
-									
-								} catch (Exception e) {
-									e.printStackTrace();
-								}
+					buttonRemoveTask.setDisable(false);
+					listViewUserStoryTask.setOnKeyPressed(new EventHandler<KeyEvent>() {
+						@Override
+						public void handle(KeyEvent event) {
+							if (event.getCode().equals(KeyCode.DELETE)) {
+								listViewUserStoryTask.getItems().remove(selectedUserStoryTask);
+								currentUserStory.getUserstorytask().remove(addedUserStoryTask);
 							}
-						});
-						stage.show();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
+						}
+					});
 				}
 			}
 		});
