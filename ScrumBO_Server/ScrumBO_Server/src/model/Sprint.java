@@ -11,6 +11,10 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+/*
+ * Entität für die Tabelle "Sprint".
+ */
+
 @Entity
 @Table(name = "SPRINT")
 public class Sprint {

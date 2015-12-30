@@ -13,6 +13,10 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 
+/*
+ * Entität für die Tabelle "Taskstatus".
+ */
+
 @Entity
 @Table(name = "TASKSTATUS")
 public class Taskstatus {
@@ -20,18 +24,18 @@ public class Taskstatus {
 	@Id
 	@GeneratedValue
 	@Column(name = "taskstatus_id", unique = true, nullable = false)
-	private Integer id;
-	
+	private Integer				id;
+								
 	@Column(name = "beschreibung", nullable = true)
-	private String beschreibung;
-	
+	private String				beschreibung;
+								
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "taskstatus")
 	@Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE,
 			org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST,
 			org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
-	private List<UserStoryTask> userstorytask;
-	
+	private List<UserStoryTask>	userstorytask;
+								
 	public Taskstatus() {
 	
 	}

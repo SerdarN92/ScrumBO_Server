@@ -7,6 +7,11 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.service.ServiceRegistry;
 import org.hibernate.service.ServiceRegistryBuilder;
 
+/*
+ * Die Klasse HibernateUtil enthält zwei statische Attribute. Eine SessionFactory und eine ServiceRegistry.
+ * Die SessionFactory ist dafür zuständig, dass für die Requests Sessions zur Verfügung gestellt werden.
+ */
+
 public class HibernateUtil {
 	
 	private static SessionFactory	sessionFactory;

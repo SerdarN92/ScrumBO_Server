@@ -9,6 +9,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/*
+ * Entität für die Tabelle "Definitionofdone".
+ */
+
 @Entity
 @Table(name = "DEFINITIONOFDONE")
 public class DefinitionOfDone {

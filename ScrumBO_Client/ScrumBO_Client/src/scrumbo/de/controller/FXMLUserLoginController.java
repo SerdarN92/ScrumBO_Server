@@ -34,6 +34,7 @@ public class FXMLUserLoginController implements Initializable {
 	
 	Parent					root;
 	Scene					scene;
+	Stage					stage;
 	BenutzerService			benutzerService			= null;
 	Benutzer				benutzer				= null;
 	BenutzerrolleService	benutzerrolleService	= null;
@@ -63,9 +64,7 @@ public class FXMLUserLoginController implements Initializable {
 	private void handleLoginButton(ActionEvent event) throws Exception {
 		if (checkEmail() && checkPassword()) {
 			if (!benutzerService.checkIfEmailExists(txtFieldEmail.getText())) {
-				emailValidFail
-						.setText("Benutzer mit dieser E-Mail Adresse existiert nicht! Bitte registrieren Sie sich.");
-				emailValidFail.setVisible(true);
+			
 			} else {
 				benutzer = benutzerService.getBenutzer();
 				CurrentBenutzer.benutzerID = benutzer.getId();

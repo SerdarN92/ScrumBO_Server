@@ -13,8 +13,9 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+/*
+ * Entität für die Tabelle "Benutzer".
+ */
 
 @Entity
 @Table(name = "BENUTZER")
@@ -41,8 +42,8 @@ public class Benutzer {
 			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "benutzer")
 	@Cascade({ org.hibernate.annotations.CascadeType.DELETE, org.hibernate.annotations.CascadeType.MERGE,
 			org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
-	@JsonSerialize
-	@JsonDeserialize
+	// @JsonSerialize
+	// @JsonDeserialize
 	private List<UserStoryTask>	userstorytask;
 								
 	public Benutzer() {
@@ -51,13 +52,6 @@ public class Benutzer {
 	
 	public Benutzer(Integer id, String vorname, String nachname, String passwort, String email) {
 		this.id = id;
-		this.vorname = vorname;
-		this.nachname = nachname;
-		this.passwort = passwort;
-		this.email = email;
-	}
-	
-	public Benutzer(String vorname, String nachname, String passwort, String email) {
 		this.vorname = vorname;
 		this.nachname = nachname;
 		this.passwort = passwort;

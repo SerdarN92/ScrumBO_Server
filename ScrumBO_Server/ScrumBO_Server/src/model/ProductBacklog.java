@@ -13,6 +13,10 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 
+/*
+ * Entität von der Tabelle "Productbacklog".
+ */
+
 @Entity
 @Table(name = "PRODUCTBACKLOG")
 public class ProductBacklog {

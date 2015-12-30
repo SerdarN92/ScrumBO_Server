@@ -9,8 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.Label;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -83,11 +81,9 @@ public class FXMLStartController implements Initializable {
 			definitionofdoneService = new DefinitionOfDoneService();
 		}
 		
-		Tooltip tooltip = new Tooltip("Herzlichn Willkommen zum ScrumBO!");
-		Label label = new Label();
-		label.setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
-		label.setTooltip(tooltip);
-		label.setGraphic(informationImage);
+		Tooltip tooltip = new Tooltip(
+				"Herzlich Willkommen zum ScrumBO! \nDiese Applikation ermöglicht es Ihnen Projektmanagement \nnach Scrum zu betreiben.");
+		Tooltip.install(informationImage, tooltip);
 	}
 	
 	public static BenutzerService getBenutzerService() {

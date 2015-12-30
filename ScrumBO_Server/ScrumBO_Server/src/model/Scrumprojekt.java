@@ -15,6 +15,10 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 
+/*
+ * Entität für die Tabelle "Scrumprojekt".
+ */
+
 @Entity
 @Table(name = "SCRUMPROJEKT")
 public class Scrumprojekt {

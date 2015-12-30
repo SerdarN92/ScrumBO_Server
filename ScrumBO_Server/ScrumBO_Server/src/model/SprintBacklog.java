@@ -5,6 +5,10 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/*
+ * Entität für die Tabelle "Sprintbacklog".
+ */
+
 @Entity
 @Table(name = "SPRINTBACKLOG")
 public class SprintBacklog {

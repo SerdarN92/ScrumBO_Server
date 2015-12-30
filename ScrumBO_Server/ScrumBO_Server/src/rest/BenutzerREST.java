@@ -182,7 +182,7 @@ public class BenutzerREST {
 				hibernateconfigfilename);
 		Benutzer_Benutzerrolle_Scrumprojekt bbs = new Benutzer_Benutzerrolle_Scrumprojekt();
 		Benutzer_Benutzerrolle_Scrumprojekt.Pk pk = new Benutzer_Benutzerrolle_Scrumprojekt.Pk(benutzer.getId(),
-				benutzerrolle.getBenutzerrollenid(), 0);
+				benutzerrolle.getId(), 0);
 		bbs.setPk(pk);
 		bbsService.persist(bbs);
 		
@@ -226,7 +226,7 @@ public class BenutzerREST {
 				hibernateconfigfilename);
 		Benutzer_Benutzerrolle_Scrumprojekt bbs = new Benutzer_Benutzerrolle_Scrumprojekt();
 		Benutzer_Benutzerrolle_Scrumprojekt.Pk pk = new Benutzer_Benutzerrolle_Scrumprojekt.Pk(benutzer.getId(),
-				benutzerrolle.getBenutzerrollenid(), scrumprojektId);
+				benutzerrolle.getId(), scrumprojektId);
 		bbs.setPk(pk);
 		bbsService.persist(bbs);
 		

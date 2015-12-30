@@ -9,6 +9,10 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
+/*
+ * Entität für die Tabelle "Userstorytask".
+ */
+
 @Entity
 @Table(name = "USERSTORYTASK")
 public class UserStoryTask {

@@ -29,7 +29,7 @@ public class BenutzerrolleREST {
 		List<Benutzerrolle> benutzerrolle = benutzerrolleService.findAll();
 		List<BenutzerrolleDTO> benutzerrolleDTOListe = new LinkedList<>();
 		for (int i = 0; i < benutzerrolle.size(); i++) {
-			BenutzerrolleDTO benutzerrolleDTO = new BenutzerrolleDTO(benutzerrolle.get(i).getBenutzerrollenid(),
+			BenutzerrolleDTO benutzerrolleDTO = new BenutzerrolleDTO(benutzerrolle.get(i).getId(),
 					benutzerrolle.get(i).getBezeichnung());
 			benutzerrolleDTOListe.add(benutzerrolleDTO);
 		}

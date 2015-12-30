@@ -8,6 +8,13 @@ import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
+/*
+ * Entität für die Tabelle "benutzer_benutzerrolle_scrumprojekt".
+ * Sie dient zur Zuweisung von Benutzern zu Benutzerrollen in Scrumprojekten.
+ *
+ * Ein Benutzer kann verschiedene Rollen in verschiedenen Projekten haben.
+ */
+
 @Entity
 @Table(name = "benutzer_benutzerrolle_scrumprojekt")
 public class Benutzer_Benutzerrolle_Scrumprojekt {
@@ -15,14 +22,14 @@ public class Benutzer_Benutzerrolle_Scrumprojekt {
 	@Embeddable
 	public static class Pk implements Serializable {
 		@Column(nullable = true, updatable = true)
-		private Integer benutzerId;
-		
+		private Integer	benutzerId;
+						
 		@Column(nullable = true, updatable = true)
-		private Integer benutzerrollenId;
-		
+		private Integer	benutzerrollenId;
+						
 		@Column(nullable = true, updatable = true)
-		private Integer scrumprojektId;
-		
+		private Integer	scrumprojektId;
+						
 		public Pk() {
 		}
 		

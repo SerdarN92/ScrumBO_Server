@@ -6,6 +6,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
+/*
+ * Entität für die Tabelle "Benutzerrolle".
+ */
+
 @Entity
 @Table(name = "BENUTZERROLLE")
 public class Benutzerrolle {
@@ -13,7 +17,7 @@ public class Benutzerrolle {
 	@Id
 	@GeneratedValue
 	@Column(name = "benutzerrollen_id", unique = true, nullable = false)
-	private Integer	benutzerrollenid;
+	private Integer	id;
 					
 	@Column(name = "bezeichnung", unique = true, nullable = false)
 	private String	bezeichnung;
@@ -26,12 +30,12 @@ public class Benutzerrolle {
 		this.bezeichnung = bezeichnung;
 	}
 	
-	public Integer getBenutzerrollenid() {
-		return benutzerrollenid;
+	public Integer getId() {
+		return id;
 	}
 	
-	public void setBenutzerrollenid(Integer benutzerrollenid) {
-		this.benutzerrollenid = benutzerrollenid;
+	public void setId(Integer id) {
+		this.id = id;
 	}
 	
 	public String getBezeichnung() {
@@ -46,7 +50,7 @@ public class Benutzerrolle {
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
-		result = prime * result + ((benutzerrollenid == null) ? 0 : benutzerrollenid.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
 		return result;
 	}
 	
@@ -59,10 +63,10 @@ public class Benutzerrolle {
 		if (getClass() != obj.getClass())
 			return false;
 		Benutzerrolle other = (Benutzerrolle) obj;
-		if (benutzerrollenid == null) {
-			if (other.benutzerrollenid != null)
+		if (id == null) {
+			if (other.id != null)
 				return false;
-		} else if (!benutzerrollenid.equals(other.benutzerrollenid))
+		} else if (!id.equals(other.id))
 			return false;
 		return true;
 	}
