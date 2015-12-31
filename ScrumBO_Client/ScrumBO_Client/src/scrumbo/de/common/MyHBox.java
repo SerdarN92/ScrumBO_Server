@@ -32,7 +32,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import scrumbo.de.app.ScrumBOClient;
-import scrumbo.de.controller.FXMLSprintBacklogController;
+import scrumbo.de.controller.SprintBacklogController;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.entity.UserStoryTask;
 
@@ -300,7 +300,7 @@ public class MyHBox extends HBox {
 					if (event.getClickCount() == 2) {
 						try {
 							FXMLLoader fxmlLoader = new FXMLLoader(
-									getClass().getResource("/scrumbo/de/gui/FXMLSprintBacklogEditUserStory.fxml"));
+									getClass().getResource("/scrumbo/de/gui/SprintBacklogEditUserStory.fxml"));
 							Parent root1 = (Parent) fxmlLoader.load();
 							Stage stage = new Stage();
 							stage.initModality(Modality.APPLICATION_MODAL);
@@ -309,7 +309,7 @@ public class MyHBox extends HBox {
 								@Override
 								public void handle(WindowEvent event) {
 									try {
-										FXMLSprintBacklogController.controller.reloadSprintBacklog();
+										SprintBacklogController.controller.reloadSprintBacklog();
 									} catch (Exception e) {
 										e.printStackTrace();
 									}

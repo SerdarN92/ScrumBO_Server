@@ -58,7 +58,7 @@ public class ScrumBOClient extends Application {
 		
 		// Startfenster wird geladen
 		Parent root;
-		root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/FXMLStartfenster.fxml"));
+		root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		
 		Scene scene = new Scene(root);
 		
