@@ -8,6 +8,8 @@ public class Sprint implements Serializable {
 	private Integer			sprintnummer;
 	private Scrumprojekt	scrumprojekt;
 	private SprintBacklog	sprintbacklog;
+	private BurndownChart	burndownChart;
+	private boolean			status;
 							
 	public Sprint() {
 	
@@ -48,6 +50,22 @@ public class Sprint implements Serializable {
 	
 	public void setSprintbacklog(SprintBacklog sprintbacklog) {
 		this.sprintbacklog = sprintbacklog;
+	}
+	
+	public boolean getStatus() {
+		return status;
+	}
+	
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+	
+	public BurndownChart getBurndownChart() {
+		return burndownChart;
+	}
+	
+	public void setBurndownChart(BurndownChart burndownChart) {
+		this.burndownChart = burndownChart;
 	}
 	
 	@Override

@@ -27,5 +27,7 @@
    <mapping class="model.UserStory"/>
    <mapping class="model.UserStoryTask"/>
    <mapping class="model.Benutzer_Benutzerrolle_Scrumprojekt"/>
+     <mapping class="model.BurndownChart"/>
+   <mapping class="model.BurndownChartPoint"/>
 </session-factory>
 </hibernate-configuration>

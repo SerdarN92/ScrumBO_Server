@@ -18,12 +18,15 @@ import org.json.JSONException;
 
 import com.google.gson.Gson;
 
+import dto.BurndownChartDTO;
+import dto.BurndownChartPointDTO;
 import dto.ImpedimentDTO;
 import dto.ProductBacklogDTO;
 import dto.ScrumprojektDTO;
 import dto.SprintDTO;
 import model.Benutzer;
 import model.Benutzer_Benutzerrolle_Scrumprojekt;
+import model.BurndownChart;
 import model.ProductBacklog;
 import model.Scrumprojekt;
 import model.Sprint;
@@ -62,6 +65,25 @@ public class ScrumprojektREST {
 			for (int i = 0; i < scrumprojekt.getSprint().size(); i++) {
 				SprintDTO sprintDTO = new SprintDTO();
 				sprintDTO.setId(scrumprojekt.getSprint().get(i).getId());
+				if (scrumprojekt.getSprint().get(i).getBurndownChart() != null) {
+					BurndownChartDTO burndownchartDTO = new BurndownChartDTO();
+					burndownchartDTO.setId(scrumprojekt.getSprint().get(i).getBurndownChart().getId());
+					burndownchartDTO.setTage(scrumprojekt.getSprint().get(i).getBurndownChart().getTage());
+					List<BurndownChartPointDTO> burndownchartPointDTOListe = new LinkedList<BurndownChartPointDTO>();
+					for (int j = 0; j < scrumprojekt.getSprint().get(i).getBurndownChart().getBurndownChartPoint()
+							.size(); j++) {
+						BurndownChartPointDTO burndownchartPointDTO = new BurndownChartPointDTO();
+						burndownchartPointDTO.setId(scrumprojekt.getSprint().get(i).getBurndownChart()
+								.getBurndownChartPoint().get(j).getId());
+						burndownchartPointDTO.setX(scrumprojekt.getSprint().get(i).getBurndownChart()
+								.getBurndownChartPoint().get(j).getX());
+						burndownchartPointDTO.setY(scrumprojekt.getSprint().get(i).getBurndownChart()
+								.getBurndownChartPoint().get(j).getY());
+						burndownchartPointDTOListe.add(burndownchartPointDTO);
+					}
+					burndownchartDTO.setBurndownChartPoint(burndownchartPointDTOListe);
+					sprintDTO.setBurndownChart(burndownchartDTO);
+				}
 				sprintDTOListe.add(sprintDTO);
 			}
 			scrumprojektDTO.setSprint(sprintDTOListe);
@@ -92,6 +114,23 @@ public class ScrumprojektREST {
 			for (int j = 0; j < scrumprojektListe.get(i).getSprint().size(); j++) {
 				SprintDTO sprintDTO = new SprintDTO();
 				sprintDTO.setId(scrumprojektListe.get(i).getSprint().get(j).getId());
+				BurndownChartDTO burndownchartDTO = new BurndownChartDTO();
+				burndownchartDTO.setId(scrumprojektListe.get(i).getSprint().get(j).getBurndownChart().getId());
+				burndownchartDTO.setTage(scrumprojektListe.get(i).getSprint().get(j).getBurndownChart().getTage());
+				List<BurndownChartPointDTO> burndownchartPointDTOListe = new LinkedList<BurndownChartPointDTO>();
+				for (int k = 0; k < scrumprojektListe.get(i).getSprint().get(j).getBurndownChart()
+						.getBurndownChartPoint().size(); k++) {
+					BurndownChartPointDTO burndownchartPointDTO = new BurndownChartPointDTO();
+					burndownchartPointDTO.setId(scrumprojektListe.get(i).getSprint().get(j).getBurndownChart()
+							.getBurndownChartPoint().get(k).getId());
+					burndownchartPointDTO.setX(scrumprojektListe.get(i).getSprint().get(j).getBurndownChart()
+							.getBurndownChartPoint().get(k).getX());
+					burndownchartPointDTO.setY(scrumprojektListe.get(i).getSprint().get(j).getBurndownChart()
+							.getBurndownChartPoint().get(k).getY());
+					burndownchartPointDTOListe.add(burndownchartPointDTO);
+				}
+				burndownchartDTO.setBurndownChartPoint(burndownchartPointDTOListe);
+				sprintDTO.setBurndownChart(burndownchartDTO);
 				sprintDTOListe.add(sprintDTO);
 			}
 			for (int j = 0; j < scrumprojektListe.get(i).getImpediment().size(); j++) {
@@ -181,9 +220,14 @@ public class ScrumprojektREST {
 			bss.persist(bssmodel);
 			
 			sprint.setSprintnummer(1);
+			sprint.setStatus(false);
 			sprint.setScrumprojekt(sps.findById(projectid));
 			sprint.setSprintbacklog(sprintbacklog);
+			
+			BurndownChart burndownChart = new BurndownChart();
+			sprint.setBurndownChart(burndownChart);
 			sprintService.persist(sprint);
+			
 			output = "Project erfolgreich erstellt";
 		} catch (Exception e) {
 			e.printStackTrace();

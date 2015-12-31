@@ -34,6 +34,12 @@ public class Sprint {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private SprintBacklog	sprintbacklog;
 							
+	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	private BurndownChart	burndownChart;
+							
+	@Column(name = "status", nullable = false)
+	private boolean			status;
+							
 	public Sprint() {
 	
 	}
@@ -68,6 +74,22 @@ public class Sprint {
 	
 	public void setSprintbacklog(SprintBacklog sprintbacklog) {
 		this.sprintbacklog = sprintbacklog;
+	}
+	
+	public BurndownChart getBurndownChart() {
+		return burndownChart;
+	}
+	
+	public void setBurndownChart(BurndownChart burndownChart) {
+		this.burndownChart = burndownChart;
+	}
+	
+	public boolean getStatus() {
+		return status;
+	}
+	
+	public void setStatus(boolean status) {
+		this.status = status;
 	}
 	
 	@Override

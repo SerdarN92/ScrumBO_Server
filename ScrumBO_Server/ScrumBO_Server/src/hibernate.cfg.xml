@@ -21,6 +21,8 @@
    <mapping class="model.DefinitionOfDone"/>
    <mapping class="model.Impediment"/>
    <mapping class="model.ProductBacklog"/>
+   <mapping class="model.BurndownChart"/>
+   <mapping class="model.BurndownChartPoint"/>
    <mapping class="model.Sprint"/>
    <mapping class="model.SprintBacklog"/>
    <mapping class="model.Taskstatus"/>

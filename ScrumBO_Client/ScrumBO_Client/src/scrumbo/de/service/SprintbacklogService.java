@@ -73,6 +73,7 @@ public class SprintbacklogService {
 		Sprint sprint = gson.fromJson(output, Sprint.class);
 		CurrentSprint.id = sprint.getId();
 		CurrentSprint.sprintnummer = sprint.getSprintnummer();
+		CurrentSprint.status = sprint.getStatus();
 	}
 	
 	public void ladeSprint() {
@@ -100,6 +101,7 @@ public class SprintbacklogService {
 		Sprint sprint = gson.fromJson(output, Sprint.class);
 		CurrentSprint.id = sprint.getId();
 		CurrentSprint.sprintnummer = sprint.getSprintnummer();
+		CurrentSprint.status = sprint.getStatus();
 	}
 	
 	public Integer ladeAnzahlSprints() {
@@ -154,5 +156,59 @@ public class SprintbacklogService {
 		List<UserStory> liste = gson.fromJson(output, listType);
 		
 		return liste;
+	}
+	
+	public boolean createBurndownChart() {
+		boolean status = false;
+		try {
+			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/sprint/createBurndownChart/" + CurrentSprint.id
+					+ "/" + ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+			String output = br.readLine();
+			if (output.equals("true"))
+				status = true;
+			conn.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return status;
+		
+	}
+	
+	public boolean endDay() {
+		boolean status = false;
+		try {
+			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/sprint/endDay/" + CurrentSprint.id + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+			String output = br.readLine();
+			if (output.equals("true"))
+				status = true;
+			conn.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return status;
+		
 	}
 }

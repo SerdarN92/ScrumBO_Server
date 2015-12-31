@@ -33,38 +33,36 @@ import scrumbo.de.service.SprintbacklogService;
 
 public class SprintBacklogController implements Initializable {
 	
-	Parent										root;
-	Scene										scene;
-	Stage										stage					= null;
-	SprintbacklogService						sprintbacklogService	= null;
+	Parent									root;
+	Scene									scene;
+	Stage									stage					= null;
+	SprintbacklogService					sprintbacklogService	= null;
 	@FXML
-	private Text								vorname;
+	private Button							buttonLogout;
 	@FXML
-	private Text								nachname;
+	private Button							buttonBack;
 	@FXML
-	private Text								benutzerrolle;
+	private Button							buttonAddUserStory;
 	@FXML
-	private Text								projektname;
+	private Button							buttonLoadSprint;
 	@FXML
-	private Button								buttonLogout;
+	private Button							buttonCreateNewSprint;
 	@FXML
-	private Button								buttonBack;
+	private Button							buttonStartSprint;
 	@FXML
-	private Button								buttonAddUserStory;
+	private Button							buttonEndDay;
 	@FXML
-	private Button								buttonLoadSprint;
+	private VBox							VBOXUserStories;
 	@FXML
-	private Button								buttonCreateNewSprint;
-	@FXML
-	private VBox								VBOXUserStories;
-	@FXML
-	private Text								sprintNumber;
-												
-	public ObservableList<UserStory>			dataSprintBacklog		= FXCollections.observableArrayList();
-	private static Integer						anzahlSprints			= 0;
-																		
+	private Text							sprintNumber;
+											
+	public ObservableList<UserStory>		dataSprintBacklog		= FXCollections.observableArrayList();
+	private static Integer					anzahlSprints			= 0;
+																	
 	public static SprintBacklogController	controller				= null;
-																		
+																	
+	private Integer							count					= 0;
+																	
 	public ObservableList<UserStory> getData() {
 		return dataSprintBacklog;
 	}
@@ -93,6 +91,35 @@ public class SprintBacklogController implements Initializable {
 		}
 		
 		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
+		
+		if (CurrentSprint.sprintnummer < anzahlSprints) {
+			System.out.println("Ja");
+			buttonStartSprint.setDisable(true);
+			buttonCreateNewSprint.setDisable(true);
+			buttonEndDay.setDisable(true);
+		} else {
+			if (!CurrentSprint.status) {
+				buttonStartSprint.setDisable(false);
+				buttonCreateNewSprint.setDisable(true);
+				buttonEndDay.setDisable(true);
+			} else {
+				buttonStartSprint.setDisable(true);
+				buttonCreateNewSprint.setDisable(false);
+				buttonEndDay.setDisable(false);
+			}
+		}
+	}
+	
+	@FXML
+	private void handleButtonStartSprint(ActionEvent event) throws Exception {
+		try {
+			sprintbacklogService.createBurndownChart();
+			buttonEndDay.setDisable(false);
+			buttonCreateNewSprint.setDisable(false);
+			buttonStartSprint.setDisable(true);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@FXML
@@ -156,6 +183,15 @@ public class SprintBacklogController implements Initializable {
 	}
 	
 	@FXML
+	private void handleButtonEndDay(ActionEvent event) throws Exception {
+		if (count == 0) {
+			sprintbacklogService.endDay();
+			count++;
+		}
+		count = 0;
+	}
+	
+	@FXML
 	private void handleButtonBack(ActionEvent event) throws Exception {
 		if (CurrentBenutzer.isSM) {
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
@@ -194,11 +230,6 @@ public class SprintBacklogController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		sprintbacklogService = StartwindowController.getSprintbacklogService();
-		
-		vorname.setText(CurrentBenutzer.vorname);
-		nachname.setText(CurrentBenutzer.nachname);
-		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
-		projektname.setText(CurrentScrumprojekt.projektname);
 		anzahlSprints = sprintbacklogService.ladeAnzahlSprints();
 		initSprintBacklog();
 		
@@ -219,6 +250,13 @@ public class SprintBacklogController implements Initializable {
 		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
 		
 		controller = this;
+		
+		if (!CurrentSprint.status) {
+			buttonEndDay.setDisable(true);
+			buttonCreateNewSprint.setDisable(true);
+		} else {
+			buttonStartSprint.setDisable(true);
+		}
 	}
 	
 	private void initSprintBacklog() {
@@ -285,8 +323,13 @@ public class SprintBacklogController implements Initializable {
 		Sprint sprint = sprintbacklogService.addNewSprintToSprintBacklog();
 		CurrentSprint.id = sprint.getId();
 		CurrentSprint.sprintnummer = sprint.getSprintnummer();
+		CurrentSprint.status = sprint.getStatus();
 		
 		reloadSprintBacklog();
+		
+		buttonStartSprint.setDisable(false);
+		buttonEndDay.setDisable(true);
+		buttonCreateNewSprint.setDisable(true);
 	}
 	
 	public void reloadSprintBacklog() throws IOException {

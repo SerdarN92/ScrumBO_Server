@@ -8,14 +8,17 @@ public class SprintDTO implements Serializable {
 	private Integer				sprintnummer;
 	private ScrumprojektDTO		scrumprojekt;
 	private SprintBacklogDTO	sprintbacklog;
+	private BurndownChartDTO	burndownChart;
+	private boolean				status;
 								
 	public SprintDTO() {
 	
 	}
 	
-	public SprintDTO(Integer id, Integer sprintnummer) {
+	public SprintDTO(Integer id, Integer sprintnummer, boolean status) {
 		this.id = id;
 		this.sprintnummer = sprintnummer;
+		this.status = status;
 	}
 	
 	public Integer getId() {
@@ -48,6 +51,22 @@ public class SprintDTO implements Serializable {
 	
 	public void setSprintbacklog(SprintBacklogDTO sprintbacklog) {
 		this.sprintbacklog = sprintbacklog;
+	}
+	
+	public boolean isStatus() {
+		return status;
+	}
+	
+	public void setStatus(boolean status) {
+		this.status = status;
+	}
+	
+	public BurndownChartDTO getBurndownChart() {
+		return burndownChart;
+	}
+	
+	public void setBurndownChart(BurndownChartDTO burndownChart) {
+		this.burndownChart = burndownChart;
 	}
 	
 	@Override
