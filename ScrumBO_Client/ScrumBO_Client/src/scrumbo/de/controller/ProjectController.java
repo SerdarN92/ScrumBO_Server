@@ -13,7 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import scrumbo.de.entity.CurrentBenutzer;
 
@@ -22,12 +21,6 @@ public class ProjectController implements Initializable {
 	Parent				root;
 	Scene				scene;
 	@FXML
-	private Text		vorname;
-	@FXML
-	private Text		nachname;
-	@FXML
-	private Text		benutzerrolle;
-	@FXML
 	private ImageView	createProjectImage;
 	@FXML
 	private ImageView	openProjectImage;
@@ -35,7 +28,7 @@ public class ProjectController implements Initializable {
 	private Button		buttonLogout;
 	@FXML
 	private Button		buttonBack;
-	
+						
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
 		CurrentBenutzer.benutzerID = -1;
@@ -73,9 +66,6 @@ public class ProjectController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		vorname.setText(CurrentBenutzer.vorname);
-		nachname.setText(CurrentBenutzer.nachname);
-		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
 	}
 	
 }

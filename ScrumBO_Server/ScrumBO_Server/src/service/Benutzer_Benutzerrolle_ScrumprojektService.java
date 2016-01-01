@@ -99,4 +99,16 @@ public class Benutzer_Benutzerrolle_ScrumprojektService {
 		return admission;
 	}
 	
+	public boolean checkAdmin(Integer benutzerId) {
+		boolean admin = false;
+		try {
+			if (bbsDao.checkAdmin(benutzerId)) {
+				admin = true;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return admin;
+	}
+	
 }

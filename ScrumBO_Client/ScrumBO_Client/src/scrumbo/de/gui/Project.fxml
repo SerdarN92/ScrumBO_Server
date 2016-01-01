@@ -21,11 +21,6 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <Label layoutX="324.0" layoutY="56.0" text="Eingeloggter User:" />
-      <Label layoutX="324.0" layoutY="101.0" text="Benutzerrolle" />
-      <Text fx:id="benutzerrolle" layoutX="422.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="120.0" />
-      <Text fx:id="nachname" layoutX="422.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="91.0" />
-      <Text fx:id="vorname" layoutX="324.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="97.9999989271164" />
       <ImageView fx:id="createProjectImage" fitHeight="150.0" fitWidth="200.0" layoutX="161.0" layoutY="225.0" onMouseClicked="#handleCreateProjectButton" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../../bin/content/1447002493_Edit.png" />

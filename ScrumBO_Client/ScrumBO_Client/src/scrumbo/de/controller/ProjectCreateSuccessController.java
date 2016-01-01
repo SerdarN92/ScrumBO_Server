@@ -58,9 +58,6 @@ public class ProjectCreateSuccessController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		vorname.setText(CurrentBenutzer.vorname);
-		nachname.setText(CurrentBenutzer.nachname);
-		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
 	}
 	
 }

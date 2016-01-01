@@ -21,11 +21,6 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <Label layoutX="324.0" layoutY="56.0" text="Eingeloggter User:" />
-      <Label layoutX="324.0" layoutY="101.0" text="Benutzerrolle" />
-      <Text fx:id="benutzerrolle" layoutX="422.0" layoutY="113.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="120.0" />
-      <Text fx:id="nachname" layoutX="422.0" layoutY="89.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="91.0" />
-      <Text fx:id="vorname" layoutX="324.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="97.9999989271164" />
       <Label layoutX="183.0" layoutY="240.0" text="Projektname">
          <font>
             <Font size="21.0" />

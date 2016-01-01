@@ -29,12 +29,6 @@ public class ProjectLoginController implements Initializable {
 	ProductbacklogService	productbacklogService	= null;
 	BenutzerService			benutzerService			= null;
 	@FXML
-	private Text			vorname;
-	@FXML
-	private Text			nachname;
-	@FXML
-	private Text			benutzerrolle;
-	@FXML
 	private Button			buttonLogout;
 	@FXML
 	private Button			buttonBack;
@@ -152,9 +146,6 @@ public class ProjectLoginController implements Initializable {
 		productbacklogService = StartwindowController.getProductbacklogService();
 		impedimentService = StartwindowController.getImpedimentService();
 		benutzerService = StartwindowController.getBenutzerService();
-		vorname.setText(CurrentBenutzer.vorname);
-		nachname.setText(CurrentBenutzer.nachname);
-		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
 	}
 	
 }

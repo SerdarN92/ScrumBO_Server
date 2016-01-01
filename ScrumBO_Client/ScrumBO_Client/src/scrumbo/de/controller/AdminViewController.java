@@ -34,6 +34,8 @@ public class AdminViewController implements Initializable {
 	private Button		buttonBack;
 	@FXML
 	private Button		buttonAddSM;
+	@FXML
+	private Text		txtFail;
 						
 	@FXML
 	private void handleBackButton(ActionEvent event) throws Exception {
@@ -71,21 +73,25 @@ public class AdminViewController implements Initializable {
 	
 	@FXML
 	private void handleSaveButton(ActionEvent event) throws Exception {
-		String changedConfigurationName = txtConfigField.getText();
-		ScrumBOClient.setDatabaseconfigfile(changedConfigurationName);
-		txtSuccess.setVisible(true);
-		Timer timer = new Timer(2000, new ActionListener() {
-			
-			@Override
-			public void actionPerformed(java.awt.event.ActionEvent e) {
-				txtSuccess.setVisible(false);
+		if (txtConfigField.getText().isEmpty()) {
+			txtFail.setVisible(true);
+		} else {
+			txtFail.setVisible(false);
+			String changedConfigurationName = txtConfigField.getText();
+			ScrumBOClient.setDatabaseconfigfile(changedConfigurationName);
+			txtSuccess.setVisible(true);
+			Timer timer = new Timer(2000, new ActionListener() {
 				
-			}
-			
-		});
-		timer.setRepeats(false);
-		timer.start();
-		
+				@Override
+				public void actionPerformed(java.awt.event.ActionEvent e) {
+					txtSuccess.setVisible(false);
+					
+				}
+				
+			});
+			timer.setRepeats(false);
+			timer.start();
+		}
 	}
 	
 	@Override

@@ -26,12 +26,6 @@ public class ProjectCreateController implements Initializable {
 	Scene				scene;
 	ScrumprojektService	scrumprojektService	= null;
 	@FXML
-	private Text		vorname;
-	@FXML
-	private Text		nachname;
-	@FXML
-	private Text		benutzerrolle;
-	@FXML
 	private Button		buttonLogout;
 	@FXML
 	private Button		buttonBack;
@@ -88,8 +82,7 @@ public class ProjectCreateController implements Initializable {
 				scrumproject.setBenutzer(benutzerliste);
 				
 				if (scrumprojektService.createProject(scrumproject)) {
-					this.root = FXMLLoader
-							.load(getClass().getResource("/scrumbo/de/gui/ProjectCreateSuccess.fxml"));
+					this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ProjectCreateSuccess.fxml"));
 					this.scene = new Scene(root);
 					Stage stage = (Stage) buttonLogout.getScene().getWindow();
 					stage.setScene(scene);
@@ -138,9 +131,6 @@ public class ProjectCreateController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		scrumprojektService = StartwindowController.getScrumprojektService();
-		vorname.setText(CurrentBenutzer.vorname);
-		nachname.setText(CurrentBenutzer.nachname);
-		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
 	}
 	
 }

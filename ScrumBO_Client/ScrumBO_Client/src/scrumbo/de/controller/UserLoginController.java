@@ -64,8 +64,10 @@ public class UserLoginController implements Initializable {
 	private void handleLoginButton(ActionEvent event) throws Exception {
 		if (checkEmail() && checkPassword()) {
 			if (!benutzerService.checkIfEmailExists(txtFieldEmail.getText())) {
-			
+				emailValidFail.setText("Benutzer mit dieser E-Mail existiert nicht.");
+				emailValidFail.setVisible(true);
 			} else {
+				emailValidFail.setVisible(false);
 				benutzer = benutzerService.getBenutzer();
 				CurrentBenutzer.benutzerID = benutzer.getId();
 				CurrentBenutzer.vorname = benutzer.getVorname();
@@ -77,8 +79,7 @@ public class UserLoginController implements Initializable {
 					emailValidFail.setVisible(false);
 					passwordValidFail.setVisible(false);
 					if (CurrentBenutzer.passwort.equals("12345678")) {
-						this.root = FXMLLoader
-								.load(getClass().getResource("/scrumbo/de/gui/UserChangePassword.fxml"));
+						this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/UserChangePassword.fxml"));
 						this.scene = new Scene(root);
 						Stage stage = (Stage) buttonLoginUser.getScene().getWindow();
 						stage.setScene(scene);
@@ -89,8 +90,7 @@ public class UserLoginController implements Initializable {
 							Stage stage = (Stage) buttonLoginUser.getScene().getWindow();
 							stage.setScene(scene);
 						} else {
-							this.root = FXMLLoader
-									.load(getClass().getResource("/scrumbo/de/gui/ProjectLogin.fxml"));
+							this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ProjectLogin.fxml"));
 							this.scene = new Scene(root);
 							Stage stage = (Stage) buttonLoginUser.getScene().getWindow();
 							stage.setScene(scene);

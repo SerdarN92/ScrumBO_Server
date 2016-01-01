@@ -100,8 +100,9 @@ public class DefinitionOfDoneREST {
 		
 		DefinitionOfDoneDTO definitionOfDoneDTO = gson.fromJson(definitionOfDoneDetails, DefinitionOfDoneDTO.class);
 		DefinitionOfDoneService definitionOfDoneService = new DefinitionOfDoneService(hibernateconfigfilename);
-		DefinitionOfDone definitionOfDone = new DefinitionOfDone(definitionOfDoneDTO.getId(),
-				definitionOfDoneDTO.getKriterium(), definitionOfDoneDTO.getStatus());
+		DefinitionOfDone definitionOfDone = definitionOfDoneService.findById(definitionOfDoneDTO.getId());
+		definitionOfDone.setKriterium(definitionOfDoneDTO.getKriterium());
+		definitionOfDone.setStatus(definitionOfDoneDTO.getStatus());
 		String output = "";
 		try {
 			definitionOfDoneService.update(definitionOfDone);

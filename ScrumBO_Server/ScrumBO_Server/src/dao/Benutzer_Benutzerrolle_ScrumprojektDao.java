@@ -198,4 +198,32 @@ public class Benutzer_Benutzerrolle_ScrumprojektDao
 		return admission;
 	}
 	
+	public boolean checkAdmin(Integer benutzerId) {
+		Benutzer_Benutzerrolle_Scrumprojekt benutzer = null;
+		boolean admin = false;
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				benutzer = (Benutzer_Benutzerrolle_Scrumprojekt) s
+						.createQuery(
+								"from Benutzer_Benutzerrolle_Scrumprojekt WHERE benutzerId LIKE '" + benutzerId + "'")
+						.uniqueResult();
+				s.getTransaction().commit();
+				s.close();
+				if (benutzer != null) {
+					if (benutzer.getPk().getBenutzerrollenId() == 4) {
+						admin = true;
+					}
+				}
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return admin;
+	}
+	
 }

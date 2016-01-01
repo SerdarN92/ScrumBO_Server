@@ -250,4 +250,19 @@ public class BenutzerREST {
 		
 		return Response.status(200).entity(output).build();
 	}
+	
+	@GET
+	@Path("/checkAdmin/{benutzerId}/{hibernateconfigfilename}")
+	@Produces("application/json" + ";charset=utf-8")
+	public Response checkAdmin(@PathParam("hibernateconfigfilename") String hibernateconfigfilename,
+			@PathParam("benutzerId") Integer benutzerId) throws JSONException {
+		String output = "Nein";
+		Benutzer_Benutzerrolle_ScrumprojektService bbsService = new Benutzer_Benutzerrolle_ScrumprojektService(
+				hibernateconfigfilename);
+		if (bbsService.checkAdmin(benutzerId)) {
+			output = "Ja";
+		}
+		
+		return Response.status(200).entity(output).build();
+	}
 }

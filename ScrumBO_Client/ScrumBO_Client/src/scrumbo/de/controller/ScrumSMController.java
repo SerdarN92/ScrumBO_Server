@@ -23,11 +23,7 @@ public class ScrumSMController implements Initializable {
 	Scene					scene;
 	SprintBacklogController	controller	= null;
 	@FXML
-	private Text			vorname;
-	@FXML
-	private Text			nachname;
-	@FXML
-	private Text			benutzerrolle;
+	private Text			name;
 	@FXML
 	private Text			projektname;
 	@FXML
@@ -110,9 +106,7 @@ public class ScrumSMController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		vorname.setText(CurrentBenutzer.vorname);
-		nachname.setText(CurrentBenutzer.nachname);
-		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
+		name.setText(CurrentBenutzer.vorname + " " + CurrentBenutzer.nachname);
 		projektname.setText(CurrentScrumprojekt.projektname);
 		
 		if (!CurrentBenutzer.isSM)

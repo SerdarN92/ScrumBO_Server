@@ -75,10 +75,15 @@ public class AdminLoginController implements Initializable {
 					CurrentBenutzer.passwort = benutzer.getPasswort();
 					emailValidFail.setVisible(false);
 					passwordValidFail.setVisible(false);
-					this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/AdminView.fxml"));
-					this.scene = new Scene(root);
-					Stage stage = (Stage) buttonLoginUser.getScene().getWindow();
-					stage.setScene(scene);
+					if (benutzerService.checkAdmin()) {
+						this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/AdminView.fxml"));
+						this.scene = new Scene(root);
+						Stage stage = (Stage) buttonLoginUser.getScene().getWindow();
+						stage.setScene(scene);
+					} else {
+						emailValidFail.setText("Benutzer hat keine Admin-Rechte!");
+						emailValidFail.setVisible(true);
+					}
 				} else {
 					passwordValidFail.setText("Passwort ist falsch");
 					passwordValidFail.setVisible(true);

@@ -81,11 +81,13 @@ public class DefinitionOfDoneEditController implements Initializable {
 			}
 			
 			if (definitionofdoneService.updateDefinitionOfDone(definitionOfDone)) {
+				System.out.println("True");
 				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 			} else {
+				System.out.println("False");
 				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
-				stage.close();
+				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 			}
 		}
 	}

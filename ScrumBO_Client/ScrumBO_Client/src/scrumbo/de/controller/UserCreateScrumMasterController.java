@@ -20,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import scrumbo.de.common.LetterTextField;
 import scrumbo.de.entity.Benutzer;
 import scrumbo.de.entity.Benutzerrolle;
@@ -57,10 +58,8 @@ public class UserCreateScrumMasterController implements Initializable {
 							
 	@FXML
 	private void handleButtonAbbort(ActionEvent event) throws IOException {
-		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/AdminView.fxml"));
-		this.scene = new Scene(root);
 		Stage stage = (Stage) buttonAbbort.getScene().getWindow();
-		stage.setScene(scene);
+		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 	}
 	
 	@FXML

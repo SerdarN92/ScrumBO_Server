@@ -21,11 +21,7 @@ public class ScrumController implements Initializable {
 	Parent			root;
 	Scene			scene;
 	@FXML
-	private Text	vorname;
-	@FXML
-	private Text	nachname;
-	@FXML
-	private Text	benutzerrolle;
+	private Text	name;
 	@FXML
 	private Text	projektname;
 	@FXML
@@ -71,8 +67,9 @@ public class ScrumController implements Initializable {
 	}
 	
 	@FXML
-	private void handleImageImpedimentbacklog(MouseEvent event) throws Exception {
-		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ImpedimentBacklog.fxml"));
+	private void handleImageBurndownChart(MouseEvent event) throws Exception {
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		this.root = fxmlLoader.load(getClass().getResource("/scrumbo/de/gui/BurndownChart.fxml"));
 		this.scene = new Scene(root);
 		Stage stage = (Stage) buttonLogout.getScene().getWindow();
 		stage.setScene(scene);
@@ -81,9 +78,7 @@ public class ScrumController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		vorname.setText(CurrentBenutzer.vorname);
-		nachname.setText(CurrentBenutzer.nachname);
-		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
+		name.setText(CurrentBenutzer.vorname + " " + CurrentBenutzer.nachname);
 		projektname.setText(CurrentScrumprojekt.projektname);
 	}
 	

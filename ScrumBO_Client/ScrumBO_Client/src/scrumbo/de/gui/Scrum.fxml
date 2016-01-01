@@ -21,13 +21,14 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <Label layoutX="324.0" layoutY="56.0" text="Eingeloggter User:" />
-      <Label layoutX="324.0" layoutY="79.0" text="Benutzerrolle" />
-      <Text fx:id="benutzerrolle" layoutX="422.0" layoutY="92.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="120.0" />
-      <Text fx:id="nachname" layoutX="557.0" layoutY="68.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="91.0" />
-      <Text fx:id="vorname" layoutX="444.0" layoutY="69.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="97.9999989271164" />
-      <Label layoutX="75.0" layoutY="129.0" text="Projektname:" />
-      <Text fx:id="projektname" layoutX="153.0" layoutY="142.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="129.13671875" />
+      <Label layoutX="323.0" layoutY="86.0" text="Projektname:">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
+      <Text fx:id="projektname" layoutX="423.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="129.13671875">
+         <font>
+            <Font size="16.0" />
+         </font></Text>
       <ImageView fx:id="imageProductBacklog" fitHeight="150.0" fitWidth="200.0" layoutX="173.0" layoutY="225.0" onMouseClicked="#handleImageProductbacklog" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../content/1447611415_news.png" />
@@ -44,10 +45,13 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <ImageView fx:id="imageSprintBurndownChart" fitHeight="150.0" fitWidth="200.0" layoutX="722.0" layoutY="225.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="imageSprintBurndownChart" fitHeight="150.0" fitWidth="200.0" layoutX="722.0" layoutY="225.0" onMouseClicked="#handleImageBurndownChart" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../content/1447611438_statistic.png" />
          </image>
+         <cursor>
+            <Cursor fx:constant="HAND" />
+         </cursor>
       </ImageView>
       <Label fx:id="labelProductbacklog" layoutX="176.0" layoutY="389.0" text="Product Backlog">
          <font>
@@ -64,6 +68,16 @@
             <Font size="20.0" />
          </font>
       </Label>
+      <Label layoutX="323.0" layoutY="58.0" text="Benutzer:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Text fx:id="name" layoutX="419.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="266.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
    </children>
    <cursor>
       <Cursor fx:constant="DEFAULT" />

@@ -211,9 +211,9 @@ public class SprintBacklogAddUserStoryController implements Initializable {
 				
 				if (click.getClickCount() == 1) {
 					selectedUserStoryTask = listViewUserStoryTask.getSelectionModel().getSelectedItem();
-					System.out.println(selectedUserStoryTask.getBeschreibung());
-					buttonRemoveTask.setDisable(false);
-					
+					if (selectedUserStoryTask != null) {
+						buttonRemoveTask.setDisable(false);
+					}
 					listViewUserStoryTask.setOnKeyPressed(new EventHandler<KeyEvent>() {
 						@Override
 						public void handle(KeyEvent event) {
