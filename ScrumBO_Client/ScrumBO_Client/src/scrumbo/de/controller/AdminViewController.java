@@ -63,6 +63,7 @@ public class AdminViewController implements Initializable {
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.setScene(new Scene(root1));
 			stage.show();
+			stage.setResizable(false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

@@ -57,7 +57,7 @@ public class SprintBacklogController implements Initializable {
 	private Text							sprintNumber;
 											
 	public ObservableList<UserStory>		dataSprintBacklog		= FXCollections.observableArrayList();
-	private static Integer					anzahlSprints			= 0;
+	public static Integer					anzahlSprints			= 0;
 																	
 	public static SprintBacklogController	controller				= null;
 																	

@@ -19,32 +19,32 @@ import scrumbo.de.entity.CurrentScrumprojekt;
 
 public class ScrumSMController implements Initializable {
 	
-	Parent						root;
-	Scene						scene;
+	Parent					root;
+	Scene					scene;
 	SprintBacklogController	controller	= null;
 	@FXML
-	private Text				vorname;
+	private Text			vorname;
 	@FXML
-	private Text				nachname;
+	private Text			nachname;
 	@FXML
-	private Text				benutzerrolle;
+	private Text			benutzerrolle;
 	@FXML
-	private Text				projektname;
+	private Text			projektname;
 	@FXML
-	private Button				buttonLogout;
+	private Button			buttonLogout;
 	@FXML
-	private Button				buttonAddProjectUser;
-								
+	private Button			buttonAddProjectUser;
+							
 	@FXML
 	private void handleButtonAddProjectUser(ActionEvent event) throws Exception {
 		try {
-			FXMLLoader fxmlLoader = new FXMLLoader(
-					getClass().getResource("/scrumbo/de/gui/UserCreateForProject.fxml"));
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/scrumbo/de/gui/UserCreateForProject.fxml"));
 			Parent root1 = (Parent) fxmlLoader.load();
 			Stage stage = new Stage();
 			stage.initModality(Modality.APPLICATION_MODAL);
 			stage.setScene(new Scene(root1));
 			stage.show();
+			stage.setResizable(false);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -68,7 +68,7 @@ public class ScrumSMController implements Initializable {
 		this.scene = new Scene(root);
 		Stage stage = (Stage) buttonLogout.getScene().getWindow();
 		stage.setScene(scene);
-		
+		stage.setResizable(false);
 	}
 	
 	@FXML
@@ -77,22 +77,26 @@ public class ScrumSMController implements Initializable {
 		this.scene = new Scene(root);
 		Stage stage = (Stage) buttonLogout.getScene().getWindow();
 		stage.setScene(scene);
+		stage.setResizable(false);
 	}
 	
 	@FXML
 	private void handleImageSprintbacklog(MouseEvent event) throws Exception {
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/SprintBacklog.fxml"));
 		this.scene = new Scene(root);
-		// FXMLLoader fxmlloader = new FXMLLoader();
-		// URL location =
-		// getClass().getResource("/scrumbo/de/gui/SprintBacklog.fxml");
-		// fxmlloader.setLocation(location);
-		// AnchorPane pane = fxmlloader.load();
-		// controller = (FXMLSprintBacklogController)
-		// fxmlloader.getController();
 		Stage stage = (Stage) buttonLogout.getScene().getWindow();
 		stage.setScene(scene);
-		
+		stage.setResizable(false);
+	}
+	
+	@FXML
+	private void handleImageBurndownChart(MouseEvent event) throws Exception {
+		FXMLLoader fxmlLoader = new FXMLLoader();
+		this.root = fxmlLoader.load(getClass().getResource("/scrumbo/de/gui/BurndownChart.fxml"));
+		this.scene = new Scene(root);
+		Stage stage = (Stage) buttonLogout.getScene().getWindow();
+		stage.setScene(scene);
+		stage.setResizable(false);
 	}
 	
 	@FXML
@@ -101,6 +105,7 @@ public class ScrumSMController implements Initializable {
 		this.scene = new Scene(root);
 		Stage stage = (Stage) buttonLogout.getScene().getWindow();
 		stage.setScene(scene);
+		stage.setResizable(false);
 	}
 	
 	@Override

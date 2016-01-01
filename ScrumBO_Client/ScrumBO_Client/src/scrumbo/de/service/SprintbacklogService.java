@@ -13,6 +13,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import scrumbo.de.app.ScrumBOClient;
+import scrumbo.de.entity.CurrentBurndownChart;
 import scrumbo.de.entity.CurrentScrumprojekt;
 import scrumbo.de.entity.CurrentSprint;
 import scrumbo.de.entity.Sprint;
@@ -74,6 +75,15 @@ public class SprintbacklogService {
 		CurrentSprint.id = sprint.getId();
 		CurrentSprint.sprintnummer = sprint.getSprintnummer();
 		CurrentSprint.status = sprint.getStatus();
+		if (sprint.getBurndownChart() != null) {
+			CurrentBurndownChart.id = sprint.getBurndownChart().getId();
+			CurrentBurndownChart.tage = sprint.getBurndownChart().getTage();
+			CurrentBurndownChart.points = sprint.getBurndownChart().getBurndownChartPoint();
+		} else {
+			CurrentBurndownChart.id = null;
+			CurrentBurndownChart.tage = null;
+			CurrentBurndownChart.points = null;
+		}
 	}
 	
 	public void ladeSprint() {
@@ -102,6 +112,15 @@ public class SprintbacklogService {
 		CurrentSprint.id = sprint.getId();
 		CurrentSprint.sprintnummer = sprint.getSprintnummer();
 		CurrentSprint.status = sprint.getStatus();
+		if (sprint.getBurndownChart() != null) {
+			CurrentBurndownChart.id = sprint.getBurndownChart().getId();
+			CurrentBurndownChart.tage = sprint.getBurndownChart().getTage();
+			CurrentBurndownChart.points = sprint.getBurndownChart().getBurndownChartPoint();
+		} else {
+			CurrentBurndownChart.id = null;
+			CurrentBurndownChart.tage = null;
+			CurrentBurndownChart.points = null;
+		}
 	}
 	
 	public Integer ladeAnzahlSprints() {

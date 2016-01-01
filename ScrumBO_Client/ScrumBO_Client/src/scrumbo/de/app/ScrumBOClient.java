@@ -64,6 +64,7 @@ public class ScrumBOClient extends Application {
 		
 		stage.setScene(scene);
 		stage.show();
+		stage.setResizable(false);
 	}
 	
 	public static void main(String[] args) {

@@ -42,18 +42,20 @@ public class SprintREST {
 		if (sprintnummer > 0) {
 			sprint = sprintService.findByProjectIdandSprintNumber(scrumprojektid, sprintnummer);
 			sprintDTO = new SprintDTO(sprint.getId(), sprint.getSprintnummer(), sprint.getStatus());
-			BurndownChartDTO burndownchartDTO = new BurndownChartDTO(sprint.getBurndownChart().getId(),
-					sprint.getBurndownChart().getTage());
-			List<BurndownChartPointDTO> burndownchartPointDTOListe = new LinkedList<BurndownChartPointDTO>();
-			for (int i = 0; i < sprint.getBurndownChart().getBurndownChartPoint().size(); i++) {
-				BurndownChartPointDTO burndownchartPointDTO = new BurndownChartPointDTO();
-				burndownchartPointDTO.setId(sprint.getBurndownChart().getBurndownChartPoint().get(i).getId());
-				burndownchartPointDTO.setX(sprint.getBurndownChart().getBurndownChartPoint().get(i).getX());
-				burndownchartPointDTO.setY(sprint.getBurndownChart().getBurndownChartPoint().get(i).getY());
-				burndownchartPointDTOListe.add(burndownchartPointDTO);
+			if (sprint.getBurndownChart() != null) {
+				BurndownChartDTO burndownchartDTO = new BurndownChartDTO(sprint.getBurndownChart().getId(),
+						sprint.getBurndownChart().getTage());
+				List<BurndownChartPointDTO> burndownchartPointDTOListe = new LinkedList<BurndownChartPointDTO>();
+				for (int i = 0; i < sprint.getBurndownChart().getBurndownChartPoint().size(); i++) {
+					BurndownChartPointDTO burndownchartPointDTO = new BurndownChartPointDTO();
+					burndownchartPointDTO.setId(sprint.getBurndownChart().getBurndownChartPoint().get(i).getId());
+					burndownchartPointDTO.setX(sprint.getBurndownChart().getBurndownChartPoint().get(i).getX());
+					burndownchartPointDTO.setY(sprint.getBurndownChart().getBurndownChartPoint().get(i).getY());
+					burndownchartPointDTOListe.add(burndownchartPointDTO);
+				}
+				burndownchartDTO.setBurndownChartPoint(burndownchartPointDTOListe);
+				sprintDTO.setBurndownChart(burndownchartDTO);
 			}
-			burndownchartDTO.setBurndownChartPoint(burndownchartPointDTOListe);
-			sprintDTO.setBurndownChart(burndownchartDTO);
 		}
 		
 		Gson gson = new Gson();
@@ -122,19 +124,21 @@ public class SprintREST {
 		sprintService.persist(sprint);
 		sprint = sprintService.findByProjectIdandSprintNumber(scrumprojektid, sprintnummer + 1);
 		sprintDTO = new SprintDTO(sprint.getId(), sprint.getSprintnummer(), sprint.getStatus());
-		BurndownChartDTO burndownchartDTO = new BurndownChartDTO();
-		burndownchartDTO.setId(sprint.getBurndownChart().getId());
-		burndownchartDTO.setTage(sprint.getBurndownChart().getTage());
-		List<BurndownChartPointDTO> burndownchartPointDTOListe = new LinkedList<BurndownChartPointDTO>();
-		for (int i = 0; i < sprint.getBurndownChart().getBurndownChartPoint().size(); i++) {
-			BurndownChartPointDTO burndownchartPointDTO = new BurndownChartPointDTO();
-			burndownchartPointDTO.setId(sprint.getBurndownChart().getBurndownChartPoint().get(i).getId());
-			burndownchartPointDTO.setX(sprint.getBurndownChart().getBurndownChartPoint().get(i).getX());
-			burndownchartPointDTO.setY(sprint.getBurndownChart().getBurndownChartPoint().get(i).getY());
-			burndownchartPointDTOListe.add(burndownchartPointDTO);
+		if (sprint.getBurndownChart() != null) {
+			BurndownChartDTO burndownchartDTO = new BurndownChartDTO();
+			burndownchartDTO.setId(sprint.getBurndownChart().getId());
+			burndownchartDTO.setTage(sprint.getBurndownChart().getTage());
+			List<BurndownChartPointDTO> burndownchartPointDTOListe = new LinkedList<BurndownChartPointDTO>();
+			for (int i = 0; i < sprint.getBurndownChart().getBurndownChartPoint().size(); i++) {
+				BurndownChartPointDTO burndownchartPointDTO = new BurndownChartPointDTO();
+				burndownchartPointDTO.setId(sprint.getBurndownChart().getBurndownChartPoint().get(i).getId());
+				burndownchartPointDTO.setX(sprint.getBurndownChart().getBurndownChartPoint().get(i).getX());
+				burndownchartPointDTO.setY(sprint.getBurndownChart().getBurndownChartPoint().get(i).getY());
+				burndownchartPointDTOListe.add(burndownchartPointDTO);
+			}
+			burndownchartDTO.setBurndownChartPoint(burndownchartPointDTOListe);
+			sprintDTO.setBurndownChart(burndownchartDTO);
 		}
-		burndownchartDTO.setBurndownChartPoint(burndownchartPointDTOListe);
-		sprintDTO.setBurndownChart(burndownchartDTO);
 		
 		Gson gson = new Gson();
 		String output = gson.toJson(sprintDTO);

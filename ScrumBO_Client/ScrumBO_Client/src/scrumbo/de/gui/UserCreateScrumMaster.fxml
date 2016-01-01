@@ -39,12 +39,12 @@
       <LetterTextField fx:id="txtFieldPrename" layoutX="282.0" layoutY="149.0" />
       <LetterTextField fx:id="txtFieldLastname" layoutX="282.0" layoutY="191.0" />
       <TextField fx:id="txtFieldEmail" layoutX="282.0" layoutY="232.0" prefHeight="25.0" prefWidth="180.0" />
-      <Button fx:id="buttonCreateSM" layoutX="282.0" layoutY="301.0" mnemonicParsing="false" onAction="#handleButtonCreateSM" text="Scrum Master anlegen">
+      <Button fx:id="buttonCreateSM" layoutX="282.0" layoutY="283.0" mnemonicParsing="false" onAction="#handleButtonCreateSM" text="Scrum Master anlegen">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button fx:id="buttonAbbort" layoutX="69.0" layoutY="301.0" mnemonicParsing="false" onAction="#handleButtonAbbort" text="Abbrechen">
+      <Button fx:id="buttonAbbort" layoutX="68.0" layoutY="283.0" mnemonicParsing="false" onAction="#handleButtonAbbort" text="Abbrechen">
          <font>
             <Font size="16.0" />
          </font>

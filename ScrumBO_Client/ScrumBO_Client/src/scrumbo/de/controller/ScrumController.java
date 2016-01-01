@@ -30,7 +30,7 @@ public class ScrumController implements Initializable {
 	private Text	projektname;
 	@FXML
 	private Button	buttonLogout;
-	
+					
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
 		CurrentBenutzer.benutzerID = -1;

@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.chart.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import scrumbo.de.common.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: WHITE;" stylesheets="@Style.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.BurndownChartController">
+   <children>
+      <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="75.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../content/logoScrumBO.png" />
+         </image>
+      </ImageView>
+      <Button fx:id="buttonLogout" layoutX="860.0" layoutY="58.0" mnemonicParsing="false" onAction="#handleButtonLogout" prefHeight="30.0" prefWidth="98.0" text="Ausloggen">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Label layoutX="392.0" layoutY="54.0" text="Burndown Chart">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Button fx:id="buttonBack" layoutX="750.0" layoutY="58.0" mnemonicParsing="false" onAction="#handleButtonBack" prefHeight="37.0" prefWidth="98.0" text="Zurück">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Pane fx:id="mainPane" layoutX="73.0" layoutY="133.0" prefHeight="422.0" prefWidth="886.0" />
+      <Button fx:id="buttonLoadBurndownChart" layoutX="779.0" layoutY="555.0" mnemonicParsing="false" onAction="#handleButtonLoadBurndownChart" text="Burndown Chart laden">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+   </children>
+   <cursor>
+      <Cursor fx:constant="DEFAULT" />
+   </cursor>
+</AnchorPane>
