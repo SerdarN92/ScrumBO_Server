@@ -3,8 +3,12 @@ package scrumbo.de.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -15,7 +19,10 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
@@ -25,6 +32,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import scrumbo.de.common.MyHBox;
 import scrumbo.de.entity.CurrentBenutzer;
+import scrumbo.de.entity.CurrentBurndownChart;
 import scrumbo.de.entity.CurrentScrumprojekt;
 import scrumbo.de.entity.CurrentSprint;
 import scrumbo.de.entity.Sprint;
@@ -55,6 +63,8 @@ public class SprintBacklogController implements Initializable {
 	private VBox							VBOXUserStories;
 	@FXML
 	private Text							sprintNumber;
+	@FXML
+	private Text							tagNumber;
 											
 	public ObservableList<UserStory>		dataSprintBacklog		= FXCollections.observableArrayList();
 	public static Integer					anzahlSprints			= 0;
@@ -63,6 +73,10 @@ public class SprintBacklogController implements Initializable {
 																	
 	private Integer							count					= 0;
 																	
+	public static boolean					editable				= true;
+																	
+	private Timer							timer;
+											
 	public ObservableList<UserStory> getData() {
 		return dataSprintBacklog;
 	}
@@ -72,6 +86,11 @@ public class SprintBacklogController implements Initializable {
 	}
 	
 	public void initLoadOldSprint() {
+		if (CurrentSprint.sprintnummer < sprintbacklogService.ladeAnzahlSprints()) {
+			editable = false;
+		} else {
+			editable = true;
+		}
 		sprintbacklogService.ladeAltenSprint(CurrentSprint.sprintnummer);
 		dataSprintBacklog.clear();
 		VBOXUserStories.getChildren().remove(0, VBOXUserStories.getChildren().size());
@@ -91,7 +110,11 @@ public class SprintBacklogController implements Initializable {
 		}
 		
 		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
-		
+		if (CurrentBurndownChart.tage != null) {
+			tagNumber.setText((CurrentBurndownChart.tage.toString()));
+		} else {
+			tagNumber.setText(null);
+		}
 		if (CurrentSprint.sprintnummer < anzahlSprints) {
 			System.out.println("Ja");
 			buttonStartSprint.setDisable(true);
@@ -113,10 +136,18 @@ public class SprintBacklogController implements Initializable {
 	@FXML
 	private void handleButtonStartSprint(ActionEvent event) throws Exception {
 		try {
-			sprintbacklogService.createBurndownChart();
-			buttonEndDay.setDisable(false);
-			buttonCreateNewSprint.setDisable(false);
-			buttonStartSprint.setDisable(true);
+			if (sprintbacklogService.createBurndownChart()) {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Sprint starten");
+				alert.setHeaderText(null);
+				alert.setContentText("Sprint Nr." + CurrentSprint.sprintnummer + " wurde gestartet!");
+				alert.showAndWait();
+				buttonEndDay.setDisable(false);
+				buttonCreateNewSprint.setDisable(false);
+				buttonStartSprint.setDisable(true);
+				reloadSprintBacklog();
+			}
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -171,6 +202,8 @@ public class SprintBacklogController implements Initializable {
 				public void handle(WindowEvent event) {
 					try {
 						reloadSprintBacklog();
+						if (!dataSprintBacklog.isEmpty())
+							buttonStartSprint.setDisable(false);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -185,8 +218,17 @@ public class SprintBacklogController implements Initializable {
 	@FXML
 	private void handleButtonEndDay(ActionEvent event) throws Exception {
 		if (count == 0) {
-			sprintbacklogService.endDay();
-			count++;
+			if (sprintbacklogService.endDay()) {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Tag beenden");
+				alert.setHeaderText(null);
+				alert.setContentText("Tag " + tagNumber.getText() + " wurde beendet.");
+				alert.showAndWait();
+				count++;
+				Integer number = Integer.parseInt(tagNumber.getText());
+				number++;
+				tagNumber.setText(number.toString());
+			}
 		}
 		count = 0;
 	}
@@ -194,11 +236,13 @@ public class SprintBacklogController implements Initializable {
 	@FXML
 	private void handleButtonBack(ActionEvent event) throws Exception {
 		if (CurrentBenutzer.isSM) {
+			timer.cancel();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonLogout.getScene().getWindow();
 			stage.setScene(scene);
 		} else {
+			timer.cancel();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Scrum.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonLogout.getScene().getWindow();
@@ -220,6 +264,8 @@ public class SprintBacklogController implements Initializable {
 		CurrentScrumprojekt.projektname = null;
 		CurrentBenutzer.isSM = false;
 		
+		timer.cancel();
+		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		this.scene = new Scene(root);
 		Stage stage = (Stage) buttonLogout.getScene().getWindow();
@@ -229,6 +275,7 @@ public class SprintBacklogController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		editable = true;
 		sprintbacklogService = StartwindowController.getSprintbacklogService();
 		anzahlSprints = sprintbacklogService.ladeAnzahlSprints();
 		initSprintBacklog();
@@ -248,6 +295,9 @@ public class SprintBacklogController implements Initializable {
 		}
 		
 		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
+		if (CurrentBurndownChart.tage != null) {
+			tagNumber.setText(CurrentBurndownChart.tage.toString());
+		}
 		
 		controller = this;
 		
@@ -257,6 +307,33 @@ public class SprintBacklogController implements Initializable {
 		} else {
 			buttonStartSprint.setDisable(true);
 		}
+		
+		if (dataSprintBacklog.isEmpty()) {
+			buttonStartSprint.setDisable(true);
+		}
+		
+		if (sprintbacklogService.ladeAnzahlSprints() <= 1) {
+			buttonLoadSprint.setDisable(true);
+		}
+		
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				Platform.runLater(new Runnable() {
+					public void run() {
+						
+						try {
+							System.out.println("Hallo");
+							reloadSprintBacklog();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		}, 0, 10000);
 	}
 	
 	private void initSprintBacklog() {
@@ -320,16 +397,32 @@ public class SprintBacklogController implements Initializable {
 	
 	@FXML
 	public void handleButtonCreateNewSprint(ActionEvent event) throws IOException {
-		Sprint sprint = sprintbacklogService.addNewSprintToSprintBacklog();
-		CurrentSprint.id = sprint.getId();
-		CurrentSprint.sprintnummer = sprint.getSprintnummer();
-		CurrentSprint.status = sprint.getStatus();
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Sprint beenden");
+		alert.setHeaderText(null);
+		alert.setContentText("Wollen Sie diese Sprint wirklich beenden?");
 		
-		reloadSprintBacklog();
+		ButtonType buttonTypeOne = new ButtonType("Ja");
+		ButtonType buttonTypeTwo = new ButtonType("Nein");
+		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
 		
-		buttonStartSprint.setDisable(false);
-		buttonEndDay.setDisable(true);
-		buttonCreateNewSprint.setDisable(true);
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == buttonTypeOne) {
+			alert.close();
+			Sprint sprint = sprintbacklogService.addNewSprintToSprintBacklog();
+			CurrentSprint.id = sprint.getId();
+			CurrentSprint.sprintnummer = sprint.getSprintnummer();
+			CurrentSprint.status = sprint.getStatus();
+			
+			reloadSprintBacklog();
+			
+			buttonStartSprint.setDisable(false);
+			buttonEndDay.setDisable(true);
+			buttonCreateNewSprint.setDisable(true);
+		} else {
+			alert.close();
+		}
+		
 	}
 	
 	public void reloadSprintBacklog() throws IOException {
@@ -352,6 +445,13 @@ public class SprintBacklogController implements Initializable {
 		}
 		
 		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
+		if (CurrentBurndownChart.tage != null) {
+			tagNumber.setText(CurrentBurndownChart.tage.toString());
+		}
+		
+		if (dataSprintBacklog.isEmpty()) {
+			buttonStartSprint.setDisable(true);
+		}
 	}
 	
 }

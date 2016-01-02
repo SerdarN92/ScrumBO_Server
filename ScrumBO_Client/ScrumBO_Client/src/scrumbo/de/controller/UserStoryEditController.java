@@ -2,6 +2,7 @@ package scrumbo.de.controller;
 
 import java.net.URL;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -10,7 +11,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
@@ -46,28 +50,24 @@ public class UserStoryEditController implements Initializable {
 	@FXML
 	private Button			buttonDoD;
 	@FXML
-	private Text			textprioritaet;
-	@FXML
-	private Text			textthema;
-	@FXML
-	private Text			textbeschreibung;
-	@FXML
-	private Text			textakzeptanzkriterien;
-	@FXML
-	private Text			textaufwandintagen;
+	private Text			txtError;
 	private UserStory		data				= null;
 												
 	private Boolean checkPrioritaet() {
 		if (prioritaet.getText().isEmpty()) {
-			textprioritaet.setText("Bitte eine Priorität eingeben");
+			txtError.setText("Bitte eine Priorität eingeben");
+			prioritaet.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		} else {
-			textprioritaet.setVisible(false);
+			txtError.setVisible(false);
 			if (isInteger(prioritaet.getText())) {
+				txtError.setVisible(false);
+				prioritaet.setStyle(null);
 				return true;
 			} else {
-				textprioritaet.setText("Bitte eine ganzzahlige Zahl eingeben.");
-				textprioritaet.setVisible(true);
+				txtError.setText("Bitte eine ganzzahlige Zahl eingeben.");
+				txtError.setVisible(true);
+				prioritaet.setStyle("-fx-border-color:#FF0000;");
 				return false;
 			}
 			
@@ -100,45 +100,60 @@ public class UserStoryEditController implements Initializable {
 	
 	private Boolean checkThema() {
 		if (thema.getText().isEmpty()) {
-			textthema.setText("Bitte ein Thema eingeben");
+			txtError.setText("Bitte ein Thema eingeben");
+			thema.setStyle("-fx-border-color:#FF0000;");
+			txtError.setVisible(true);
 			return false;
 		} else {
-			textthema.setVisible(false);
+			txtError.setVisible(false);
+			thema.setStyle(null);
 			return true;
 		}
 	}
 	
 	private Boolean checkBeschreibung() {
 		if (beschreibung.getText().isEmpty()) {
-			textbeschreibung.setText("Bitte eine Beschreibung eingeben");
+			txtError.setText("Bitte eine Beschreibung eingeben");
+			beschreibung.setStyle("-fx-border-color:#FF0000;");
+			txtError.setVisible(true);
 			return false;
 		} else {
-			textbeschreibung.setVisible(false);
+			txtError.setVisible(false);
+			beschreibung.setStyle(null);
 			return true;
 		}
 	}
 	
 	private Boolean checkAkzeptanzkriterien() {
 		if (akzeptanzkriterien.getText().isEmpty()) {
-			textakzeptanzkriterien.setText("Bitte ein Akzeptanzkriterium eingeben");
+			txtError.setText("Bitte ein Akzeptanzkriterium eingeben");
+			akzeptanzkriterien.setStyle("-fx-border-color:#FF0000;");
+			txtError.setVisible(true);
 			return false;
 		} else {
-			textakzeptanzkriterien.setVisible(false);
+			txtError.setVisible(false);
+			akzeptanzkriterien.setStyle(null);
 			return true;
 		}
 	}
 	
 	private Boolean checkAufwandInTagen() {
 		if (aufwandintagen.getText().isEmpty()) {
-			textaufwandintagen.setText("Bitte einen Aufwand(in Tagen) eingeben");
+			txtError.setText("Bitte einen Aufwand(in Tagen) eingeben");
+			aufwandintagen.setStyle("-fx-border-color:#FF0000;");
+			txtError.setVisible(true);
 			return false;
 		} else {
-			textaufwandintagen.setVisible(false);
+			txtError.setVisible(false);
+			aufwandintagen.setStyle(null);
 			if (isInteger(aufwandintagen.getText())) {
+				aufwandintagen.setStyle(null);
+				txtError.setVisible(false);
 				return true;
 			} else {
-				textaufwandintagen.setText("Bitte eine ganzzahlige Zahl eingeben.");
-				textaufwandintagen.setVisible(true);
+				txtError.setText("Bitte eine ganzzahlige Zahl eingeben.");
+				aufwandintagen.setStyle("-fx-border-color:#FF0000;");
+				txtError.setVisible(true);
 				return false;
 			}
 			
@@ -159,19 +174,59 @@ public class UserStoryEditController implements Initializable {
 		UserStory userstory = new UserStory();
 		userstory.setId(data.getId());
 		
-		if (userstoryService.deleteUserStory(userstory)) {
-			Stage stage = (Stage) buttonDelete.getScene().getWindow();
-			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Userstory bearbeiten");
+		alert.setHeaderText(null);
+		alert.setContentText("Wollen Sie diese Userstory wirklich löschen?");
+		
+		ButtonType buttonTypeOne = new ButtonType("Ja");
+		ButtonType buttonTypeTwo = new ButtonType("Nein");
+		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+		
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == buttonTypeOne) {
+			alert.close();
+			if (userstoryService.deleteUserStory(userstory)) {
+				Alert alert2 = new Alert(AlertType.INFORMATION);
+				alert2.setTitle("Userstory löschen");
+				alert2.setHeaderText(null);
+				alert2.setContentText("Userstory wurde erfolgreich gelöscht!");
+				alert2.showAndWait();
+				Stage stage = (Stage) buttonDelete.getScene().getWindow();
+				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+			} else {
+				Alert alert2 = new Alert(AlertType.INFORMATION);
+				alert2.setTitle("Userstory löschen");
+				alert2.setHeaderText(null);
+				alert2.setContentText("Fehler! Userstory wurde nicht gelöscht!");
+				alert2.showAndWait();
+				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
+				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+			}
 		} else {
-			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
-			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+			alert.close();
 		}
 	}
 	
 	@FXML
 	private void handleButtonAbbort(ActionEvent event) throws Exception {
-		Stage stage = (Stage) buttonAbbort.getScene().getWindow();
-		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Userstory bearbeiten");
+		alert.setHeaderText(null);
+		alert.setContentText("Wollen Sie die Bearbeitung der Userstory wirklich abbrechen?");
+		
+		ButtonType buttonTypeOne = new ButtonType("Ja");
+		ButtonType buttonTypeTwo = new ButtonType("Nein");
+		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+		
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == buttonTypeOne) {
+			alert.close();
+			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
+			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+		} else {
+			alert.close();
+		}
 	}
 	
 	@FXML
@@ -198,9 +253,19 @@ public class UserStoryEditController implements Initializable {
 				}
 				
 				if (userstoryService.updateUserStory(userstory)) {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Userstory bearbeiten");
+					alert.setHeaderText(null);
+					alert.setContentText("Userstory wurde erfolgreich bearbeitet!");
+					alert.showAndWait();
 					Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 					stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 				} else {
+					Alert alert = new Alert(AlertType.ERROR);
+					alert.setTitle("Userstory bearbeiten");
+					alert.setHeaderText(null);
+					alert.setContentText("Fehler! Userstory wurde nicht erfolgreich bearbeitet!");
+					alert.showAndWait();
 					Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 					stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 				}

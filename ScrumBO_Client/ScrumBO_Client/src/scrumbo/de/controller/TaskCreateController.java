@@ -46,6 +46,13 @@ public class TaskCreateController implements Initializable {
 	private UserStoryTask		task				= new UserStoryTask();
 													
 	@FXML
+	private void handleButtonAbbort(ActionEvent event) throws Exception {
+		SprintBacklogAddUserStoryController.addedUserStoryTask = null;
+		Stage stage = (Stage) buttonAdd.getScene().getWindow();
+		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+	}
+	
+	@FXML
 	private void handleButtonAdd(ActionEvent event) throws Exception {
 		task.setBeschreibung(taskbeschreibung.getText());
 		task.setAufwandinstunden(Integer.parseInt(aufwandinstunden.getText()));

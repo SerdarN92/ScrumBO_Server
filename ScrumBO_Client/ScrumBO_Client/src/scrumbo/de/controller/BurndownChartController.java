@@ -3,7 +3,10 @@ package scrumbo.de.controller;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -50,15 +53,18 @@ public class BurndownChartController implements Initializable {
 	private LineChart<String, Number>	lineChart	= new LineChart<String, Number>(xAxis, yAxis);
 	private XYChart.Series				series;
 	private XYChart.Series				series2;
+	private Timer						timer;
 										
 	@FXML
 	private void handleButtonBack(ActionEvent event) throws Exception {
 		if (CurrentBenutzer.isSM) {
+			timer.cancel();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonLogout.getScene().getWindow();
 			stage.setScene(scene);
 		} else {
+			timer.cancel();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Scrum.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonLogout.getScene().getWindow();
@@ -121,6 +127,7 @@ public class BurndownChartController implements Initializable {
 	
 	public void initLoadOldSprint() {
 		sprintbacklogService.ladeAltenSprint(CurrentSprint.sprintnummer);
+		
 	}
 	
 	@FXML
@@ -136,6 +143,8 @@ public class BurndownChartController implements Initializable {
 		CurrentScrumprojekt.scrumprojektID = -1;
 		CurrentScrumprojekt.projektname = null;
 		CurrentBenutzer.isSM = false;
+		
+		timer.cancel();
 		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		this.scene = new Scene(root);
@@ -155,6 +164,28 @@ public class BurndownChartController implements Initializable {
 		
 		mainPane.getChildren().removeAll();
 		initBurndownChart();
+		
+		if (sprintbacklogService.ladeAnzahlSprints() <= 1) {
+			buttonLoadBurndownChart.setDisable(true);
+		}
+		
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				Platform.runLater(new Runnable() {
+					public void run() {
+						
+						try {
+							reloadBurndownChart();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		}, 0, 10000);
 	}
 	
 	private void initBurndownChart() {
@@ -190,6 +221,37 @@ public class BurndownChartController implements Initializable {
 		}
 		
 		mainPane.getChildren().add(lineChart);
+	}
+	
+	public void reloadBurndownChart() {
+		sprintbacklogService = new SprintbacklogService();
+		sprintbacklogService.ladeSprint();
+		burndownChartId = CurrentBurndownChart.id;
+		tage = CurrentBurndownChart.tage;
+		points = CurrentBurndownChart.points;
+		
+		lineChart.getData().remove(series);
+		lineChart.getData().remove(series2);
+		
+		series.getData().clear();
+		series2.getData().clear();
+		
+		if (points != null && points.size() > 0) {
+			
+			for (int i = 0; i < points.size(); i++) {
+				series.getData().add(new Data("Tag " + i, points.get(i).getY()));
+			}
+			
+			series2.getData().add(new Data("Tag 0", points.get(0).getY()));
+			if (points.size() > 0) {
+				series2.getData().add(new Data("Tag " + (points.size() - 1), points.get(points.size() - 1).getY()));
+			}
+			
+			lineChart.getData().add(series);
+			lineChart.getData().add(series2);
+		}
+		
+		lineChart.setTitle("zu Sprint " + CurrentSprint.sprintnummer);
 	}
 	
 }

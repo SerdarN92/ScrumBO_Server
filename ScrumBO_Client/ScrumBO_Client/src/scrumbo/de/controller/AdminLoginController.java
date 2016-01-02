@@ -65,9 +65,12 @@ public class AdminLoginController implements Initializable {
 				emailValidFail
 						.setText("Benutzer mit dieser E-Mail Adresse existiert nicht! Bitte registrieren Sie sich.");
 				emailValidFail.setVisible(true);
+				txtFieldEmail.setStyle("-fx-border-color:#FF0000;");
 			} else {
+				txtFieldEmail.setStyle(null);
 				benutzer = benutzerService.getBenutzer();
 				if (pswtFieldPassword.getText().equals(benutzer.getPasswort())) {
+					pswtFieldPassword.setStyle(null);
 					CurrentBenutzer.benutzerID = benutzer.getId();
 					CurrentBenutzer.vorname = benutzer.getVorname();
 					CurrentBenutzer.nachname = benutzer.getNachname();
@@ -87,6 +90,7 @@ public class AdminLoginController implements Initializable {
 				} else {
 					passwordValidFail.setText("Passwort ist falsch");
 					passwordValidFail.setVisible(true);
+					pswtFieldPassword.setStyle("-fx-border-color:#FF0000;");
 				}
 				
 			}
@@ -96,9 +100,11 @@ public class AdminLoginController implements Initializable {
 	private Boolean checkEmail() {
 		if (txtFieldEmail.getText().contains("@")) {
 			emailValidFail.setText(null);
+			txtFieldEmail.setStyle(null);
 			return true;
 		} else {
 			emailValidFail.setText("Ungültige E-Mail");
+			txtFieldEmail.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		}
 	}
@@ -106,9 +112,11 @@ public class AdminLoginController implements Initializable {
 	private Boolean checkPassword() throws Exception {
 		if (!(pswtFieldPassword.getText().isEmpty())) {
 			passwordValidFail.setText(null);
+			pswtFieldPassword.setStyle(null);
 			return true;
 		} else {
 			passwordValidFail.setText("Bitte ein Passwort eingeben");
+			pswtFieldPassword.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		}
 	}

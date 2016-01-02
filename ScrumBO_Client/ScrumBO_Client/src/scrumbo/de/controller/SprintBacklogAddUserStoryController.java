@@ -9,6 +9,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import org.json.JSONObject;
@@ -27,7 +28,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
@@ -81,15 +85,42 @@ public class SprintBacklogAddUserStoryController implements Initializable {
 																
 	@FXML
 	private void handleButtonAbbort(ActionEvent event) throws Exception {
-		comboBoxUserStory = null;
-		userstoryList = null;
-		currentUserStory = null;
-		listViewUserStoryTask = null;
-		selectedUserStoryTask = null;
-		addedUserStoryTask = null;
+		if (!prioritaet.getText().isEmpty()) {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Userstory übertragen");
+			alert.setHeaderText(null);
+			alert.setContentText("Wollen Sie fortfahren ohne zu speichern?");
+			
+			ButtonType buttonTypeOne = new ButtonType("Ja");
+			ButtonType buttonTypeTwo = new ButtonType("Nein");
+			alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+			
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == buttonTypeOne) {
+				alert.close();
+				comboBoxUserStory = null;
+				userstoryList = null;
+				currentUserStory = null;
+				listViewUserStoryTask = null;
+				selectedUserStoryTask = null;
+				addedUserStoryTask = null;
+				
+				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
+				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+			} else {
+				alert.close();
+			}
+		} else {
+			comboBoxUserStory = null;
+			userstoryList = null;
+			currentUserStory = null;
+			listViewUserStoryTask = null;
+			selectedUserStoryTask = null;
+			addedUserStoryTask = null;
+			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
+			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+		}
 		
-		Stage stage = (Stage) buttonAbbort.getScene().getWindow();
-		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 	}
 	
 	@FXML
@@ -115,9 +146,11 @@ public class SprintBacklogAddUserStoryController implements Initializable {
 				@Override
 				public void handle(WindowEvent event) {
 					try {
-						listViewUserStoryTask.getItems().add(addedUserStoryTask);
-						currentUserStory.getUserstorytask().add(addedUserStoryTask);
-						buttonSave.setDisable(false);
+						if (addedUserStoryTask != null) {
+							listViewUserStoryTask.getItems().add(addedUserStoryTask);
+							currentUserStory.getUserstorytask().add(addedUserStoryTask);
+							buttonSave.setDisable(false);
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -154,11 +187,21 @@ public class SprintBacklogAddUserStoryController implements Initializable {
 				System.out.println("\nRest Service Invoked Successfully..");
 			conn.disconnect();
 			
+			Alert alert = new Alert(AlertType.INFORMATION);
+			alert.setTitle("Userstory übertragen");
+			alert.setHeaderText(null);
+			alert.setContentText("Userstory wurde erfolgreich ins Sprint Backlog übertragen!");
+			alert.showAndWait();
 			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 		} catch (Exception e) {
 			System.out.println("\nError while calling Rest service");
 			e.printStackTrace();
+			Alert alert = new Alert(AlertType.ERROR);
+			alert.setTitle("Userstory übertragen");
+			alert.setHeaderText(null);
+			alert.setContentText("Fehler! Userstory wurde nicht ins Sprint Backlog übertragen!");
+			alert.showAndWait();
 			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 		}

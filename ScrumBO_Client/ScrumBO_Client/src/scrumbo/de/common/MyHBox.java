@@ -91,238 +91,242 @@ public class MyHBox extends HBox {
 		vboxdonetasks.setStyle(
 				"-fx-padding:5px;" + "-fx-border-style: solid;" + "-fx-border-width: 0.3;" + "-fx-border-color: black");
 				
-		vboxtasksinwork.setOnDragEntered(new EventHandler<DragEvent>() {
-			@Override
-			public void handle(DragEvent dragEvent) {
-				vboxtasksinwork.setBlendMode(BlendMode.DIFFERENCE);
-			}
-		});
-		
-		vboxtasksinwork.setOnDragExited(new EventHandler<DragEvent>() {
-			@Override
-			public void handle(DragEvent dragEvent) {
-				vboxtasksinwork.setBlendMode(null);
-			}
-		});
-		
-		vboxtasksinwork.setOnDragOver(new EventHandler<DragEvent>() {
-			@Override
-			public void handle(DragEvent dragEvent) {
-				dragEvent.acceptTransferModes(TransferMode.MOVE);
-				
-				String pane = dragEvent.getDragboard().getString();
-				int userstorytaskid = Integer.parseInt(pane);
-				int platz = -1;
-				if (bla == 1) {
-					for (int i = 0; i < vboxopentasks.getChildren().size(); i++) {
-						if (vboxopentasks.getChildren().get(i).equals(currentPane)) {
-							platz = i;
-						}
-					}
-					vboxtasksinwork.getChildren().add(vboxopentasks.getChildren().get(platz));
-					vboxopentasks.getChildren().remove(currentPane);
-					int taskstatusid = 2;
-					try {
-						updateTaskstatus(userstorytaskid, taskstatusid);
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				if (bla == 3) {
-					for (int i = 0; i < vboxdonetasks.getChildren().size(); i++) {
-						if (vboxdonetasks.getChildren().get(i).equals(currentPane)) {
-							platz = i;
-						}
-					}
-					vboxtasksinwork.getChildren().add(vboxdonetasks.getChildren().get(platz));
-					vboxdonetasks.getChildren().remove(currentPane);
-					int taskstatusid = 2;
-					try {
-						updateTaskstatus(userstorytaskid, taskstatusid);
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				
-			}
-		});
-		
-		vboxtasksinwork.setOnDragDropped(new EventHandler<DragEvent>() {
-			@Override
-			public void handle(DragEvent dragEvent) {
-			}
-		});
-		
-		vboxopentasks.setOnDragEntered(new EventHandler<DragEvent>() {
-			@Override
-			public void handle(DragEvent dragEvent) {
-				vboxopentasks.setBlendMode(BlendMode.DIFFERENCE);
-			}
-		});
-		
-		vboxopentasks.setOnDragExited(new EventHandler<DragEvent>() {
+		if (SprintBacklogController.editable) {
 			
-			@Override
-			public void handle(DragEvent dragEvent) {
-				vboxopentasks.setBlendMode(null);
-				currentPane.setStyle(" -fx-border-radius: 10px; -fx-border-style: solid;" + "-fx-border-width: 0.3;"
-						+ "-fx-border-color: black");
-			}
-		});
-		
-		vboxopentasks.setOnDragOver(new EventHandler<DragEvent>() {
-			@Override
-			public void handle(DragEvent dragEvent) {
-				dragEvent.acceptTransferModes(TransferMode.MOVE);
-				
-				String pane = dragEvent.getDragboard().getString();
-				int userstorytaskid = Integer.parseInt(pane);
-				int platz = -1;
-				if (bla == 2) {
-					for (int i = 0; i < vboxtasksinwork.getChildren().size(); i++) {
-						if (vboxtasksinwork.getChildren().get(i).equals(currentPane)) {
-							platz = i;
-						}
-					}
-					vboxopentasks.getChildren().add(vboxtasksinwork.getChildren().get(platz));
-					vboxtasksinwork.getChildren().remove(currentPane);
-					int taskstatusid = 1;
-					try {
-						updateTaskstatus(userstorytaskid, taskstatusid);
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+			vboxtasksinwork.setOnDragEntered(new EventHandler<DragEvent>() {
+				@Override
+				public void handle(DragEvent dragEvent) {
+					vboxtasksinwork.setBlendMode(BlendMode.DIFFERENCE);
 				}
-				if (bla == 3) {
-					for (int i = 0; i < vboxdonetasks.getChildren().size(); i++) {
-						if (vboxdonetasks.getChildren().get(i).equals(currentPane)) {
-							platz = i;
-						}
-					}
-					vboxopentasks.getChildren().add(vboxdonetasks.getChildren().get(platz));
-					vboxdonetasks.getChildren().remove(currentPane);
-					int taskstatusid = 1;
-					try {
-						updateTaskstatus(userstorytaskid, taskstatusid);
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
+			});
+			
+			vboxtasksinwork.setOnDragExited(new EventHandler<DragEvent>() {
+				@Override
+				public void handle(DragEvent dragEvent) {
+					vboxtasksinwork.setBlendMode(null);
 				}
-				
-			}
-		});
-		
-		vboxopentasks.setOnDragDropped(new EventHandler<DragEvent>() {
-			@Override
-			public void handle(DragEvent dragEvent) {
-			}
-		});
-		
-		vboxdonetasks.setOnDragEntered(new EventHandler<DragEvent>() {
-			@Override
-			public void handle(DragEvent dragEvent) {
-				vboxopentasks.setBlendMode(BlendMode.DIFFERENCE);
-			}
-		});
-		
-		vboxdonetasks.setOnDragExited(new EventHandler<DragEvent>() {
-			@Override
-			public void handle(DragEvent dragEvent) {
-				vboxopentasks.setBlendMode(null);
-			}
-		});
-		
-		vboxdonetasks.setOnDragOver(new EventHandler<DragEvent>() {
-			@Override
-			public void handle(DragEvent dragEvent) {
-				dragEvent.acceptTransferModes(TransferMode.MOVE);
-				
-				String pane = dragEvent.getDragboard().getString();
-				int userstorytaskid = Integer.parseInt(pane);
-				int platz = -1;
-				if (bla == 1) {
-					for (int i = 0; i < vboxopentasks.getChildren().size(); i++) {
-						if (vboxopentasks.getChildren().get(i).equals(currentPane)) {
-							platz = i;
+			});
+			
+			vboxtasksinwork.setOnDragOver(new EventHandler<DragEvent>() {
+				@Override
+				public void handle(DragEvent dragEvent) {
+					dragEvent.acceptTransferModes(TransferMode.MOVE);
+					
+					String pane = dragEvent.getDragboard().getString();
+					int userstorytaskid = Integer.parseInt(pane);
+					int platz = -1;
+					if (bla == 1) {
+						for (int i = 0; i < vboxopentasks.getChildren().size(); i++) {
+							if (vboxopentasks.getChildren().get(i).equals(currentPane)) {
+								platz = i;
+							}
 						}
-					}
-					vboxdonetasks.getChildren().add(vboxopentasks.getChildren().get(platz));
-					vboxopentasks.getChildren().remove(currentPane);
-					int taskstatusid = 3;
-					try {
-						updateTaskstatus(userstorytaskid, taskstatusid);
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-				if (bla == 2) {
-					for (int i = 0; i < vboxtasksinwork.getChildren().size(); i++) {
-						if (vboxtasksinwork.getChildren().get(i).equals(currentPane)) {
-							platz = i;
-						}
-					}
-					vboxdonetasks.getChildren().add(vboxtasksinwork.getChildren().get(platz));
-					vboxtasksinwork.getChildren().remove(currentPane);
-					int taskstatusid = 3;
-					try {
-						updateTaskstatus(userstorytaskid, taskstatusid);
-					} catch (JSONException e) {
-						// TODO Auto-generated catch block
-						e.printStackTrace();
-					}
-				}
-			}
-		});
-		
-		vboxdonetasks.setOnDragDropped(new EventHandler<DragEvent>() {
-			@Override
-			public void handle(DragEvent dragEvent) {
-			}
-		});
-		
-		this.setStyle("-fx-border-style: solid;" + "-fx-border-width: 1;" + "-fx-border-color: black");
-		
-		this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				setUserStory(userstory);
-			}
-		});
-		this.setOnMouseClicked(new EventHandler<MouseEvent>() {
-			@Override
-			public void handle(MouseEvent event) {
-				if (event.getButton().equals(MouseButton.PRIMARY)) {
-					if (event.getClickCount() == 2) {
+						vboxtasksinwork.getChildren().add(vboxopentasks.getChildren().get(platz));
+						vboxopentasks.getChildren().remove(currentPane);
+						int taskstatusid = 2;
 						try {
-							FXMLLoader fxmlLoader = new FXMLLoader(
-									getClass().getResource("/scrumbo/de/gui/SprintBacklogEditUserStory.fxml"));
-							Parent root1 = (Parent) fxmlLoader.load();
-							Stage stage = new Stage();
-							stage.initModality(Modality.APPLICATION_MODAL);
-							stage.setScene(new Scene(root1));
-							stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-								@Override
-								public void handle(WindowEvent event) {
-									try {
-										SprintBacklogController.controller.reloadSprintBacklog();
-									} catch (Exception e) {
-										e.printStackTrace();
-									}
-								}
-							});
-							stage.show();
-						} catch (Exception e) {
+							updateTaskstatus(userstorytaskid, taskstatusid);
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					if (bla == 3) {
+						for (int i = 0; i < vboxdonetasks.getChildren().size(); i++) {
+							if (vboxdonetasks.getChildren().get(i).equals(currentPane)) {
+								platz = i;
+							}
+						}
+						vboxtasksinwork.getChildren().add(vboxdonetasks.getChildren().get(platz));
+						vboxdonetasks.getChildren().remove(currentPane);
+						int taskstatusid = 2;
+						try {
+							updateTaskstatus(userstorytaskid, taskstatusid);
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					
+				}
+			});
+			
+			vboxtasksinwork.setOnDragDropped(new EventHandler<DragEvent>() {
+				@Override
+				public void handle(DragEvent dragEvent) {
+				}
+			});
+			
+			vboxopentasks.setOnDragEntered(new EventHandler<DragEvent>() {
+				@Override
+				public void handle(DragEvent dragEvent) {
+					vboxopentasks.setBlendMode(BlendMode.DIFFERENCE);
+				}
+			});
+			
+			vboxopentasks.setOnDragExited(new EventHandler<DragEvent>() {
+				
+				@Override
+				public void handle(DragEvent dragEvent) {
+					vboxopentasks.setBlendMode(null);
+					currentPane.setStyle(" -fx-border-radius: 10px; -fx-border-style: solid;" + "-fx-border-width: 0.3;"
+							+ "-fx-border-color: black");
+				}
+			});
+			
+			vboxopentasks.setOnDragOver(new EventHandler<DragEvent>() {
+				@Override
+				public void handle(DragEvent dragEvent) {
+					dragEvent.acceptTransferModes(TransferMode.MOVE);
+					
+					String pane = dragEvent.getDragboard().getString();
+					int userstorytaskid = Integer.parseInt(pane);
+					int platz = -1;
+					if (bla == 2) {
+						for (int i = 0; i < vboxtasksinwork.getChildren().size(); i++) {
+							if (vboxtasksinwork.getChildren().get(i).equals(currentPane)) {
+								platz = i;
+							}
+						}
+						vboxopentasks.getChildren().add(vboxtasksinwork.getChildren().get(platz));
+						vboxtasksinwork.getChildren().remove(currentPane);
+						int taskstatusid = 1;
+						try {
+							updateTaskstatus(userstorytaskid, taskstatusid);
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					if (bla == 3) {
+						for (int i = 0; i < vboxdonetasks.getChildren().size(); i++) {
+							if (vboxdonetasks.getChildren().get(i).equals(currentPane)) {
+								platz = i;
+							}
+						}
+						vboxopentasks.getChildren().add(vboxdonetasks.getChildren().get(platz));
+						vboxdonetasks.getChildren().remove(currentPane);
+						int taskstatusid = 1;
+						try {
+							updateTaskstatus(userstorytaskid, taskstatusid);
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					
+				}
+			});
+			
+			vboxopentasks.setOnDragDropped(new EventHandler<DragEvent>() {
+				@Override
+				public void handle(DragEvent dragEvent) {
+				}
+			});
+			
+			vboxdonetasks.setOnDragEntered(new EventHandler<DragEvent>() {
+				@Override
+				public void handle(DragEvent dragEvent) {
+					vboxopentasks.setBlendMode(BlendMode.DIFFERENCE);
+				}
+			});
+			
+			vboxdonetasks.setOnDragExited(new EventHandler<DragEvent>() {
+				@Override
+				public void handle(DragEvent dragEvent) {
+					vboxopentasks.setBlendMode(null);
+				}
+			});
+			
+			vboxdonetasks.setOnDragOver(new EventHandler<DragEvent>() {
+				@Override
+				public void handle(DragEvent dragEvent) {
+					dragEvent.acceptTransferModes(TransferMode.MOVE);
+					
+					String pane = dragEvent.getDragboard().getString();
+					int userstorytaskid = Integer.parseInt(pane);
+					int platz = -1;
+					if (bla == 1) {
+						for (int i = 0; i < vboxopentasks.getChildren().size(); i++) {
+							if (vboxopentasks.getChildren().get(i).equals(currentPane)) {
+								platz = i;
+							}
+						}
+						vboxdonetasks.getChildren().add(vboxopentasks.getChildren().get(platz));
+						vboxopentasks.getChildren().remove(currentPane);
+						int taskstatusid = 3;
+						try {
+							updateTaskstatus(userstorytaskid, taskstatusid);
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					if (bla == 2) {
+						for (int i = 0; i < vboxtasksinwork.getChildren().size(); i++) {
+							if (vboxtasksinwork.getChildren().get(i).equals(currentPane)) {
+								platz = i;
+							}
+						}
+						vboxdonetasks.getChildren().add(vboxtasksinwork.getChildren().get(platz));
+						vboxtasksinwork.getChildren().remove(currentPane);
+						int taskstatusid = 3;
+						try {
+							updateTaskstatus(userstorytaskid, taskstatusid);
+						} catch (JSONException e) {
+							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}
 				}
-			}
-		});
+			});
+			
+			vboxdonetasks.setOnDragDropped(new EventHandler<DragEvent>() {
+				@Override
+				public void handle(DragEvent dragEvent) {
+				}
+			});
+			
+			this.setStyle("-fx-border-style: solid;" + "-fx-border-width: 1;" + "-fx-border-color: black");
+			
+			this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
+					setUserStory(userstory);
+				}
+			});
+			this.setOnMouseClicked(new EventHandler<MouseEvent>() {
+				@Override
+				public void handle(MouseEvent event) {
+					if (event.getButton().equals(MouseButton.PRIMARY)) {
+						if (event.getClickCount() == 2) {
+							try {
+								FXMLLoader fxmlLoader = new FXMLLoader(
+										getClass().getResource("/scrumbo/de/gui/SprintBacklogEditUserStory.fxml"));
+								Parent root1 = (Parent) fxmlLoader.load();
+								Stage stage = new Stage();
+								stage.initModality(Modality.APPLICATION_MODAL);
+								stage.setScene(new Scene(root1));
+								stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+									@Override
+									public void handle(WindowEvent event) {
+										try {
+											SprintBacklogController.controller.reloadSprintBacklog();
+										} catch (Exception e) {
+											e.printStackTrace();
+										}
+									}
+								});
+								stage.show();
+							} catch (Exception e) {
+								e.printStackTrace();
+							}
+						}
+					}
+				}
+			});
+			
+		}
 		this.getChildren().add(vboxprioritaet);
 		this.getChildren().add(vboxuserstory);
 		this.getChildren().add(vboxopentasks);

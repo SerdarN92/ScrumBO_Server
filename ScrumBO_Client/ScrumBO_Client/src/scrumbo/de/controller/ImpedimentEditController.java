@@ -7,6 +7,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -14,7 +15,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
@@ -50,33 +54,67 @@ public class ImpedimentEditController implements Initializable {
 	@FXML
 	private DatePicker	datumBehobenAm;
 	@FXML
-	private Text		textprioritaet;
-	@FXML
-	private Text		textbeschreibung;
-	@FXML
-	private Text		textAngelegtVon;
-	@FXML
-	private Text		textDatumBehobenAm;
-	@FXML
-	private Text		textDatumAufgetretenAm;
+	private Text		txtError;
 	private Impediment	data				= null;
 											
 	@FXML
 	private void handleButtonAbbort(ActionEvent event) throws Exception {
-		Stage stage = (Stage) buttonAbbort.getScene().getWindow();
-		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Impediment bearbeiten");
+		alert.setHeaderText(null);
+		alert.setContentText("Wollen Sie fortfahren ohne zu Speichern?");
+		
+		ButtonType buttonTypeOne = new ButtonType("Ja");
+		ButtonType buttonTypeTwo = new ButtonType("Nein");
+		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+		
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == buttonTypeOne) {
+			alert.close();
+			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
+			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+		} else {
+			alert.close();
+		}
+		
 	}
 	
 	@FXML
 	private void handleButtonDelete(ActionEvent event) throws Exception {
 		Impediment impediment = data;
-		if (impedimentService.deleteImpediment(impediment)) {
-			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
-			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Impediment löschen");
+		alert.setHeaderText(null);
+		alert.setContentText("Wollen Sie dieses Impediment wirklich löschen?");
+		
+		ButtonType buttonTypeOne = new ButtonType("Ja");
+		ButtonType buttonTypeTwo = new ButtonType("Nein");
+		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+		
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == buttonTypeOne) {
+			alert.close();
+			if (impedimentService.deleteImpediment(impediment)) {
+				Alert alert2 = new Alert(AlertType.INFORMATION);
+				alert2.setTitle("Impediment löschen");
+				alert2.setHeaderText(null);
+				alert2.setContentText("Impediment wurde erfolgreich gelöscht.");
+				alert2.showAndWait();
+				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
+				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+			} else {
+				Alert alert2 = new Alert(AlertType.INFORMATION);
+				alert2.setTitle("Impediment löschen");
+				alert2.setHeaderText(null);
+				alert2.setContentText("Fehler! Impediment wurde nicht gelöscht.");
+				alert2.showAndWait();
+				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
+				stage.close();
+			}
 		} else {
-			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
-			stage.close();
+			alert.close();
 		}
+		
 	}
 	
 	@FXML
@@ -103,9 +141,19 @@ public class ImpedimentEditController implements Initializable {
 			liste.add(impediment);
 			
 			if (impedimentService.updateImpediment(impediment)) {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Impediment bearbeiten");
+				alert.setHeaderText(null);
+				alert.setContentText("Impediment wurde erfolgreich bearbeitet!");
+				alert.showAndWait();
 				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 			} else {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Impediment bearbeiten");
+				alert.setHeaderText(null);
+				alert.setContentText("Fehler! Impediment wurde nicht erfolgreich bearbeitet!");
+				alert.showAndWait();
 				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 				stage.close();
 			}
@@ -114,15 +162,17 @@ public class ImpedimentEditController implements Initializable {
 	
 	private Boolean checkPrioritaet() {
 		if (prioritaet.getText().isEmpty()) {
-			textprioritaet.setText("Bitte eine Priorität eingeben");
+			txtError.setText("Bitte eine Priorität eingeben");
+			prioritaet.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		} else {
-			textprioritaet.setVisible(false);
+			txtError.setVisible(false);
 			if (isInteger(prioritaet.getText())) {
+				prioritaet.setStyle(null);
 				return true;
 			} else {
-				textprioritaet.setText("Bitte eine ganzzahlige Zahl eingeben.");
-				textprioritaet.setVisible(true);
+				txtError.setText("Bitte eine ganzzahlige Zahl eingeben.");
+				txtError.setVisible(true);
 				return false;
 			}
 			
@@ -155,30 +205,39 @@ public class ImpedimentEditController implements Initializable {
 	
 	private Boolean checkBeschreibung() {
 		if (beschreibung.getText().isEmpty()) {
-			textbeschreibung.setText("Bitte eine Beschreibung eingeben");
+			txtError.setText("Bitte eine Beschreibung eingeben");
+			txtError.setVisible(true);
+			beschreibung.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		} else {
-			textbeschreibung.setVisible(false);
+			txtError.setVisible(false);
+			beschreibung.setStyle(null);
 			return true;
 		}
 	}
 	
 	private Boolean checkAngelegtVon() {
 		if (angelegtVon.getText().isEmpty()) {
-			textAngelegtVon.setText("Bitte eine Benutzer eingeben");
+			txtError.setText("Bitte eine Benutzer eingeben");
+			txtError.setVisible(true);
+			angelegtVon.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		} else {
-			textAngelegtVon.setVisible(false);
+			txtError.setVisible(false);
+			angelegtVon.setStyle(null);
 			return true;
 		}
 	}
 	
 	private Boolean checkDatumAngelegtAm() {
 		if (datumAufgetretenAm.getValue() == null) {
-			textDatumAufgetretenAm.setText("Bitte ein Datum auswählen");
+			txtError.setText("Bitte ein Datum auswählen");
+			txtError.setVisible(true);
+			datumAufgetretenAm.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		} else {
-			textDatumAufgetretenAm.setVisible(false);
+			txtError.setVisible(false);
+			datumAufgetretenAm.setStyle(null);
 			return true;
 		}
 	}

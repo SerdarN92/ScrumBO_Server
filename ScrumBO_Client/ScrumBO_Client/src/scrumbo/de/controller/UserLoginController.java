@@ -66,7 +66,9 @@ public class UserLoginController implements Initializable {
 			if (!benutzerService.checkIfEmailExists(txtFieldEmail.getText())) {
 				emailValidFail.setText("Benutzer mit dieser E-Mail existiert nicht.");
 				emailValidFail.setVisible(true);
+				txtFieldEmail.setStyle("-fx-border-color:#FF0000;");
 			} else {
+				txtFieldEmail.setStyle(null);
 				emailValidFail.setVisible(false);
 				benutzer = benutzerService.getBenutzer();
 				CurrentBenutzer.benutzerID = benutzer.getId();
@@ -76,6 +78,7 @@ public class UserLoginController implements Initializable {
 				CurrentBenutzer.passwort = benutzer.getPasswort();
 				benutzerrolleService.checkRole(CurrentBenutzer.email);
 				if (pswtFieldPassword.getText().equals(CurrentBenutzer.passwort)) {
+					pswtFieldPassword.setStyle(null);
 					emailValidFail.setVisible(false);
 					passwordValidFail.setVisible(false);
 					if (CurrentBenutzer.passwort.equals("12345678")) {
@@ -100,6 +103,7 @@ public class UserLoginController implements Initializable {
 				} else {
 					passwordValidFail.setText("Passwort ist falsch");
 					passwordValidFail.setVisible(true);
+					pswtFieldPassword.setStyle("-fx-border-color:#FF0000;");
 				}
 				
 			}
@@ -109,9 +113,11 @@ public class UserLoginController implements Initializable {
 	private Boolean checkEmail() {
 		if (txtFieldEmail.getText().contains("@")) {
 			emailValidFail.setText(null);
+			txtFieldEmail.setStyle(null);
 			return true;
 		} else {
 			emailValidFail.setText("Ungültige E-Mail");
+			txtFieldEmail.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		}
 	}
@@ -119,9 +125,11 @@ public class UserLoginController implements Initializable {
 	private Boolean checkPassword() throws Exception {
 		if (!(pswtFieldPassword.getText().isEmpty())) {
 			passwordValidFail.setText(null);
+			pswtFieldPassword.setStyle(null);
 			return true;
 		} else {
 			passwordValidFail.setText("Bitte ein Passwort eingeben");
+			pswtFieldPassword.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		}
 	}

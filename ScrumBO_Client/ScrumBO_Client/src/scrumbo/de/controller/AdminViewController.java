@@ -75,8 +75,10 @@ public class AdminViewController implements Initializable {
 	private void handleSaveButton(ActionEvent event) throws Exception {
 		if (txtConfigField.getText().isEmpty()) {
 			txtFail.setVisible(true);
+			txtConfigField.setStyle("-fx-border-color:#FF0000;");
 		} else {
 			txtFail.setVisible(false);
+			txtConfigField.setStyle(null);
 			String changedConfigurationName = txtConfigField.getText();
 			ScrumBOClient.setDatabaseconfigfile(changedConfigurationName);
 			txtSuccess.setVisible(true);

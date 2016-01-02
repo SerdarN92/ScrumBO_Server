@@ -9,7 +9,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="444.0" prefWidth="543.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.ImpedimentCreatController">
+<AnchorPane id="AnchorPane" prefHeight="489.0" prefWidth="543.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.ImpedimentCreatController">
    <children>
       <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="174.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -38,13 +38,13 @@
       </Label>
       <TextField fx:id="prioritaet" layoutX="221.0" layoutY="186.0" />
       <TextField fx:id="angelegtVon" layoutX="221.0" layoutY="224.0" prefHeight="25.0" prefWidth="149.0" />
-      <TextArea fx:id="beschreibung" layoutX="221.0" layoutY="262.0" prefHeight="79.0" prefWidth="174.0" />
-      <Button fx:id="buttonAdd" layoutX="370.0" layoutY="395.0" mnemonicParsing="false" onAction="#handleButtonAdd" text="Hinzufügen">
+      <TextArea fx:id="beschreibung" layoutX="221.0" layoutY="262.0" prefHeight="79.0" prefWidth="174.0" wrapText="true" />
+      <Button fx:id="buttonAdd" layoutX="370.0" layoutY="438.0" mnemonicParsing="false" onAction="#handleButtonAdd" text="Hinzufügen">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button fx:id="buttonAbbort" layoutX="246.0" layoutY="395.0" mnemonicParsing="false" onAction="#handleButtonAbbort" text="Abbrechen">
+      <Button fx:id="buttonAbbort" layoutX="246.0" layoutY="438.0" mnemonicParsing="false" onAction="#handleButtonAbbort" text="Abbrechen">
          <font>
             <Font size="16.0" />
          </font>
@@ -55,7 +55,10 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Text fx:id="textprioritaet" layoutX="383.0" layoutY="203.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="139.13671875" />
+      <Text fx:id="txtError" fill="RED" layoutX="246.0" layoutY="413.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="226.13671875">
+         <font>
+            <Font size="16.0" />
+         </font></Text>
       <Text fx:id="textAngelegtVon" layoutX="389.0" layoutY="241.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="139.13671875" />
       <Text fx:id="textbeschreibung" layoutX="400.0" layoutY="279.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="128.13671875" />
       <Text fx:id="textDatumAufgetretenAm" layoutX="400.0" layoutY="368.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="128.13671875" />

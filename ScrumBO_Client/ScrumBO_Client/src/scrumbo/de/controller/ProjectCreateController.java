@@ -71,6 +71,7 @@ public class ProjectCreateController implements Initializable {
 	private void handleButtonCreateProject(ActionEvent event) throws Exception {
 		if (checkProjectname() && checkPassword()) {
 			if (!scrumprojektService.checkIfProjectnameExists(txtFieldProjectname.getText().toString())) {
+				txtFieldProjectname.setStyle(null);
 				projectnameValidFail.setVisible(false);
 				Scrumprojekt scrumproject = new Scrumprojekt();
 				scrumproject.setProjektname(txtFieldProjectname.getText());
@@ -96,6 +97,7 @@ public class ProjectCreateController implements Initializable {
 			} else {
 				projectnameValidFail.setText("Projekt mit diesem Namen existiert bereits.");
 				projectnameValidFail.setVisible(true);
+				txtFieldProjectname.setStyle("-fx-border-color:#FF0000;");
 			}
 		}
 	}
@@ -103,16 +105,20 @@ public class ProjectCreateController implements Initializable {
 	private Boolean checkPassword() throws Exception {
 		if (!(pswtFieldPassword.getText().isEmpty())) {
 			passwordValidFail.setText(null);
+			pswtFieldPassword.setStyle(null);
 			if (pswtFieldPassword.getText().length() >= 6) {
 				passwordValidFail.setText(null);
+				pswtFieldPassword.setStyle(null);
 				// encryptPassword(pswtFieldPassword.getText());
 				return true;
 			} else {
 				passwordValidFail.setText("Passwort ist zu kurz");
+				pswtFieldPassword.setStyle("-fx-border-color:#FF0000;");
 				return false;
 			}
 		} else {
 			passwordValidFail.setText("Bitte ein Passwort eingeben");
+			pswtFieldPassword.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		}
 		
@@ -121,9 +127,11 @@ public class ProjectCreateController implements Initializable {
 	private Boolean checkProjectname() {
 		if (!(txtFieldProjectname.getText().isEmpty())) {
 			projectnameValidFail.setText(null);
+			txtFieldProjectname.setStyle(null);
 			return true;
 		} else {
 			projectnameValidFail.setText("Bitte einen Projektnamen eingeben");
+			txtFieldProjectname.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		}
 	}

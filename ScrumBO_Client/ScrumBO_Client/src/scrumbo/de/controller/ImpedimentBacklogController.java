@@ -4,7 +4,10 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
+import javafx.application.Platform;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -67,6 +70,8 @@ public class ImpedimentBacklogController implements Initializable {
 												
 	public static ObservableList<Impediment>	data				= FXCollections.observableArrayList();
 																	
+	private Timer								timer;
+												
 	public static ObservableList<Impediment> getData() {
 		return data;
 	}
@@ -75,11 +80,13 @@ public class ImpedimentBacklogController implements Initializable {
 	private void handleButtonBack(ActionEvent event) throws Exception {
 		data.clear();
 		if (CurrentBenutzer.isSM) {
+			timer.cancel();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonLogout.getScene().getWindow();
 			stage.setScene(scene);
 		} else {
+			timer.cancel();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Scrum.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonLogout.getScene().getWindow();
@@ -101,6 +108,8 @@ public class ImpedimentBacklogController implements Initializable {
 		CurrentScrumprojekt.scrumprojektID = -1;
 		CurrentScrumprojekt.projektname = null;
 		CurrentBenutzer.isSM = false;
+		
+		timer.cancel();
 		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		this.scene = new Scene(root);
@@ -164,6 +173,8 @@ public class ImpedimentBacklogController implements Initializable {
 							} else {
 								setStyle("-fx-background-color: #90FE74;");
 							}
+						} else {
+							setStyle(null);
 						}
 					}
 				};
@@ -206,6 +217,24 @@ public class ImpedimentBacklogController implements Initializable {
 		tableColumnKommentar.setCellValueFactory(new PropertyValueFactory<Impediment, String>("kommentar"));
 		
 		tableViewImpedimentBacklog.setItems(data);
+		
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				Platform.runLater(new Runnable() {
+					public void run() {
+						
+						try {
+							reload();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		}, 0, 10000);
 		
 	}
 	

@@ -71,6 +71,16 @@
             <Font size="16.0" />
          </font>
       </Button>
+      <Text fx:id="tagNumber" layoutX="422.0" layoutY="159.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="49.00002479553223">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <Label layoutX="392.0" layoutY="141.0" text="Tag:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
    </children>
    <cursor>
       <Cursor fx:constant="DEFAULT" />

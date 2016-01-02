@@ -8,7 +8,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="535.0" prefWidth="676.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.UserStoryCreateController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="676.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.UserStoryCreateController">
    <children>
       <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="211.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -47,40 +47,20 @@
       </Label>
       <TextField fx:id="prioritaet" layoutX="303.0" layoutY="186.0" />
       <TextField fx:id="thema" layoutX="303.0" layoutY="224.0" />
-      <TextArea fx:id="beschreibung" layoutX="303.0" layoutY="262.0" prefHeight="79.0" prefWidth="222.0" />
-      <TextArea fx:id="akzeptanzkriterien" layoutX="303.0" layoutY="354.0" prefHeight="79.0" prefWidth="222.0" />
+      <TextArea fx:id="beschreibung" layoutX="303.0" layoutY="262.0" prefHeight="79.0" prefWidth="222.0" wrapText="true" />
+      <TextArea fx:id="akzeptanzkriterien" layoutX="303.0" layoutY="354.0" prefHeight="79.0" prefWidth="222.0" wrapText="true" />
       <TextField fx:id="aufwandintagen" layoutX="303.0" layoutY="446.0" />
-      <Button fx:id="buttonAdd" layoutX="421.0" layoutY="484.0" mnemonicParsing="false" onAction="#handleButtonAdd" text="Hinzufügen">
+      <Button fx:id="buttonAdd" layoutX="421.0" layoutY="538.0" mnemonicParsing="false" onAction="#handleButtonAdd" text="Hinzufügen">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button fx:id="buttonAbbort" layoutX="303.0" layoutY="484.0" mnemonicParsing="false" onAction="#handleButtonAbbort" text="Abbrechen">
+      <Button fx:id="buttonAbbort" layoutX="303.0" layoutY="538.0" mnemonicParsing="false" onAction="#handleButtonAbbort" text="Abbrechen">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Text fx:id="textprioritaet" fill="#f50505" layoutX="473.0" layoutY="204.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="132.00000298023224">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Text>
-      <Text fx:id="textthema" fill="#f50505" layoutX="473.0" layoutY="242.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="186.00000298023224">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Text>
-      <Text fx:id="textbeschreibung" fill="#f50505" layoutX="539.0" layoutY="301.0" scaleY="3.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="116.00000298023224">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Text>
-      <Text fx:id="textakzeptanzkriterien" fill="#f50505" layoutX="539.0" layoutY="393.0" scaleY="3.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="116.00000298023224">
-         <font>
-            <Font size="16.0" />
-         </font>
-      </Text>
-      <Text fx:id="textaufwandintagen" layoutX="473.0" layoutY="464.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="132.00000298023224">
+      <Text fx:id="txtError" fill="RED" layoutX="104.0" layoutY="512.0" strokeType="OUTSIDE" strokeWidth="0.0" textAlignment="CENTER" wrappingWidth="428.13671875">
          <font>
             <Font size="16.0" />
          </font>

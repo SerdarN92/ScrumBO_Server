@@ -3,6 +3,7 @@ package scrumbo.de.controller;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.event.ActionEvent;
@@ -12,7 +13,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ListCell;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextArea;
@@ -65,9 +69,34 @@ public class SprintBacklogEditUserStoryController implements Initializable {
 	@FXML
 	private void handleButtonDelete(ActionEvent event) throws Exception {
 		try {
-			if (userstoryService.setSprintNull(currentUserStory.getId())) {
-				Stage stage = (Stage) buttonDelete.getScene().getWindow();
-				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Userstory entfernen");
+			alert.setHeaderText(null);
+			alert.setContentText("Wollen Sie diese Userstory wirklich aus dem Sprint Backlog entfernen?");
+			
+			ButtonType buttonTypeOne = new ButtonType("Ja");
+			ButtonType buttonTypeTwo = new ButtonType("Nein");
+			alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+			
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == buttonTypeOne) {
+				if (userstoryService.setSprintNull(currentUserStory.getId())) {
+					Alert alert2 = new Alert(AlertType.INFORMATION);
+					alert2.setTitle("Userstory entfernen");
+					alert2.setHeaderText(null);
+					alert2.setContentText("Userstory wurde erfolgreich aus dem Sprint Backlog entfernt!");
+					alert2.showAndWait();
+					Stage stage = (Stage) buttonDelete.getScene().getWindow();
+					stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+				} else {
+					Alert alert3 = new Alert(AlertType.INFORMATION);
+					alert3.setTitle("Userstory entfernen");
+					alert3.setHeaderText(null);
+					alert3.setContentText("Fehler! Userstory wurde nicht aus dem Sprint Backlog entfernt!");
+					alert3.showAndWait();
+				}
+			} else {
+				alert.close();
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

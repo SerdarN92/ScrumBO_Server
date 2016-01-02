@@ -85,9 +85,11 @@ public class ProjectLoginController implements Initializable {
 		if (checkProjectname() && checkPassword()) {
 			if (scrumprojektService.checkIfProjectnameExists(txtFieldProjectname.getText().toString())) {
 				projectnameValidFail.setVisible(false);
+				txtFieldProjectname.setStyle(null);
 				CurrentScrumprojekt.scrumprojektID = scrumprojektService.getScrumproject().getScrumProjektID();
 				CurrentScrumprojekt.projektname = scrumprojektService.getScrumproject().getProjektname();
 				if (benutzerService.checkAdmission()) {
+					txtFieldProjectname.setStyle(null);
 					productbacklogService.getProductbacklog();
 					impedimentService.getImpedimentBacklog();
 					if (CurrentBenutzer.isSM) {
@@ -104,10 +106,12 @@ public class ProjectLoginController implements Initializable {
 				} else {
 					projectnameValidFail.setText("Sie haben keine Zugriffsrechte auf dieses Projekt");
 					projectnameValidFail.setVisible(true);
+					txtFieldProjectname.setStyle("-fx-border-color:#FF0000;");
 				}
 			} else {
 				projectnameValidFail.setText("Projekt mit diesem Namen existiert nicht.");
 				projectnameValidFail.setVisible(true);
+				txtFieldProjectname.setStyle("-fx-border-color:#FF0000;");
 			}
 		}
 	}
@@ -115,16 +119,20 @@ public class ProjectLoginController implements Initializable {
 	private Boolean checkPassword() throws Exception {
 		if (!(pswtFieldPassword.getText().isEmpty())) {
 			passwordValidFail.setText(null);
+			pswtFieldPassword.setStyle(null);
 			if (pswtFieldPassword.getText().length() >= 6) {
 				passwordValidFail.setText(null);
+				pswtFieldPassword.setStyle(null);
 				// encryptPassword(pswtFieldPassword.getText());
 				return true;
 			} else {
 				passwordValidFail.setText("Passwort ist zu kurz");
+				pswtFieldPassword.setStyle("-fx-border-color:#FF0000;");
 				return false;
 			}
 		} else {
 			passwordValidFail.setText("Bitte ein Passwort eingeben");
+			pswtFieldPassword.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		}
 		
@@ -133,9 +141,11 @@ public class ProjectLoginController implements Initializable {
 	private Boolean checkProjectname() {
 		if (!(txtFieldProjectname.getText().isEmpty())) {
 			projectnameValidFail.setText(null);
+			txtFieldProjectname.setStyle(null);
 			return true;
 		} else {
 			projectnameValidFail.setText("Bitte einen Projektnamen eingeben");
+			txtFieldProjectname.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		}
 	}

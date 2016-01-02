@@ -31,7 +31,7 @@ public class UserChangePasswordController implements Initializable {
 	@FXML
 	private Text			txtName;
 	@FXML
-	private Text			txtPasswortValid;
+	private Text			txtError;
 							
 	@FXML
 	private void handleButtonSave(ActionEvent event) throws Exception {
@@ -63,27 +63,41 @@ public class UserChangePasswordController implements Initializable {
 	private Boolean passwordCheck() {
 		Boolean check = false;
 		if (txtPassword.getText().isEmpty() || txtPassword2.getText().isEmpty()) {
-			txtPasswortValid.setText("Bitte füllen Sie beide Felder mit einem identischem neuem Passwort.");
-			if (!(txtPasswortValid.isVisible()))
-				txtPasswortValid.setVisible(true);
+			txtError.setText("Bitte füllen Sie beide Felder mit einem identischem neuem Passwort.");
+			txtPassword.setStyle("-fx-border-color:#FF0000;");
+			txtPassword2.setStyle("-fx-border-color:#FF0000;");
+			if (!(txtError.isVisible())) {
+				txtError.setVisible(true);
+			}
 		} else if (!(txtPassword.getText().equals(txtPassword2.getText()))) {
-			txtPasswortValid.setText("Die von Ihnen eingegebenen Passwörter sind nicht identisch");
-			if (!(txtPasswortValid.isVisible()))
-				txtPasswortValid.setVisible(true);
+			txtError.setText("Die von Ihnen eingegebenen Passwörter sind nicht identisch");
+			txtPassword.setStyle("-fx-border-color:#FF0000;");
+			txtPassword2.setStyle("-fx-border-color:#FF0000;");
+			if (!(txtError.isVisible())) {
+				txtError.setVisible(true);
+			}
 		} else if (txtPassword.getText().equals("12345678")) {
-			txtPasswortValid.setText(
+			txtError.setText(
 					"Das von Ihnen eingegebene Passwort ist identisch mit dem Default-Kennwort, welches unzulässig ist.");
-			if (!(txtPasswortValid.isVisible()))
-				txtPasswortValid.setVisible(true);
+			txtPassword.setStyle("-fx-border-color:#FF0000;");
+			txtPassword2.setStyle("-fx-border-color:#FF0000;");
+			if (!(txtError.isVisible())) {
+				txtError.setVisible(true);
+			}
 		} else if (txtPassword.getText().length() < 8) {
-			txtPasswortValid
-					.setText("Das von Ihnen eingegebene Passwort ist kleiner als die Länge 8, welches unzulässig ist.");
-			if (!(txtPasswortValid.isVisible()))
-				txtPasswortValid.setVisible(true);
-				
+			txtError.setText("Das von Ihnen eingegebene Passwort ist kleiner als die Länge 8, welches unzulässig ist.");
+			txtPassword.setStyle("-fx-border-color:#FF0000;");
+			txtPassword2.setStyle("-fx-border-color:#FF0000;");
+			if (!(txtError.isVisible())) {
+				txtError.setVisible(true);
+			}
+			
 		} else {
-			if ((txtPasswortValid.isVisible()))
-				txtPasswortValid.setVisible(false);
+			if ((txtError.isVisible())) {
+				txtError.setVisible(false);
+				txtPassword.setStyle(null);
+				txtPassword2.setStyle(null);
+			}
 			check = true;
 		}
 		return check;

@@ -68,7 +68,9 @@ public class UserCreateScrumMasterController implements Initializable {
 			if (benutzerService.checkIfEmailExists(txtFieldEmail.getText())) {
 				txtEmail.setText("E-Mail Adresse bereits vorhanden.");
 				txtEmail.setVisible(true);
+				txtFieldEmail.setStyle("-fx-border-color:#FF0000;");
 			} else {
+				txtFieldEmail.setStyle(null);
 				txtEmail.setVisible(false);
 				
 				Benutzer benutzer = new Benutzer();
@@ -97,9 +99,11 @@ public class UserCreateScrumMasterController implements Initializable {
 	private Boolean checkEmail() {
 		if (txtFieldEmail.getText().contains("@")) {
 			txtEmail.setText(null);
+			txtFieldEmail.setStyle(null);
 			return true;
 		} else {
 			txtEmail.setText("Ungültige E-Mail");
+			txtFieldEmail.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		}
 	}
@@ -107,9 +111,11 @@ public class UserCreateScrumMasterController implements Initializable {
 	private Boolean checkPreName() {
 		if (!(txtFieldPrename.getText().isEmpty())) {
 			txtPrename.setText(null);
+			txtFieldPrename.setStyle(null);
 			return true;
 		} else {
 			txtPrename.setText("Bitte einen Vornamen eingeben");
+			txtFieldPrename.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		}
 	}
@@ -117,9 +123,11 @@ public class UserCreateScrumMasterController implements Initializable {
 	private Boolean checkLastName() {
 		if (!(txtFieldLastname.getText().isEmpty())) {
 			txtLastname.setText(null);
+			txtFieldLastname.setStyle(null);
 			return true;
 		} else {
 			txtLastname.setText("Bitte einen Nachnamen eingeben");
+			txtFieldLastname.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		}
 	}

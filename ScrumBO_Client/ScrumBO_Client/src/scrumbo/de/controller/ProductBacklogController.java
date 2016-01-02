@@ -3,6 +3,8 @@ package scrumbo.de.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -36,7 +38,7 @@ public class ProductBacklogController implements Initializable {
 	
 	Parent									root;
 	Scene									scene;
-	Stage									stage;
+	public static Stage						stage;
 	ProductbacklogService					productbacklogService	= null;
 	public static UserStory					rowData;
 	@FXML
@@ -72,6 +74,8 @@ public class ProductBacklogController implements Initializable {
 											
 	public static ObservableList<UserStory>	data					= FXCollections.observableArrayList();
 																	
+	private Timer							timer;
+											
 	public static ObservableList<UserStory> getData() {
 		return data;
 	}
@@ -85,11 +89,13 @@ public class ProductBacklogController implements Initializable {
 	private void handleButtonBack(ActionEvent event) throws Exception {
 		data.clear();
 		if (CurrentBenutzer.isSM) {
+			timer.cancel();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonLogout.getScene().getWindow();
 			stage.setScene(scene);
 		} else {
+			timer.cancel();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Scrum.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonLogout.getScene().getWindow();
@@ -135,6 +141,8 @@ public class ProductBacklogController implements Initializable {
 		CurrentScrumprojekt.projektname = null;
 		CurrentBenutzer.isSM = false;
 		
+		timer.cancel();
+		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		this.scene = new Scene(root);
 		Stage stage = (Stage) buttonLogout.getScene().getWindow();
@@ -154,6 +162,21 @@ public class ProductBacklogController implements Initializable {
 			buttonCreateUserStory.setDisable(true);
 			
 		initTableView();
+		
+		timer = new Timer();
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				try {
+					System.out.println("Hallo");
+					reload();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}, 0, 10000);
 		
 	}
 	
@@ -293,7 +316,14 @@ public class ProductBacklogController implements Initializable {
 	}
 	
 	public void reload() throws IOException {
-		tableViewProductBacklog.getItems().clear();
+		// tableViewProductBacklog.getItems().clear();
+		// productbacklogService.loadProductBacklog();
+		// for (int i = 0; i <
+		// CurrentScrumprojekt.productbacklog.getUserstory().size(); i++) {
+		// data.add(CurrentScrumprojekt.productbacklog.getUserstory().get(i));
+		// }
+		
+		data.clear();
 		productbacklogService.loadProductBacklog();
 		for (int i = 0; i < CurrentScrumprojekt.productbacklog.getUserstory().size(); i++) {
 			data.add(CurrentScrumprojekt.productbacklog.getUserstory().get(i));

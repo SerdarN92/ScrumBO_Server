@@ -97,7 +97,9 @@ public class UserCreateForProjectController implements Initializable {
 			if (checkIfEmailExists(txtFieldEmail.getText())) {
 				emailValidFail.setText("E-Mail Adresse bereits vorhanden.");
 				emailValidFail.setVisible(true);
+				txtFieldEmail.setStyle("-fx-border-color:#FF0000;");
 			} else {
+				txtFieldEmail.setStyle(null);
 				emailValidFail.setVisible(false);
 				
 				Benutzer benutzer = new Benutzer();
@@ -124,8 +126,6 @@ public class UserCreateForProjectController implements Initializable {
 					}
 				}
 				
-				// benutzer.setBenutzerrolle(benutzerrolle);
-				
 				Gson gson = new Gson();
 				String output = gson.toJson(benutzer);
 				
@@ -149,14 +149,19 @@ public class UserCreateForProjectController implements Initializable {
 						System.out.println("\nRest Service Invoked Successfully..");
 					conn.disconnect();
 					
-					Stage stage = (Stage) buttonBackCreateUser.getScene().getWindow();
-					stage.close();
+					this.root = FXMLLoader
+							.load(getClass().getResource("/scrumbo/de/gui/UserCreateScrumMasterSuccess.fxml"));
+					this.scene = new Scene(root);
+					Stage stage = (Stage) buttonCreateUser.getScene().getWindow();
+					stage.setScene(scene);
 				} catch (Exception e) {
 					System.out.println("\nError while calling Rest service");
 					e.printStackTrace();
-					Stage stage = (Stage) buttonBackCreateUser.getScene().getWindow();
-					stage.close();
-					;
+					this.root = FXMLLoader
+							.load(getClass().getResource("/scrumbo/de/gui/UserCreateScrumMasterFail.fxml"));
+					this.scene = new Scene(root);
+					Stage stage = (Stage) buttonCreateUser.getScene().getWindow();
+					stage.setScene(scene);
 				}
 				
 			}
@@ -166,9 +171,11 @@ public class UserCreateForProjectController implements Initializable {
 	private Boolean checkEmail() {
 		if (txtFieldEmail.getText().contains("@")) {
 			emailValidFail.setText(null);
+			txtFieldEmail.setStyle(null);
 			return true;
 		} else {
 			emailValidFail.setText("Ungültige E-Mail");
+			txtFieldEmail.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		}
 	}
@@ -176,9 +183,11 @@ public class UserCreateForProjectController implements Initializable {
 	private Boolean checkPreName() {
 		if (!(txtFieldPrename.getText().isEmpty())) {
 			prenameValidFail.setText(null);
+			txtFieldPrename.setStyle(null);
 			return true;
 		} else {
 			prenameValidFail.setText("Bitte einen Vornamen eingeben");
+			txtFieldPrename.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		}
 	}
@@ -186,9 +195,11 @@ public class UserCreateForProjectController implements Initializable {
 	private Boolean checkLastName() {
 		if (!(txtFieldLastname.getText().isEmpty())) {
 			lastnameValidFail.setText(null);
+			txtFieldLastname.setStyle(null);
 			return true;
 		} else {
 			lastnameValidFail.setText("Bitte einen Nachnamen eingeben");
+			txtFieldLastname.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		}
 	}
@@ -196,9 +207,13 @@ public class UserCreateForProjectController implements Initializable {
 	private Boolean checkRole() {
 		if ((radiobuttonProductOwner.isSelected()) || (radiobuttonDeveloper.isSelected())) {
 			roleValidFail.setText(null);
+			radiobuttonProductOwner.setStyle(null);
+			radiobuttonDeveloper.setStyle(null);
 			return true;
 		} else {
 			roleValidFail.setText("Bitte eine Rolle auswählen");
+			radiobuttonProductOwner.setStyle("-fx-border-color:#FF0000;");
+			radiobuttonDeveloper.setStyle("-fx-border-color:#FF0000;");
 			return false;
 		}
 	}
