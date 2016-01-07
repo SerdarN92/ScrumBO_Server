@@ -7,7 +7,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="317.0" prefWidth="678.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.AdminViewController">
+<AnchorPane id="AnchorPane" prefHeight="396.0" prefWidth="678.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.AdminViewController">
    <children>
       <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="75.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -19,7 +19,7 @@
             <Font size="30.0" />
          </font>
       </Label>
-      <Button fx:id="buttonBack" layoutX="75.0" layoutY="230.0" mnemonicParsing="false" onAction="#handleBackButton" text="Zurück">
+      <Button fx:id="buttonBack" layoutX="75.0" layoutY="331.0" mnemonicParsing="false" onAction="#handleBackButton" text="Zurück">
          <font>
             <Font size="16.0" />
          </font>
@@ -30,17 +30,17 @@
          </font>
       </Label>
       <TextField fx:id="txtConfigField" layoutX="400.0" layoutY="161.0" prefHeight="25.0" prefWidth="224.0" />
-      <Button fx:id="buttonSave" layoutX="506.0" layoutY="230.0" mnemonicParsing="false" onAction="#handleSaveButton" prefHeight="37.0" prefWidth="117.0" text="Übernehmen">
+      <Button fx:id="buttonSave" layoutX="506.0" layoutY="331.0" mnemonicParsing="false" onAction="#handleSaveButton" prefHeight="37.0" prefWidth="117.0" text="Übernehmen">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Text fx:id="txtSuccess" fill="#17dd31" layoutX="257.0" layoutY="212.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Änderung war erfolgreich!" visible="false" wrappingWidth="249.13671875">
+      <Text fx:id="txtSuccess" fill="#17dd31" layoutX="257.0" layoutY="300.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Änderung war erfolgreich!" visible="false" wrappingWidth="249.13671875">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Button fx:id="buttonAddSM" layoutX="229.0" layoutY="230.0" mnemonicParsing="false" onAction="#handleAddSMButton" text="Scrum Master hinzufügen">
+      <Button fx:id="buttonAddSM" layoutX="229.0" layoutY="331.0" mnemonicParsing="false" onAction="#handleAddSMButton" text="Scrum Master hinzufügen">
          <font>
             <Font size="16.0" />
          </font>
@@ -50,5 +50,19 @@
             <Font size="16.0" />
          </font>
       </Text>
+      <Label layoutX="75.0" layoutY="204.0" text="Host:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <Label layoutX="76.0" layoutY="242.0" text="Port:">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Label>
+      <TextField fx:id="portField" layoutX="145.0" layoutY="242.0" prefHeight="25.0" prefWidth="224.0" />
+      <TextField fx:id="hostField" layoutX="145.0" layoutY="204.0" prefHeight="25.0" prefWidth="224.0" />
+      <Button fx:id="buttonDeleteUser" layoutX="400.0" layoutY="242.0" mnemonicParsing="false" onAction="#handleButtonDeleteUser" text="Benutzer löschen" />
+      <Button fx:id="buttonProject" layoutX="400.0" layoutY="204.0" mnemonicParsing="false" onAction="#handleButtonDeleteProject" text="Projekt löschen" />
    </children>
 </AnchorPane>

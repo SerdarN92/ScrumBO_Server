@@ -13,15 +13,19 @@ import com.google.gson.Gson;
 
 import dto.BenutzerDTO;
 import dto.ProductBacklogDTO;
+import dto.SprintDTO;
 import dto.TaskstatusDTO;
 import dto.UserStoryDTO;
 import dto.UserStoryTaskDTO;
 import model.Benutzer;
 import model.ProductBacklog;
+import model.Sprint;
 import model.Taskstatus;
 import service.BenutzerService;
 import service.ProductBacklogService;
+import service.SprintService;
 import service.TaskstatusService;
+import service.UserStoryService;
 
 @Path("/productbacklog")
 public class ProductBacklogREST {
@@ -32,6 +36,8 @@ public class ProductBacklogREST {
 	public Response getProductBacklogById(@PathParam("productbacklogid") Integer productbacklogid,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
 		ProductBacklogService productbacklogService = new ProductBacklogService(hibernateconfigfilename);
+		UserStoryService userstoryService = new UserStoryService(hibernateconfigfilename);
+		SprintService sprintService = new SprintService(hibernateconfigfilename);
 		ProductBacklog productbacklog = productbacklogService.findById(productbacklogid);
 		ProductBacklogDTO productbacklogDTO = new ProductBacklogDTO();
 		productbacklogDTO.setId(productbacklog.getId());
@@ -44,6 +50,13 @@ public class ProductBacklogREST {
 					productbacklog.getUserstory().get(i).getAufwandintagen(),
 					productbacklog.getUserstory().get(i).getAkzeptanzkriterien(),
 					productbacklog.getUserstory().get(i).getStatus());
+			if (productbacklogService.findById(productbacklogid).getUserstory().get(i).getSprint() != null) {
+				Integer sprintid = productbacklogService.findById(productbacklogid).getUserstory().get(i).getSprint()
+						.getId();
+				Sprint sprint = sprintService.findById(sprintid);
+				SprintDTO sprintDTO = new SprintDTO(sprint.getId(), sprint.getSprintnummer(), sprint.getStatus());
+				userstoryDTO.setSprintbacklog(sprintDTO);
+			}
 			userstoryDTOListe.add(userstoryDTO);
 		}
 		productbacklogDTO.setUserstory(userstoryDTOListe);

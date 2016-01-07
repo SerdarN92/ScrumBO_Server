@@ -451,7 +451,7 @@ public class MyHBox extends HBox {
 		JSONObject jsonObject = new JSONObject(output);
 		
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstorytask/update" + "/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/userstorytask/update" + "/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);

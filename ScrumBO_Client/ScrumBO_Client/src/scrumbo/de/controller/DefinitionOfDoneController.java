@@ -111,37 +111,41 @@ public class DefinitionOfDoneController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		definitionofdoneService = StartwindowController.getDefinitionofdoneService();
-		tableViewDefinitionOfDone.setRowFactory(tv -> {
-			TableRow<DefinitionOfDone> row = new TableRow<>();
-			row.setOnMouseClicked(event -> {
-				if (event.getClickCount() == 1 && (!row.isEmpty())) {
-					rowData = row.getItem();
-					try {
-						FXMLLoader fxmlLoader = new FXMLLoader(
-								getClass().getResource("/scrumbo/de/gui/DefinitionOfDoneEdit.fxml"));
-						Parent root1 = (Parent) fxmlLoader.load();
-						Stage stage = new Stage();
-						stage.initModality(Modality.APPLICATION_MODAL);
-						stage.setScene(new Scene(root1));
-						stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-							@Override
-							public void handle(WindowEvent event) {
-								try {
-									data.clear();
-									reload();
-								} catch (Exception e) {
-									e.printStackTrace();
+		if (CurrentUserStory.status != 2) {
+			tableViewDefinitionOfDone.setRowFactory(tv -> {
+				TableRow<DefinitionOfDone> row = new TableRow<>();
+				row.setOnMouseClicked(event -> {
+					if (event.getClickCount() == 1 && (!row.isEmpty())) {
+						rowData = row.getItem();
+						try {
+							FXMLLoader fxmlLoader = new FXMLLoader(
+									getClass().getResource("/scrumbo/de/gui/DefinitionOfDoneEdit.fxml"));
+							Parent root1 = (Parent) fxmlLoader.load();
+							Stage stage = new Stage();
+							stage.initModality(Modality.APPLICATION_MODAL);
+							stage.setScene(new Scene(root1));
+							stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+								@Override
+								public void handle(WindowEvent event) {
+									try {
+										data.clear();
+										reload();
+									} catch (Exception e) {
+										e.printStackTrace();
+									}
 								}
-							}
-						});
-						stage.show();
-					} catch (Exception e) {
-						e.printStackTrace();
+							});
+							stage.show();
+						} catch (Exception e) {
+							e.printStackTrace();
+						}
 					}
-				}
+				});
+				return row;
 			});
-			return row;
-		});
+		} else {
+			buttonCreateDefinitionOfDone.setDisable(true);
+		}
 		
 		ladeDefinitionOfDone();
 		

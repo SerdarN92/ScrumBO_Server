@@ -26,7 +26,7 @@ public class UserstoryService {
 		String output = gson.toJson(userstory);
 		
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstory/create/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/userstory/create/"
 					+ CurrentScrumprojekt.productbacklog.getId() + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
@@ -56,7 +56,7 @@ public class UserstoryService {
 		String output = gson.toJson(userstory);
 		
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstory/delete" + "/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/userstory/delete" + "/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
@@ -85,7 +85,7 @@ public class UserstoryService {
 		String output = gson.toJson(userstory);
 		
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstory/update" + "/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/userstory/update" + "/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
@@ -112,7 +112,7 @@ public class UserstoryService {
 	public List<UserStory> ladeUserStory() {
 		String output = "";
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstory/sucheNULL/productbacklogid/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/userstory/sucheNULL/productbacklogid/"
 					+ CurrentScrumprojekt.productbacklog.getId() + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -145,7 +145,7 @@ public class UserstoryService {
 		String output = gson.toJson(userstory);
 		
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstory/updateTasks/" + CurrentSprint.id
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/userstory/updateTasks/" + CurrentSprint.id
 					+ "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
@@ -173,7 +173,7 @@ public class UserstoryService {
 		boolean status = false;
 		
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstory/deleteFromSprint/" + userstoryid
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/userstory/deleteFromSprint/" + userstoryid
 					+ "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);

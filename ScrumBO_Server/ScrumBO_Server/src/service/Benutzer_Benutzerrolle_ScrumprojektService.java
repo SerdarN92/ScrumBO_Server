@@ -66,6 +66,22 @@ public class Benutzer_Benutzerrolle_ScrumprojektService {
 		}
 	}
 	
+	public void deleteBenutzer(Integer benutzerId) {
+		try {
+			bbsDao.deleteBenutzer(benutzerId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteProject(Integer scrumprojektId) {
+		try {
+			bbsDao.deleteProject(scrumprojektId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public List<Benutzer_Benutzerrolle_Scrumprojekt> findAll() {
 		try {
 			return bbsDao.findAll();

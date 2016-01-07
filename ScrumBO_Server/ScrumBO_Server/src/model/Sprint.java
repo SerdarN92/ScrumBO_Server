@@ -11,6 +11,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import org.hibernate.annotations.Cascade;
+
 /*
  * Entität für die Tabelle "Sprint".
  */
@@ -35,6 +37,9 @@ public class Sprint {
 	private SprintBacklog	sprintbacklog;
 							
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+	@Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE,
+			org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST,
+			org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
 	private BurndownChart	burndownChart;
 							
 	@Column(name = "status", nullable = false)

@@ -36,8 +36,8 @@ public class BenutzerService {
 	
 	public Boolean checkIfEmailExists(String email) throws JSONException {
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/benutzer/suche/" + email + "/"
-					+ ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/benutzer/suche/" + email + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setReadTimeout(5000);
@@ -79,8 +79,8 @@ public class BenutzerService {
 		String output = gson.toJson(benutzer);
 		
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/benutzer/create/1" + "/"
-					+ ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/benutzer/create/1" + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestProperty("Content-Type", "application/json");
@@ -112,8 +112,9 @@ public class BenutzerService {
 		Gson gson = new Gson();
 		String output = gson.toJson(benutzer);
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/benutzer/updatePassword/"
-					+ CurrentBenutzer.email + "/" + ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/benutzer/updatePassword/" + CurrentBenutzer.email + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestProperty("Content-Type", "application/json");
@@ -136,12 +137,44 @@ public class BenutzerService {
 		return status;
 	}
 	
-	public List<Benutzer> ladeBenutzerVomAktuellenProjekt() {
+	// nur Benutzer die Entwickler sind
+	public List<Benutzer> ladeEntwicklerVomAktuellenProjekt() {
 		List<Benutzer> benutzerList = new LinkedList<Benutzer>();
 		String output = "";
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/benutzer/alle/scrumprojekt/"
-					+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/benutzer/alle/scrumprojekt/entwickler/" + CurrentScrumprojekt.scrumprojektID
+					+ "/" + ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+			output = br.readLine();
+			conn.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Gson gson = new Gson();
+		Type listType = new TypeToken<LinkedList<Benutzer>>() {
+		}.getType();
+		benutzerList = gson.fromJson(output, listType);
+		
+		return benutzerList;
+	}
+	
+	public List<Benutzer> ladeBenutzer() {
+		List<Benutzer> benutzerList = new LinkedList<Benutzer>();
+		String output = "";
+		try {
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/benutzer/alle/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
@@ -168,9 +201,9 @@ public class BenutzerService {
 	
 	public boolean checkAdmission() throws JSONException {
 		try {
-			URL url = new URL(
-					"http://localhost:8080/ScrumBO_Server/rest/benutzer/checkAdmission/" + CurrentBenutzer.benutzerID
-							+ "/" + CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/benutzer/checkAdmission/" + CurrentBenutzer.benutzerID + "/"
+					+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setReadTimeout(5000);
@@ -202,8 +235,9 @@ public class BenutzerService {
 	
 	public boolean checkAdmin() throws JSONException {
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/benutzer/checkAdmin/"
-					+ CurrentBenutzer.benutzerID + "/" + ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/benutzer/checkAdmin/" + CurrentBenutzer.benutzerID + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setReadTimeout(5000);
@@ -231,5 +265,34 @@ public class BenutzerService {
 		}
 		
 		return false;
+	}
+	
+	public boolean deleteBenutzer(Benutzer benutzer) {
+		boolean status = false;
+		Gson gson = new Gson();
+		String output = gson.toJson(benutzer);
+		try {
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/benutzer/delete/" + ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setDoOutput(true);
+			conn.setRequestProperty("Content-Type", "application/json");
+			conn.setConnectTimeout(5000);
+			conn.setReadTimeout(5000);
+			conn.setRequestMethod("POST");
+			
+			OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+			out.write(output);
+			out.close();
+			
+			if (conn.getResponseMessage().equals("OK"))
+				status = true;
+			conn.disconnect();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+		return status;
 	}
 }

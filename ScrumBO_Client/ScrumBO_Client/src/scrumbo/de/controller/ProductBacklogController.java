@@ -4,8 +4,9 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
-import java.util.TimerTask;
 
+import javafx.beans.property.ReadOnlyObjectWrapper;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -19,6 +20,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -71,11 +73,15 @@ public class ProductBacklogController implements Initializable {
 	private TableColumn<UserStory, String>	tableColumnAkzeptanzkriterien;
 	@FXML
 	private TableColumn<UserStory, Integer>	tableColumnAufwand;
+	@FXML
+	private TableColumn<UserStory, Integer>	tableColumnSprintNummer;
 											
 	public static ObservableList<UserStory>	data					= FXCollections.observableArrayList();
 																	
 	private Timer							timer;
 											
+	private ObservableValue<Integer>		obsInt					= null;
+																	
 	public static ObservableList<UserStory> getData() {
 		return data;
 	}
@@ -164,23 +170,29 @@ public class ProductBacklogController implements Initializable {
 		initTableView();
 		
 		timer = new Timer();
-		timer.schedule(new TimerTask() {
-			
-			@Override
-			public void run() {
-				try {
-					System.out.println("Hallo");
-					reload();
-				} catch (IOException e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}, 0, 10000);
+		// timer.schedule(new TimerTask() {
+		//
+		// @Override
+		// public void run() {
+		// try {
+		// System.out.println("Hallo");
+		// data.clear();
+		// productbacklogService.loadProductBacklog();
+		// for (int i = 0; i <
+		// CurrentScrumprojekt.productbacklog.getUserstory().size(); i++) {
+		// data.add(CurrentScrumprojekt.productbacklog.getUserstory().get(i));
+		// }
+		// } catch (Exception e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
+		// }, 0, 10000);
 		
 	}
 	
 	public void initTableView() {
+		
 		tableViewProductBacklog.setRowFactory(tv -> {
 			TableRow<UserStory> row = new TableRow<>();
 			if (CurrentBenutzer.isPO) {
@@ -311,7 +323,21 @@ public class ProductBacklogController implements Initializable {
 					}
 				});
 		tableColumnAufwand.setCellValueFactory(new PropertyValueFactory<UserStory, Integer>("aufwandintagen"));
-		
+		tableColumnSprintNummer
+				.setCellValueFactory(new Callback<CellDataFeatures<UserStory, Integer>, ObservableValue<Integer>>() {
+					@Override
+					public ObservableValue<Integer> call(CellDataFeatures<UserStory, Integer> data) {
+						
+						if (data.getValue().getSprint() != null) {
+							obsInt = new ReadOnlyObjectWrapper<Integer>(data.getValue().getSprint().getSprintnummer());
+						} else {
+							obsInt = null;
+						}
+						
+						return obsInt;
+					}
+				});
+				
 		tableViewProductBacklog.setItems(data);
 	}
 	

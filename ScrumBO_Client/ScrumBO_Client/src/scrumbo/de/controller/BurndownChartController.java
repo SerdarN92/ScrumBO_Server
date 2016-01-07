@@ -58,18 +58,42 @@ public class BurndownChartController implements Initializable {
 	@FXML
 	private void handleButtonBack(ActionEvent event) throws Exception {
 		if (CurrentBenutzer.isSM) {
-			timer.cancel();
+			pause();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonLogout.getScene().getWindow();
 			stage.setScene(scene);
 		} else {
-			timer.cancel();
+			pause();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Scrum.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonLogout.getScene().getWindow();
 			stage.setScene(scene);
 		}
+	}
+	
+	public void pause() {
+		this.timer.cancel();
+	}
+	
+	public void resume() {
+		this.timer = new Timer();
+		this.timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				Platform.runLater(new Runnable() {
+					public void run() {
+						
+						try {
+							reloadBurndownChart();
+						} catch (Exception e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		}, 0, 10000);
 	}
 	
 	@FXML
@@ -87,6 +111,11 @@ public class BurndownChartController implements Initializable {
 				public void handle(WindowEvent event) {
 					try {
 						initLoadOldSprint();
+						if (CurrentSprint.sprintnummer < SprintBacklogController.anzahlSprints) {
+							pause();
+						} else {
+							resume();
+						}
 						burndownChartId = CurrentBurndownChart.id;
 						tage = CurrentBurndownChart.tage;
 						points = CurrentBurndownChart.points;
@@ -127,7 +156,6 @@ public class BurndownChartController implements Initializable {
 	
 	public void initLoadOldSprint() {
 		sprintbacklogService.ladeAltenSprint(CurrentSprint.sprintnummer);
-		
 	}
 	
 	@FXML

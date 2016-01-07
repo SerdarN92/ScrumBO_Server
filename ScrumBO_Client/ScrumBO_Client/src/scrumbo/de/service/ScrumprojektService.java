@@ -3,10 +3,15 @@ package scrumbo.de.service;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.LinkedList;
+import java.util.List;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.entity.CurrentBenutzer;
@@ -17,7 +22,8 @@ public class ScrumprojektService {
 	Scrumprojekt scrumproject = null;
 	
 	public Boolean checkIfProjectnameExists(String projectname) throws Exception {
-		URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/scrumprojekt/suche/" + projectname + "/"
+		URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+				+ "/ScrumBO_Server/rest/scrumprojekt/suche/" + projectname + "/"
 				+ ScrumBOClient.getDatabaseconfigfile());
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
@@ -47,7 +53,8 @@ public class ScrumprojektService {
 	}
 	
 	public Boolean checkIfProjectnameExistsForProjectLogin(String projectname) throws Exception {
-		URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/scrumprojekt/suche/" + projectname + "/"
+		URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+				+ "/ScrumBO_Server/rest/scrumprojekt/suche/" + projectname + "/"
 				+ ScrumBOClient.getDatabaseconfigfile());
 		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 		conn.setRequestMethod("GET");
@@ -83,8 +90,9 @@ public class ScrumprojektService {
 		String output = gson.toJson(scrumproject);
 		
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/scrumprojekt/create/" + CurrentBenutzer.email
-					+ "/" + ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/scrumprojekt/create/" + CurrentBenutzer.email + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestProperty("Content-Type", "application/json");
@@ -113,6 +121,65 @@ public class ScrumprojektService {
 	
 	public void setScrumproject(Scrumprojekt scrumproject) {
 		this.scrumproject = scrumproject;
+	}
+	
+	public boolean deleteProject(Scrumprojekt scrumproject) {
+		boolean status = false;
+		Gson gson = new Gson();
+		String output = gson.toJson(scrumproject);
+		try {
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/scrumprojekt/delete/" + ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setDoOutput(true);
+			conn.setRequestProperty("Content-Type", "application/json");
+			conn.setConnectTimeout(5000);
+			conn.setReadTimeout(5000);
+			conn.setRequestMethod("POST");
+			
+			OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+			out.write(output);
+			out.close();
+			
+			if (conn.getResponseMessage().equals("OK"))
+				status = true;
+			conn.disconnect();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+		return status;
+	}
+	
+	public List<Scrumprojekt> ladeProjekte() {
+		List<Scrumprojekt> projekteListe = new LinkedList<Scrumprojekt>();
+		String output = "";
+		try {
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/scrumprojekt/alle/" + ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+			output = br.readLine();
+			conn.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Gson gson = new Gson();
+		Type listType = new TypeToken<LinkedList<Scrumprojekt>>() {
+		}.getType();
+		projekteListe = gson.fromJson(output, listType);
+		
+		return projekteListe;
 	}
 	
 }

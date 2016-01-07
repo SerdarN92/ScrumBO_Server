@@ -85,10 +85,36 @@ public class SprintBacklogController implements Initializable {
 		return anzahlSprints;
 	}
 	
+	public void pause() {
+		this.timer.cancel();
+	}
+	
+	public void resume() {
+		this.timer = new Timer();
+		this.timer.schedule(new TimerTask() {
+			@Override
+			public void run() {
+				Platform.runLater(new Runnable() {
+					public void run() {
+						
+						try {
+							reloadSprintBacklog();
+						} catch (IOException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				});
+			}
+		}, 0, 10000);
+	}
+	
 	public void initLoadOldSprint() {
 		if (CurrentSprint.sprintnummer < sprintbacklogService.ladeAnzahlSprints()) {
+			pause();
 			editable = false;
 		} else {
+			resume();
 			editable = true;
 		}
 		sprintbacklogService.ladeAltenSprint(CurrentSprint.sprintnummer);
@@ -204,6 +230,14 @@ public class SprintBacklogController implements Initializable {
 						reloadSprintBacklog();
 						if (!dataSprintBacklog.isEmpty())
 							buttonStartSprint.setDisable(false);
+							
+						if (CurrentBenutzer.isPO || CurrentBenutzer.isDev) {
+							buttonStartSprint.setDisable(true);
+							buttonEndDay.setDisable(true);
+							buttonCreateNewSprint.setDisable(true);
+							buttonLoadSprint.setDisable(true);
+						}
+						
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -236,13 +270,13 @@ public class SprintBacklogController implements Initializable {
 	@FXML
 	private void handleButtonBack(ActionEvent event) throws Exception {
 		if (CurrentBenutzer.isSM) {
-			timer.cancel();
+			pause();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonLogout.getScene().getWindow();
 			stage.setScene(scene);
 		} else {
-			timer.cancel();
+			pause();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Scrum.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonLogout.getScene().getWindow();
@@ -264,7 +298,7 @@ public class SprintBacklogController implements Initializable {
 		CurrentScrumprojekt.projektname = null;
 		CurrentBenutzer.isSM = false;
 		
-		timer.cancel();
+		pause();
 		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		this.scene = new Scene(root);
@@ -316,6 +350,13 @@ public class SprintBacklogController implements Initializable {
 			buttonLoadSprint.setDisable(true);
 		}
 		
+		if (CurrentBenutzer.isPO || CurrentBenutzer.isDev) {
+			buttonStartSprint.setDisable(true);
+			buttonEndDay.setDisable(true);
+			buttonCreateNewSprint.setDisable(true);
+			buttonLoadSprint.setDisable(true);
+		}
+		
 		timer = new Timer();
 		timer.schedule(new TimerTask() {
 			@Override
@@ -324,7 +365,6 @@ public class SprintBacklogController implements Initializable {
 					public void run() {
 						
 						try {
-							System.out.println("Hallo");
 							reloadSprintBacklog();
 						} catch (IOException e) {
 							// TODO Auto-generated catch block
@@ -422,6 +462,8 @@ public class SprintBacklogController implements Initializable {
 		} else {
 			alert.close();
 		}
+		
+		tagNumber.setText(null);
 		
 	}
 	

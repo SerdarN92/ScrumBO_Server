@@ -54,6 +54,9 @@ public class UserStory {
 	@JoinColumn(name = "sprint_id", nullable = true)
 	private Sprint					sprint;
 									
+	// @Column(name = "sprintnummer", unique = false, nullable = true)
+	// private Integer sprintnummer;
+	
 	@OneToMany(fetch = FetchType.EAGER, mappedBy = "userstory")
 	@Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE,
 			org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST,
@@ -168,6 +171,16 @@ public class UserStory {
 	public void setDefinitinOfDone(List<DefinitionOfDone> definitionofdone) {
 		this.definitionofdone = definitionofdone;
 	}
+	
+	// public Integer getSprintnummer() {
+	// if (sprint != null)
+	// return sprint.getSprintnummer();
+	// return null;
+	// }
+	//
+	// public void setSprintnummer(Integer sprintnummer) {
+	// this.sprintnummer = sprintnummer;
+	// }
 	
 	@Override
 	public int hashCode() {

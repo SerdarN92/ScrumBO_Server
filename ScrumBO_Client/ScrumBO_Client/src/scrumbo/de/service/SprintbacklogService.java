@@ -24,7 +24,7 @@ public class SprintbacklogService {
 	public Sprint addNewSprintToSprintBacklog() {
 		String output = "";
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/sprint/create/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/sprint/create/"
 					+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -52,7 +52,7 @@ public class SprintbacklogService {
 		String output = "";
 		try {
 			URL url = new URL(
-					"http://localhost:8080/ScrumBO_Server/rest/sprint/suche/" + CurrentScrumprojekt.scrumprojektID + "/"
+					"http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/sprint/suche/" + CurrentScrumprojekt.scrumprojektID + "/"
 							+ sprintnummer + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -89,7 +89,7 @@ public class SprintbacklogService {
 	public void ladeSprint() {
 		String output = "";
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/sprint/suche/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/sprint/suche/"
 					+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -127,7 +127,7 @@ public class SprintbacklogService {
 		String output = "";
 		
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/sprint/suche/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/sprint/suche/"
 					+ CurrentScrumprojekt.scrumprojektID + "/anzahl/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -151,7 +151,7 @@ public class SprintbacklogService {
 	public List<UserStory> ladeSprintBacklog() {
 		String output = "";
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/userstory/suche/sprintid/" + CurrentSprint.id
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/userstory/suche/sprintid/" + CurrentSprint.id
 					+ "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -180,7 +180,7 @@ public class SprintbacklogService {
 	public boolean createBurndownChart() {
 		boolean status = false;
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/sprint/createBurndownChart/" + CurrentSprint.id
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/sprint/createBurndownChart/" + CurrentSprint.id
 					+ "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -207,7 +207,7 @@ public class SprintbacklogService {
 	public boolean endDay() {
 		boolean status = false;
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/sprint/endDay/" + CurrentSprint.id + "/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/sprint/endDay/" + CurrentSprint.id + "/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");

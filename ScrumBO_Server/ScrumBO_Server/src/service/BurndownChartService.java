@@ -47,6 +47,14 @@ public class BurndownChartService {
 		}
 	}
 	
+	public void deleteWithNull() {
+		try {
+			burndownChartDao.deleteAllNull();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	public List<BurndownChart> findAll() {
 		try {
 			return burndownChartDao.findAll();

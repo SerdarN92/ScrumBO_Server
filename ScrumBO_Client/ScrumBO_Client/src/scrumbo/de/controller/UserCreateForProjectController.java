@@ -132,7 +132,7 @@ public class UserCreateForProjectController implements Initializable {
 				JSONObject jsonObject = new JSONObject(output);
 				
 				try {
-					URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/benutzer/create/" + benutzerrollenId
+					URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/benutzer/create/" + benutzerrollenId
 							+ "/" + CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
 					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 					conn.setDoOutput(true);
@@ -223,7 +223,7 @@ public class UserCreateForProjectController implements Initializable {
 		HttpURLConnection conn = null;
 		
 		try {
-			url2 = new URL("http://localhost:8080/ScrumBO_Server/rest/benutzerrolle" + "/"
+			url2 = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/benutzerrolle" + "/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			conn = (HttpURLConnection) url2.openConnection();
 			conn.setRequestMethod("GET");
@@ -262,7 +262,7 @@ public class UserCreateForProjectController implements Initializable {
 	
 	private Boolean checkIfEmailExists(String email) throws JSONException {
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/benutzer/suche/" + email + "/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/benutzer/suche/" + email + "/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");

@@ -287,6 +287,18 @@ public class UserStoryEditController implements Initializable {
 		beschreibung.setText(data.getBeschreibung());
 		akzeptanzkriterien.setText(data.getAkzeptanzkriterien());
 		aufwandintagen.setText(data.getAufwandintagen().toString());
+		CurrentUserStory.status = data.getStatus();
+		
+		if (data.getStatus() == 2) {
+			buttonDelete.setDisable(true);
+			buttonUpdate.setDisable(true);
+			buttonAbbort.setText("Schlieﬂen");
+			aufwandintagen.setEditable(false);
+			beschreibung.setEditable(false);
+			akzeptanzkriterien.setEditable(false);
+			thema.setEditable(false);
+			prioritaet.setEditable(false);
+		}
 	}
 	
 	public static Integer getId() {

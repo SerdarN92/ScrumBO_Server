@@ -58,12 +58,12 @@ public class TaskEditController2 implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		benutzerService = StartwindowController.getBenutzerService();
-		benutzerList = benutzerService.ladeBenutzerVomAktuellenProjekt();
+		benutzerList = benutzerService.ladeEntwicklerVomAktuellenProjekt();
 		initComboBox();
 		
 		taskbeschreibung.setText(SprintBacklogAddUserStoryController.selectedUserStoryTask.getBeschreibung());
-		aufwandinstunden.setText(
-				SprintBacklogAddUserStoryController.selectedUserStoryTask.getAufwandinstunden().toString());
+		aufwandinstunden
+				.setText(SprintBacklogAddUserStoryController.selectedUserStoryTask.getAufwandinstunden().toString());
 		Integer platz = 0;
 		for (int i = 0; i < benutzerList.size(); i++) {
 			if (benutzerList.get(i).getEmail()

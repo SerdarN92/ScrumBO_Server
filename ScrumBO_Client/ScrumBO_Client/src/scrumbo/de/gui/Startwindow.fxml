@@ -19,7 +19,7 @@
       </ImageView>
       <ImageView fx:id="adminImage" fitHeight="150.0" fitWidth="200.0" layoutX="161.0" layoutY="225.0" onMouseClicked="#handleClickAdminImage" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../bin/content/1448997976_Key.png" />
+            <Image url="@../../../content/1448997976_Key.png" />
          </image>
          <cursor>
             <Cursor fx:constant="HAND" />

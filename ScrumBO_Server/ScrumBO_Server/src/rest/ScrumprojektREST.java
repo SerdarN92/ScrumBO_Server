@@ -33,6 +33,7 @@ import model.Sprint;
 import model.SprintBacklog;
 import service.BenutzerService;
 import service.Benutzer_Benutzerrolle_ScrumprojektService;
+import service.BurndownChartService;
 import service.ProductBacklogService;
 import service.ScrumprojektService;
 import service.SprintBacklogService;
@@ -258,6 +259,76 @@ public class ScrumprojektREST {
 		
 		return Response.status(200).entity(output).build();
 		
+	}
+	
+	@Path("/delete/{scrumprojektid}/{hibernateconfigfilename}")
+	@GET
+	@Produces("application/json" + ";charset=utf-8")
+	public Response delete(@PathParam("scrumprojektid") Integer scrumprojektid,
+			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
+		Benutzer_Benutzerrolle_ScrumprojektService bbsService = new Benutzer_Benutzerrolle_ScrumprojektService(
+				hibernateconfigfilename);
+		BurndownChartService burndownchartService = new BurndownChartService(hibernateconfigfilename);
+		ScrumprojektService scrumprojektService = new ScrumprojektService(hibernateconfigfilename);
+		Scrumprojekt scrumprojekt = scrumprojektService.findById(scrumprojektid);
+		boolean success = false;
+		
+		try {
+			bbsService.deleteProject(scrumprojekt.getId());
+			scrumprojektService.delete(scrumprojekt.getId());
+			success = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		String output = "Projekt nicht gelöscht";
+		if (success) {
+			output = "Projekt gelöscht";
+		}
+		
+		return Response.status(200).entity(output).build();
+		
+	}
+	
+	@POST
+	@Path("/delete/{hibernateconfigfilename}")
+	@Consumes("application/json" + ";charset=utf-8")
+	public Response deleteProject(InputStream input,
+			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
+		StringBuilder b = new StringBuilder();
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(input));
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				b.append(line);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String scrumprojektDetails = b.toString();
+		Gson gson = new Gson();
+		ScrumprojektDTO scrumprojektDTO = gson.fromJson(scrumprojektDetails, ScrumprojektDTO.class);
+		Benutzer_Benutzerrolle_ScrumprojektService bbsService = new Benutzer_Benutzerrolle_ScrumprojektService(
+				hibernateconfigfilename);
+		BurndownChartService burndownchartService = new BurndownChartService(hibernateconfigfilename);
+		ScrumprojektService scrumprojektService = new ScrumprojektService(hibernateconfigfilename);
+		Scrumprojekt scrumprojekt = scrumprojektService.findById(scrumprojektDTO.getId());
+		boolean success = false;
+		String output = "Projekt nicht gelöscht";
+		
+		try {
+			bbsService.deleteProject(scrumprojekt.getId());
+			scrumprojektService.delete(scrumprojekt.getId());
+			success = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		if (success) {
+			output = "Projekt gelöscht";
+		}
+		
+		return Response.status(200).entity(output).build();
 	}
 	
 }

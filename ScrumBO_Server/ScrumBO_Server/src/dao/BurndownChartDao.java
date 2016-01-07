@@ -115,9 +115,37 @@ public class BurndownChartDao implements DaoInterface<BurndownChart, Integer> {
 		return burndownChartListe;
 	}
 	
+	public List<BurndownChart> findAllNull() {
+		List<BurndownChart> burndownChartListe = null;
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				burndownChartListe = (List<BurndownChart>) s.createQuery("from Burndownchart WHERE tage IS NULL")
+						.list();
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return burndownChartListe;
+	}
+	
 	@Override
 	public void deleteAll() {
 		List<BurndownChart> burndownChartListe = findAll();
+		for (BurndownChart burndownChart : burndownChartListe) {
+			delete(burndownChart);
+		}
+	}
+	
+	public void deleteAllNull() {
+		List<BurndownChart> burndownChartListe = findAllNull();
 		for (BurndownChart burndownChart : burndownChartListe) {
 			delete(burndownChart);
 		}

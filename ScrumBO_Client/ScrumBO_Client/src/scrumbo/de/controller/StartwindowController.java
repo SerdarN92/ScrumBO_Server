@@ -63,6 +63,7 @@ public class StartwindowController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
+		
 		if (benutzerService == null)
 			benutzerService = new BenutzerService();
 		if (benutzerrolleService == null)

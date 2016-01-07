@@ -3,6 +3,7 @@ package scrumbo.de.controller;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import javafx.beans.value.ChangeListener;
@@ -14,67 +15,91 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
 import scrumbo.de.entity.Benutzer;
-import scrumbo.de.entity.UserStoryTask;
 import scrumbo.de.service.BenutzerService;
 
-public class TaskEditController implements Initializable {
+public class UserDeleteController implements Initializable {
 	
 	Parent						root;
 	Scene						scene;
 	BenutzerService				benutzerService		= null;
 	@FXML
-	private TextField			taskbeschreibung;
-	@FXML
-	private TextField			aufwandinstunden;
-	@FXML
 	private ComboBox<Benutzer>	comboBoxBenutzer	= new ComboBox<>();
 	@FXML
 	private Button				buttonAbbort;
 	@FXML
-	private Button				buttonAdd;
-								
+	private Button				buttonDelete;
 	private List<Benutzer>		benutzerList		= new LinkedList<Benutzer>();
 	private Benutzer			currentBenutzer		= new Benutzer();
-	private UserStoryTask		task				= new UserStoryTask();
 													
 	@FXML
-	private void handleButtonAdd(ActionEvent event) throws Exception {
-		SprintBacklogEditUserStoryController.selectedUserStoryTask.setBeschreibung(taskbeschreibung.getText());
-		SprintBacklogEditUserStoryController.selectedUserStoryTask
-				.setAufwandinstunden(Integer.parseInt(aufwandinstunden.getText()));
-		SprintBacklogEditUserStoryController.selectedUserStoryTask.setBenutzer(currentBenutzer);
-		Stage stage = (Stage) buttonAdd.getScene().getWindow();
+	private void handleButtonAbbort(ActionEvent event) throws Exception {
+		Stage stage = (Stage) buttonDelete.getScene().getWindow();
 		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+	}
+	
+	@FXML
+	private void handleButtonDelete(ActionEvent event) throws Exception {
+		if (currentBenutzer.getId() != null) {
+			try {
+				Alert alert = new Alert(AlertType.CONFIRMATION);
+				alert.setTitle("Benutzer löschen");
+				alert.setHeaderText(null);
+				alert.setContentText("Wollen Sie diesen Benutzer wirklich löschen?");
+				
+				ButtonType buttonTypeOne = new ButtonType("Ja");
+				ButtonType buttonTypeTwo = new ButtonType("Nein");
+				alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+				
+				Optional<ButtonType> result = alert.showAndWait();
+				if (result.get() == buttonTypeOne) {
+					alert.close();
+					if (benutzerService.deleteBenutzer(currentBenutzer)) {
+						Alert alert2 = new Alert(AlertType.INFORMATION);
+						alert2.setTitle("Benutzer löschen");
+						alert2.setHeaderText(null);
+						alert2.setContentText("Benutzer wurde erfolgreich gelöscht!");
+						alert2.showAndWait();
+						Stage stage = (Stage) buttonDelete.getScene().getWindow();
+						stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+					} else {
+						Alert alert2 = new Alert(AlertType.INFORMATION);
+						alert2.setTitle("Benutzer löschen");
+						alert2.setHeaderText(null);
+						alert2.setContentText("Fehler! Benutzer wurde nicht gelöscht!");
+						alert2.showAndWait();
+						Stage stage = (Stage) buttonAbbort.getScene().getWindow();
+						stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+					}
+				} else {
+					alert.close();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		benutzerService = StartwindowController.getBenutzerService();
-		benutzerList = benutzerService.ladeEntwicklerVomAktuellenProjekt();
-		initComboBox();
+		benutzerList = benutzerService.ladeBenutzer();
 		
-		taskbeschreibung.setText(SprintBacklogEditUserStoryController.selectedUserStoryTask.getBeschreibung());
-		aufwandinstunden
-				.setText(SprintBacklogEditUserStoryController.selectedUserStoryTask.getAufwandinstunden().toString());
-		Integer platz = 0;
-		for (int i = 0; i < benutzerList.size(); i++) {
-			if (benutzerList.get(i).getEmail()
-					.equals(SprintBacklogEditUserStoryController.selectedUserStoryTask.getBenutzer().getEmail()))
-				platz = i;
+		if (benutzerList.isEmpty()) {
+			buttonDelete.setDisable(true);
+		} else {
+			buttonDelete.setDisable(false);
 		}
 		
-		benutzerList.set(platz, benutzerList.get(platz));
-	}
-	
-	public void initComboBox() {
 		ObservableList<Benutzer> options = FXCollections.observableArrayList();
 		for (int i = 0; i < benutzerList.size(); i++) {
 			options.add(benutzerList.get(i));
@@ -100,6 +125,7 @@ public class TaskEditController implements Initializable {
 		});
 		
 		comboBoxBenutzer.valueProperty().addListener((ChangeListener<Benutzer>) (ov, t, t1) -> currentBenutzer = t1);
+		
 	}
 	
 }

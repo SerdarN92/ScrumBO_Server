@@ -27,6 +27,10 @@ public class AdminViewController implements Initializable {
 	@FXML
 	private TextField	txtConfigField;
 	@FXML
+	private TextField	hostField;
+	@FXML
+	private TextField	portField;
+	@FXML
 	private Text		txtSuccess;
 	@FXML
 	private Button		buttonSave;
@@ -34,6 +38,10 @@ public class AdminViewController implements Initializable {
 	private Button		buttonBack;
 	@FXML
 	private Button		buttonAddSM;
+	@FXML
+	private Button		buttonDeleteUser;
+	@FXML
+	private Button		buttonDeleteProject;
 	@FXML
 	private Text		txtFail;
 						
@@ -53,6 +61,36 @@ public class AdminViewController implements Initializable {
 		this.scene = new Scene(root);
 		Stage stage = (Stage) buttonBack.getScene().getWindow();
 		stage.setScene(scene);
+	}
+	
+	@FXML
+	private void handleButtonDeleteUser(ActionEvent event) throws Exception {
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/scrumbo/de/gui/UserDelete.fxml"));
+			Parent root1 = (Parent) fxmlLoader.load();
+			Stage stage = new Stage();
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.setScene(new Scene(root1));
+			stage.show();
+			stage.setResizable(false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@FXML
+	private void handleButtonDeleteProject(ActionEvent event) throws Exception {
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/scrumbo/de/gui/ProjektLoeschen.fxml"));
+			Parent root1 = (Parent) fxmlLoader.load();
+			Stage stage = new Stage();
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.setScene(new Scene(root1));
+			stage.show();
+			stage.setResizable(false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@FXML
@@ -80,7 +118,9 @@ public class AdminViewController implements Initializable {
 			txtFail.setVisible(false);
 			txtConfigField.setStyle(null);
 			String changedConfigurationName = txtConfigField.getText();
-			ScrumBOClient.setDatabaseconfigfile(changedConfigurationName);
+			String changedHost = hostField.getText();
+			String changedPort = portField.getText();
+			ScrumBOClient.setDatabaseconfigfile(changedConfigurationName, changedHost, changedPort);
 			txtSuccess.setVisible(true);
 			Timer timer = new Timer(2000, new ActionListener() {
 				
@@ -99,6 +139,8 @@ public class AdminViewController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		txtConfigField.setText(ScrumBOClient.getDatabaseconfigfile());
+		hostField.setText(ScrumBOClient.getHost());
+		portField.setText(ScrumBOClient.getPort());
 	}
 	
 }

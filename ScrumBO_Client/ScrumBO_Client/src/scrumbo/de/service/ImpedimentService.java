@@ -22,7 +22,7 @@ public class ImpedimentService {
 	public void getImpedimentBacklog() {
 		String output = "";
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/impedimentbacklog/suche/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/impedimentbacklog/suche/"
 					+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -52,7 +52,7 @@ public class ImpedimentService {
 		Gson gson = new Gson();
 		String output = gson.toJson(impediment);
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/impedimentbacklog/create/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/impedimentbacklog/create/"
 					+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
@@ -81,7 +81,7 @@ public class ImpedimentService {
 		Gson gson = new Gson();
 		String output = gson.toJson(impediment);
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/impedimentbacklog/delete/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/impedimentbacklog/delete/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
@@ -110,7 +110,7 @@ public class ImpedimentService {
 		Gson gson = new Gson();
 		String output = gson.toJson(impediment);
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/impedimentbacklog/update/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/impedimentbacklog/update/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);

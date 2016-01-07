@@ -18,7 +18,7 @@ public class ProductbacklogService {
 		String output = "";
 		try {
 			URL url = new URL(
-					"http://localhost:8080/ScrumBO_Server/rest/scrumprojekt/suche/" + CurrentScrumprojekt.scrumprojektID
+					"http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/scrumprojekt/suche/" + CurrentScrumprojekt.scrumprojektID
 							+ "/productbacklog" + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -46,7 +46,7 @@ public class ProductbacklogService {
 		Integer platz = -1;
 		try {
 			
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/productbacklog/suche/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/productbacklog/suche/"
 					+ CurrentScrumprojekt.productbacklog.getId() + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");

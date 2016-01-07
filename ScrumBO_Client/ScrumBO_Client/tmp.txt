@@ -1,1 +1,3 @@
 hibernate.cfg.xml
+localhost
+8080

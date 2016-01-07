@@ -37,7 +37,7 @@ public class BenutzerrolleService {
 		HttpURLConnection conn = null;
 		
 		try {
-			url2 = new URL("http://localhost:8080/ScrumBO_Server/rest/benutzerrolle" + "/"
+			url2 = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/benutzerrolle" + "/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			conn = (HttpURLConnection) url2.openConnection();
 			conn.setRequestMethod("GET");
@@ -71,7 +71,7 @@ public class BenutzerrolleService {
 	
 	public Boolean checkRole(String email) throws JSONException {
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/benutzer/suche/" + email + "/rolle/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/benutzer/suche/" + email + "/rolle/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");

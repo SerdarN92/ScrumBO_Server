@@ -23,7 +23,7 @@
       </Button>
       <ImageView fx:id="createProjectImage" fitHeight="150.0" fitWidth="200.0" layoutX="161.0" layoutY="225.0" onMouseClicked="#handleCreateProjectButton" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../bin/content/1447002493_Edit.png" />
+            <Image url="@../../../content/1447002493_Edit.png" />
          </image>
          <cursor>
             <Cursor fx:constant="HAND" />
@@ -31,7 +31,7 @@
       </ImageView>
       <ImageView fx:id="openProjectImage" fitHeight="150.0" fitWidth="200.0" layoutX="487.0" layoutY="225.0" onMouseClicked="#handleOpenProjectButton" pickOnBounds="true" preserveRatio="true">
          <image>
-            <Image url="@../../../../bin/content/1447002486_Folder.png" />
+            <Image url="@../../../content/1447002486_Folder.png" />
          </image>
          <cursor>
             <Cursor fx:constant="HAND" />

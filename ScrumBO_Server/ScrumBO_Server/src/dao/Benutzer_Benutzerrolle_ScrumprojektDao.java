@@ -141,6 +141,27 @@ public class Benutzer_Benutzerrolle_ScrumprojektDao
 		return benutzerListe;
 	}
 	
+	public List<Benutzer_Benutzerrolle_Scrumprojekt> findAllWithBenutzerId(Integer benutzerId) {
+		List<Benutzer_Benutzerrolle_Scrumprojekt> benutzerListe = null;
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				benutzerListe = (List<Benutzer_Benutzerrolle_Scrumprojekt>) s.createQuery(
+						"from Benutzer_Benutzerrolle_Scrumprojekt where benutzerId LIKE LIKE '" + benutzerId + "'")
+						.list();
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return benutzerListe;
+	}
+	
 	@Override
 	public void deleteAll() {
 		try {
@@ -196,6 +217,28 @@ public class Benutzer_Benutzerrolle_ScrumprojektDao
 			e.printStackTrace();
 		}
 		return admission;
+	}
+	
+	public void deleteBenutzer(Integer benutzerId) {
+		try {
+			List<Benutzer_Benutzerrolle_Scrumprojekt> benutzerListe = findListByBenutzerId(benutzerId);
+			for (Benutzer_Benutzerrolle_Scrumprojekt benutzer : benutzerListe) {
+				delete(benutzer);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	public void deleteProject(Integer scrumprojectId) {
+		try {
+			List<Benutzer_Benutzerrolle_Scrumprojekt> benutzerListe = findListByProjectId(scrumprojectId);
+			for (Benutzer_Benutzerrolle_Scrumprojekt benutzer : benutzerListe) {
+				delete(benutzer);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public boolean checkAdmin(Integer benutzerId) {

@@ -22,7 +22,7 @@ public class DefinitionOfDoneService {
 	public void ladeDefinitionOfDone() {
 		String output = "";
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/definitionofdone/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/definitionofdone/"
 					+ CurrentUserStory.userstoryID + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -53,7 +53,7 @@ public class DefinitionOfDoneService {
 		String output = gson.toJson(dod);
 		
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/definitionofdone/create/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/definitionofdone/create/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
@@ -83,7 +83,7 @@ public class DefinitionOfDoneService {
 		Gson gson = new Gson();
 		String output = gson.toJson(dod);
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/definitionofdone/delete/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/definitionofdone/delete/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
@@ -113,7 +113,7 @@ public class DefinitionOfDoneService {
 		String output = gson.toJson(dod);
 		
 		try {
-			URL url = new URL("http://localhost:8080/ScrumBO_Server/rest/definitionofdone/update/"
+			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/definitionofdone/update/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);

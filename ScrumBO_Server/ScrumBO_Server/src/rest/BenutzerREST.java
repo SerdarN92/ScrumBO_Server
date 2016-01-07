@@ -62,7 +62,36 @@ public class BenutzerREST {
 		List<Benutzer_Benutzerrolle_Scrumprojekt> bbsListe = bbsService.findListByProjectId(scrumprojektid);
 		List<Benutzer> benutzerListe = new LinkedList<Benutzer>();
 		for (int i = 0; i < bbsListe.size(); i++) {
+			
 			benutzerListe.add(benutzerService.findById(bbsListe.get(i).getPk().getBenutzerId()));
+		}
+		
+		List<BenutzerDTO> benutzerDTOListe = new LinkedList<BenutzerDTO>();
+		for (int i = 0; i < benutzerListe.size(); i++) {
+			BenutzerDTO benutzerDTO = new BenutzerDTO(benutzerListe.get(i).getId(), benutzerListe.get(i).getVorname(),
+					benutzerListe.get(i).getNachname(), benutzerListe.get(i).getPasswort(),
+					benutzerListe.get(i).getEmail());
+			benutzerDTOListe.add(benutzerDTO);
+		}
+		
+		Gson gson = new Gson();
+		String output = gson.toJson(benutzerDTOListe);
+		return Response.status(200).entity(output).build();
+	}
+	
+	@GET
+	@Path("/alle/scrumprojekt/entwickler/{scrumprojektid}/{hibernateconfigfilename}")
+	@Produces("application/json" + ";charset=utf-8")
+	public Response getDeveloperOfProject(@PathParam("scrumprojektid") Integer scrumprojektid,
+			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) throws JSONException {
+		Benutzer_Benutzerrolle_ScrumprojektService bbsService = new Benutzer_Benutzerrolle_ScrumprojektService(
+				hibernateconfigfilename);
+		BenutzerService benutzerService = new BenutzerService(hibernateconfigfilename);
+		List<Benutzer_Benutzerrolle_Scrumprojekt> bbsListe = bbsService.findListByProjectId(scrumprojektid);
+		List<Benutzer> benutzerListe = new LinkedList<Benutzer>();
+		for (int i = 0; i < bbsListe.size(); i++) {
+			if (bbsListe.get(i).getPk().getBenutzerrollenId() == 3)
+				benutzerListe.add(benutzerService.findById(bbsListe.get(i).getPk().getBenutzerId()));
 		}
 		
 		List<BenutzerDTO> benutzerDTOListe = new LinkedList<BenutzerDTO>();
@@ -265,4 +294,39 @@ public class BenutzerREST {
 		
 		return Response.status(200).entity(output).build();
 	}
+	
+	@POST
+	@Path("/delete/{hibernateconfigfilename}")
+	@Consumes("application/json" + ";charset=utf-8")
+	public Response deleteDefinitionOfDone(InputStream input,
+			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
+		StringBuilder b = new StringBuilder();
+		try {
+			BufferedReader in = new BufferedReader(new InputStreamReader(input));
+			String line = null;
+			while ((line = in.readLine()) != null) {
+				b.append(line);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String benutzerDetails = b.toString();
+		Gson gson = new Gson();
+		BenutzerDTO benutzerDTO = gson.fromJson(benutzerDetails, BenutzerDTO.class);
+		BenutzerService benutzerService = new BenutzerService(hibernateconfigfilename);
+		Benutzer_Benutzerrolle_ScrumprojektService bbsService = new Benutzer_Benutzerrolle_ScrumprojektService(
+				hibernateconfigfilename);
+				
+		String output = "";
+		try {
+			benutzerService.delete(benutzerDTO.getId());
+			bbsService.deleteBenutzer(benutzerDTO.getId());
+			output = "Benutzer erfolgreich gelöscht";
+		} catch (Exception e) {
+			e.printStackTrace();
+			output = "Benutzer wurde nicht erfolgreich gelöscht";
+		}
+		return Response.status(200).entity(output).build();
+	}
+	
 }

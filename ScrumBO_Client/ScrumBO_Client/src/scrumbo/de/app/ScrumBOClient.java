@@ -29,18 +29,25 @@ import javafx.stage.WindowEvent;
  */
 public class ScrumBOClient extends Application {
 	
-	static String databaseconfigfile = "";
-	
+	public static String	databaseconfigfile	= "";
+	public static String	host				= "";
+	public static String	port				= "";
+												
 	@Override
 	public void start(Stage stage) throws Exception {
+		
 		try {
 			File file = new File("tmp.txt");
 			if (!file.exists()) {
 				databaseconfigfile = "hibernate.cfg.xml";
+				host = "localhost";
+				port = "8080";
 				file.createNewFile();
 				FileWriter fw = new FileWriter(file.getAbsoluteFile());
 				BufferedWriter bw = new BufferedWriter(fw);
 				bw.write(databaseconfigfile);
+				bw.write("\n" + host);
+				bw.write("\n" + port);
 				bw.close();
 			} else {
 				try {
@@ -48,6 +55,8 @@ public class ScrumBOClient extends Application {
 					InputStreamReader isr = new InputStreamReader(fis, Charset.forName("UTF-8"));
 					BufferedReader br = new BufferedReader(isr);
 					databaseconfigfile = br.readLine();
+					host = br.readLine();
+					port = br.readLine();
 					
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -73,6 +82,7 @@ public class ScrumBOClient extends Application {
 		});
 		stage.show();
 		stage.setResizable(false);
+		
 	}
 	
 	public static void main(String[] args) {
@@ -83,8 +93,18 @@ public class ScrumBOClient extends Application {
 		return databaseconfigfile;
 	}
 	
-	public static void setDatabaseconfigfile(String databaseconfigfile) {
+	public static String getHost() {
+		return host;
+	}
+	
+	public static String getPort() {
+		return port;
+	}
+	
+	public static void setDatabaseconfigfile(String databaseconfigfile, String host, String port) {
 		ScrumBOClient.databaseconfigfile = databaseconfigfile;
+		ScrumBOClient.host = host;
+		ScrumBOClient.port = port;
 		
 		try {
 			File file = new File("tmp.txt");
@@ -94,6 +114,8 @@ public class ScrumBOClient extends Application {
 				FileWriter fw = new FileWriter(file.getAbsoluteFile());
 				BufferedWriter bw = new BufferedWriter(fw);
 				bw.write(databaseconfigfile);
+				bw.write("\n" + host);
+				bw.write("\n" + port);
 				bw.close();
 			}
 			

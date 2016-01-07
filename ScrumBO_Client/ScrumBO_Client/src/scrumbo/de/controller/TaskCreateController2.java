@@ -58,7 +58,7 @@ public class TaskCreateController2 implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		benutzerService = StartwindowController.getBenutzerService();
-		benutzerList = benutzerService.ladeBenutzerVomAktuellenProjekt();
+		benutzerList = benutzerService.ladeEntwicklerVomAktuellenProjekt();
 		ObservableList<Benutzer> options = FXCollections.observableArrayList();
 		for (int i = 0; i < benutzerList.size(); i++) {
 			options.add(benutzerList.get(i));
