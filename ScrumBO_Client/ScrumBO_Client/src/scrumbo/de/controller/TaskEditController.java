@@ -21,7 +21,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
-import scrumbo.de.entity.Benutzer;
+import scrumbo.de.entity.User;
 import scrumbo.de.entity.UserStoryTask;
 import scrumbo.de.service.BenutzerService;
 
@@ -35,14 +35,14 @@ public class TaskEditController implements Initializable {
 	@FXML
 	private TextField			aufwandinstunden;
 	@FXML
-	private ComboBox<Benutzer>	comboBoxBenutzer	= new ComboBox<>();
+	private ComboBox<User>	comboBoxBenutzer	= new ComboBox<>();
 	@FXML
 	private Button				buttonAbbort;
 	@FXML
 	private Button				buttonAdd;
 								
-	private List<Benutzer>		benutzerList		= new LinkedList<Benutzer>();
-	private Benutzer			currentBenutzer		= new Benutzer();
+	private List<User>		benutzerList		= new LinkedList<User>();
+	private User			currentBenutzer		= new User();
 	private UserStoryTask		task				= new UserStoryTask();
 													
 	@FXML
@@ -75,7 +75,7 @@ public class TaskEditController implements Initializable {
 	}
 	
 	public void initComboBox() {
-		ObservableList<Benutzer> options = FXCollections.observableArrayList();
+		ObservableList<User> options = FXCollections.observableArrayList();
 		for (int i = 0; i < benutzerList.size(); i++) {
 			options.add(benutzerList.get(i));
 		}
@@ -87,19 +87,19 @@ public class TaskEditController implements Initializable {
 			}
 		});
 		
-		comboBoxBenutzer.setConverter(new StringConverter<Benutzer>() {
+		comboBoxBenutzer.setConverter(new StringConverter<User>() {
 			@Override
-			public String toString(Benutzer u) {
+			public String toString(User u) {
 				return u.getVorname() + " " + u.getNachname();
 			}
 			
 			@Override
-			public Benutzer fromString(String string) {
+			public User fromString(String string) {
 				throw new UnsupportedOperationException();
 			}
 		});
 		
-		comboBoxBenutzer.valueProperty().addListener((ChangeListener<Benutzer>) (ov, t, t1) -> currentBenutzer = t1);
+		comboBoxBenutzer.valueProperty().addListener((ChangeListener<User>) (ov, t, t1) -> currentBenutzer = t1);
 	}
 	
 }

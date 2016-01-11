@@ -13,8 +13,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import scrumbo.de.entity.Benutzer;
-import scrumbo.de.entity.CurrentBenutzer;
+import scrumbo.de.entity.User;
+import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.service.BenutzerService;
 
 public class UserChangePasswordController implements Initializable {
@@ -36,15 +36,15 @@ public class UserChangePasswordController implements Initializable {
 	@FXML
 	private void handleButtonSave(ActionEvent event) throws Exception {
 		if (passwordCheck()) {
-			Benutzer benutzer = new Benutzer();
-			benutzer.setId(CurrentBenutzer.benutzerID);
-			benutzer.setVorname(CurrentBenutzer.vorname);
-			benutzer.setNachname(CurrentBenutzer.nachname);
-			benutzer.setEmail(CurrentBenutzer.email);
+			User benutzer = new User();
+			benutzer.setId(CurrentUser.userId);
+			benutzer.setVorname(CurrentUser.prename);
+			benutzer.setNachname(CurrentUser.lastname);
+			benutzer.setEmail(CurrentUser.email);
 			benutzer.setPasswort(txtPassword.getText());
 			
 			if (benutzerService.changeDefaultPassword(benutzer)) {
-				if (CurrentBenutzer.isSM) {
+				if (CurrentUser.isSM) {
 					this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Project.fxml"));
 					this.scene = new Scene(root);
 					Stage stage = (Stage) buttonSave.getScene().getWindow();
@@ -106,7 +106,7 @@ public class UserChangePasswordController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		benutzerService = StartwindowController.getBenutzerService();
-		txtName.setText(CurrentBenutzer.vorname + " " + CurrentBenutzer.nachname + ",");
+		txtName.setText(CurrentUser.prename + " " + CurrentUser.lastname + ",");
 		
 	}
 	

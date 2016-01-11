@@ -15,9 +15,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import scrumbo.de.entity.Benutzer;
-import scrumbo.de.entity.CurrentBenutzer;
-import scrumbo.de.entity.Scrumprojekt;
+import scrumbo.de.entity.CurrentUser;
+import scrumbo.de.entity.Project;
+import scrumbo.de.entity.User;
 import scrumbo.de.service.ScrumprojektService;
 
 public class ProjectCreateController implements Initializable {
@@ -42,15 +42,15 @@ public class ProjectCreateController implements Initializable {
 						
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
-		CurrentBenutzer.benutzerID = -1;
-		CurrentBenutzer.vorname = null;
-		CurrentBenutzer.nachname = null;
-		CurrentBenutzer.email = null;
-		CurrentBenutzer.passwort = null;
-		CurrentBenutzer.benutzerrollenID = -1;
-		CurrentBenutzer.benutzerrolle = null;
-		CurrentBenutzer.projekte = null;
-		CurrentBenutzer.isSM = false;
+		CurrentUser.userId = -1;
+		CurrentUser.prename = null;
+		CurrentUser.lastname = null;
+		CurrentUser.email = null;
+		CurrentUser.password = null;
+		CurrentUser.roleId = -1;
+		CurrentUser.role = null;
+		CurrentUser.projects = null;
+		CurrentUser.isSM = false;
 		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		this.scene = new Scene(root);
@@ -73,12 +73,12 @@ public class ProjectCreateController implements Initializable {
 			if (!scrumprojektService.checkIfProjectnameExists(txtFieldProjectname.getText().toString())) {
 				txtFieldProjectname.setStyle(null);
 				projectnameValidFail.setVisible(false);
-				Scrumprojekt scrumproject = new Scrumprojekt();
+				Project scrumproject = new Project();
 				scrumproject.setProjektname(txtFieldProjectname.getText());
 				scrumproject.setPasswort(pswtFieldPassword.getText());
-				List<Benutzer> benutzerliste = new LinkedList<Benutzer>();
-				Benutzer currBen = new Benutzer();
-				currBen.setId(CurrentBenutzer.benutzerID);
+				List<User> benutzerliste = new LinkedList<User>();
+				User currBen = new User();
+				currBen.setId(CurrentUser.userId);
 				benutzerliste.add(currBen);
 				scrumproject.setBenutzer(benutzerliste);
 				

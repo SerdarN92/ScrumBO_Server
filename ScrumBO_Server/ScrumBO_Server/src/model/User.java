@@ -13,48 +13,42 @@ import javax.persistence.Table;
 
 import org.hibernate.annotations.Cascade;
 
-/*
- * Entität für die Tabelle "Benutzer".
- */
-
 @Entity
-@Table(name = "BENUTZER")
-public class Benutzer {
+@Table(name = "USER")
+public class User {
 	
 	@Id
 	@GeneratedValue
-	@Column(name = "benutzer_id", unique = true, nullable = false)
+	@Column(name = "user_id", unique = true, nullable = false)
 	private Integer				id;
 								
-	@Column(name = "vorname", nullable = false)
-	private String				vorname;
+	@Column(name = "prename", nullable = false)
+	private String				prename;
 								
-	@Column(name = "nachname", nullable = false)
-	private String				nachname;
+	@Column(name = "lastname", nullable = false)
+	private String				lastname;
 								
-	@Column(name = "passwort", nullable = false)
-	private String				passwort;
+	@Column(name = "password", nullable = false)
+	private String				password;
 								
 	@Column(name = "email", unique = true, nullable = false)
 	private String				email;
 								
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "benutzer")
+			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "user")
 	@Cascade({ org.hibernate.annotations.CascadeType.DELETE, org.hibernate.annotations.CascadeType.MERGE,
 			org.hibernate.annotations.CascadeType.PERSIST, org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
-	// @JsonSerialize
-	// @JsonDeserialize
 	private List<UserStoryTask>	userstorytask;
 								
-	public Benutzer() {
+	public User() {
 	
 	}
 	
-	public Benutzer(Integer id, String vorname, String nachname, String passwort, String email) {
+	public User(Integer id, String prename, String lastname, String password, String email) {
 		this.id = id;
-		this.vorname = vorname;
-		this.nachname = nachname;
-		this.passwort = passwort;
+		this.prename = prename;
+		this.lastname = lastname;
+		this.password = password;
 		this.email = email;
 	}
 	
@@ -66,28 +60,28 @@ public class Benutzer {
 		this.id = id;
 	}
 	
-	public String getVorname() {
-		return vorname;
+	public String getPrename() {
+		return prename;
 	}
 	
-	public void setVorname(String vorname) {
-		this.vorname = vorname;
+	public void setPrename(String prename) {
+		this.prename = prename;
 	}
 	
-	public String getNachname() {
-		return nachname;
+	public String getLastname() {
+		return lastname;
 	}
 	
-	public void setNachname(String nachname) {
-		this.nachname = nachname;
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 	
-	public String getPasswort() {
-		return passwort;
+	public String getPassword() {
+		return password;
 	}
 	
-	public void setPasswort(String passwort) {
-		this.passwort = passwort;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	public String getEmail() {
@@ -122,7 +116,7 @@ public class Benutzer {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Benutzer other = (Benutzer) obj;
+		User other = (User) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

@@ -2,22 +2,22 @@ package dto;
 
 import java.io.Serializable;
 
-public class BenutzerDTO implements Serializable {
+public class UserDTO implements Serializable {
 	
 	private Integer	id;
-	private String	vorname;
-	private String	nachname;
-	private String	passwort;
+	private String	prename;
+	private String	lastname;
+	private String	password;
 	private String	email;
 					
-	public BenutzerDTO() {
+	public UserDTO() {
 	}
 	
-	public BenutzerDTO(Integer id, String vorname, String nachname, String passwort, String email) {
+	public UserDTO(Integer id, String prename, String lastname, String password, String email) {
 		this.id = id;
-		this.vorname = vorname;
-		this.nachname = nachname;
-		this.passwort = passwort;
+		this.prename = prename;
+		this.lastname = lastname;
+		this.password = password;
 		this.email = email;
 	}
 	
@@ -30,31 +30,28 @@ public class BenutzerDTO implements Serializable {
 		
 	}
 	
-	public String getVorname() {
-		return vorname;
-		
+	public String getPrename() {
+		return prename;
 	}
 	
-	public void setVorname(String vorname) {
-		this.vorname = vorname;
-		
+	public void setPrename(String prename) {
+		this.prename = prename;
 	}
 	
-	public String getNachname() {
-		return nachname;
-		
+	public String getLastname() {
+		return lastname;
 	}
 	
-	public void setNachname(String nachname) {
-		this.nachname = nachname;
+	public void setLastname(String lastname) {
+		this.lastname = lastname;
 	}
 	
-	public String getPasswort() {
-		return passwort;
+	public String getPassword() {
+		return password;
 	}
 	
-	public void setPasswort(String passwort) {
-		this.passwort = passwort;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	public String getEmail() {
@@ -81,7 +78,7 @@ public class BenutzerDTO implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		BenutzerDTO other = (BenutzerDTO) obj;
+		UserDTO other = (UserDTO) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

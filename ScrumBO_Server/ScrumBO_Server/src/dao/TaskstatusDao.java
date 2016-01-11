@@ -9,12 +9,12 @@ import model.Taskstatus;
 
 public class TaskstatusDao implements DaoInterface<Taskstatus, Integer> {
 	
-	private String			hibernateconfig	= "";
-	private HibernateUtil	hibernateutil	= null;
-											
+	private String			hibernateconfigfilename	= "";
+	private HibernateUtil	hibernateutil			= null;
+													
 	public TaskstatusDao(String hibernateconfigfilename) {
-		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
+		this.setHibernateconfigfilename(hibernateconfigfilename);
+		this.setHibernateutil(new HibernateUtil(hibernateconfigfilename));
 	}
 	
 	public void persist(Taskstatus entity) {
@@ -54,12 +54,12 @@ public class TaskstatusDao implements DaoInterface<Taskstatus, Integer> {
 	}
 	
 	public Taskstatus findById(Integer id) {
-		Taskstatus taskstatus = null;
+		Taskstatus entity = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				taskstatus = (Taskstatus) s.get(Taskstatus.class, id);
+				entity = (Taskstatus) s.get(Taskstatus.class, id);
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -70,7 +70,7 @@ public class TaskstatusDao implements DaoInterface<Taskstatus, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return taskstatus;
+		return entity;
 	}
 	
 	public void delete(Taskstatus entity) {
@@ -91,13 +91,14 @@ public class TaskstatusDao implements DaoInterface<Taskstatus, Integer> {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Taskstatus> findAll() {
-		List<Taskstatus> taskstatusListe = null;
+		List<Taskstatus> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				taskstatusListe = (List<Taskstatus>) s.createQuery("from Taskstatus").list();
+				list = (List<Taskstatus>) s.createQuery("FROM Taskstatus").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -108,13 +109,29 @@ public class TaskstatusDao implements DaoInterface<Taskstatus, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return taskstatusListe;
+		return list;
 	}
 	
 	public void deleteAll() {
-		List<Taskstatus> taskstatusListe = findAll();
-		for (Taskstatus taskstatus : taskstatusListe) {
-			delete(taskstatus);
+		List<Taskstatus> list = findAll();
+		for (Taskstatus entity : list) {
+			delete(entity);
 		}
+	}
+	
+	public HibernateUtil getHibernateutil() {
+		return hibernateutil;
+	}
+	
+	public void setHibernateutil(HibernateUtil hibernateutil) {
+		this.hibernateutil = hibernateutil;
+	}
+	
+	public String getHibernateconfigfilename() {
+		return hibernateconfigfilename;
+	}
+	
+	public void setHibernateconfigfilename(String hibernateconfigfilename) {
+		this.hibernateconfigfilename = hibernateconfigfilename;
 	}
 }

@@ -19,7 +19,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.service.UserstoryService;
 
@@ -185,12 +185,12 @@ public class UserStoryCreateController implements Initializable {
 		if (checkPrioritaet() && checkThema() && checkBeschreibung() && checkAkzeptanzkriterien()
 				&& checkAufwandInTagen()) {
 			UserStory userstory = new UserStory();
-			userstory.setPrioritaet(Integer.parseInt(prioritaet.getText()));
-			userstory.setThema(thema.getText());
-			userstory.setBeschreibung(beschreibung.getText());
-			userstory.setAkzeptanzkriterien(akzeptanzkriterien.getText());
-			userstory.setAufwandintagen(Integer.parseInt(aufwandintagen.getText()));
-			List<UserStory> userstoryList = CurrentScrumprojekt.productbacklog.getUserstory();
+			userstory.setPriority(Integer.parseInt(prioritaet.getText()));
+			userstory.setTheme(thema.getText());
+			userstory.setDescription(beschreibung.getText());
+			userstory.setAcceptanceCriteria(akzeptanzkriterien.getText());
+			userstory.setEffortInDays(Integer.parseInt(aufwandintagen.getText()));
+			List<UserStory> userstoryList = CurrentProject.productbacklog.getUserstory();
 			userstoryList.add(userstory);
 			
 			if (userstoryService.createUserStory(userstory)) {

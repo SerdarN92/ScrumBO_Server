@@ -6,7 +6,7 @@ import java.util.List;
 public class BurndownChart implements Serializable {
 	
 	private Integer						id;
-	private Integer						tage;
+	private Integer						days;
 	private List<BurndownChartPoint>	burndownChartPoint;
 										
 	public BurndownChart() {
@@ -21,12 +21,12 @@ public class BurndownChart implements Serializable {
 		this.id = id;
 	}
 	
-	public Integer getTage() {
-		return tage;
+	public Integer getDays() {
+		return days;
 	}
 	
-	public void setTage(Integer tage) {
-		this.tage = tage;
+	public void setDays(Integer days) {
+		this.days = days;
 	}
 	
 	public List<BurndownChartPoint> getBurndownChartPoint() {

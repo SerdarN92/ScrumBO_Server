@@ -9,12 +9,12 @@ import model.DefinitionOfDone;
 
 public class DefinitionOfDoneDao implements DaoInterface<DefinitionOfDone, Integer> {
 	
-	private String			hibernateconfig	= "";
-	private HibernateUtil	hibernateutil	= null;
-											
+	private String			hibernateconfigfilename	= "";
+	private HibernateUtil	hibernateutil			= null;
+													
 	public DefinitionOfDoneDao(String hibernateconfigfilename) {
-		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
+		this.setHibernateconfigfilename(hibernateconfigfilename);
+		this.setHibernateutil(new HibernateUtil(hibernateconfigfilename));
 	}
 	
 	public void persist(DefinitionOfDone entity) {
@@ -54,12 +54,12 @@ public class DefinitionOfDoneDao implements DaoInterface<DefinitionOfDone, Integ
 	}
 	
 	public DefinitionOfDone findById(Integer id) {
-		DefinitionOfDone definitionofdone = null;
+		DefinitionOfDone entity = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				definitionofdone = (DefinitionOfDone) s.get(DefinitionOfDone.class, id);
+				entity = (DefinitionOfDone) s.get(DefinitionOfDone.class, id);
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -70,16 +70,17 @@ public class DefinitionOfDoneDao implements DaoInterface<DefinitionOfDone, Integ
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return definitionofdone;
+		return entity;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<DefinitionOfDone> findByUserstoryId(Integer userstoryId) {
-		List<DefinitionOfDone> definitionofdoneListe = null;
+		List<DefinitionOfDone> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				definitionofdoneListe = (List<DefinitionOfDone>) s
+				list = (List<DefinitionOfDone>) s
 						.createQuery("from DefinitionOfDone where userstory_id like '" + userstoryId + "'").list();
 				s.getTransaction().commit();
 				s.close();
@@ -91,7 +92,7 @@ public class DefinitionOfDoneDao implements DaoInterface<DefinitionOfDone, Integ
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return definitionofdoneListe;
+		return list;
 	}
 	
 	public void delete(DefinitionOfDone entity) {
@@ -112,13 +113,14 @@ public class DefinitionOfDoneDao implements DaoInterface<DefinitionOfDone, Integ
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<DefinitionOfDone> findAll() {
-		List<DefinitionOfDone> definitionofdoneListe = null;
+		List<DefinitionOfDone> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				definitionofdoneListe = (List<DefinitionOfDone>) s.createQuery("from DefinitionOfDone").list();
+				list = (List<DefinitionOfDone>) s.createQuery("from DefinitionOfDone").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -129,13 +131,29 @@ public class DefinitionOfDoneDao implements DaoInterface<DefinitionOfDone, Integ
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return definitionofdoneListe;
+		return list;
 	}
 	
 	public void deleteAll() {
-		List<DefinitionOfDone> definitionofdoneListe = findAll();
-		for (DefinitionOfDone definitionofdone : definitionofdoneListe) {
-			delete(definitionofdone);
+		List<DefinitionOfDone> list = findAll();
+		for (DefinitionOfDone entity : list) {
+			delete(entity);
 		}
+	}
+	
+	public String getHibernateconfigfilename() {
+		return hibernateconfigfilename;
+	}
+	
+	public void setHibernateconfigfilename(String hibernateconfigfilename) {
+		this.hibernateconfigfilename = hibernateconfigfilename;
+	}
+	
+	public HibernateUtil getHibernateutil() {
+		return hibernateutil;
+	}
+	
+	public void setHibernateutil(HibernateUtil hibernateutil) {
+		this.hibernateutil = hibernateutil;
 	}
 }

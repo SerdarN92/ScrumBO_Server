@@ -27,8 +27,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import scrumbo.de.entity.CurrentBenutzer;
-import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.CurrentProject;
+import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.Impediment;
 import scrumbo.de.service.ImpedimentService;
 
@@ -79,7 +79,7 @@ public class ImpedimentBacklogController implements Initializable {
 	@FXML
 	private void handleButtonBack(ActionEvent event) throws Exception {
 		data.clear();
-		if (CurrentBenutzer.isSM) {
+		if (CurrentUser.isSM) {
 			timer.cancel();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
 			this.scene = new Scene(root);
@@ -97,17 +97,17 @@ public class ImpedimentBacklogController implements Initializable {
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
 		data.clear();
-		CurrentBenutzer.benutzerID = -1;
-		CurrentBenutzer.vorname = null;
-		CurrentBenutzer.nachname = null;
-		CurrentBenutzer.email = null;
-		CurrentBenutzer.passwort = null;
-		CurrentBenutzer.benutzerrollenID = -1;
-		CurrentBenutzer.benutzerrolle = null;
-		CurrentBenutzer.projekte = null;
-		CurrentScrumprojekt.scrumprojektID = -1;
-		CurrentScrumprojekt.projektname = null;
-		CurrentBenutzer.isSM = false;
+		CurrentUser.userId = -1;
+		CurrentUser.prename = null;
+		CurrentUser.lastname = null;
+		CurrentUser.email = null;
+		CurrentUser.password = null;
+		CurrentUser.roleId = -1;
+		CurrentUser.role = null;
+		CurrentUser.projects = null;
+		CurrentProject.projectId = -1;
+		CurrentProject.projectname = null;
+		CurrentUser.isSM = false;
 		
 		timer.cancel();
 		
@@ -147,17 +147,17 @@ public class ImpedimentBacklogController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		impedimentService = StartwindowController.getImpedimentService();
-		vorname.setText(CurrentBenutzer.vorname);
-		nachname.setText(CurrentBenutzer.nachname);
-		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
-		projektname.setText(CurrentScrumprojekt.projektname);
+		vorname.setText(CurrentUser.prename);
+		nachname.setText(CurrentUser.lastname);
+		benutzerrolle.setText(CurrentUser.role);
+		projektname.setText(CurrentProject.projectname);
 		
 		impedimentService.getImpedimentBacklog();
 		
 		data.clear();
 		
-		for (int i = 0; i < CurrentScrumprojekt.impedimentbacklog.size(); i++) {
-			data.add(CurrentScrumprojekt.impedimentbacklog.get(i));
+		for (int i = 0; i < CurrentProject.impedimentbacklog.size(); i++) {
+			data.add(CurrentProject.impedimentbacklog.get(i));
 		}
 		
 		tableViewImpedimentBacklog.setRowFactory(new Callback<TableView<Impediment>, TableRow<Impediment>>() {
@@ -249,8 +249,8 @@ public class ImpedimentBacklogController implements Initializable {
 		
 		data.clear();
 		
-		for (int i = 0; i < CurrentScrumprojekt.impedimentbacklog.size(); i++) {
-			data.add(CurrentScrumprojekt.impedimentbacklog.get(i));
+		for (int i = 0; i < CurrentProject.impedimentbacklog.size(); i++) {
+			data.add(CurrentProject.impedimentbacklog.get(i));
 		}
 	}
 	

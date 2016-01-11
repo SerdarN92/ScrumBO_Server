@@ -18,9 +18,9 @@ import com.google.gson.Gson;
 
 import dto.ImpedimentDTO;
 import model.Impediment;
-import model.Scrumprojekt;
+import model.Project;
 import service.ImpedimentService;
-import service.ScrumprojektService;
+import service.ProjectService;
 
 @Path("/impedimentbacklog")
 public class ImpedimentREST {
@@ -35,9 +35,9 @@ public class ImpedimentREST {
 		List<ImpedimentDTO> impedimentDTOListe = new LinkedList<ImpedimentDTO>();
 		for (int i = 0; i < impedimentListe.size(); i++) {
 			ImpedimentDTO impedimentDTO = new ImpedimentDTO(impedimentListe.get(i).getId(),
-					impedimentListe.get(i).getPriorität(), impedimentListe.get(i).getMitarbeiter(),
-					impedimentListe.get(i).getBeschreibung(), impedimentListe.get(i).getDatumDesAuftretens(),
-					impedimentListe.get(i).getDatumDerBehebung(), impedimentListe.get(i).getKommentar());
+					impedimentListe.get(i).getPriority(), impedimentListe.get(i).getEmployee(),
+					impedimentListe.get(i).getDescription(), impedimentListe.get(i).getDateOfOccurrence(),
+					impedimentListe.get(i).getDateOfRectify(), impedimentListe.get(i).getComment());
 			impedimentDTOListe.add(impedimentDTO);
 		}
 		Gson gson = new Gson();
@@ -65,17 +65,17 @@ public class ImpedimentREST {
 		Gson gson = new Gson();
 		ImpedimentDTO impedimentDTO = gson.fromJson(impedimentdetails, ImpedimentDTO.class);
 		ImpedimentService impedimentService = new ImpedimentService(hibernateconfigfilename);
-		Impediment impediment = new Impediment(impedimentDTO.getPriorität(), impedimentDTO.getMitarbeiter(),
-				impedimentDTO.getBeschreibung(), impedimentDTO.getDatumDesAuftretens());
+		Impediment impediment = new Impediment(impedimentDTO.getPriority(), impedimentDTO.getEmployee(),
+				impedimentDTO.getDescription(), impedimentDTO.getDateOfOccurrence());
 				
-		ScrumprojektService scrumprojektService = new ScrumprojektService(hibernateconfigfilename);
-		Scrumprojekt scrumprojekt = scrumprojektService.findById(scrumprojektId);
-		impediment.setScrumprojekt(scrumprojekt);
+		ProjectService projectService = new ProjectService(hibernateconfigfilename);
+		Project project = projectService.findById(scrumprojektId);
+		impediment.setProject(project);
 		
 		String output = "";
 		try {
 			impedimentService.persist(impediment);
-			scrumprojektService.update(scrumprojekt);
+			projectService.update(project);
 			output = "Impediment erfolgreich erstellt";
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -107,12 +107,12 @@ public class ImpedimentREST {
 		
 		Impediment impediment = new Impediment();
 		impediment = impedimentService.findById(impedimentDTO.getId());
-		impediment.setPriorität(impedimentDTO.getPriorität());
-		impediment.setBeschreibung(impedimentDTO.getBeschreibung());
-		impediment.setMitarbeiter(impedimentDTO.getMitarbeiter());
-		impediment.setDatumDesAuftretens(impedimentDTO.getDatumDesAuftretens());
-		impediment.setDatumDerBehebung(impedimentDTO.getDatumDerBehebung());
-		impediment.setKommentar(impedimentDTO.getKommentar());
+		impediment.setPriority(impedimentDTO.getPriority());
+		impediment.setDescription(impedimentDTO.getDescription());
+		impediment.setEmployee(impedimentDTO.getEmployee());
+		impediment.setDateOfOccurrence(impedimentDTO.getDateOfOccurrence());
+		impediment.setDateOfRectify(impedimentDTO.getDateOfRectify());
+		impediment.setComment(impedimentDTO.getComment());
 		String output = "";
 		try {
 			impedimentService.update(impediment);

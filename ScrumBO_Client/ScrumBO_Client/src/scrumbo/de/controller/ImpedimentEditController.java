@@ -25,7 +25,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.Impediment;
 import scrumbo.de.service.ImpedimentService;
 
@@ -137,7 +137,7 @@ public class ImpedimentEditController implements Initializable {
 				impediment.setDatumDerBehebung(null);
 			}
 			impediment.setKommentar(kommentar.getText());
-			List<Impediment> liste = CurrentScrumprojekt.impedimentbacklog;
+			List<Impediment> liste = CurrentProject.impedimentbacklog;
 			liste.add(impediment);
 			
 			if (impedimentService.updateImpediment(impediment)) {

@@ -11,23 +11,23 @@ import java.io.Serializable;
  *
  * @author Serdar
  */
-public class Benutzer implements Serializable {
+public class User implements Serializable {
 	
 	private Integer	id;
-	private String	vorname;
-	private String	nachname;
-	private String	passwort;
+	private String	prename;
+	private String	lastname;
+	private String	password;
 	private String	email;
 	// private Benutzerrolle benutzerrolle;
 	
-	public Benutzer() {
+	public User() {
 	}
 	
-	public Benutzer(Integer id, String vorname, String nachname, String passwort, String email) {
+	public User(Integer id, String vorname, String nachname, String passwort, String email) {
 		this.id = id;
-		this.vorname = vorname;
-		this.nachname = nachname;
-		this.passwort = passwort;
+		this.prename = vorname;
+		this.lastname = nachname;
+		this.password = passwort;
 		this.email = email;
 	}
 	
@@ -52,30 +52,30 @@ public class Benutzer implements Serializable {
 	}
 	
 	public String getVorname() {
-		return vorname;
+		return prename;
 		
 	}
 	
 	public void setVorname(String vorname) {
-		this.vorname = vorname;
+		this.prename = vorname;
 		
 	}
 	
 	public String getNachname() {
-		return nachname;
+		return lastname;
 		
 	}
 	
 	public void setNachname(String nachname) {
-		this.nachname = nachname;
+		this.lastname = nachname;
 	}
 	
 	public String getPasswort() {
-		return passwort;
+		return password;
 	}
 	
 	public void setPasswort(String passwort) {
-		this.passwort = passwort;
+		this.password = passwort;
 	}
 	
 	public String getEmail() {
@@ -110,7 +110,7 @@ public class Benutzer implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Benutzer other = (Benutzer) obj;
+		User other = (User) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

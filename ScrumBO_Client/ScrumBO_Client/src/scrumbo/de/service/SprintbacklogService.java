@@ -14,7 +14,7 @@ import com.google.gson.reflect.TypeToken;
 
 import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.entity.CurrentBurndownChart;
-import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentSprint;
 import scrumbo.de.entity.Sprint;
 import scrumbo.de.entity.UserStory;
@@ -24,8 +24,9 @@ public class SprintbacklogService {
 	public Sprint addNewSprintToSprintBacklog() {
 		String output = "";
 		try {
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/sprint/create/"
-					+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/sprint/create/" + CurrentProject.projectId + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
@@ -51,9 +52,9 @@ public class SprintbacklogService {
 	public void ladeAltenSprint(Integer sprintnummer) {
 		String output = "";
 		try {
-			URL url = new URL(
-					"http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/sprint/suche/" + CurrentScrumprojekt.scrumprojektID + "/"
-							+ sprintnummer + "/" + ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/sprint/suche/" + CurrentProject.projectId + "/" + sprintnummer + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
@@ -73,15 +74,15 @@ public class SprintbacklogService {
 		Gson gson = new Gson();
 		Sprint sprint = gson.fromJson(output, Sprint.class);
 		CurrentSprint.id = sprint.getId();
-		CurrentSprint.sprintnummer = sprint.getSprintnummer();
+		CurrentSprint.sprintnumber = sprint.getSprintnummer();
 		CurrentSprint.status = sprint.getStatus();
 		if (sprint.getBurndownChart() != null) {
 			CurrentBurndownChart.id = sprint.getBurndownChart().getId();
-			CurrentBurndownChart.tage = sprint.getBurndownChart().getTage();
+			CurrentBurndownChart.days = sprint.getBurndownChart().getDays();
 			CurrentBurndownChart.points = sprint.getBurndownChart().getBurndownChartPoint();
 		} else {
 			CurrentBurndownChart.id = null;
-			CurrentBurndownChart.tage = null;
+			CurrentBurndownChart.days = null;
 			CurrentBurndownChart.points = null;
 		}
 	}
@@ -89,8 +90,9 @@ public class SprintbacklogService {
 	public void ladeSprint() {
 		String output = "";
 		try {
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/sprint/suche/"
-					+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/sprint/suche/" + CurrentProject.projectId + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
@@ -110,15 +112,15 @@ public class SprintbacklogService {
 		Gson gson = new Gson();
 		Sprint sprint = gson.fromJson(output, Sprint.class);
 		CurrentSprint.id = sprint.getId();
-		CurrentSprint.sprintnummer = sprint.getSprintnummer();
+		CurrentSprint.sprintnumber = sprint.getSprintnummer();
 		CurrentSprint.status = sprint.getStatus();
 		if (sprint.getBurndownChart() != null) {
 			CurrentBurndownChart.id = sprint.getBurndownChart().getId();
-			CurrentBurndownChart.tage = sprint.getBurndownChart().getTage();
+			CurrentBurndownChart.days = sprint.getBurndownChart().getDays();
 			CurrentBurndownChart.points = sprint.getBurndownChart().getBurndownChartPoint();
 		} else {
 			CurrentBurndownChart.id = null;
-			CurrentBurndownChart.tage = null;
+			CurrentBurndownChart.days = null;
 			CurrentBurndownChart.points = null;
 		}
 	}
@@ -127,8 +129,9 @@ public class SprintbacklogService {
 		String output = "";
 		
 		try {
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/sprint/suche/"
-					+ CurrentScrumprojekt.scrumprojektID + "/anzahl/" + ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/sprint/suche/" + CurrentProject.projectId + "/anzahl/"
+					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
@@ -151,8 +154,9 @@ public class SprintbacklogService {
 	public List<UserStory> ladeSprintBacklog() {
 		String output = "";
 		try {
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/userstory/suche/sprintid/" + CurrentSprint.id
-					+ "/" + ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/userstory/suche/sprintid/" + CurrentSprint.id + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
@@ -180,8 +184,9 @@ public class SprintbacklogService {
 	public boolean createBurndownChart() {
 		boolean status = false;
 		try {
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/sprint/createBurndownChart/" + CurrentSprint.id
-					+ "/" + ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/sprint/createBurndownChart/" + CurrentSprint.id + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
@@ -207,7 +212,8 @@ public class SprintbacklogService {
 	public boolean endDay() {
 		boolean status = false;
 		try {
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/sprint/endDay/" + CurrentSprint.id + "/"
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/sprint/endDay/" + CurrentSprint.id + "/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");

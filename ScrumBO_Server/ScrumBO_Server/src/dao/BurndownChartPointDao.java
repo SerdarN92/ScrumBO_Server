@@ -13,8 +13,8 @@ public class BurndownChartPointDao implements DaoInterface<BurndownChartPoint, I
 	private HibernateUtil	hibernateutil			= null;
 													
 	public BurndownChartPointDao(String hibernateconfigfilename) {
-		this.hibernateconfigfilename = hibernateconfigfilename;
-		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
+		this.setHibernateconfigfilename(hibernateconfigfilename);
+		this.setHibernateutil(new HibernateUtil(hibernateconfigfilename));
 	}
 	
 	@Override
@@ -56,12 +56,12 @@ public class BurndownChartPointDao implements DaoInterface<BurndownChartPoint, I
 	
 	@Override
 	public BurndownChartPoint findById(Integer id) {
-		BurndownChartPoint burndownChartPoint = null;
+		BurndownChartPoint entity = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				burndownChartPoint = (BurndownChartPoint) s.get(BurndownChartPoint.class, id);
+				entity = (BurndownChartPoint) s.get(BurndownChartPoint.class, id);
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -72,7 +72,7 @@ public class BurndownChartPointDao implements DaoInterface<BurndownChartPoint, I
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return burndownChartPoint;
+		return entity;
 	}
 	
 	@Override
@@ -94,14 +94,15 @@ public class BurndownChartPointDao implements DaoInterface<BurndownChartPoint, I
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<BurndownChartPoint> findAll() {
-		List<BurndownChartPoint> burndownChartPointListe = null;
+		List<BurndownChartPoint> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				burndownChartPointListe = (List<BurndownChartPoint>) s.createQuery("from Burndownchartpoint").list();
+				list = (List<BurndownChartPoint>) s.createQuery("from BurndownChartPoint").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -112,15 +113,31 @@ public class BurndownChartPointDao implements DaoInterface<BurndownChartPoint, I
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return burndownChartPointListe;
+		return list;
 	}
 	
 	@Override
 	public void deleteAll() {
-		List<BurndownChartPoint> burndownChartPointListe = findAll();
-		for (BurndownChartPoint burndownChartPoint : burndownChartPointListe) {
-			delete(burndownChartPoint);
+		List<BurndownChartPoint> list = findAll();
+		for (BurndownChartPoint entity : list) {
+			delete(entity);
 		}
+	}
+	
+	public String getHibernateconfigfilename() {
+		return hibernateconfigfilename;
+	}
+	
+	public void setHibernateconfigfilename(String hibernateconfigfilename) {
+		this.hibernateconfigfilename = hibernateconfigfilename;
+	}
+	
+	public HibernateUtil getHibernateutil() {
+		return hibernateutil;
+	}
+	
+	public void setHibernateutil(HibernateUtil hibernateutil) {
+		this.hibernateutil = hibernateutil;
 	}
 	
 }

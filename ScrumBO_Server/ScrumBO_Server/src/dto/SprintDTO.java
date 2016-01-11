@@ -5,8 +5,8 @@ import java.io.Serializable;
 public class SprintDTO implements Serializable {
 	
 	private Integer				id;
-	private Integer				sprintnummer;
-	private ScrumprojektDTO		scrumprojekt;
+	private Integer				sprintnumber;
+	private ProjectDTO			project;
 	private SprintBacklogDTO	sprintbacklog;
 	private BurndownChartDTO	burndownChart;
 	private boolean				status;
@@ -15,9 +15,9 @@ public class SprintDTO implements Serializable {
 	
 	}
 	
-	public SprintDTO(Integer id, Integer sprintnummer, boolean status) {
+	public SprintDTO(Integer id, Integer sprintnumber, boolean status) {
 		this.id = id;
-		this.sprintnummer = sprintnummer;
+		this.sprintnumber = sprintnumber;
 		this.status = status;
 	}
 	
@@ -29,20 +29,20 @@ public class SprintDTO implements Serializable {
 		this.id = id;
 	}
 	
-	public Integer getSprintnummer() {
-		return sprintnummer;
+	public Integer getSprintnumber() {
+		return sprintnumber;
 	}
 	
-	public void setSprintnummer(Integer sprintnummer) {
-		this.sprintnummer = sprintnummer;
+	public void setSprintnumber(Integer sprintnumber) {
+		this.sprintnumber = sprintnumber;
 	}
 	
-	public ScrumprojektDTO getScrumprojekt() {
-		return scrumprojekt;
+	public ProjectDTO getProject() {
+		return project;
 	}
 	
-	public void setScrumprojekt(ScrumprojektDTO scrumprojekt) {
-		this.scrumprojekt = scrumprojekt;
+	public void setProject(ProjectDTO project) {
+		this.project = project;
 	}
 	
 	public SprintBacklogDTO getSprintbacklog() {

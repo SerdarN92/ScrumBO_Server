@@ -22,37 +22,37 @@ public class UserStoryTask {
 	@Column(name = "userstorytask_id", unique = true, nullable = false)
 	private Integer		id;
 						
-	@Column(name = "beschreibung", nullable = false)
-	private String		beschreibung;
+	@Column(name = "description", nullable = false)
+	private String		description;
 						
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "taskstatus_id", nullable = true)
 	private Taskstatus	taskstatus;
 						
-	@Column(name = "aufwandinstunden", nullable = false)
-	private Integer		aufwandinstunden;
+	@Column(name = "effortInHours", nullable = false)
+	private Integer		effortInHours;
 						
 	@ManyToOne(fetch = FetchType.EAGER)
-	@JoinColumn(name = "benutzer_id", nullable = true, updatable = true)
-	private Benutzer	benutzer;
+	@JoinColumn(name = "user_id", nullable = true, updatable = true)
+	private User		user;
 						
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "userstory_id", nullable = true, updatable = true)
 	private UserStory	userstory;
 						
-	public UserStoryTask(String beschreibung, Taskstatus taskstatus, Integer aufwandinstunden) {
-		this.beschreibung = beschreibung;
+	public UserStoryTask(String description, Taskstatus taskstatus, Integer effortInHours) {
+		this.description = description;
 		this.taskstatus = taskstatus;
-		this.aufwandinstunden = aufwandinstunden;
+		this.effortInHours = effortInHours;
 		
 	}
 	
-	public UserStoryTask(String beschreibung, Taskstatus taskstatus, Integer aufwandinstunden, Benutzer benutzer,
+	public UserStoryTask(String description, Taskstatus taskstatus, Integer effortInHours, User user,
 			UserStory userstory) {
-		this.beschreibung = beschreibung;
+		this.description = description;
 		this.taskstatus = taskstatus;
-		this.aufwandinstunden = aufwandinstunden;
-		this.benutzer = benutzer;
+		this.effortInHours = effortInHours;
+		this.user = user;
 		this.userstory = userstory;
 		
 	}
@@ -69,12 +69,12 @@ public class UserStoryTask {
 		this.id = id;
 	}
 	
-	public String getBeschreibung() {
-		return beschreibung;
+	public String getDescription() {
+		return description;
 	}
 	
-	public void setBeschreibung(String beschreibung) {
-		this.beschreibung = beschreibung;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	public Taskstatus getTaskstatus() {
@@ -85,20 +85,20 @@ public class UserStoryTask {
 		this.taskstatus = taskstatus;
 	}
 	
-	public Integer getAufwandinstunden() {
-		return aufwandinstunden;
+	public Integer getEffortInHours() {
+		return effortInHours;
 	}
 	
-	public void setAufwandinstunden(Integer aufwandinstunden) {
-		this.aufwandinstunden = aufwandinstunden;
+	public void setEffortInHours(Integer effortInHours) {
+		this.effortInHours = effortInHours;
 	}
 	
-	public Benutzer getBenutzer() {
-		return benutzer;
+	public User getUser() {
+		return user;
 	}
 	
-	public void setBenutzer(Benutzer benutzer) {
-		this.benutzer = benutzer;
+	public void setUser(User user) {
+		this.user = user;
 	}
 	
 	public UserStory getUserstory() {

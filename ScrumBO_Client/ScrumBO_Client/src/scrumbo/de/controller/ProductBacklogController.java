@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
+import java.util.TimerTask;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -31,8 +32,8 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
-import scrumbo.de.entity.CurrentBenutzer;
-import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.CurrentProject;
+import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.service.ProductbacklogService;
 
@@ -94,7 +95,7 @@ public class ProductBacklogController implements Initializable {
 	@FXML
 	private void handleButtonBack(ActionEvent event) throws Exception {
 		data.clear();
-		if (CurrentBenutzer.isSM) {
+		if (CurrentUser.isSM) {
 			timer.cancel();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
 			this.scene = new Scene(root);
@@ -135,17 +136,17 @@ public class ProductBacklogController implements Initializable {
 	
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
-		CurrentBenutzer.benutzerID = -1;
-		CurrentBenutzer.vorname = null;
-		CurrentBenutzer.nachname = null;
-		CurrentBenutzer.email = null;
-		CurrentBenutzer.passwort = null;
-		CurrentBenutzer.benutzerrollenID = -1;
-		CurrentBenutzer.benutzerrolle = null;
-		CurrentBenutzer.projekte = null;
-		CurrentScrumprojekt.scrumprojektID = -1;
-		CurrentScrumprojekt.projektname = null;
-		CurrentBenutzer.isSM = false;
+		CurrentUser.userId = -1;
+		CurrentUser.prename = null;
+		CurrentUser.lastname = null;
+		CurrentUser.email = null;
+		CurrentUser.password = null;
+		CurrentUser.roleId = -1;
+		CurrentUser.role = null;
+		CurrentUser.projects = null;
+		CurrentProject.projectId = -1;
+		CurrentProject.projectname = null;
+		CurrentUser.isSM = false;
 		
 		timer.cancel();
 		
@@ -159,35 +160,29 @@ public class ProductBacklogController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		productbacklogService = StartwindowController.getProductbacklogService();
-		vorname.setText(CurrentBenutzer.vorname);
-		nachname.setText(CurrentBenutzer.nachname);
-		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
-		projektname.setText(CurrentScrumprojekt.projektname);
+		vorname.setText(CurrentUser.prename);
+		nachname.setText(CurrentUser.lastname);
+		benutzerrolle.setText(CurrentUser.role);
+		projektname.setText(CurrentProject.projectname);
 		
-		if (!CurrentBenutzer.isPO)
+		if (!CurrentUser.isPO)
 			buttonCreateUserStory.setDisable(true);
 			
 		initTableView();
 		
 		timer = new Timer();
-		// timer.schedule(new TimerTask() {
-		//
-		// @Override
-		// public void run() {
-		// try {
-		// System.out.println("Hallo");
-		// data.clear();
-		// productbacklogService.loadProductBacklog();
-		// for (int i = 0; i <
-		// CurrentScrumprojekt.productbacklog.getUserstory().size(); i++) {
-		// data.add(CurrentScrumprojekt.productbacklog.getUserstory().get(i));
-		// }
-		// } catch (Exception e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
-		// }, 0, 10000);
+		timer.schedule(new TimerTask() {
+			
+			@Override
+			public void run() {
+				try {
+					reload();
+				} catch (Exception e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}, 0, 10000);
 		
 	}
 	
@@ -195,7 +190,7 @@ public class ProductBacklogController implements Initializable {
 		
 		tableViewProductBacklog.setRowFactory(tv -> {
 			TableRow<UserStory> row = new TableRow<>();
-			if (CurrentBenutzer.isPO) {
+			if (CurrentUser.isPO) {
 				row.setOnMouseClicked(event -> {
 					if (event.getClickCount() == 1 && (!row.isEmpty())) {
 						rowData = row.getItem();
@@ -229,8 +224,8 @@ public class ProductBacklogController implements Initializable {
 		
 		productbacklogService.loadProductBacklog();
 		
-		for (int i = 0; i < CurrentScrumprojekt.productbacklog.getUserstory().size(); i++) {
-			data.add(CurrentScrumprojekt.productbacklog.getUserstory().get(i));
+		for (int i = 0; i < CurrentProject.productbacklog.getUserstory().size(); i++) {
+			data.add(CurrentProject.productbacklog.getUserstory().get(i));
 		}
 		
 		tableColumnStatus.setCellValueFactory(new PropertyValueFactory<UserStory, Integer>("status"));
@@ -269,9 +264,9 @@ public class ProductBacklogController implements Initializable {
 						return cell;
 					}
 				});
-		tableColumnPrioritaet.setCellValueFactory(new PropertyValueFactory<UserStory, Integer>("prioritaet"));
-		tableColumnThema.setCellValueFactory(new PropertyValueFactory<UserStory, String>("thema"));
-		tableColumnBeschreibung.setCellValueFactory(new PropertyValueFactory<UserStory, String>("beschreibung"));
+		tableColumnPrioritaet.setCellValueFactory(new PropertyValueFactory<UserStory, Integer>("priority"));
+		tableColumnThema.setCellValueFactory(new PropertyValueFactory<UserStory, String>("theme"));
+		tableColumnBeschreibung.setCellValueFactory(new PropertyValueFactory<UserStory, String>("description"));
 		tableColumnBeschreibung
 				.setCellFactory(new Callback<TableColumn<UserStory, String>, TableCell<UserStory, String>>() {
 					@Override
@@ -297,7 +292,7 @@ public class ProductBacklogController implements Initializable {
 					}
 				});
 		tableColumnAkzeptanzkriterien
-				.setCellValueFactory(new PropertyValueFactory<UserStory, String>("akzeptanzkriterien"));
+				.setCellValueFactory(new PropertyValueFactory<UserStory, String>("acceptanceCriteria"));
 		tableColumnAkzeptanzkriterien
 				.setCellFactory(new Callback<TableColumn<UserStory, String>, TableCell<UserStory, String>>() {
 					@Override
@@ -322,7 +317,7 @@ public class ProductBacklogController implements Initializable {
 						return cell;
 					}
 				});
-		tableColumnAufwand.setCellValueFactory(new PropertyValueFactory<UserStory, Integer>("aufwandintagen"));
+		tableColumnAufwand.setCellValueFactory(new PropertyValueFactory<UserStory, Integer>("effortInDays"));
 		tableColumnSprintNummer
 				.setCellValueFactory(new Callback<CellDataFeatures<UserStory, Integer>, ObservableValue<Integer>>() {
 					@Override
@@ -351,8 +346,8 @@ public class ProductBacklogController implements Initializable {
 		
 		data.clear();
 		productbacklogService.loadProductBacklog();
-		for (int i = 0; i < CurrentScrumprojekt.productbacklog.getUserstory().size(); i++) {
-			data.add(CurrentScrumprojekt.productbacklog.getUserstory().get(i));
+		for (int i = 0; i < CurrentProject.productbacklog.getUserstory().size(); i++) {
+			data.add(CurrentProject.productbacklog.getUserstory().get(i));
 		}
 	}
 	

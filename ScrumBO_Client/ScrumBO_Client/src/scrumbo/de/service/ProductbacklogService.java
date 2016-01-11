@@ -9,7 +9,7 @@ import java.nio.charset.StandardCharsets;
 import com.google.gson.Gson;
 
 import scrumbo.de.app.ScrumBOClient;
-import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.ProductBacklog;
 
 public class ProductbacklogService {
@@ -17,9 +17,9 @@ public class ProductbacklogService {
 	public void getProductbacklog() {
 		String output = "";
 		try {
-			URL url = new URL(
-					"http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/scrumprojekt/suche/" + CurrentScrumprojekt.scrumprojektID
-							+ "/productbacklog" + "/" + ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/scrumprojekt/suche/" + CurrentProject.projectId + "/productbacklog" + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
@@ -38,7 +38,7 @@ public class ProductbacklogService {
 		
 		Gson gson = new Gson();
 		ProductBacklog liste = gson.fromJson(output, ProductBacklog.class);
-		CurrentScrumprojekt.productbacklog = liste;
+		CurrentProject.productbacklog = liste;
 	}
 	
 	public void loadProductBacklog() {
@@ -46,8 +46,9 @@ public class ProductbacklogService {
 		Integer platz = -1;
 		try {
 			
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/productbacklog/suche/"
-					+ CurrentScrumprojekt.productbacklog.getId() + "/" + ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/productbacklog/suche/" + CurrentProject.productbacklog.getId() + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
@@ -66,7 +67,7 @@ public class ProductbacklogService {
 		
 		Gson gson = new Gson();
 		ProductBacklog a = gson.fromJson(output, ProductBacklog.class);
-		CurrentScrumprojekt.productbacklog = a;
+		CurrentProject.productbacklog = a;
 		
 	}
 }

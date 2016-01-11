@@ -27,8 +27,8 @@ public class BurndownChart {
 	@Column(name = "burndownchart_id", unique = true, nullable = false)
 	private Integer						id;
 										
-	@Column(name = "tage", nullable = true)
-	private Integer						tage;
+	@Column(name = "days", nullable = true)
+	private Integer						days;
 										
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "burndownChart")
@@ -49,12 +49,12 @@ public class BurndownChart {
 		this.id = id;
 	}
 	
-	public Integer getTage() {
-		return tage;
+	public Integer getDays() {
+		return days;
 	}
 	
-	public void setTage(Integer tage) {
-		this.tage = tage;
+	public void setDays(Integer days) {
+		this.days = days;
 	}
 	
 	public List<BurndownChartPoint> getBurndownChartPoint() {

@@ -17,18 +17,18 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import scrumbo.de.app.ScrumBOClient;
-import scrumbo.de.entity.Benutzerrolle;
-import scrumbo.de.entity.CurrentBenutzer;
+import scrumbo.de.entity.Role;
+import scrumbo.de.entity.CurrentUser;
 
 public class BenutzerrolleService {
 	
-	List<Benutzerrolle> liste = null;
+	List<Role> liste = null;
 	
 	public BenutzerrolleService() {
 		ladeRollen();
 	}
 	
-	public List<Benutzerrolle> getListe() {
+	public List<Role> getListe() {
 		return liste;
 	}
 	
@@ -37,8 +37,8 @@ public class BenutzerrolleService {
 		HttpURLConnection conn = null;
 		
 		try {
-			url2 = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/benutzerrolle" + "/"
-					+ ScrumBOClient.getDatabaseconfigfile());
+			url2 = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/role/all" + "/" + ScrumBOClient.getDatabaseconfigfile());
 			conn = (HttpURLConnection) url2.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json");
@@ -56,7 +56,7 @@ public class BenutzerrolleService {
 			conn.disconnect();
 			
 			Gson gson = new Gson();
-			Type listType = new TypeToken<LinkedList<Benutzerrolle>>() {
+			Type listType = new TypeToken<LinkedList<Role>>() {
 			}.getType();
 			this.liste = gson.fromJson(o.toString(), listType);
 			
@@ -71,7 +71,8 @@ public class BenutzerrolleService {
 	
 	public Boolean checkRole(String email) throws JSONException {
 		try {
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/benutzer/suche/" + email + "/rolle/"
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/benutzer/suche/" + email + "/rolle/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -87,13 +88,13 @@ public class BenutzerrolleService {
 			conn.disconnect();
 			
 			if (output.equals("User ist Scrum Master")) {
-				CurrentBenutzer.isSM = true;
+				CurrentUser.isSM = true;
 			}
 			if (output.equals("User ist Product Owner")) {
-				CurrentBenutzer.isPO = true;
+				CurrentUser.isPO = true;
 			}
 			if (output.equals("User ist Entwickler")) {
-				CurrentBenutzer.isDev = true;
+				CurrentUser.isDev = true;
 			}
 			
 		} catch (MalformedURLException e) {

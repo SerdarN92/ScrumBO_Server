@@ -22,8 +22,8 @@ public class DefinitionOfDone {
 	@Column(name = "definitionofdone_id", unique = true, nullable = false)
 	private Integer		id;
 						
-	@Column(name = "kriterium", nullable = true)
-	private String		kriterium;
+	@Column(name = "criteria", nullable = true)
+	private String		criteria;
 						
 	@Column(name = "status")
 	private boolean		status;
@@ -36,15 +36,15 @@ public class DefinitionOfDone {
 	
 	}
 	
-	public DefinitionOfDone(Integer id, String kriterium, boolean status) {
+	public DefinitionOfDone(Integer id, String criteria, boolean status) {
 		this.id = id;
-		this.kriterium = kriterium;
+		this.criteria = criteria;
 		this.status = status;
 		
 	}
 	
-	public DefinitionOfDone(String kriterium, boolean status, UserStory userstory) {
-		this.kriterium = kriterium;
+	public DefinitionOfDone(String criteria, boolean status, UserStory userstory) {
+		this.criteria = criteria;
 		this.status = status;
 		this.userstory = userstory;
 	}
@@ -57,12 +57,12 @@ public class DefinitionOfDone {
 		this.id = id;
 	}
 	
-	public String getKriterium() {
-		return kriterium;
+	public String getCriteria() {
+		return criteria;
 	}
 	
-	public void setKriterium(String kriterium) {
-		this.kriterium = kriterium;
+	public void setCriteria(String criteria) {
+		this.criteria = criteria;
 	}
 	
 	public boolean getStatus() {

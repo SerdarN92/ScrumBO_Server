@@ -38,8 +38,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.common.LetterTextField;
-import scrumbo.de.entity.Benutzer;
-import scrumbo.de.entity.Benutzerrolle;
+import scrumbo.de.entity.User;
+import scrumbo.de.entity.Role;
 
 /**
  * FXML Controller Klasse für die Erstellung eines Benutzers
@@ -50,7 +50,7 @@ public class UserCreateController implements Initializable {
 	
 	Parent					root;
 	Scene					scene;
-	List<Benutzerrolle>		liste	= null;
+	List<Role>		liste	= null;
 	@FXML
 	private LetterTextField	txtFieldPrename;
 	@FXML
@@ -97,13 +97,13 @@ public class UserCreateController implements Initializable {
 			} else {
 				emailValidFail.setVisible(false);
 				
-				Benutzer benutzer = new Benutzer();
+				User benutzer = new User();
 				benutzer.setVorname(txtFieldPrename.getText());
 				benutzer.setNachname(txtFieldLastname.getText());
 				benutzer.setEmail(txtFieldEmail.getText());
 				benutzer.setPasswort(pswtFieldPassword.getText());
 				
-				Benutzerrolle benutzerrolle = null;
+				Role benutzerrolle = null;
 				
 				String benutzerrolleSelection = "";
 				
@@ -117,7 +117,7 @@ public class UserCreateController implements Initializable {
 				
 				for (int i = 0; i < liste.size(); i++) {
 					if (benutzerrolleSelection.equals(liste.get(i).getBezeichnung())) {
-						benutzerrolle = new Benutzerrolle(liste.get(i).getId(), liste.get(i).getBezeichnung());
+						benutzerrolle = new Role(liste.get(i).getId(), liste.get(i).getBezeichnung());
 					}
 				}
 				
@@ -245,7 +245,7 @@ public class UserCreateController implements Initializable {
 			conn.disconnect();
 			
 			Gson gson = new Gson();
-			Type listType = new TypeToken<LinkedList<Benutzerrolle>>() {
+			Type listType = new TypeToken<LinkedList<Role>>() {
 			}.getType();
 			this.liste = gson.fromJson(o.toString(), listType);
 			
@@ -280,12 +280,12 @@ public class UserCreateController implements Initializable {
 			conn.disconnect();
 			
 			Gson gson = new Gson();
-			Benutzer a = null;
+			User a = null;
 			if (output.equals("User nicht vorhanden")) {
 				return false;
 				
 			} else {
-				a = gson.fromJson(output, Benutzer.class);
+				a = gson.fromJson(output, User.class);
 				if (email.equals(a.getEmail())) {
 					return true;
 				} else {

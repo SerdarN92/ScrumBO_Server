@@ -5,7 +5,7 @@ import java.io.Serializable;
 public class DefinitionOfDone implements Serializable {
 	
 	private Integer		id;
-	private String		kriterium;
+	private String		criteria;
 	private boolean		status;
 	private UserStory	userstory	= null;
 	
@@ -15,7 +15,7 @@ public class DefinitionOfDone implements Serializable {
 	
 	public DefinitionOfDone(Integer id, String kriterium, boolean status) {
 		this.id = id;
-		this.kriterium = kriterium;
+		this.criteria = kriterium;
 		this.status = status;
 	}
 	
@@ -28,11 +28,11 @@ public class DefinitionOfDone implements Serializable {
 	}
 	
 	public String getKriterium() {
-		return kriterium;
+		return criteria;
 	}
 	
 	public void setKriterium(String kriterium) {
-		this.kriterium = kriterium;
+		this.criteria = kriterium;
 	}
 	
 	public boolean isStatus() {

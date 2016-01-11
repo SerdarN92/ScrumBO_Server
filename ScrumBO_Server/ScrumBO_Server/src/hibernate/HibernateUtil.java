@@ -17,6 +17,7 @@ public class HibernateUtil {
 	private static SessionFactory	sessionFactory;
 	private static ServiceRegistry	serviceRegistry;
 									
+	@SuppressWarnings("deprecation")
 	public HibernateUtil(String hibernateconfig) {
 		if (sessionFactory == null) {
 			try {

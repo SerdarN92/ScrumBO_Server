@@ -13,8 +13,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import scrumbo.de.entity.CurrentBenutzer;
-import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.CurrentProject;
+import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.service.BenutzerService;
 import scrumbo.de.service.ImpedimentService;
 import scrumbo.de.service.ProductbacklogService;
@@ -45,15 +45,15 @@ public class ProjectLoginController implements Initializable {
 							
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
-		CurrentBenutzer.benutzerID = -1;
-		CurrentBenutzer.vorname = null;
-		CurrentBenutzer.nachname = null;
-		CurrentBenutzer.email = null;
-		CurrentBenutzer.passwort = null;
-		CurrentBenutzer.benutzerrollenID = -1;
-		CurrentBenutzer.benutzerrolle = null;
-		CurrentBenutzer.projekte = null;
-		CurrentBenutzer.isSM = false;
+		CurrentUser.userId = -1;
+		CurrentUser.prename = null;
+		CurrentUser.lastname = null;
+		CurrentUser.email = null;
+		CurrentUser.password = null;
+		CurrentUser.roleId = -1;
+		CurrentUser.role = null;
+		CurrentUser.projects = null;
+		CurrentUser.isSM = false;
 		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		this.scene = new Scene(root);
@@ -64,15 +64,15 @@ public class ProjectLoginController implements Initializable {
 	
 	@FXML
 	private void handleBackButton(ActionEvent event) throws Exception {
-		CurrentBenutzer.benutzerID = -1;
-		CurrentBenutzer.vorname = null;
-		CurrentBenutzer.nachname = null;
-		CurrentBenutzer.email = null;
-		CurrentBenutzer.passwort = null;
-		CurrentBenutzer.benutzerrollenID = -1;
-		CurrentBenutzer.benutzerrolle = null;
-		CurrentBenutzer.projekte = null;
-		CurrentBenutzer.isSM = false;
+		CurrentUser.userId = -1;
+		CurrentUser.prename = null;
+		CurrentUser.lastname = null;
+		CurrentUser.email = null;
+		CurrentUser.password = null;
+		CurrentUser.roleId = -1;
+		CurrentUser.role = null;
+		CurrentUser.projects = null;
+		CurrentUser.isSM = false;
 		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		this.scene = new Scene(root);
@@ -86,13 +86,13 @@ public class ProjectLoginController implements Initializable {
 			if (scrumprojektService.checkIfProjectnameExists(txtFieldProjectname.getText().toString())) {
 				projectnameValidFail.setVisible(false);
 				txtFieldProjectname.setStyle(null);
-				CurrentScrumprojekt.scrumprojektID = scrumprojektService.getScrumproject().getScrumProjektID();
-				CurrentScrumprojekt.projektname = scrumprojektService.getScrumproject().getProjektname();
+				CurrentProject.projectId = scrumprojektService.getScrumproject().getScrumProjektID();
+				CurrentProject.projectname = scrumprojektService.getScrumproject().getProjektname();
 				if (benutzerService.checkAdmission()) {
 					txtFieldProjectname.setStyle(null);
 					productbacklogService.getProductbacklog();
 					impedimentService.getImpedimentBacklog();
-					if (CurrentBenutzer.isSM) {
+					if (CurrentUser.isSM) {
 						this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
 						this.scene = new Scene(root);
 						Stage stage = (Stage) buttonLogout.getScene().getWindow();

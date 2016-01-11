@@ -33,6 +33,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.controller.SprintBacklogController;
+import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.entity.UserStoryTask;
 
@@ -58,12 +59,12 @@ public class MyHBox extends HBox {
 	}
 	
 	private void initMyHBox() {
-		prioritaet.setText(userstory.getPrioritaet().toString());
+		prioritaet.setText(userstory.getPriority().toString());
 		vboxprioritaet.setMinWidth(100);
 		vboxprioritaet.setAlignment(Pos.CENTER);
 		vboxprioritaet.getChildren().add(prioritaet);
 		vboxprioritaet.setStyle("-fx-border-style: solid;" + "-fx-border-width: 0.3;" + "-fx-border-color: black");
-		StringBuilder sb = new StringBuilder(userstory.getBeschreibung());
+		StringBuilder sb = new StringBuilder(userstory.getDescription());
 		int i = 0;
 		while (i + 20 < sb.length() && (i = sb.lastIndexOf(" ", i + 20)) != -1) {
 			sb.replace(i, i + 1, "\n");
@@ -91,7 +92,7 @@ public class MyHBox extends HBox {
 		vboxdonetasks.setStyle(
 				"-fx-padding:5px;" + "-fx-border-style: solid;" + "-fx-border-width: 0.3;" + "-fx-border-color: black");
 				
-		if (SprintBacklogController.editable) {
+		if (SprintBacklogController.editable && !CurrentUser.isPO) {
 			
 			vboxtasksinwork.setOnDragEntered(new EventHandler<DragEvent>() {
 				@Override
@@ -451,8 +452,8 @@ public class MyHBox extends HBox {
 		JSONObject jsonObject = new JSONObject(output);
 		
 		try {
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/userstorytask/update" + "/"
-					+ ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/userstorytask/update" + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestProperty("Content-Type", "application/json");

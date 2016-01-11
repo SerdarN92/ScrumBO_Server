@@ -14,7 +14,7 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import scrumbo.de.app.ScrumBOClient;
-import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.Impediment;
 
 public class ImpedimentService {
@@ -23,7 +23,7 @@ public class ImpedimentService {
 		String output = "";
 		try {
 			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/impedimentbacklog/suche/"
-					+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
+					+ CurrentProject.projectId + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
@@ -44,7 +44,7 @@ public class ImpedimentService {
 		Type listType = new TypeToken<LinkedList<Impediment>>() {
 		}.getType();
 		List<Impediment> liste = gson.fromJson(output, listType);
-		CurrentScrumprojekt.impedimentbacklog = liste;
+		CurrentProject.impedimentbacklog = liste;
 	}
 	
 	public boolean createImpediment(Impediment impediment) {
@@ -53,7 +53,7 @@ public class ImpedimentService {
 		String output = gson.toJson(impediment);
 		try {
 			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/impedimentbacklog/create/"
-					+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
+					+ CurrentProject.projectId + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestProperty("Content-Type", "application/json");

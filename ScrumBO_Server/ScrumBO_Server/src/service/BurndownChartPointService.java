@@ -9,8 +9,8 @@ public class BurndownChartPointService {
 	
 	private BurndownChartPointDao burndownChartPointDao = null;
 	
-	public BurndownChartPointService(String hibernateconfig) {
-		this.burndownChartPointDao = new BurndownChartPointDao(hibernateconfig);
+	public BurndownChartPointService(String hibernateconfigfilename) {
+		this.burndownChartPointDao = new BurndownChartPointDao(hibernateconfigfilename);
 	}
 	
 	public void persist(BurndownChartPoint entity) {

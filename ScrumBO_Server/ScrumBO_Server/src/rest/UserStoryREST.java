@@ -16,20 +16,20 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 
-import dto.BenutzerDTO;
 import dto.TaskstatusDTO;
+import dto.UserDTO;
 import dto.UserStoryDTO;
 import dto.UserStoryTaskDTO;
-import model.Benutzer;
 import model.ProductBacklog;
 import model.Sprint;
 import model.Taskstatus;
+import model.User;
 import model.UserStory;
 import model.UserStoryTask;
-import service.BenutzerService;
 import service.ProductBacklogService;
 import service.SprintService;
 import service.TaskstatusService;
+import service.UserService;
 import service.UserStoryService;
 import service.UserStoryTaskService;
 
@@ -47,16 +47,18 @@ public class UserStoryREST {
 		for (int i = 0; i < userstoryListe.size(); i++) {
 			UserStoryDTO userstoryDTO = new UserStoryDTO();
 			userstoryDTO.setId(userstoryListe.get(i).getId());
-			userstoryDTO.setPrioritaet(userstoryListe.get(i).getPrioritaet());
-			userstoryDTO.setThema(userstoryListe.get(i).getThema());
-			userstoryDTO.setBeschreibung(userstoryListe.get(i).getBeschreibung());
-			userstoryDTO.setAkzeptanzkriterien(userstoryListe.get(i).getAkzeptanzkriterien());
-			userstoryDTO.setAufwandintagen(userstoryListe.get(i).getAufwandintagen());
+			userstoryDTO.setPriority(userstoryListe.get(i).getPriority());
+			userstoryDTO.setTheme(userstoryListe.get(i).getTheme());
+			userstoryDTO.setDescription(userstoryListe.get(i).getDescription());
+			userstoryDTO.setAcceptanceCriteria(userstoryListe.get(i).getAcceptanceCriteria());
+			userstoryDTO.setEffortInDays(userstoryListe.get(i).getEffortInDays());
 			userstoryDTO.setStatus(userstoryListe.get(i).getStatus());
 			userstoryDTOListe.add(userstoryDTO);
 		}
 		Gson gson = new Gson();
 		String output = gson.toJson(userstoryDTOListe);
+		
+		System.out.println(output);
 		
 		return Response.status(200).entity(output).build();
 	}
@@ -72,26 +74,26 @@ public class UserStoryREST {
 		for (int i = 0; i < userstoryListe.size(); i++) {
 			UserStoryDTO userstoryDTO = new UserStoryDTO();
 			userstoryDTO.setId(userstoryListe.get(i).getId());
-			userstoryDTO.setPrioritaet(userstoryListe.get(i).getPrioritaet());
-			userstoryDTO.setThema(userstoryListe.get(i).getThema());
-			userstoryDTO.setBeschreibung(userstoryListe.get(i).getBeschreibung());
-			userstoryDTO.setAkzeptanzkriterien(userstoryListe.get(i).getAkzeptanzkriterien());
-			userstoryDTO.setAufwandintagen(userstoryListe.get(i).getAufwandintagen());
+			userstoryDTO.setPriority(userstoryListe.get(i).getPriority());
+			userstoryDTO.setTheme(userstoryListe.get(i).getTheme());
+			userstoryDTO.setDescription(userstoryListe.get(i).getDescription());
+			userstoryDTO.setAcceptanceCriteria(userstoryListe.get(i).getAcceptanceCriteria());
+			userstoryDTO.setEffortInDays(userstoryListe.get(i).getEffortInDays());
 			userstoryDTO.setStatus(userstoryListe.get(i).getStatus());
 			List<UserStoryTaskDTO> userstoryTaskDTOListe = new LinkedList<UserStoryTaskDTO>();
 			for (int j = 0; j < userstoryListe.get(i).getUserstorytask().size(); j++) {
 				if (userstoryListe.get(i).getSprint().getId() == sprintid) {
 					UserStoryTaskDTO userstoryTaskDTO = new UserStoryTaskDTO();
 					userstoryTaskDTO.setId(userstoryListe.get(i).getUserstorytask().get(j).getId());
-					userstoryTaskDTO.setBeschreibung(userstoryListe.get(i).getUserstorytask().get(j).getBeschreibung());
+					userstoryTaskDTO.setDescription(userstoryListe.get(i).getUserstorytask().get(j).getDescription());
 					userstoryTaskDTO
-							.setAufwandinstunden(userstoryListe.get(i).getUserstorytask().get(j).getAufwandinstunden());
-					Benutzer benutzer = userstoryListe.get(i).getUserstorytask().get(j).getBenutzer();
-					BenutzerDTO benutzerDTO = new BenutzerDTO(benutzer.getId(), benutzer.getVorname(),
-							benutzer.getNachname(), benutzer.getPasswort(), benutzer.getEmail());
-					userstoryTaskDTO.setBenutzer(benutzerDTO);
+							.setEffortInHours(userstoryListe.get(i).getUserstorytask().get(j).getEffortInHours());
+					User user = userstoryListe.get(i).getUserstorytask().get(j).getUser();
+					UserDTO userDTO = new UserDTO(user.getId(), user.getPrename(), user.getLastname(),
+							user.getPassword(), user.getEmail());
+					userstoryTaskDTO.setUser(userDTO);
 					Taskstatus taskstatus = userstoryListe.get(i).getUserstorytask().get(j).getTaskstatus();
-					TaskstatusDTO taskstatusDTO = new TaskstatusDTO(taskstatus.getId(), taskstatus.getBeschreibung());
+					TaskstatusDTO taskstatusDTO = new TaskstatusDTO(taskstatus.getId(), taskstatus.getDescription());
 					userstoryTaskDTO.setTaskstatus(taskstatusDTO);
 					userstoryTaskDTOListe.add(userstoryTaskDTO);
 				}
@@ -127,11 +129,11 @@ public class UserStoryREST {
 		UserStoryService userstoryService = new UserStoryService(hibernateconfigfilename);
 		ProductBacklogService productbacklogService = new ProductBacklogService(hibernateconfigfilename);
 		ProductBacklog productbacklog = productbacklogService.findById(id);
-		userstory.setPrioritaet(userstoryDTO.getPrioritaet());
-		userstory.setThema(userstoryDTO.getThema());
-		userstory.setBeschreibung(userstoryDTO.getBeschreibung());
-		userstory.setAkzeptanzkriterien(userstoryDTO.getAkzeptanzkriterien());
-		userstory.setAufwandintagen(userstoryDTO.getAufwandintagen());
+		userstory.setPriority(userstoryDTO.getPriority());
+		userstory.setTheme(userstoryDTO.getTheme());
+		userstory.setDescription(userstoryDTO.getDescription());
+		userstory.setAcceptanceCriteria(userstoryDTO.getAcceptanceCriteria());
+		userstory.setEffortInDays(userstoryDTO.getEffortInDays());
 		userstory.setStatus(0);
 		userstory.setProductbacklog(productbacklog);
 		
@@ -170,11 +172,11 @@ public class UserStoryREST {
 		UserStory userstory = new UserStory();
 		UserStoryService userstoryService = new UserStoryService(hibernateconfigfilename);
 		userstory = userstoryService.findById(userstoryDTO.getId());
-		userstory.setPrioritaet(userstoryDTO.getPrioritaet());
-		userstory.setThema(userstoryDTO.getThema());
-		userstory.setBeschreibung(userstoryDTO.getBeschreibung());
-		userstory.setAkzeptanzkriterien(userstoryDTO.getAkzeptanzkriterien());
-		userstory.setAufwandintagen(userstoryDTO.getAufwandintagen());
+		userstory.setPriority(userstoryDTO.getPriority());
+		userstory.setTheme(userstoryDTO.getTheme());
+		userstory.setDescription(userstoryDTO.getDescription());
+		userstory.setAcceptanceCriteria(userstoryDTO.getAcceptanceCriteria());
+		userstory.setEffortInDays(userstoryDTO.getEffortInDays());
 		userstory.setStatus(userstoryDTO.getStatus());
 		String output = "";
 		try {
@@ -212,7 +214,7 @@ public class UserStoryREST {
 		
 		UserStoryTaskService userstorytaskService = new UserStoryTaskService(hibernateconfigfilename);
 		TaskstatusService taskstatusService = new TaskstatusService(hibernateconfigfilename);
-		BenutzerService benutzerService = new BenutzerService(hibernateconfigfilename);
+		UserService benutzerService = new UserService(hibernateconfigfilename);
 		SprintService sprintService = new SprintService(hibernateconfigfilename);
 		Sprint sprint = new Sprint();
 		sprint = sprintService.findById(sprintId);
@@ -234,13 +236,13 @@ public class UserStoryREST {
 						if (userstoryDTO.getUserstorytask().get(i).getId() == userstory.getUserstorytask().get(j)
 								.getId()) {
 							userstory.getUserstorytask().get(j)
-									.setBeschreibung(userstoryDTO.getUserstorytask().get(i).getBeschreibung());
+									.setDescription(userstoryDTO.getUserstorytask().get(i).getDescription());
 							userstory.getUserstorytask().get(j).setTaskstatus(taskstatusService
 									.findById(userstoryDTO.getUserstorytask().get(i).getTaskstatus().getId()));
 							userstory.getUserstorytask().get(j)
-									.setAufwandinstunden(userstoryDTO.getUserstorytask().get(i).getAufwandinstunden());
-							userstory.getUserstorytask().get(j).setBenutzer(benutzerService
-									.findById(userstoryDTO.getUserstorytask().get(i).getBenutzer().getId()));
+									.setEffortInHours(userstoryDTO.getUserstorytask().get(i).getEffortInHours());
+							userstory.getUserstorytask().get(j).setUser(
+									benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getUser().getId()));
 							userstorytaskService.update(userstory.getUserstorytask().get(j));
 						} else {
 							userstorytaskService.delete(userstory.getUserstorytask().get(j).getId());
@@ -252,11 +254,9 @@ public class UserStoryREST {
 			
 		} else {
 			for (int i = 0; i < userstoryDTO.getUserstorytask().size(); i++) {
-				UserStoryTask userstorytask = new UserStoryTask(
-						userstoryDTO.getUserstorytask().get(i).getBeschreibung(), taskstatusService.findById(1),
-						userstoryDTO.getUserstorytask().get(i).getAufwandinstunden(),
-						benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getBenutzer().getId()),
-						userstory);
+				UserStoryTask userstorytask = new UserStoryTask(userstoryDTO.getUserstorytask().get(i).getDescription(),
+						taskstatusService.findById(1), userstoryDTO.getUserstorytask().get(i).getEffortInHours(),
+						benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getUser().getId()), userstory);
 				userstory.getUserstorytask().add(userstorytask);
 				userstorytaskService.persist(userstorytask);
 			}
@@ -322,25 +322,25 @@ public class UserStoryREST {
 		for (int i = 0; i < userstoryListe.size(); i++) {
 			UserStoryDTO userstoryDTO = new UserStoryDTO();
 			userstoryDTO.setId(userstoryListe.get(i).getId());
-			userstoryDTO.setPrioritaet(userstoryListe.get(i).getPrioritaet());
-			userstoryDTO.setThema(userstoryListe.get(i).getThema());
-			userstoryDTO.setBeschreibung(userstoryListe.get(i).getBeschreibung());
-			userstoryDTO.setAkzeptanzkriterien(userstoryListe.get(i).getAkzeptanzkriterien());
-			userstoryDTO.setAufwandintagen(userstoryListe.get(i).getAufwandintagen());
+			userstoryDTO.setPriority(userstoryListe.get(i).getPriority());
+			userstoryDTO.setTheme(userstoryListe.get(i).getTheme());
+			userstoryDTO.setDescription(userstoryListe.get(i).getDescription());
+			userstoryDTO.setAcceptanceCriteria(userstoryListe.get(i).getAcceptanceCriteria());
+			userstoryDTO.setEffortInDays(userstoryListe.get(i).getEffortInDays());
 			List<UserStoryTaskDTO> userstoryTaskDTOListe = new LinkedList<UserStoryTaskDTO>();
 			for (int j = 0; j < userstoryListe.get(i).getUserstorytask().size(); j++) {
 				if (userstoryListe.get(i).getProductbacklog().getId() == productbacklogid) {
 					UserStoryTaskDTO userstoryTaskDTO = new UserStoryTaskDTO();
 					userstoryTaskDTO.setId(userstoryListe.get(i).getUserstorytask().get(j).getId());
-					userstoryTaskDTO.setBeschreibung(userstoryListe.get(i).getUserstorytask().get(j).getBeschreibung());
+					userstoryTaskDTO.setDescription(userstoryListe.get(i).getUserstorytask().get(j).getDescription());
 					userstoryTaskDTO
-							.setAufwandinstunden(userstoryListe.get(i).getUserstorytask().get(j).getAufwandinstunden());
-					Benutzer benutzer = userstoryListe.get(i).getUserstorytask().get(j).getBenutzer();
-					BenutzerDTO benutzerDTO = new BenutzerDTO(benutzer.getId(), benutzer.getVorname(),
-							benutzer.getNachname(), benutzer.getPasswort(), benutzer.getEmail());
-					userstoryTaskDTO.setBenutzer(benutzerDTO);
+							.setEffortInHours(userstoryListe.get(i).getUserstorytask().get(j).getEffortInHours());
+					User benutzer = userstoryListe.get(i).getUserstorytask().get(j).getUser();
+					UserDTO benutzerDTO = new UserDTO(benutzer.getId(), benutzer.getPrename(), benutzer.getLastname(),
+							benutzer.getPassword(), benutzer.getEmail());
+					userstoryTaskDTO.setUser(benutzerDTO);
 					Taskstatus taskstatus = userstoryListe.get(i).getUserstorytask().get(j).getTaskstatus();
-					TaskstatusDTO taskstatusDTO = new TaskstatusDTO(taskstatus.getId(), taskstatus.getBeschreibung());
+					TaskstatusDTO taskstatusDTO = new TaskstatusDTO(taskstatus.getId(), taskstatus.getDescription());
 					userstoryTaskDTO.setTaskstatus(taskstatusDTO);
 					userstoryTaskDTOListe.add(userstoryTaskDTO);
 				}

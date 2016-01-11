@@ -4,23 +4,23 @@ import java.io.Serializable;
 import java.util.LinkedList;
 import java.util.List;
 
-public class ScrumprojektDTO implements Serializable {
+public class ProjectDTO implements Serializable {
 	
 	private Integer				id;
-	private String				projektname;
-	private String				passwort;
+	private String				projectname;
+	private String				password;
 	private List<SprintDTO>		sprint			= new LinkedList<SprintDTO>();
 	private List<ImpedimentDTO>	impediment		= new LinkedList<ImpedimentDTO>();
 	private ProductBacklogDTO	productbacklog	= new ProductBacklogDTO();
 												
-	public ScrumprojektDTO() {
+	public ProjectDTO() {
 	
 	}
 	
-	public ScrumprojektDTO(Integer id, String projektname, String passwort) {
+	public ProjectDTO(Integer id, String projectname, String password) {
 		this.id = id;
-		this.projektname = projektname;
-		this.passwort = passwort;
+		this.projectname = projectname;
+		this.password = password;
 	}
 	
 	public Integer getId() {
@@ -31,20 +31,20 @@ public class ScrumprojektDTO implements Serializable {
 		this.id = id;
 	}
 	
-	public String getProjektname() {
-		return projektname;
+	public String getProjectname() {
+		return projectname;
 	}
 	
-	public void setProjektname(String projektname) {
-		this.projektname = projektname;
+	public void setProjectname(String projectname) {
+		this.projectname = projectname;
 	}
 	
-	public String getPasswort() {
-		return passwort;
+	public String getPassword() {
+		return password;
 	}
 	
-	public void setPasswort(String passwort) {
-		this.passwort = passwort;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	public List<SprintDTO> getSprint() {
@@ -87,7 +87,7 @@ public class ScrumprojektDTO implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		ScrumprojektDTO other = (ScrumprojektDTO) obj;
+		ProjectDTO other = (ProjectDTO) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

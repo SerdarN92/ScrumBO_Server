@@ -12,7 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import scrumbo.de.entity.CurrentBenutzer;
+import scrumbo.de.entity.CurrentUser;
 
 public class ProjectCreateFailController implements Initializable {
 	
@@ -31,15 +31,15 @@ public class ProjectCreateFailController implements Initializable {
 					
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
-		CurrentBenutzer.benutzerID = -1;
-		CurrentBenutzer.vorname = null;
-		CurrentBenutzer.nachname = null;
-		CurrentBenutzer.email = null;
-		CurrentBenutzer.passwort = null;
-		CurrentBenutzer.benutzerrollenID = -1;
-		CurrentBenutzer.benutzerrolle = null;
-		CurrentBenutzer.projekte = null;
-		CurrentBenutzer.isSM = false;
+		CurrentUser.userId = -1;
+		CurrentUser.prename = null;
+		CurrentUser.lastname = null;
+		CurrentUser.email = null;
+		CurrentUser.password = null;
+		CurrentUser.roleId = -1;
+		CurrentUser.role = null;
+		CurrentUser.projects = null;
+		CurrentUser.isSM = false;
 		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		this.scene = new Scene(root);
@@ -58,9 +58,9 @@ public class ProjectCreateFailController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		vorname.setText(CurrentBenutzer.vorname);
-		nachname.setText(CurrentBenutzer.nachname);
-		benutzerrolle.setText(CurrentBenutzer.benutzerrolle);
+		vorname.setText(CurrentUser.prename);
+		nachname.setText(CurrentUser.lastname);
+		benutzerrolle.setText(CurrentUser.role);
 	}
 	
 }

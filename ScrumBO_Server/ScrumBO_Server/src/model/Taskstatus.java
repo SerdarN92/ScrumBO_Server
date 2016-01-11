@@ -26,8 +26,8 @@ public class Taskstatus {
 	@Column(name = "taskstatus_id", unique = true, nullable = false)
 	private Integer				id;
 								
-	@Column(name = "beschreibung", nullable = true)
-	private String				beschreibung;
+	@Column(name = "description", nullable = true)
+	private String				description;
 								
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
 			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "taskstatus")
@@ -40,8 +40,8 @@ public class Taskstatus {
 	
 	}
 	
-	public Taskstatus(String beschreibung) {
-		this.beschreibung = beschreibung;
+	public Taskstatus(String description) {
+		this.description = description;
 	}
 	
 	public Integer getId() {
@@ -52,12 +52,12 @@ public class Taskstatus {
 		this.id = id;
 	}
 	
-	public String getBeschreibung() {
-		return beschreibung;
+	public String getDescription() {
+		return description;
 	}
 	
-	public void setBeschreibung(String beschreibung) {
-		this.beschreibung = beschreibung;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	public List<UserStoryTask> getUserstorytask() {

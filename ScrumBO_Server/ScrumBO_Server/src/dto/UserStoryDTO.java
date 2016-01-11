@@ -6,11 +6,11 @@ import java.util.List;
 public class UserStoryDTO implements Serializable {
 	
 	private Integer						id;
-	private Integer						prioritaet;
-	private String						thema;
-	private String						beschreibung;
-	private Integer						aufwandintagen;
-	private String						akzeptanzkriterien;
+	private Integer						priority;
+	private String						theme;
+	private String						description;
+	private Integer						effortInDays;
+	private String						acceptanceCriteria;
 	private Integer						status;
 										
 	private ProductBacklogDTO			productbacklog;
@@ -22,14 +22,14 @@ public class UserStoryDTO implements Serializable {
 	
 	}
 	
-	public UserStoryDTO(Integer id, Integer prioritaet, String thema, String beschreibung, Integer aufwandintagen,
-			String akzeptanzkriterien, Integer status) {
+	public UserStoryDTO(Integer id, Integer priority, String theme, String description, Integer effortInDays,
+			String acceptanceCriteria, Integer status) {
 		this.id = id;
-		this.prioritaet = prioritaet;
-		this.thema = thema;
-		this.beschreibung = beschreibung;
-		this.aufwandintagen = aufwandintagen;
-		this.akzeptanzkriterien = akzeptanzkriterien;
+		this.priority = priority;
+		this.theme = theme;
+		this.description = description;
+		this.effortInDays = effortInDays;
+		this.acceptanceCriteria = acceptanceCriteria;
 		this.status = status;
 	}
 	
@@ -41,44 +41,48 @@ public class UserStoryDTO implements Serializable {
 		this.id = id;
 	}
 	
-	public Integer getPrioritaet() {
-		return prioritaet;
+	public Integer getPriority() {
+		return priority;
 	}
 	
-	public void setPrioritaet(Integer prioritaet) {
-		this.prioritaet = prioritaet;
+	public void setPriority(Integer priority) {
+		this.priority = priority;
 	}
 	
-	public String getThema() {
-		return thema;
+	public String getTheme() {
+		return theme;
 	}
 	
-	public void setThema(String thema) {
-		this.thema = thema;
+	public void setTheme(String theme) {
+		this.theme = theme;
 	}
 	
-	public String getBeschreibung() {
-		return beschreibung;
+	public String getDescription() {
+		return description;
 	}
 	
-	public void setBeschreibung(String beschreibung) {
-		this.beschreibung = beschreibung;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
-	public Integer getAufwandintagen() {
-		return aufwandintagen;
+	public Integer getEffortInDays() {
+		return effortInDays;
 	}
 	
-	public void setAufwandintagen(Integer aufwandintagen) {
-		this.aufwandintagen = aufwandintagen;
+	public void setEffortInDays(Integer effortInDays) {
+		this.effortInDays = effortInDays;
 	}
 	
-	public String getAkzeptanzkriterien() {
-		return akzeptanzkriterien;
+	public String getAcceptanceCriteria() {
+		return acceptanceCriteria;
 	}
 	
-	public void setAkzeptanzkriterien(String akzeptanzkriterien) {
-		this.akzeptanzkriterien = akzeptanzkriterien;
+	public void setAcceptanceCriteria(String acceptanceCriteria) {
+		this.acceptanceCriteria = acceptanceCriteria;
+	}
+	
+	public void setSprint(SprintDTO sprint) {
+		this.sprint = sprint;
 	}
 	
 	public Integer getStatus() {

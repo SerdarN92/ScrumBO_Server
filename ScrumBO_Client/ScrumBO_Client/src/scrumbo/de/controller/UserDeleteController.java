@@ -24,7 +24,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
-import scrumbo.de.entity.Benutzer;
+import scrumbo.de.entity.User;
 import scrumbo.de.service.BenutzerService;
 
 public class UserDeleteController implements Initializable {
@@ -33,13 +33,13 @@ public class UserDeleteController implements Initializable {
 	Scene						scene;
 	BenutzerService				benutzerService		= null;
 	@FXML
-	private ComboBox<Benutzer>	comboBoxBenutzer	= new ComboBox<>();
+	private ComboBox<User>	comboBoxBenutzer	= new ComboBox<>();
 	@FXML
 	private Button				buttonAbbort;
 	@FXML
 	private Button				buttonDelete;
-	private List<Benutzer>		benutzerList		= new LinkedList<Benutzer>();
-	private Benutzer			currentBenutzer		= new Benutzer();
+	private List<User>		benutzerList		= new LinkedList<User>();
+	private User			currentBenutzer		= new User();
 													
 	@FXML
 	private void handleButtonAbbort(ActionEvent event) throws Exception {
@@ -100,7 +100,7 @@ public class UserDeleteController implements Initializable {
 			buttonDelete.setDisable(false);
 		}
 		
-		ObservableList<Benutzer> options = FXCollections.observableArrayList();
+		ObservableList<User> options = FXCollections.observableArrayList();
 		for (int i = 0; i < benutzerList.size(); i++) {
 			options.add(benutzerList.get(i));
 		}
@@ -112,19 +112,19 @@ public class UserDeleteController implements Initializable {
 			}
 		});
 		
-		comboBoxBenutzer.setConverter(new StringConverter<Benutzer>() {
+		comboBoxBenutzer.setConverter(new StringConverter<User>() {
 			@Override
-			public String toString(Benutzer u) {
+			public String toString(User u) {
 				return u.getVorname() + " " + u.getNachname();
 			}
 			
 			@Override
-			public Benutzer fromString(String string) {
+			public User fromString(String string) {
 				throw new UnsupportedOperationException();
 			}
 		});
 		
-		comboBoxBenutzer.valueProperty().addListener((ChangeListener<Benutzer>) (ov, t, t1) -> currentBenutzer = t1);
+		comboBoxBenutzer.valueProperty().addListener((ChangeListener<User>) (ov, t, t1) -> currentBenutzer = t1);
 		
 	}
 	

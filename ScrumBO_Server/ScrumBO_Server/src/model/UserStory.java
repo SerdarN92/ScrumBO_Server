@@ -28,20 +28,20 @@ public class UserStory {
 	@Column(name = "userstory_id", unique = true, nullable = false)
 	private Integer					id;
 									
-	@Column(name = "prioritaet", nullable = false)
-	private Integer					prioritaet;
+	@Column(name = "priority", nullable = false)
+	private Integer					priority;
 									
-	@Column(name = "thema", nullable = false)
-	private String					thema;
+	@Column(name = "theme", nullable = false)
+	private String					theme;
 									
-	@Column(name = "beschreibung", nullable = false)
-	private String					beschreibung;
+	@Column(name = "description", nullable = false)
+	private String					description;
 									
-	@Column(name = "aufwandintagen", nullable = false)
-	private Integer					aufwandintagen;
+	@Column(name = "effortInDays", nullable = false)
+	private Integer					effortInDays;
 									
-	@Column(name = "akzeptanzkriterien", nullable = false)
-	private String					akzeptanzkriterien;
+	@Column(name = "acceptanceCriteria", nullable = false)
+	private String					acceptanceCriteria;
 									
 	@Column(name = "status", unique = false, nullable = true)
 	private Integer					status;
@@ -74,13 +74,13 @@ public class UserStory {
 	
 	}
 	
-	public UserStory(Integer priortaet, String thema, String beschreibung, Integer aufwandintagen,
-			String akzeptanzkriterien, Integer status) {
-		this.prioritaet = priortaet;
-		this.thema = thema;
-		this.beschreibung = beschreibung;
-		this.aufwandintagen = aufwandintagen;
-		this.akzeptanzkriterien = akzeptanzkriterien;
+	public UserStory(Integer priority, String theme, String description, Integer effortInDays,
+			String acceptanceCriteria, Integer status) {
+		this.priority = priority;
+		this.theme = theme;
+		this.description = description;
+		this.effortInDays = effortInDays;
+		this.acceptanceCriteria = acceptanceCriteria;
 		this.status = status;
 	}
 	
@@ -92,44 +92,52 @@ public class UserStory {
 		this.id = id;
 	}
 	
-	public Integer getPrioritaet() {
-		return prioritaet;
+	public Integer getPriority() {
+		return priority;
 	}
 	
-	public void setPrioritaet(Integer prioritaet) {
-		this.prioritaet = prioritaet;
+	public void setPriority(Integer priority) {
+		this.priority = priority;
 	}
 	
-	public String getThema() {
-		return thema;
+	public String getTheme() {
+		return theme;
 	}
 	
-	public void setThema(String thema) {
-		this.thema = thema;
+	public void setTheme(String theme) {
+		this.theme = theme;
 	}
 	
-	public String getBeschreibung() {
-		return beschreibung;
+	public String getDescription() {
+		return description;
 	}
 	
-	public void setBeschreibung(String beschreibung) {
-		this.beschreibung = beschreibung;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
-	public Integer getAufwandintagen() {
-		return aufwandintagen;
+	public Integer getEffortInDays() {
+		return effortInDays;
 	}
 	
-	public void setAufwandintagen(Integer aufwandintagen) {
-		this.aufwandintagen = aufwandintagen;
+	public void setEffortInDays(Integer effortInDays) {
+		this.effortInDays = effortInDays;
 	}
 	
-	public String getAkzeptanzkriterien() {
-		return akzeptanzkriterien;
+	public String getAcceptanceCriteria() {
+		return acceptanceCriteria;
 	}
 	
-	public void setAkzeptanzkriterien(String akzeptanzkriterien) {
-		this.akzeptanzkriterien = akzeptanzkriterien;
+	public void setAcceptanceCriteria(String acceptanceCriteria) {
+		this.acceptanceCriteria = acceptanceCriteria;
+	}
+	
+	public List<DefinitionOfDone> getDefinitionofdone() {
+		return definitionofdone;
+	}
+	
+	public void setDefinitionofdone(List<DefinitionOfDone> definitionofdone) {
+		this.definitionofdone = definitionofdone;
 	}
 	
 	public Integer getStatus() {

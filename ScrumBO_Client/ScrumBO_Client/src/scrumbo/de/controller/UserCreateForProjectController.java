@@ -37,10 +37,10 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.common.LetterTextField;
-import scrumbo.de.entity.Benutzer;
-import scrumbo.de.entity.Benutzerrolle;
-import scrumbo.de.entity.CurrentBenutzer;
-import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.CurrentProject;
+import scrumbo.de.entity.CurrentUser;
+import scrumbo.de.entity.Role;
+import scrumbo.de.entity.User;
 
 /**
  * FXML Controller Klasse für die Erstellung eines Benutzers
@@ -51,7 +51,7 @@ public class UserCreateForProjectController implements Initializable {
 	
 	Parent					root;
 	Scene					scene;
-	List<Benutzerrolle>		liste	= null;
+	List<Role>				liste	= null;
 	@FXML
 	private LetterTextField	txtFieldPrename;
 	@FXML
@@ -77,7 +77,7 @@ public class UserCreateForProjectController implements Initializable {
 							
 	@FXML
 	private void handleBackButtonCreateUser(ActionEvent event) throws IOException {
-		if (CurrentBenutzer.isSM) {
+		if (CurrentUser.isSM) {
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonBackCreateUser.getScene().getWindow();
@@ -102,13 +102,13 @@ public class UserCreateForProjectController implements Initializable {
 				txtFieldEmail.setStyle(null);
 				emailValidFail.setVisible(false);
 				
-				Benutzer benutzer = new Benutzer();
+				User benutzer = new User();
 				benutzer.setVorname(txtFieldPrename.getText());
 				benutzer.setNachname(txtFieldLastname.getText());
 				benutzer.setEmail(txtFieldEmail.getText());
 				benutzer.setPasswort("12345678");
 				
-				Benutzerrolle benutzerrolle = null;
+				Role benutzerrolle = null;
 				
 				String benutzerrolleSelection = "";
 				
@@ -122,7 +122,7 @@ public class UserCreateForProjectController implements Initializable {
 				
 				for (int i = 0; i < liste.size(); i++) {
 					if (benutzerrolleSelection.equals(liste.get(i).getBezeichnung())) {
-						benutzerrolle = new Benutzerrolle(liste.get(i).getId(), liste.get(i).getBezeichnung());
+						benutzerrolle = new Role(liste.get(i).getId(), liste.get(i).getBezeichnung());
 					}
 				}
 				
@@ -132,8 +132,9 @@ public class UserCreateForProjectController implements Initializable {
 				JSONObject jsonObject = new JSONObject(output);
 				
 				try {
-					URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/benutzer/create/" + benutzerrollenId
-							+ "/" + CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
+					URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+							+ "/ScrumBO_Server/rest/benutzer/create/" + benutzerrollenId + "/"
+							+ CurrentProject.projectId + "/" + ScrumBOClient.getDatabaseconfigfile());
 					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 					conn.setDoOutput(true);
 					conn.setRequestProperty("Content-Type", "application/json");
@@ -223,8 +224,8 @@ public class UserCreateForProjectController implements Initializable {
 		HttpURLConnection conn = null;
 		
 		try {
-			url2 = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/benutzerrolle" + "/"
-					+ ScrumBOClient.getDatabaseconfigfile());
+			url2 = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/role/all" + "/" + ScrumBOClient.getDatabaseconfigfile());
 			conn = (HttpURLConnection) url2.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json");
@@ -242,7 +243,7 @@ public class UserCreateForProjectController implements Initializable {
 			conn.disconnect();
 			
 			Gson gson = new Gson();
-			Type listType = new TypeToken<LinkedList<Benutzerrolle>>() {
+			Type listType = new TypeToken<LinkedList<Role>>() {
 			}.getType();
 			this.liste = gson.fromJson(o.toString(), listType);
 			
@@ -262,8 +263,8 @@ public class UserCreateForProjectController implements Initializable {
 	
 	private Boolean checkIfEmailExists(String email) throws JSONException {
 		try {
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/benutzer/suche/" + email + "/"
-					+ ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/benutzer/suche/" + email + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json");
@@ -277,12 +278,12 @@ public class UserCreateForProjectController implements Initializable {
 			conn.disconnect();
 			
 			Gson gson = new Gson();
-			Benutzer a = null;
+			User a = null;
 			if (output.equals("User ist nicht vorhanden")) {
 				return false;
 				
 			} else {
-				a = gson.fromJson(output, Benutzer.class);
+				a = gson.fromJson(output, User.class);
 				if (email.equals(a.getEmail())) {
 					return true;
 				} else {

@@ -22,8 +22,8 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import scrumbo.de.common.LetterTextField;
-import scrumbo.de.entity.Benutzer;
-import scrumbo.de.entity.Benutzerrolle;
+import scrumbo.de.entity.User;
+import scrumbo.de.entity.Role;
 import scrumbo.de.service.BenutzerService;
 import scrumbo.de.service.BenutzerrolleService;
 
@@ -38,7 +38,7 @@ public class UserCreateScrumMasterController implements Initializable {
 	Scene					scene;
 	BenutzerService			benutzerService			= null;
 	BenutzerrolleService	benutzerrolleService	= null;
-	List<Benutzerrolle>		liste					= null;
+	List<Role>		liste					= null;
 	@FXML
 	private LetterTextField	txtFieldPrename;
 	@FXML
@@ -73,7 +73,7 @@ public class UserCreateScrumMasterController implements Initializable {
 				txtFieldEmail.setStyle(null);
 				txtEmail.setVisible(false);
 				
-				Benutzer benutzer = new Benutzer();
+				User benutzer = new User();
 				benutzer.setVorname(txtFieldPrename.getText());
 				benutzer.setNachname(txtFieldLastname.getText());
 				benutzer.setEmail(txtFieldEmail.getText());

@@ -13,26 +13,26 @@ import java.util.List;
  *
  * @author Serdar
  */
-public class Scrumprojekt implements Serializable {
+public class Project implements Serializable {
 	
 	private Integer				id;
-	private String				projektname;
-	private String				passwort;
-	private List<Benutzer>		benutzer;
+	private String				projectname;
+	private String				password;
+	private List<User>			user;
 	private List<Sprint>		sprint			= new LinkedList<Sprint>();
 	private List<Impediment>	impediment		= new LinkedList<Impediment>();
 	private ProductBacklog		productbacklog	= new ProductBacklog();
 												
-	public Scrumprojekt() {
+	public Project() {
 	}
 	
-	public Scrumprojekt(Integer id) {
+	public Project(Integer id) {
 		this.id = id;
 	}
 	
-	public Scrumprojekt(Integer id, String projektname) {
+	public Project(Integer id, String projektname) {
 		this.id = id;
-		this.projektname = projektname;
+		this.projectname = projektname;
 	}
 	
 	public Integer getScrumProjektID() {
@@ -44,27 +44,27 @@ public class Scrumprojekt implements Serializable {
 	}
 	
 	public String getProjektname() {
-		return projektname;
+		return projectname;
 	}
 	
 	public void setProjektname(String projektname) {
-		this.projektname = projektname;
+		this.projectname = projektname;
 	}
 	
 	public String getPasswort() {
-		return passwort;
+		return password;
 	}
 	
 	public void setPasswort(String passwort) {
-		this.passwort = passwort;
+		this.password = passwort;
 	}
 	
-	public List<Benutzer> getBenutzer() {
-		return benutzer;
+	public List<User> getBenutzer() {
+		return user;
 	}
 	
-	public void setBenutzer(List<Benutzer> benutzer) {
-		this.benutzer = benutzer;
+	public void setBenutzer(List<User> benutzer) {
+		this.user = benutzer;
 	}
 	
 	public Integer getId() {
@@ -115,7 +115,7 @@ public class Scrumprojekt implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Scrumprojekt other = (Scrumprojekt) obj;
+		Project other = (Project) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

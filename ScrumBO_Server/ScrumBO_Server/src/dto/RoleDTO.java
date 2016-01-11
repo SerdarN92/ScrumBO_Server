@@ -2,18 +2,18 @@ package dto;
 
 import java.io.Serializable;
 
-public class BenutzerrolleDTO implements Serializable {
+public class RoleDTO implements Serializable {
 	
 	private Integer	id;
-	private String	bezeichnung;
-	
-	public BenutzerrolleDTO() {
+	private String	description;
+					
+	public RoleDTO() {
 	
 	}
 	
-	public BenutzerrolleDTO(Integer id, String bezeichnung) {
+	public RoleDTO(Integer id, String description) {
 		this.id = id;
-		this.bezeichnung = bezeichnung;
+		this.description = description;
 	}
 	
 	public Integer getId() {
@@ -24,12 +24,12 @@ public class BenutzerrolleDTO implements Serializable {
 		this.id = id;
 	}
 	
-	public String getBezeichnung() {
-		return bezeichnung;
+	public String getDescription() {
+		return description;
 	}
 	
-	public void setBezeichnung(String bezeichnung) {
-		this.bezeichnung = bezeichnung;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	@Override
@@ -48,7 +48,7 @@ public class BenutzerrolleDTO implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		BenutzerrolleDTO other = (BenutzerrolleDTO) obj;
+		RoleDTO other = (RoleDTO) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

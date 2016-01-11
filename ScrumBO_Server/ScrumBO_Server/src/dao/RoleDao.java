@@ -5,19 +5,19 @@ import java.util.List;
 import org.hibernate.Session;
 
 import hibernate.HibernateUtil;
-import model.Scrumprojekt;
+import model.Role;
 
-public class ScrumprojektDao implements DaoInterface<Scrumprojekt, Integer> {
+public class RoleDao implements DaoInterface<Role, Integer> {
 	
-	private String			hibernateconfig	= "";
-	private HibernateUtil	hibernateutil	= null;
-											
-	public ScrumprojektDao(String hibernateconfigfilename) {
-		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
+	private String			hibernateconfigfilename	= "";
+	private HibernateUtil	hibernateutil			= null;
+													
+	public RoleDao(String hibernateconfigfilename) {
+		this.setHibernateconfigfilename(hibernateconfigfilename);
+		this.setHibernateutil(new HibernateUtil(hibernateconfigfilename));
 	}
 	
-	public void persist(Scrumprojekt entity) {
+	public void persist(Role entity) {
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
@@ -35,7 +35,7 @@ public class ScrumprojektDao implements DaoInterface<Scrumprojekt, Integer> {
 		}
 	}
 	
-	public void update(Scrumprojekt entity) {
+	public void update(Role entity) {
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
@@ -53,13 +53,13 @@ public class ScrumprojektDao implements DaoInterface<Scrumprojekt, Integer> {
 		}
 	}
 	
-	public Scrumprojekt findById(Integer id) {
-		Scrumprojekt scrumprojekt = null;
+	public Role findById(Integer id) {
+		Role entity = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				scrumprojekt = (Scrumprojekt) s.get(Scrumprojekt.class, id);
+				entity = (Role) s.get(Role.class, id);
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -70,20 +70,10 @@ public class ScrumprojektDao implements DaoInterface<Scrumprojekt, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return scrumprojekt;
+		return entity;
 	}
 	
-	public Scrumprojekt findByProjectname(String projectname) {
-		List<Scrumprojekt> projectList = findAll();
-		Scrumprojekt a = null;
-		for (int i = 0; i < projectList.size(); i++) {
-			if (projectList.get(i).getProjektname().equals(projectname))
-				a = projectList.get(i);
-		}
-		return a;
-	}
-	
-	public void delete(Scrumprojekt entity) {
+	public void delete(Role entity) {
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
@@ -101,13 +91,14 @@ public class ScrumprojektDao implements DaoInterface<Scrumprojekt, Integer> {
 		}
 	}
 	
-	public List<Scrumprojekt> findAll() {
-		List<Scrumprojekt> scrumprojektListe = null;
+	@SuppressWarnings("unchecked")
+	public List<Role> findAll() {
+		List<Role> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				scrumprojektListe = (List<Scrumprojekt>) s.createQuery("from Scrumprojekt").list();
+				list = (List<Role>) s.createQuery("FROM Role").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -118,14 +109,30 @@ public class ScrumprojektDao implements DaoInterface<Scrumprojekt, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return scrumprojektListe;
+		return list;
 	}
 	
 	public void deleteAll() {
-		List<Scrumprojekt> scrumprojektListe = findAll();
-		for (Scrumprojekt scrumprojekt : scrumprojektListe) {
-			delete(scrumprojekt);
+		List<Role> list = findAll();
+		for (Role entity : list) {
+			delete(entity);
 		}
+	}
+	
+	public String getHibernateconfigfilename() {
+		return hibernateconfigfilename;
+	}
+	
+	public void setHibernateconfigfilename(String hibernateconfigfilename) {
+		this.hibernateconfigfilename = hibernateconfigfilename;
+	}
+	
+	public HibernateUtil getHibernateutil() {
+		return hibernateutil;
+	}
+	
+	public void setHibernateutil(HibernateUtil hibernateutil) {
+		this.hibernateutil = hibernateutil;
 	}
 	
 }

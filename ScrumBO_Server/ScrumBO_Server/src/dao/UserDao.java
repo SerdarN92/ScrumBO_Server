@@ -5,19 +5,24 @@ import java.util.List;
 import org.hibernate.Session;
 
 import hibernate.HibernateUtil;
-import model.Benutzer;
+import model.User;
 
-public class BenutzerDao implements DaoInterface<Benutzer, Integer> {
+/*
+ * Author: Serdar Nurgün
+ *
+ * This class allows to manipulate the Database Table "User".
+ */
+public class UserDao implements DaoInterface<User, Integer> {
 	
 	private String			hibernateconfigfilename	= "";
 	private HibernateUtil	hibernateutil			= null;
 													
-	public BenutzerDao(String hibernateconfigfilename) {
-		this.hibernateconfigfilename = hibernateconfigfilename;
-		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
+	public UserDao(String hibernateconfigfilename) {
+		this.setHibernateconfigfilename(hibernateconfigfilename);
+		this.setHibernateutil(new HibernateUtil(hibernateconfigfilename));
 	}
 	
-	public void persist(Benutzer entity) {
+	public void persist(User entity) {
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
@@ -35,7 +40,7 @@ public class BenutzerDao implements DaoInterface<Benutzer, Integer> {
 		}
 	}
 	
-	public void update(Benutzer entity) {
+	public void update(User entity) {
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
@@ -53,13 +58,13 @@ public class BenutzerDao implements DaoInterface<Benutzer, Integer> {
 		}
 	}
 	
-	public Benutzer findById(Integer id) {
-		Benutzer benutzer = null;
+	public User findById(Integer id) {
+		User entity = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				benutzer = (Benutzer) s.get(Benutzer.class, id);
+				entity = (User) s.get(User.class, id);
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -70,16 +75,16 @@ public class BenutzerDao implements DaoInterface<Benutzer, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return benutzer;
+		return entity;
 	}
 	
-	public Benutzer findByEmail(String email) {
-		List<Benutzer> benutzerList = null;
+	public User findByEmail(String email) {
+		List<User> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				benutzerList = findAll();
+				list = findAll();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -90,15 +95,15 @@ public class BenutzerDao implements DaoInterface<Benutzer, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		Benutzer benutzer = null;
-		for (int i = 0; i < benutzerList.size(); i++) {
-			if (benutzerList.get(i).getEmail().equals(email))
-				benutzer = benutzerList.get(i);
+		User entity = null;
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getEmail().equals(email))
+				entity = list.get(i);
 		}
-		return benutzer;
+		return entity;
 	}
 	
-	public void delete(Benutzer entity) {
+	public void delete(User entity) {
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
@@ -116,13 +121,14 @@ public class BenutzerDao implements DaoInterface<Benutzer, Integer> {
 		}
 	}
 	
-	public List<Benutzer> findAll() {
-		List<Benutzer> benutzerListe = null;
+	@SuppressWarnings("unchecked")
+	public List<User> findAll() {
+		List<User> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				benutzerListe = (List<Benutzer>) s.createQuery("from Benutzer").list();
+				list = (List<User>) s.createQuery("from User").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -133,14 +139,30 @@ public class BenutzerDao implements DaoInterface<Benutzer, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return benutzerListe;
+		return list;
 	}
 	
 	public void deleteAll() {
-		List<Benutzer> benutzerListe = findAll();
-		for (Benutzer benutzer : benutzerListe) {
-			delete(benutzer);
+		List<User> list = findAll();
+		for (User entity : list) {
+			delete(entity);
 		}
+	}
+	
+	public String getHibernateconfigfilename() {
+		return hibernateconfigfilename;
+	}
+	
+	public void setHibernateconfigfilename(String hibernateconfigfilename) {
+		this.hibernateconfigfilename = hibernateconfigfilename;
+	}
+	
+	public HibernateUtil getHibernateutil() {
+		return hibernateutil;
+	}
+	
+	public void setHibernateutil(HibernateUtil hibernateutil) {
+		this.hibernateutil = hibernateutil;
 	}
 	
 }

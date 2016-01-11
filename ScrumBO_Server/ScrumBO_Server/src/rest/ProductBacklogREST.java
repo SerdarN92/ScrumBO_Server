@@ -11,21 +11,18 @@ import javax.ws.rs.core.Response;
 
 import com.google.gson.Gson;
 
-import dto.BenutzerDTO;
 import dto.ProductBacklogDTO;
 import dto.SprintDTO;
 import dto.TaskstatusDTO;
+import dto.UserDTO;
 import dto.UserStoryDTO;
 import dto.UserStoryTaskDTO;
-import model.Benutzer;
 import model.ProductBacklog;
 import model.Sprint;
 import model.Taskstatus;
-import service.BenutzerService;
+import model.User;
 import service.ProductBacklogService;
 import service.SprintService;
-import service.TaskstatusService;
-import service.UserStoryService;
 
 @Path("/productbacklog")
 public class ProductBacklogREST {
@@ -36,7 +33,6 @@ public class ProductBacklogREST {
 	public Response getProductBacklogById(@PathParam("productbacklogid") Integer productbacklogid,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
 		ProductBacklogService productbacklogService = new ProductBacklogService(hibernateconfigfilename);
-		UserStoryService userstoryService = new UserStoryService(hibernateconfigfilename);
 		SprintService sprintService = new SprintService(hibernateconfigfilename);
 		ProductBacklog productbacklog = productbacklogService.findById(productbacklogid);
 		ProductBacklogDTO productbacklogDTO = new ProductBacklogDTO();
@@ -44,17 +40,16 @@ public class ProductBacklogREST {
 		List<UserStoryDTO> userstoryDTOListe = new LinkedList<UserStoryDTO>();
 		for (int i = 0; i < productbacklog.getUserstory().size(); i++) {
 			UserStoryDTO userstoryDTO = new UserStoryDTO(productbacklog.getUserstory().get(i).getId(),
-					productbacklog.getUserstory().get(i).getPrioritaet(),
-					productbacklog.getUserstory().get(i).getThema(),
-					productbacklog.getUserstory().get(i).getBeschreibung(),
-					productbacklog.getUserstory().get(i).getAufwandintagen(),
-					productbacklog.getUserstory().get(i).getAkzeptanzkriterien(),
+					productbacklog.getUserstory().get(i).getPriority(), productbacklog.getUserstory().get(i).getTheme(),
+					productbacklog.getUserstory().get(i).getDescription(),
+					productbacklog.getUserstory().get(i).getEffortInDays(),
+					productbacklog.getUserstory().get(i).getAcceptanceCriteria(),
 					productbacklog.getUserstory().get(i).getStatus());
 			if (productbacklogService.findById(productbacklogid).getUserstory().get(i).getSprint() != null) {
 				Integer sprintid = productbacklogService.findById(productbacklogid).getUserstory().get(i).getSprint()
 						.getId();
 				Sprint sprint = sprintService.findById(sprintid);
-				SprintDTO sprintDTO = new SprintDTO(sprint.getId(), sprint.getSprintnummer(), sprint.getStatus());
+				SprintDTO sprintDTO = new SprintDTO(sprint.getId(), sprint.getSprintnumber(), sprint.getStatus());
 				userstoryDTO.setSprintbacklog(sprintDTO);
 			}
 			userstoryDTOListe.add(userstoryDTO);
@@ -82,32 +77,29 @@ public class ProductBacklogREST {
 		
 		for (int i = 0; i < productbacklog.getUserstory().size(); i++) {
 			UserStoryDTO userstoryDTO = new UserStoryDTO(productbacklog.getUserstory().get(i).getId(),
-					productbacklog.getUserstory().get(i).getPrioritaet(),
-					productbacklog.getUserstory().get(i).getThema(),
-					productbacklog.getUserstory().get(i).getBeschreibung(),
-					productbacklog.getUserstory().get(i).getAufwandintagen(),
-					productbacklog.getUserstory().get(i).getAkzeptanzkriterien(),
+					productbacklog.getUserstory().get(i).getPriority(), productbacklog.getUserstory().get(i).getTheme(),
+					productbacklog.getUserstory().get(i).getDescription(),
+					productbacklog.getUserstory().get(i).getEffortInDays(),
+					productbacklog.getUserstory().get(i).getAcceptanceCriteria(),
 					productbacklog.getUserstory().get(i).getStatus());
 					
-			BenutzerService benutzerService = new BenutzerService(hibernateconfigfilename);
-			TaskstatusService taskstatusService = new TaskstatusService(hibernateconfigfilename);
 			List<UserStoryTaskDTO> userstoryTaskDTOListe = new LinkedList<UserStoryTaskDTO>();
 			for (int j = 0; j < productbacklog.getUserstory().get(i).getUserstorytask().size(); j++) {
 				if (productbacklog.getUserstory().get(i).getSprint().getId() == sprintid) {
-					Benutzer benutzer = productbacklog.getUserstory().get(i).getUserstorytask().get(j).getBenutzer();
-					BenutzerDTO benutzerDTO = new BenutzerDTO(benutzer.getId(), benutzer.getVorname(),
-							benutzer.getNachname(), benutzer.getPasswort(), benutzer.getEmail());
+					User user = productbacklog.getUserstory().get(i).getUserstorytask().get(j).getUser();
+					UserDTO userDTO = new UserDTO(user.getId(), user.getPrename(), user.getLastname(),
+							user.getPassword(), user.getEmail());
 					Taskstatus taskstatus = productbacklog.getUserstory().get(i).getUserstorytask().get(j)
 							.getTaskstatus();
-					TaskstatusDTO taskstatusDTO = new TaskstatusDTO(taskstatus.getId(), taskstatus.getBeschreibung());
+					TaskstatusDTO taskstatusDTO = new TaskstatusDTO(taskstatus.getId(), taskstatus.getDescription());
 					UserStoryTaskDTO userstoryTaskDTO = new UserStoryTaskDTO();
 					userstoryTaskDTO.setId(productbacklog.getUserstory().get(i).getUserstorytask().get(j).getId());
-					userstoryTaskDTO.setBeschreibung(
-							productbacklog.getUserstory().get(i).getUserstorytask().get(j).getBeschreibung());
-					userstoryTaskDTO.setAufwandinstunden(
-							productbacklog.getUserstory().get(i).getUserstorytask().get(j).getAufwandinstunden());
+					userstoryTaskDTO.setDescription(
+							productbacklog.getUserstory().get(i).getUserstorytask().get(j).getDescription());
+					userstoryTaskDTO.setEffortInHours(
+							productbacklog.getUserstory().get(i).getUserstorytask().get(j).getEffortInHours());
 							
-					userstoryTaskDTO.setBenutzer(benutzerDTO);
+					userstoryTaskDTO.setUser(userDTO);
 					
 					userstoryTaskDTO.setTaskstatus(taskstatusDTO);
 					userstoryTaskDTOListe.add(userstoryTaskDTO);

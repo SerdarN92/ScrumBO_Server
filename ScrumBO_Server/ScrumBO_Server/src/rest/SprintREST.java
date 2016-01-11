@@ -21,7 +21,7 @@ import model.UserStory;
 import model.UserStoryTask;
 import service.BurndownChartPointService;
 import service.BurndownChartService;
-import service.ScrumprojektService;
+import service.ProjectService;
 import service.SprintService;
 import service.UserStoryService;
 import service.UserStoryTaskService;
@@ -37,14 +37,14 @@ public class SprintREST {
 		SprintService sprintService = new SprintService(hibernateconfigfilename);
 		Sprint sprint = null;
 		SprintDTO sprintDTO = null;
-		Integer sprintnummer = 0;
-		sprintnummer = sprintService.countSprintsToProject(scrumprojektid);
-		if (sprintnummer > 0) {
-			sprint = sprintService.findByProjectIdandSprintNumber(scrumprojektid, sprintnummer);
-			sprintDTO = new SprintDTO(sprint.getId(), sprint.getSprintnummer(), sprint.getStatus());
+		Integer sprintnumber = 0;
+		sprintnumber = sprintService.countSprintsToProject(scrumprojektid);
+		if (sprintnumber > 0) {
+			sprint = sprintService.findByProjectIdandSprintNumber(scrumprojektid, sprintnumber);
+			sprintDTO = new SprintDTO(sprint.getId(), sprint.getSprintnumber(), sprint.getStatus());
 			if (sprint.getBurndownChart() != null) {
 				BurndownChartDTO burndownchartDTO = new BurndownChartDTO(sprint.getBurndownChart().getId(),
-						sprint.getBurndownChart().getTage());
+						sprint.getBurndownChart().getDays());
 				List<BurndownChartPointDTO> burndownchartPointDTOListe = new LinkedList<BurndownChartPointDTO>();
 				for (int i = 0; i < sprint.getBurndownChart().getBurndownChartPoint().size(); i++) {
 					BurndownChartPointDTO burndownchartPointDTO = new BurndownChartPointDTO();
@@ -63,34 +63,34 @@ public class SprintREST {
 		return Response.status(200).entity(output).build();
 	}
 	
-	@Path("/suche/{scrumprojektid}/anzahl/{hibernateconfigfilename}")
+	@Path("/suche/{projectId}/anzahl/{hibernateconfigfilename}")
 	@GET
 	@Produces("application/json" + ";charset=utf-8")
-	public Response getAnzahlSprintsToProject(@PathParam("scrumprojektid") Integer scrumprojektid,
+	public Response getAnzahlSprintsToProject(@PathParam("projectId") Integer projectId,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
 		SprintService sprintService = new SprintService(hibernateconfigfilename);
 		Integer count = 0;
-		count = sprintService.countSprintsAnzahlToProject(scrumprojektid);
+		count = sprintService.countNumberOfSprintsOfProject(projectId);
 		String output = count.toString();
 		return Response.status(200).entity(output).build();
 	}
 	
-	@Path("/suche/{scrumprojektid}/{sprintnummer}/{hibernateconfigfilename}")
+	@Path("/suche/{projectId}/{sprintnummer}/{hibernateconfigfilename}")
 	@GET
 	@Produces("application/json" + ";charset=utf-8")
-	public Response getSprintID(@PathParam("scrumprojektid") Integer scrumprojektid,
+	public Response getSprintID(@PathParam("projectId") Integer projectId,
 			@PathParam("sprintnummer") Integer sprintnummer,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
 		SprintService sprintService = new SprintService(hibernateconfigfilename);
 		Sprint sprint = null;
 		SprintDTO sprintDTO = null;
-		sprint = sprintService.findByProjectIdandSprintNumber(scrumprojektid, sprintnummer);
+		sprint = sprintService.findByProjectIdandSprintNumber(projectId, sprintnummer);
 		if (sprint != null) {
-			sprintDTO = new SprintDTO(sprint.getId(), sprint.getSprintnummer(), sprint.getStatus());
+			sprintDTO = new SprintDTO(sprint.getId(), sprint.getSprintnumber(), sprint.getStatus());
 			if (sprint.getBurndownChart() != null) {
 				BurndownChartDTO burndownchartDTO = new BurndownChartDTO();
 				burndownchartDTO.setId(sprint.getBurndownChart().getId());
-				burndownchartDTO.setTage(sprint.getBurndownChart().getTage());
+				burndownchartDTO.setDays(sprint.getBurndownChart().getDays());
 				List<BurndownChartPointDTO> burndownchartPointDTOListe = new LinkedList<BurndownChartPointDTO>();
 				for (int i = 0; i < sprint.getBurndownChart().getBurndownChartPoint().size(); i++) {
 					BurndownChartPointDTO burndownchartPointDTO = new BurndownChartPointDTO();
@@ -109,27 +109,27 @@ public class SprintREST {
 		return Response.status(200).entity(output).build();
 	}
 	
-	@Path("/create/{scrumprojektid}/{hibernateconfigfilename}")
+	@Path("/create/{projectId}/{hibernateconfigfilename}")
 	@GET
 	@Produces("application/json" + ";charset=utf-8")
-	public Response getNewSprint(@PathParam("scrumprojektid") Integer scrumprojektid,
+	public Response getNewSprint(@PathParam("projectId") Integer projectId,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
 		SprintService sprintService = new SprintService(hibernateconfigfilename);
-		ScrumprojektService scrumprojektService = new ScrumprojektService(hibernateconfigfilename);
+		ProjectService scrumprojektService = new ProjectService(hibernateconfigfilename);
 		Sprint sprint = null;
 		SprintDTO sprintDTO = null;
 		Integer sprintnummer = 0;
-		sprintnummer = sprintService.countSprintsAnzahlToProject(scrumprojektid);
+		sprintnummer = sprintService.countNumberOfSprintsOfProject(projectId);
 		sprint = new Sprint();
-		sprint.setSprintnummer(sprintnummer + 1);
-		sprint.setScrumprojekt(scrumprojektService.findById(scrumprojektid));
+		sprint.setSprintnumber(sprintnummer + 1);
+		sprint.setProject(scrumprojektService.findById(projectId));
 		sprintService.persist(sprint);
-		sprint = sprintService.findByProjectIdandSprintNumber(scrumprojektid, sprintnummer + 1);
-		sprintDTO = new SprintDTO(sprint.getId(), sprint.getSprintnummer(), sprint.getStatus());
+		sprint = sprintService.findByProjectIdandSprintNumber(projectId, sprintnummer + 1);
+		sprintDTO = new SprintDTO(sprint.getId(), sprint.getSprintnumber(), sprint.getStatus());
 		if (sprint.getBurndownChart() != null) {
 			BurndownChartDTO burndownchartDTO = new BurndownChartDTO();
 			burndownchartDTO.setId(sprint.getBurndownChart().getId());
-			burndownchartDTO.setTage(sprint.getBurndownChart().getTage());
+			burndownchartDTO.setDays(sprint.getBurndownChart().getDays());
 			List<BurndownChartPointDTO> burndownchartPointDTOListe = new LinkedList<BurndownChartPointDTO>();
 			for (int i = 0; i < sprint.getBurndownChart().getBurndownChartPoint().size(); i++) {
 				BurndownChartPointDTO burndownchartPointDTO = new BurndownChartPointDTO();
@@ -158,7 +158,7 @@ public class SprintREST {
 			Sprint sprint = sprintService.findById(sprintid);
 			BurndownChartService burndownChartService = new BurndownChartService(hibernateconfigfilename);
 			BurndownChart burndownChart = new BurndownChart();
-			burndownChart.setTage(0);
+			burndownChart.setDays(0);
 			burndownChartService.persist(burndownChart);
 			sprint.setBurndownChart(burndownChart);
 			sprint.setStatus(true);
@@ -195,7 +195,7 @@ public class SprintREST {
 			
 			BurndownChartPoint burndownChartPoint = new BurndownChartPoint();
 			
-			Integer tag = burndownChart.getTage();
+			Integer tag = burndownChart.getDays();
 			burndownChartService.update(burndownChart);
 			
 			Integer aufwand = 0;
@@ -206,19 +206,19 @@ public class SprintREST {
 				List<UserStoryTask> userstorytaskList = userstorytaskService
 						.findAllByUserStoryId(userstoryList.get(i).getId());
 				for (int j = 0; j < userstorytaskList.size(); j++) {
-					if ((userstorytaskList.get(j).getTaskstatus().getBeschreibung().equals("Offen"))
-							|| (userstorytaskList.get(j).getTaskstatus().getBeschreibung().equals("In Arbeit"))) {
-						aufwand += userstorytaskList.get(j).getAufwandinstunden();
+					if ((userstorytaskList.get(j).getTaskstatus().getDescription().equals("Offen"))
+							|| (userstorytaskList.get(j).getTaskstatus().getDescription().equals("In Arbeit"))) {
+						aufwand += userstorytaskList.get(j).getEffortInHours();
 					}
 				}
 			}
 			
-			burndownChartPoint.setX(sprint.getBurndownChart().getTage());
+			burndownChartPoint.setX(sprint.getBurndownChart().getDays());
 			burndownChartPoint.setY(aufwand);
 			burndownChartPoint.setBurndownChart(burndownChart);
 			burndownChartPointService.persist(burndownChartPoint);
 			
-			sprint.getBurndownChart().setTage(sprint.getBurndownChart().getTage() + 1);
+			sprint.getBurndownChart().setDays(sprint.getBurndownChart().getDays() + 1);
 			sprintService.update(sprint);
 			status = true;
 		} catch (Exception e) {

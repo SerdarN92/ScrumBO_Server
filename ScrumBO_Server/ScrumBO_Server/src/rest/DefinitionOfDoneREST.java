@@ -33,13 +33,11 @@ public class DefinitionOfDoneREST {
 	public Response getDoDByUserstoryId(@PathParam("userstoryid") Integer userstoryId,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) throws JSONException {
 		DefinitionOfDoneService dodService = new DefinitionOfDoneService(hibernateconfigfilename);
-		UserStoryService userstoryService = new UserStoryService(hibernateconfigfilename);
-		UserStory userstory = userstoryService.findById(userstoryId);
 		List<DefinitionOfDone> dodListe = dodService.findByUserstoryId(userstoryId);
 		List<DefinitionOfDoneDTO> dodDTOListe = new LinkedList<DefinitionOfDoneDTO>();
 		for (int i = 0; i < dodListe.size(); i++) {
-			DefinitionOfDoneDTO dodDTO = new DefinitionOfDoneDTO(dodListe.get(i).getId(),
-					dodListe.get(i).getKriterium(), dodListe.get(i).getStatus());
+			DefinitionOfDoneDTO dodDTO = new DefinitionOfDoneDTO(dodListe.get(i).getId(), dodListe.get(i).getCriteria(),
+					dodListe.get(i).getStatus());
 			dodDTOListe.add(dodDTO);
 			
 		}
@@ -71,7 +69,7 @@ public class DefinitionOfDoneREST {
 		UserStoryService userstoryService = new UserStoryService(hibernateconfigfilename);
 		UserStory userstory = userstoryService.findById(definitionOfDoneDTO.getUserstory().getId());
 		DefinitionOfDoneService definitionOfDoneService = new DefinitionOfDoneService(hibernateconfigfilename);
-		DefinitionOfDone definitionOfDone = new DefinitionOfDone(definitionOfDoneDTO.getKriterium(),
+		DefinitionOfDone definitionOfDone = new DefinitionOfDone(definitionOfDoneDTO.getCriteria(),
 				definitionOfDoneDTO.getStatus(), userstory);
 		definitionOfDoneService.persist(definitionOfDone);
 		
@@ -101,7 +99,7 @@ public class DefinitionOfDoneREST {
 		DefinitionOfDoneDTO definitionOfDoneDTO = gson.fromJson(definitionOfDoneDetails, DefinitionOfDoneDTO.class);
 		DefinitionOfDoneService definitionOfDoneService = new DefinitionOfDoneService(hibernateconfigfilename);
 		DefinitionOfDone definitionOfDone = definitionOfDoneService.findById(definitionOfDoneDTO.getId());
-		definitionOfDone.setKriterium(definitionOfDoneDTO.getKriterium());
+		definitionOfDone.setCriteria(definitionOfDoneDTO.getCriteria());
 		definitionOfDone.setStatus(definitionOfDoneDTO.getStatus());
 		String output = "";
 		try {

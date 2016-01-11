@@ -22,22 +22,21 @@ import dto.BurndownChartDTO;
 import dto.BurndownChartPointDTO;
 import dto.ImpedimentDTO;
 import dto.ProductBacklogDTO;
-import dto.ScrumprojektDTO;
+import dto.ProjectDTO;
 import dto.SprintDTO;
-import model.Benutzer;
-import model.Benutzer_Benutzerrolle_Scrumprojekt;
 import model.BurndownChart;
 import model.ProductBacklog;
-import model.Scrumprojekt;
+import model.Project;
 import model.Sprint;
 import model.SprintBacklog;
-import service.BenutzerService;
-import service.Benutzer_Benutzerrolle_ScrumprojektService;
-import service.BurndownChartService;
+import model.User;
+import model.User_Role_Project;
 import service.ProductBacklogService;
-import service.ScrumprojektService;
+import service.ProjectService;
 import service.SprintBacklogService;
 import service.SprintService;
+import service.UserService;
+import service.User_Role_ProjectService;
 
 @Path("/scrumprojekt")
 public class ScrumprojektREST {
@@ -47,50 +46,49 @@ public class ScrumprojektREST {
 	@Produces("application/json" + ";charset=utf-8")
 	public Response getProjectByProjectname(@PathParam("projectname") String projectname,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
-		ScrumprojektService scrumprojektService = new ScrumprojektService(hibernateconfigfilename);
-		Scrumprojekt scrumprojekt = scrumprojektService.findByProjectname(projectname);
+		ProjectService projectService = new ProjectService(hibernateconfigfilename);
+		Project project = projectService.findByProjectname(projectname);
 		String output = "Projekt nicht vorhanden";
-		if (scrumprojekt != null) {
-			ScrumprojektDTO scrumprojektDTO = new ScrumprojektDTO(scrumprojekt.getId(), scrumprojekt.getProjektname(),
-					scrumprojekt.getPasswort());
-			List<ImpedimentDTO> impedimentDTOListe = new LinkedList<ImpedimentDTO>();
-			for (int i = 0; i < scrumprojekt.getImpediment().size(); i++) {
+		if (project != null) {
+			ProjectDTO projectDTO = new ProjectDTO(project.getId(), project.getProjectname(), project.getPassword());
+			List<ImpedimentDTO> impedimentDTOList = new LinkedList<ImpedimentDTO>();
+			for (int i = 0; i < project.getImpediment().size(); i++) {
 				ImpedimentDTO impedimentDTO = new ImpedimentDTO();
-				impedimentDTO.setId(scrumprojekt.getImpediment().get(i).getId());
+				impedimentDTO.setId(project.getImpediment().get(i).getId());
 			}
-			scrumprojektDTO.setImpediment(impedimentDTOListe);
+			projectDTO.setImpediment(impedimentDTOList);
 			ProductBacklogDTO productbacklogDTO = new ProductBacklogDTO();
-			productbacklogDTO.setId(scrumprojekt.getProductbacklog().getId());
-			scrumprojektDTO.setProductbacklog(productbacklogDTO);
-			List<SprintDTO> sprintDTOListe = new LinkedList<SprintDTO>();
-			for (int i = 0; i < scrumprojekt.getSprint().size(); i++) {
+			productbacklogDTO.setId(project.getProductbacklog().getId());
+			projectDTO.setProductbacklog(productbacklogDTO);
+			List<SprintDTO> sprintDTOList = new LinkedList<SprintDTO>();
+			for (int i = 0; i < project.getSprint().size(); i++) {
 				SprintDTO sprintDTO = new SprintDTO();
-				sprintDTO.setId(scrumprojekt.getSprint().get(i).getId());
-				if (scrumprojekt.getSprint().get(i).getBurndownChart() != null) {
+				sprintDTO.setId(project.getSprint().get(i).getId());
+				if (project.getSprint().get(i).getBurndownChart() != null) {
 					BurndownChartDTO burndownchartDTO = new BurndownChartDTO();
-					burndownchartDTO.setId(scrumprojekt.getSprint().get(i).getBurndownChart().getId());
-					burndownchartDTO.setTage(scrumprojekt.getSprint().get(i).getBurndownChart().getTage());
-					List<BurndownChartPointDTO> burndownchartPointDTOListe = new LinkedList<BurndownChartPointDTO>();
-					for (int j = 0; j < scrumprojekt.getSprint().get(i).getBurndownChart().getBurndownChartPoint()
+					burndownchartDTO.setId(project.getSprint().get(i).getBurndownChart().getId());
+					burndownchartDTO.setDays(project.getSprint().get(i).getBurndownChart().getDays());
+					List<BurndownChartPointDTO> burndownchartPointDTOList = new LinkedList<BurndownChartPointDTO>();
+					for (int j = 0; j < project.getSprint().get(i).getBurndownChart().getBurndownChartPoint()
 							.size(); j++) {
 						BurndownChartPointDTO burndownchartPointDTO = new BurndownChartPointDTO();
-						burndownchartPointDTO.setId(scrumprojekt.getSprint().get(i).getBurndownChart()
-								.getBurndownChartPoint().get(j).getId());
-						burndownchartPointDTO.setX(scrumprojekt.getSprint().get(i).getBurndownChart()
-								.getBurndownChartPoint().get(j).getX());
-						burndownchartPointDTO.setY(scrumprojekt.getSprint().get(i).getBurndownChart()
-								.getBurndownChartPoint().get(j).getY());
-						burndownchartPointDTOListe.add(burndownchartPointDTO);
+						burndownchartPointDTO.setId(
+								project.getSprint().get(i).getBurndownChart().getBurndownChartPoint().get(j).getId());
+						burndownchartPointDTO.setX(
+								project.getSprint().get(i).getBurndownChart().getBurndownChartPoint().get(j).getX());
+						burndownchartPointDTO.setY(
+								project.getSprint().get(i).getBurndownChart().getBurndownChartPoint().get(j).getY());
+						burndownchartPointDTOList.add(burndownchartPointDTO);
 					}
-					burndownchartDTO.setBurndownChartPoint(burndownchartPointDTOListe);
+					burndownchartDTO.setBurndownChartPoint(burndownchartPointDTOList);
 					sprintDTO.setBurndownChart(burndownchartDTO);
 				}
-				sprintDTOListe.add(sprintDTO);
+				sprintDTOList.add(sprintDTO);
 			}
-			scrumprojektDTO.setSprint(sprintDTOListe);
+			projectDTO.setSprint(sprintDTOList);
 			
 			Gson gson = new Gson();
-			output = gson.toJson(scrumprojektDTO);
+			output = gson.toJson(projectDTO);
 		}
 		return Response.status(200).entity(output).build();
 	}
@@ -100,58 +98,58 @@ public class ScrumprojektREST {
 	@Produces("application/json" + ";charset=utf-8")
 	public Response getScrumprojekteAll(@PathParam("hibernateconfigfilename") String hibernateconfigfilename)
 			throws JSONException {
-		ScrumprojektService scrumprojektService = new ScrumprojektService(hibernateconfigfilename);
+		ProjectService projectService = new ProjectService(hibernateconfigfilename);
 		
-		List<ScrumprojektDTO> scrumprojektDTOListe = new LinkedList<ScrumprojektDTO>();
-		List<Scrumprojekt> scrumprojektListe = scrumprojektService.findAll();
-		for (int i = 0; i < scrumprojektListe.size(); i++) {
-			ScrumprojektDTO scrumprojektDTO = new ScrumprojektDTO();
-			scrumprojektDTO.setId(scrumprojektListe.get(i).getId());
-			scrumprojektDTO.setProjektname(scrumprojektListe.get(i).getProjektname());
-			scrumprojektDTO.setPasswort(scrumprojektListe.get(i).getPasswort());
-			List<SprintDTO> sprintDTOListe = new LinkedList<SprintDTO>();
-			List<ImpedimentDTO> impedimentDTOListe = new LinkedList<ImpedimentDTO>();
+		List<ProjectDTO> projectDTOList = new LinkedList<ProjectDTO>();
+		List<Project> projectList = projectService.findAll();
+		for (int i = 0; i < projectList.size(); i++) {
+			ProjectDTO projectDTO = new ProjectDTO();
+			projectDTO.setId(projectList.get(i).getId());
+			projectDTO.setProjectname(projectList.get(i).getProjectname());
+			projectDTO.setPassword(projectList.get(i).getPassword());
+			List<SprintDTO> sprintDTOList = new LinkedList<SprintDTO>();
+			List<ImpedimentDTO> impedimentDTOList = new LinkedList<ImpedimentDTO>();
 			
-			for (int j = 0; j < scrumprojektListe.get(i).getSprint().size(); j++) {
+			for (int j = 0; j < projectList.get(i).getSprint().size(); j++) {
 				SprintDTO sprintDTO = new SprintDTO();
-				sprintDTO.setId(scrumprojektListe.get(i).getSprint().get(j).getId());
+				sprintDTO.setId(projectList.get(i).getSprint().get(j).getId());
 				BurndownChartDTO burndownchartDTO = new BurndownChartDTO();
-				burndownchartDTO.setId(scrumprojektListe.get(i).getSprint().get(j).getBurndownChart().getId());
-				burndownchartDTO.setTage(scrumprojektListe.get(i).getSprint().get(j).getBurndownChart().getTage());
-				List<BurndownChartPointDTO> burndownchartPointDTOListe = new LinkedList<BurndownChartPointDTO>();
-				for (int k = 0; k < scrumprojektListe.get(i).getSprint().get(j).getBurndownChart()
-						.getBurndownChartPoint().size(); k++) {
+				burndownchartDTO.setId(projectList.get(i).getSprint().get(j).getBurndownChart().getId());
+				burndownchartDTO.setDays(projectList.get(i).getSprint().get(j).getBurndownChart().getDays());
+				List<BurndownChartPointDTO> burndownchartPointDTOList = new LinkedList<BurndownChartPointDTO>();
+				for (int k = 0; k < projectList.get(i).getSprint().get(j).getBurndownChart().getBurndownChartPoint()
+						.size(); k++) {
 					BurndownChartPointDTO burndownchartPointDTO = new BurndownChartPointDTO();
-					burndownchartPointDTO.setId(scrumprojektListe.get(i).getSprint().get(j).getBurndownChart()
+					burndownchartPointDTO.setId(projectList.get(i).getSprint().get(j).getBurndownChart()
 							.getBurndownChartPoint().get(k).getId());
-					burndownchartPointDTO.setX(scrumprojektListe.get(i).getSprint().get(j).getBurndownChart()
+					burndownchartPointDTO.setX(projectList.get(i).getSprint().get(j).getBurndownChart()
 							.getBurndownChartPoint().get(k).getX());
-					burndownchartPointDTO.setY(scrumprojektListe.get(i).getSprint().get(j).getBurndownChart()
+					burndownchartPointDTO.setY(projectList.get(i).getSprint().get(j).getBurndownChart()
 							.getBurndownChartPoint().get(k).getY());
-					burndownchartPointDTOListe.add(burndownchartPointDTO);
+					burndownchartPointDTOList.add(burndownchartPointDTO);
 				}
-				burndownchartDTO.setBurndownChartPoint(burndownchartPointDTOListe);
+				burndownchartDTO.setBurndownChartPoint(burndownchartPointDTOList);
 				sprintDTO.setBurndownChart(burndownchartDTO);
-				sprintDTOListe.add(sprintDTO);
+				sprintDTOList.add(sprintDTO);
 			}
-			for (int j = 0; j < scrumprojektListe.get(i).getImpediment().size(); j++) {
+			for (int j = 0; j < projectList.get(i).getImpediment().size(); j++) {
 				ImpedimentDTO impedimentDTO = new ImpedimentDTO();
-				impedimentDTO.setId(scrumprojektListe.get(i).getImpediment().get(j).getId());
+				impedimentDTO.setId(projectList.get(i).getImpediment().get(j).getId());
 				
-				impedimentDTOListe.add(impedimentDTO);
+				impedimentDTOList.add(impedimentDTO);
 			}
 			
 			ProductBacklogDTO productbacklogDTO = new ProductBacklogDTO();
-			productbacklogDTO.setId(scrumprojektListe.get(i).getProductbacklog().getId());
+			productbacklogDTO.setId(projectList.get(i).getProductbacklog().getId());
 			
-			scrumprojektDTO.setSprint(sprintDTOListe);
-			scrumprojektDTO.setImpediment(impedimentDTOListe);
-			scrumprojektDTO.setProductbacklog(productbacklogDTO);
-			scrumprojektDTOListe.add(scrumprojektDTO);
+			projectDTO.setSprint(sprintDTOList);
+			projectDTO.setImpediment(impedimentDTOList);
+			projectDTO.setProductbacklog(productbacklogDTO);
+			projectDTOList.add(projectDTO);
 		}
 		
 		Gson gson = new Gson();
-		String output = gson.toJson(scrumprojektDTOListe);
+		String output = gson.toJson(projectDTOList);
 		
 		return Response.status(200).entity(output).build();
 	}
@@ -175,36 +173,37 @@ public class ScrumprojektREST {
 		
 		Gson gson = new Gson();
 		
-		ScrumprojektService sps = new ScrumprojektService(hibernateconfigfilename);
-		BenutzerService bs = new BenutzerService(hibernateconfigfilename);
-		Benutzer_Benutzerrolle_ScrumprojektService bss = new Benutzer_Benutzerrolle_ScrumprojektService(
-				hibernateconfigfilename);
+		ProjectService sps = new ProjectService(hibernateconfigfilename);
+		UserService bs = new UserService(hibernateconfigfilename);
+		User_Role_ProjectService bss = new User_Role_ProjectService(hibernateconfigfilename);
 		SprintBacklogService sprintbacklogService = new SprintBacklogService(hibernateconfigfilename);
 		SprintService sprintService = new SprintService(hibernateconfigfilename);
 		
-		ScrumprojektDTO scrumprojektDTO = gson.fromJson(projectdetails, ScrumprojektDTO.class);
+		ProjectDTO projectDTO = gson.fromJson(projectdetails, ProjectDTO.class);
 		
-		Scrumprojekt scrumprojekt = new Scrumprojekt();
-		Benutzer benutzer = bs.findByEmail(email);
+		Project scrumprojekt = new Project();
+		User benutzer = bs.findByEmail(email);
 		ProductBacklog productbacklog = new ProductBacklog();
-		Benutzer_Benutzerrolle_Scrumprojekt bssmodel = new Benutzer_Benutzerrolle_Scrumprojekt();
+		User_Role_Project bssmodel = new User_Role_Project();
 		SprintBacklog sprintbacklog = new SprintBacklog();
 		Sprint sprint = new Sprint();
 		
-		Integer sprintbacklogid = sprintbacklogService.findAll().size() + 1;
+		Integer sprintbacklogid = 1;
+		if (sprintbacklogService.findAll() != null) {
+			sprintbacklogid = sprintbacklogService.findAll().size() + 1;
+		}
 		sprintbacklog.setId(sprintbacklogid);
 		sprintbacklogService.persist(sprintbacklog);
 		sprintbacklog = sprintbacklogService.findById(sprintbacklogid);
 		
-		List<Benutzer_Benutzerrolle_Scrumprojekt> bssliste = bss.findAll();
+		List<User_Role_Project> bssliste = bss.findAll();
 		
-		scrumprojekt.setProjektname(scrumprojektDTO.getProjektname());
-		scrumprojekt.setPasswort(scrumprojektDTO.getPasswort());
+		scrumprojekt.setProjectname(projectDTO.getProjectname());
+		scrumprojekt.setPassword(projectDTO.getPassword());
 		scrumprojekt.setProductbacklog(productbacklog);
 		
 		for (int i = 0; i < bssliste.size(); i++) {
-			if (bssliste.get(i).getPk().getBenutzerId() == benutzer.getId()
-					&& bssliste.get(i).getPk().getBenutzerrollenId() == 1) {
+			if (bssliste.get(i).getPk().getUserId() == benutzer.getId() && bssliste.get(i).getPk().getRoleId() == 1) {
 				bssmodel = bssliste.get(i);
 			}
 		}
@@ -212,17 +211,17 @@ public class ScrumprojektREST {
 		String output = "";
 		try {
 			sps.persist(scrumprojekt);
-			Integer projectid = sps.findByProjectname(scrumprojekt.getProjektname()).getId();
-			Benutzer_Benutzerrolle_Scrumprojekt.Pk pk = new Benutzer_Benutzerrolle_Scrumprojekt.Pk();
-			pk.setBenutzerId(bssmodel.getPk().getBenutzerId());
-			pk.setBenutzerrollenId(bssmodel.getPk().getBenutzerrollenId());
-			pk.setScrumprojektId(projectid);
+			Integer projectid = sps.findByProjectname(scrumprojekt.getProjectname()).getId();
+			User_Role_Project.Pk pk = new User_Role_Project.Pk();
+			pk.setUserId(bssmodel.getPk().getUserId());
+			pk.setRoleId(bssmodel.getPk().getRoleId());
+			pk.setProjectId(projectid);
 			bssmodel.setPk(pk);
 			bss.persist(bssmodel);
 			
-			sprint.setSprintnummer(1);
+			sprint.setSprintnumber(1);
 			sprint.setStatus(false);
-			sprint.setScrumprojekt(sps.findById(projectid));
+			sprint.setProject(sps.findById(projectid));
 			sprint.setSprintbacklog(sprintbacklog);
 			
 			BurndownChart burndownChart = new BurndownChart();
@@ -244,8 +243,8 @@ public class ScrumprojektREST {
 	@Produces("application/json" + ";charset=utf-8")
 	public Response getProductbacklogByProjectname(@PathParam("projectid") Integer projectid,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
-		ScrumprojektService scrumprojektService = new ScrumprojektService(hibernateconfigfilename);
-		Scrumprojekt scrumprojekt = scrumprojektService.findById(projectid);
+		ProjectService projectService = new ProjectService(hibernateconfigfilename);
+		Project scrumprojekt = projectService.findById(projectid);
 		Integer productbacklogid = scrumprojekt.getProductbacklog().getId();
 		ProductBacklogService productbacklogService = new ProductBacklogService(hibernateconfigfilename);
 		ProductBacklog productbacklog = new ProductBacklog();
@@ -266,16 +265,14 @@ public class ScrumprojektREST {
 	@Produces("application/json" + ";charset=utf-8")
 	public Response delete(@PathParam("scrumprojektid") Integer scrumprojektid,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
-		Benutzer_Benutzerrolle_ScrumprojektService bbsService = new Benutzer_Benutzerrolle_ScrumprojektService(
-				hibernateconfigfilename);
-		BurndownChartService burndownchartService = new BurndownChartService(hibernateconfigfilename);
-		ScrumprojektService scrumprojektService = new ScrumprojektService(hibernateconfigfilename);
-		Scrumprojekt scrumprojekt = scrumprojektService.findById(scrumprojektid);
+		User_Role_ProjectService urpService = new User_Role_ProjectService(hibernateconfigfilename);
+		ProjectService projectService = new ProjectService(hibernateconfigfilename);
+		Project scrumprojekt = projectService.findById(scrumprojektid);
 		boolean success = false;
 		
 		try {
-			bbsService.deleteProject(scrumprojekt.getId());
-			scrumprojektService.delete(scrumprojekt.getId());
+			urpService.deleteProject(scrumprojekt.getId());
+			projectService.delete(scrumprojekt.getId());
 			success = true;
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -307,18 +304,16 @@ public class ScrumprojektREST {
 		}
 		String scrumprojektDetails = b.toString();
 		Gson gson = new Gson();
-		ScrumprojektDTO scrumprojektDTO = gson.fromJson(scrumprojektDetails, ScrumprojektDTO.class);
-		Benutzer_Benutzerrolle_ScrumprojektService bbsService = new Benutzer_Benutzerrolle_ScrumprojektService(
-				hibernateconfigfilename);
-		BurndownChartService burndownchartService = new BurndownChartService(hibernateconfigfilename);
-		ScrumprojektService scrumprojektService = new ScrumprojektService(hibernateconfigfilename);
-		Scrumprojekt scrumprojekt = scrumprojektService.findById(scrumprojektDTO.getId());
+		ProjectDTO projectDTO = gson.fromJson(scrumprojektDetails, ProjectDTO.class);
+		User_Role_ProjectService urpService = new User_Role_ProjectService(hibernateconfigfilename);
+		ProjectService projectService = new ProjectService(hibernateconfigfilename);
+		Project scrumprojekt = projectService.findById(projectDTO.getId());
 		boolean success = false;
 		String output = "Projekt nicht gelöscht";
 		
 		try {
-			bbsService.deleteProject(scrumprojekt.getId());
-			scrumprojektService.delete(scrumprojekt.getId());
+			urpService.deleteProject(scrumprojekt.getId());
+			projectService.delete(scrumprojekt.getId());
 			success = true;
 		} catch (Exception e) {
 			e.printStackTrace();

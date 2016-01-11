@@ -23,7 +23,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.Impediment;
 import scrumbo.de.service.ImpedimentService;
 
@@ -84,7 +84,7 @@ public class ImpedimentCreatController implements Initializable {
 			SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
 			String b = sdf.format(date);
 			impediment.setDatumDesAuftretens(b);
-			List<Impediment> liste = CurrentScrumprojekt.impedimentbacklog;
+			List<Impediment> liste = CurrentProject.impedimentbacklog;
 			liste.add(impediment);
 			
 			if (impedimentService.createImpediment(impediment)) {

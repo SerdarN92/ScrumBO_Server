@@ -5,27 +5,27 @@ import java.io.Serializable;
 public class ImpedimentDTO implements Serializable {
 	
 	private Integer			id;
-	private Integer			priorität;
-	private String			mitarbeiter;
-	private String			beschreibung;
-	private String			datumDesAuftretens;
-	private String			datumDerBehebung;
-	private String			kommentar;
-	private ScrumprojektDTO	scrumprojekt;
-	
+	private Integer			priority;
+	private String			employee;
+	private String			description;
+	private String			dateOfOccurrence;
+	private String			dateOfRectify;
+	private String			comment;
+	private ProjectDTO	project;
+							
 	public ImpedimentDTO() {
 	
 	}
 	
-	public ImpedimentDTO(Integer id, Integer priorität, String mitarbeiter, String beschreibung,
-			String datumDesAuftretens, String datumDerBehebung, String kommentar) {
+	public ImpedimentDTO(Integer id, Integer priority, String employee, String description, String dateOfOccurrence,
+			String dateOfRectify, String comment) {
 		this.id = id;
-		this.priorität = priorität;
-		this.mitarbeiter = mitarbeiter;
-		this.beschreibung = beschreibung;
-		this.datumDesAuftretens = datumDesAuftretens;
-		this.datumDerBehebung = datumDerBehebung;
-		this.kommentar = kommentar;
+		this.priority = priority;
+		this.employee = employee;
+		this.description = description;
+		this.dateOfOccurrence = dateOfOccurrence;
+		this.dateOfRectify = dateOfRectify;
+		this.comment = comment;
 	}
 	
 	public Integer getId() {
@@ -36,60 +36,60 @@ public class ImpedimentDTO implements Serializable {
 		this.id = id;
 	}
 	
-	public Integer getPriorität() {
-		return priorität;
+	public Integer getPriority() {
+		return priority;
 	}
 	
-	public void setPriorität(Integer priorität) {
-		this.priorität = priorität;
+	public void setPriority(Integer priority) {
+		this.priority = priority;
 	}
 	
-	public String getBeschreibung() {
-		return beschreibung;
+	public String getEmployee() {
+		return employee;
 	}
 	
-	public void setBeschreibung(String beschreibung) {
-		this.beschreibung = beschreibung;
+	public void setEmployee(String employee) {
+		this.employee = employee;
 	}
 	
-	public String getDatumDesAuftretens() {
-		return datumDesAuftretens;
+	public String getDescription() {
+		return description;
 	}
 	
-	public void setDatumDesAuftretens(String datumDesAuftretens) {
-		this.datumDesAuftretens = datumDesAuftretens;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
-	public String getDatumDerBehebung() {
-		return datumDerBehebung;
+	public String getDateOfOccurrence() {
+		return dateOfOccurrence;
 	}
 	
-	public void setDatumDerBehebung(String datumDerBehebung) {
-		this.datumDerBehebung = datumDerBehebung;
+	public void setDateOfOccurrence(String dateOfOccurrence) {
+		this.dateOfOccurrence = dateOfOccurrence;
 	}
 	
-	public String getMitarbeiter() {
-		return mitarbeiter;
+	public String getDateOfRectify() {
+		return dateOfRectify;
 	}
 	
-	public void setMitarbeiter(String mitarbeiter) {
-		this.mitarbeiter = mitarbeiter;
+	public void setDateOfRectify(String dateOfRectify) {
+		this.dateOfRectify = dateOfRectify;
 	}
 	
-	public String getKommentar() {
-		return kommentar;
+	public String getComment() {
+		return comment;
 	}
 	
-	public void setKommentar(String kommentar) {
-		this.kommentar = kommentar;
+	public void setComment(String comment) {
+		this.comment = comment;
 	}
 	
-	public ScrumprojektDTO getScrumprojekt() {
-		return scrumprojekt;
+	public ProjectDTO getProject() {
+		return project;
 	}
 	
-	public void setScrumprojekt(ScrumprojektDTO scrumprojekt) {
-		this.scrumprojekt = scrumprojekt;
+	public void setProject(ProjectDTO project) {
+		this.project = project;
 	}
 	
 	@Override

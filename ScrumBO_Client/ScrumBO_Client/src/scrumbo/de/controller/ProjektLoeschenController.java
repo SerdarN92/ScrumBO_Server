@@ -24,7 +24,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
-import scrumbo.de.entity.Scrumprojekt;
+import scrumbo.de.entity.Project;
 import scrumbo.de.service.ScrumprojektService;
 
 public class ProjektLoeschenController implements Initializable {
@@ -33,13 +33,13 @@ public class ProjektLoeschenController implements Initializable {
 	Scene							scene;
 	ScrumprojektService				scrumprojektService	= null;
 	@FXML
-	private ComboBox<Scrumprojekt>	comboBoxProjekte	= new ComboBox<>();
+	private ComboBox<Project>	comboBoxProjekte	= new ComboBox<>();
 	@FXML
 	private Button					buttonAbbort;
 	@FXML
 	private Button					buttonDelete;
-	private List<Scrumprojekt>		scrumprojectList	= new LinkedList<Scrumprojekt>();
-	private Scrumprojekt			currentScrumproject	= new Scrumprojekt();
+	private List<Project>		scrumprojectList	= new LinkedList<Project>();
+	private Project			currentScrumproject	= new Project();
 														
 	@FXML
 	private void handleButtonAbbort(ActionEvent event) throws Exception {
@@ -103,7 +103,7 @@ public class ProjektLoeschenController implements Initializable {
 			buttonDelete.setDisable(false);
 		}
 		
-		ObservableList<Scrumprojekt> options = FXCollections.observableArrayList();
+		ObservableList<Project> options = FXCollections.observableArrayList();
 		for (int i = 0; i < scrumprojectList.size(); i++) {
 			options.add(scrumprojectList.get(i));
 		}
@@ -115,20 +115,20 @@ public class ProjektLoeschenController implements Initializable {
 			}
 		});
 		
-		comboBoxProjekte.setConverter(new StringConverter<Scrumprojekt>() {
+		comboBoxProjekte.setConverter(new StringConverter<Project>() {
 			@Override
-			public String toString(Scrumprojekt u) {
+			public String toString(Project u) {
 				return u.getProjektname();
 			}
 			
 			@Override
-			public Scrumprojekt fromString(String string) {
+			public Project fromString(String string) {
 				throw new UnsupportedOperationException();
 			}
 		});
 		
 		comboBoxProjekte.valueProperty()
-				.addListener((ChangeListener<Scrumprojekt>) (ov, t, t1) -> currentScrumproject = t1);
+				.addListener((ChangeListener<Project>) (ov, t, t1) -> currentScrumproject = t1);
 				
 	}
 	

@@ -9,12 +9,12 @@ import model.UserStoryTask;
 
 public class UserStoryTaskDao implements DaoInterface<UserStoryTask, Integer> {
 	
-	private String			hibernateconfig	= "";
-	private HibernateUtil	hibernateutil	= null;
-											
+	private String			hibernateconfigfilename	= "";
+	private HibernateUtil	hibernateutil			= null;
+													
 	public UserStoryTaskDao(String hibernateconfigfilename) {
-		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
+		this.setHibernateconfigfilename(hibernateconfigfilename);
+		this.setHibernateutil(new HibernateUtil(hibernateconfigfilename));
 	}
 	
 	public void persist(UserStoryTask entity) {
@@ -54,12 +54,12 @@ public class UserStoryTaskDao implements DaoInterface<UserStoryTask, Integer> {
 	}
 	
 	public UserStoryTask findById(Integer id) {
-		UserStoryTask userstorytask = null;
+		UserStoryTask entity = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				userstorytask = (UserStoryTask) s.get(UserStoryTask.class, id);
+				entity = (UserStoryTask) s.get(UserStoryTask.class, id);
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -70,7 +70,7 @@ public class UserStoryTaskDao implements DaoInterface<UserStoryTask, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return userstorytask;
+		return entity;
 	}
 	
 	public void delete(UserStoryTask entity) {
@@ -91,13 +91,14 @@ public class UserStoryTaskDao implements DaoInterface<UserStoryTask, Integer> {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<UserStoryTask> findAll() {
-		List<UserStoryTask> userstorytaskListe = null;
+		List<UserStoryTask> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				userstorytaskListe = (List<UserStoryTask>) s.createQuery("from UserStoryTask").list();
+				list = (List<UserStoryTask>) s.createQuery("FROM UserStoryTask").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -108,17 +109,18 @@ public class UserStoryTaskDao implements DaoInterface<UserStoryTask, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return userstorytaskListe;
+		return list;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<UserStoryTask> findAllByUserStoryId(Integer userstoryId) {
-		List<UserStoryTask> userstorytaskListe = null;
+		List<UserStoryTask> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				userstorytaskListe = (List<UserStoryTask>) s
-						.createQuery("from UserStoryTask WHERE userstory_id like '" + userstoryId + "'").list();
+				list = (List<UserStoryTask>) s
+						.createQuery("FROM UserStoryTask WHERE userstory_id LIKE '" + userstoryId + "'").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -129,13 +131,29 @@ public class UserStoryTaskDao implements DaoInterface<UserStoryTask, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return userstorytaskListe;
+		return list;
 	}
 	
 	public void deleteAll() {
-		List<UserStoryTask> userstorytaskListe = findAll();
-		for (UserStoryTask userstorytask : userstorytaskListe) {
-			delete(userstorytask);
+		List<UserStoryTask> list = findAll();
+		for (UserStoryTask entity : list) {
+			delete(entity);
 		}
+	}
+	
+	public String getHibernateconfigfilename() {
+		return hibernateconfigfilename;
+	}
+	
+	public void setHibernateconfigfilename(String hibernateconfigfilename) {
+		this.hibernateconfigfilename = hibernateconfigfilename;
+	}
+	
+	public HibernateUtil getHibernateutil() {
+		return hibernateutil;
+	}
+	
+	public void setHibernateutil(HibernateUtil hibernateutil) {
+		this.hibernateutil = hibernateutil;
 	}
 }

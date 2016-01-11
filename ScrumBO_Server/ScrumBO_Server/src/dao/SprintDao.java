@@ -9,12 +9,12 @@ import model.Sprint;
 
 public class SprintDao implements DaoInterface<Sprint, Integer> {
 	
-	private String			hibernateconfig	= "";
-	private HibernateUtil	hibernateutil	= null;
-											
+	private String			hibernateconfigfilename	= "";
+	private HibernateUtil	hibernateutil			= null;
+													
 	public SprintDao(String hibernateconfigfilename) {
-		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
+		this.setHibernateconfigfilename(hibernateconfigfilename);
+		this.setHibernateutil(new HibernateUtil(hibernateconfigfilename));
 	}
 	
 	public void persist(Sprint entity) {
@@ -54,12 +54,12 @@ public class SprintDao implements DaoInterface<Sprint, Integer> {
 	}
 	
 	public Sprint findById(Integer id) {
-		Sprint sprint = null;
+		Sprint entity = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				sprint = (Sprint) s.get(Sprint.class, id);
+				entity = (Sprint) s.get(Sprint.class, id);
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -70,17 +70,17 @@ public class SprintDao implements DaoInterface<Sprint, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return sprint;
+		return entity;
 	}
 	
-	public Sprint findByProjectIdandSprintNumber(Integer scrumprojektid, Integer sprintnumber) {
-		Sprint sprint = null;
+	public Sprint findByProjectIdandSprintNumber(Integer projectId, Integer sprintnumber) {
+		Sprint entity = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				sprint = (Sprint) s.createQuery("from Sprint where scrumprojekt_id like '" + scrumprojektid
-						+ "' AND sprint_nummer like'" + sprintnumber + "'").uniqueResult();
+				entity = (Sprint) s.createQuery("FROM Sprint WHERE project_id LIKE '" + projectId
+						+ "' AND sprint_number LIKE'" + sprintnumber + "'").uniqueResult();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -91,7 +91,7 @@ public class SprintDao implements DaoInterface<Sprint, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return sprint;
+		return entity;
 	}
 	
 	public void delete(Sprint entity) {
@@ -112,13 +112,14 @@ public class SprintDao implements DaoInterface<Sprint, Integer> {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Sprint> findAll() {
-		List<Sprint> sprintListe = null;
+		List<Sprint> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				sprintListe = (List<Sprint>) s.createQuery("from Sprint").list();
+				list = (List<Sprint>) s.createQuery("FROM Sprint").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -129,26 +130,25 @@ public class SprintDao implements DaoInterface<Sprint, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return sprintListe;
+		return list;
 	}
 	
 	public void deleteAll() {
-		List<Sprint> sprintListe = findAll();
-		for (Sprint sprint : sprintListe) {
-			delete(sprint);
+		List<Sprint> list = findAll();
+		for (Sprint entity : list) {
+			delete(entity);
 		}
 	}
 	
-	// Gibt die höchste SprintNummer eines Projekts zurück
-	public Integer countSprintsToProject(Integer scrumprojektid) {
-		Integer sprintnummer = 0;
-		List<Sprint> sprintListe = null;
+	@SuppressWarnings("unchecked")
+	public Integer countSprintsToProject(Integer projectId) {
+		Integer sprintnumber = 0;
+		List<Sprint> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				sprintListe = (List<Sprint>) s
-						.createQuery("from Sprint where scrumprojekt_id like'" + scrumprojektid + "'").list();
+				list = (List<Sprint>) s.createQuery("FROM Sprint WHERE project_id LIKE'" + projectId + "'").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -159,24 +159,23 @@ public class SprintDao implements DaoInterface<Sprint, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		for (int i = 0; i < sprintListe.size(); i++) {
-			if (sprintListe.get(i).getSprintnummer() > sprintnummer) {
-				sprintnummer = sprintListe.get(i).getSprintnummer();
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getSprintnumber() > sprintnumber) {
+				sprintnumber = list.get(i).getSprintnumber();
 			}
 		}
-		return sprintnummer;
+		return sprintnumber;
 	}
 	
-	// Gibt die Anzahl von Sprints eines Projekts zurück
-	public Integer countSprintsAnzahlToProject(Integer scrumprojektid) {
+	@SuppressWarnings("unchecked")
+	public Integer countNumberOfSprintsOfProject(Integer projectId) {
 		Integer count = 0;
-		List<Sprint> sprintListe = null;
+		List<Sprint> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				sprintListe = (List<Sprint>) s
-						.createQuery("from Sprint where scrumprojekt_id like'" + scrumprojektid + "'").list();
+				list = (List<Sprint>) s.createQuery("FROM Sprint WHERE project_id like'" + projectId + "'").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -187,8 +186,24 @@ public class SprintDao implements DaoInterface<Sprint, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		count = sprintListe.size();
+		count = list.size();
 		return count;
+	}
+	
+	public String getHibernateconfigfilename() {
+		return hibernateconfigfilename;
+	}
+	
+	public void setHibernateconfigfilename(String hibernateconfigfilename) {
+		this.hibernateconfigfilename = hibernateconfigfilename;
+	}
+	
+	public HibernateUtil getHibernateutil() {
+		return hibernateutil;
+	}
+	
+	public void setHibernateutil(HibernateUtil hibernateutil) {
+		this.hibernateutil = hibernateutil;
 	}
 	
 }

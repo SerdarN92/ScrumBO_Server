@@ -20,29 +20,29 @@ import org.hibernate.annotations.Cascade;
  */
 
 @Entity
-@Table(name = "SCRUMPROJEKT")
-public class Scrumprojekt {
+@Table(name = "PROJECT")
+public class Project {
 	
 	@Id
 	@GeneratedValue
-	@Column(name = "scrumprojekt_id", unique = true, nullable = false)
+	@Column(name = "project_id", unique = true, nullable = false)
 	private Integer				id;
 								
-	@Column(name = "projektname", unique = true, nullable = false)
-	private String				projektname;
+	@Column(name = "projectname", unique = true, nullable = false)
+	private String				projectname;
 								
-	@Column(name = "passwort", nullable = false)
-	private String				passwort;
+	@Column(name = "password", nullable = false)
+	private String				password;
 								
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "scrumprojekt")
+			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "project")
 	@Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE,
 			org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST,
 			org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
 	private List<Sprint>		sprint	= new LinkedList<Sprint>();
 										
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "scrumprojekt")
+			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "project")
 	@Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE,
 			org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST,
 			org.hibernate.annotations.CascadeType.DELETE_ORPHAN })
@@ -51,13 +51,13 @@ public class Scrumprojekt {
 	@OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	private ProductBacklog		productbacklog;
 								
-	public Scrumprojekt() {
+	public Project() {
 	
 	}
 	
-	public Scrumprojekt(String projektname, String passwort) {
-		this.projektname = projektname;
-		this.passwort = passwort;
+	public Project(String projectname, String password) {
+		this.projectname = projectname;
+		this.password = password;
 	}
 	
 	public Integer getId() {
@@ -68,20 +68,20 @@ public class Scrumprojekt {
 		this.id = id;
 	}
 	
-	public String getProjektname() {
-		return projektname;
+	public String getProjectname() {
+		return projectname;
 	}
 	
-	public void setProjektname(String projektname) {
-		this.projektname = projektname;
+	public void setProjectname(String projectname) {
+		this.projectname = projectname;
 	}
 	
-	public String getPasswort() {
-		return passwort;
+	public String getPassword() {
+		return password;
 	}
 	
-	public void setPasswort(String passwort) {
-		this.passwort = passwort;
+	public void setPassword(String password) {
+		this.password = password;
 	}
 	
 	public List<Sprint> getSprint() {
@@ -124,7 +124,7 @@ public class Scrumprojekt {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Scrumprojekt other = (Scrumprojekt) obj;
+		Project other = (Project) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

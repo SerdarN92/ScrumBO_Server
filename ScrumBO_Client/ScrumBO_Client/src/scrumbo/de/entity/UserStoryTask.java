@@ -5,10 +5,10 @@ import java.io.Serializable;
 public class UserStoryTask implements Serializable {
 	
 	private Integer		id;
-	private String		beschreibung;
+	private String		description;
 	private Taskstatus	taskstatus;
-	private Integer		aufwandinstunden;
-	private Benutzer	benutzer;
+	private Integer		effortInHours;
+	private User	user;
 	private UserStory	userstory;
 	
 	public UserStoryTask() {
@@ -17,17 +17,17 @@ public class UserStoryTask implements Serializable {
 	
 	public UserStoryTask(Integer id, String beschreibung, Integer aufwandinstunden) {
 		this.id = id;
-		this.beschreibung = beschreibung;
-		this.aufwandinstunden = aufwandinstunden;
+		this.description = beschreibung;
+		this.effortInHours = aufwandinstunden;
 	}
 	
 	public UserStoryTask(Integer id, String beschreibung, Taskstatus taskstatus, Integer aufwandinstunden,
-			Benutzer benutzer, UserStory userstory) {
+			User benutzer, UserStory userstory) {
 		this.id = id;
-		this.beschreibung = beschreibung;
+		this.description = beschreibung;
 		this.taskstatus = taskstatus;
-		this.aufwandinstunden = aufwandinstunden;
-		this.benutzer = benutzer;
+		this.effortInHours = aufwandinstunden;
+		this.user = benutzer;
 		this.userstory = userstory;
 	}
 	
@@ -40,11 +40,11 @@ public class UserStoryTask implements Serializable {
 	}
 	
 	public String getBeschreibung() {
-		return beschreibung;
+		return description;
 	}
 	
 	public void setBeschreibung(String beschreibung) {
-		this.beschreibung = beschreibung;
+		this.description = beschreibung;
 	}
 	
 	public Taskstatus getTaskstatus() {
@@ -56,19 +56,19 @@ public class UserStoryTask implements Serializable {
 	}
 	
 	public Integer getAufwandinstunden() {
-		return aufwandinstunden;
+		return effortInHours;
 	}
 	
 	public void setAufwandinstunden(Integer aufwandinstunden) {
-		this.aufwandinstunden = aufwandinstunden;
+		this.effortInHours = aufwandinstunden;
 	}
 	
-	public Benutzer getBenutzer() {
-		return benutzer;
+	public User getBenutzer() {
+		return user;
 	}
 	
-	public void setBenutzer(Benutzer benutzer) {
-		this.benutzer = benutzer;
+	public void setBenutzer(User benutzer) {
+		this.user = benutzer;
 	}
 	
 	public UserStory getUserstory() {

@@ -18,13 +18,13 @@ import org.json.JSONException;
 
 import com.google.gson.Gson;
 
-import dto.BenutzerDTO;
-import model.Benutzer;
-import model.Benutzer_Benutzerrolle_Scrumprojekt;
-import model.Benutzerrolle;
-import service.BenutzerService;
-import service.Benutzer_Benutzerrolle_ScrumprojektService;
-import service.BenutzerrolleService;
+import dto.UserDTO;
+import model.Role;
+import model.User;
+import model.User_Role_Project;
+import service.RoleService;
+import service.UserService;
+import service.User_Role_ProjectService;
 
 @Path("/benutzer")
 public class BenutzerREST {
@@ -32,100 +32,96 @@ public class BenutzerREST {
 	@GET
 	@Path("/alle/{hibernateconfigfilename}")
 	@Produces("application/json" + ";charset=utf-8")
-	public Response getBenutzerAll(@PathParam("hibernateconfigfilename") String hibernateconfigfilename)
+	public Response getAllUser(@PathParam("hibernateconfigfilename") String hibernateconfigfilename)
 			throws JSONException {
-		BenutzerService benutzerService = new BenutzerService(hibernateconfigfilename);
+		UserService userService = new UserService(hibernateconfigfilename);
 		
-		List<BenutzerDTO> benutzerDTOListe = new LinkedList<BenutzerDTO>();
-		List<Benutzer> benutzerListe = benutzerService.findAll();
-		for (int i = 0; i < benutzerListe.size(); i++) {
-			BenutzerDTO benutzerDTO = new BenutzerDTO(benutzerListe.get(i).getId(), benutzerListe.get(i).getVorname(),
-					benutzerListe.get(i).getNachname(), benutzerListe.get(i).getPasswort(),
-					benutzerListe.get(i).getEmail());
-			benutzerDTOListe.add(benutzerDTO);
+		List<UserDTO> userDTOList = new LinkedList<UserDTO>();
+		List<User> userList = userService.findAll();
+		for (int i = 0; i < userList.size(); i++) {
+			UserDTO userDTO = new UserDTO(userList.get(i).getId(), userList.get(i).getPrename(),
+					userList.get(i).getLastname(), userList.get(i).getPassword(), userList.get(i).getEmail());
+			userDTOList.add(userDTO);
 		}
 		
 		Gson gson = new Gson();
-		String output = gson.toJson(benutzerDTOListe);
+		String output = gson.toJson(userDTOList);
 		
 		return Response.status(200).entity(output).build();
 	}
 	
 	@GET
-	@Path("/alle/scrumprojekt/{scrumprojektid}/{hibernateconfigfilename}")
+	@Path("/alle/scrumprojekt/{projectId}/{hibernateconfigfilename}")
 	@Produces("application/json" + ";charset=utf-8")
-	public Response getBenutzerOfProject(@PathParam("scrumprojektid") Integer scrumprojektid,
+	public Response getAllUsersOfProject(@PathParam("projectId") Integer projectId,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) throws JSONException {
-		Benutzer_Benutzerrolle_ScrumprojektService bbsService = new Benutzer_Benutzerrolle_ScrumprojektService(
-				hibernateconfigfilename);
-		BenutzerService benutzerService = new BenutzerService(hibernateconfigfilename);
-		List<Benutzer_Benutzerrolle_Scrumprojekt> bbsListe = bbsService.findListByProjectId(scrumprojektid);
-		List<Benutzer> benutzerListe = new LinkedList<Benutzer>();
-		for (int i = 0; i < bbsListe.size(); i++) {
+		User_Role_ProjectService urpService = new User_Role_ProjectService(hibernateconfigfilename);
+		UserService userService = new UserService(hibernateconfigfilename);
+		List<User_Role_Project> urpList = urpService.findListByProjectId(projectId);
+		List<User> userList = new LinkedList<User>();
+		for (int i = 0; i < urpList.size(); i++) {
 			
-			benutzerListe.add(benutzerService.findById(bbsListe.get(i).getPk().getBenutzerId()));
+			userList.add(userService.findById(urpList.get(i).getPk().getUserId()));
 		}
 		
-		List<BenutzerDTO> benutzerDTOListe = new LinkedList<BenutzerDTO>();
-		for (int i = 0; i < benutzerListe.size(); i++) {
-			BenutzerDTO benutzerDTO = new BenutzerDTO(benutzerListe.get(i).getId(), benutzerListe.get(i).getVorname(),
-					benutzerListe.get(i).getNachname(), benutzerListe.get(i).getPasswort(),
-					benutzerListe.get(i).getEmail());
-			benutzerDTOListe.add(benutzerDTO);
+		List<UserDTO> userDTOList = new LinkedList<UserDTO>();
+		for (int i = 0; i < userList.size(); i++) {
+			UserDTO userDTO = new UserDTO(userList.get(i).getId(), userList.get(i).getPrename(),
+					userList.get(i).getLastname(), userList.get(i).getPassword(), userList.get(i).getEmail());
+			userDTOList.add(userDTO);
 		}
 		
 		Gson gson = new Gson();
-		String output = gson.toJson(benutzerDTOListe);
+		String output = gson.toJson(userDTOList);
 		return Response.status(200).entity(output).build();
 	}
 	
 	@GET
-	@Path("/alle/scrumprojekt/entwickler/{scrumprojektid}/{hibernateconfigfilename}")
+	@Path("/alle/scrumprojekt/entwickler/{projectId}/{hibernateconfigfilename}")
 	@Produces("application/json" + ";charset=utf-8")
-	public Response getDeveloperOfProject(@PathParam("scrumprojektid") Integer scrumprojektid,
+	public Response getDeveloperOfProject(@PathParam("projectId") Integer projectId,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) throws JSONException {
-		Benutzer_Benutzerrolle_ScrumprojektService bbsService = new Benutzer_Benutzerrolle_ScrumprojektService(
-				hibernateconfigfilename);
-		BenutzerService benutzerService = new BenutzerService(hibernateconfigfilename);
-		List<Benutzer_Benutzerrolle_Scrumprojekt> bbsListe = bbsService.findListByProjectId(scrumprojektid);
-		List<Benutzer> benutzerListe = new LinkedList<Benutzer>();
-		for (int i = 0; i < bbsListe.size(); i++) {
-			if (bbsListe.get(i).getPk().getBenutzerrollenId() == 3)
-				benutzerListe.add(benutzerService.findById(bbsListe.get(i).getPk().getBenutzerId()));
+		User_Role_ProjectService urpService = new User_Role_ProjectService(hibernateconfigfilename);
+		UserService userService = new UserService(hibernateconfigfilename);
+		List<User_Role_Project> urpList = urpService.findListByProjectId(projectId);
+		List<User> userList = new LinkedList<User>();
+		for (int i = 0; i < urpList.size(); i++) {
+			if (urpList.get(i).getPk().getRoleId() == 3)
+				userList.add(userService.findById(urpList.get(i).getPk().getUserId()));
 		}
 		
-		List<BenutzerDTO> benutzerDTOListe = new LinkedList<BenutzerDTO>();
-		for (int i = 0; i < benutzerListe.size(); i++) {
-			BenutzerDTO benutzerDTO = new BenutzerDTO(benutzerListe.get(i).getId(), benutzerListe.get(i).getVorname(),
-					benutzerListe.get(i).getNachname(), benutzerListe.get(i).getPasswort(),
-					benutzerListe.get(i).getEmail());
-			benutzerDTOListe.add(benutzerDTO);
+		List<UserDTO> userDTOList = new LinkedList<UserDTO>();
+		for (int i = 0; i < userList.size(); i++) {
+			UserDTO userDTO = new UserDTO(userList.get(i).getId(), userList.get(i).getPrename(),
+					userList.get(i).getLastname(), userList.get(i).getPassword(), userList.get(i).getEmail());
+			userDTOList.add(userDTO);
 		}
 		
 		Gson gson = new Gson();
-		String output = gson.toJson(benutzerDTOListe);
+		String output = gson.toJson(userDTOList);
 		return Response.status(200).entity(output).build();
 	}
 	
 	@Path("/suche/{email}/rolle/{hibernateconfigfilename}")
 	@GET
 	@Produces("application/json" + ";charset=utf-8")
-	public Response getBenutzerrolleByEmail(@PathParam("email") String email,
+	public Response getRoleByEmail(@PathParam("email") String email,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
-		BenutzerService benutzerService = new BenutzerService(hibernateconfigfilename);
-		Benutzer benutzer = benutzerService.findByEmail(email);
+		UserService userService = new UserService(hibernateconfigfilename);
+		User user = userService.findByEmail(email);
 		String output = "User ist kein Scrum Master";
-		if (benutzer != null) {
-			Benutzer_Benutzerrolle_ScrumprojektService bbsService = new Benutzer_Benutzerrolle_ScrumprojektService(
-					hibernateconfigfilename);
-			List<Benutzer_Benutzerrolle_Scrumprojekt> bbsListe = bbsService.findListByBenutzerId(benutzer.getId());
-			for (int i = 0; i < bbsListe.size(); i++) {
-				if (bbsListe.get(i).getPk().getBenutzerrollenId() == 1)
+		if (user != null) {
+			User_Role_ProjectService urpService = new User_Role_ProjectService(hibernateconfigfilename);
+			List<User_Role_Project> urpList = urpService.findListByUserId(user.getId());
+			for (int i = 0; i < urpList.size(); i++) {
+				if (urpList.get(i).getPk().getRoleId() == 1)
 					output = "User ist Scrum Master";
-				if (bbsListe.get(i).getPk().getBenutzerrollenId() == 2)
+				if (urpList.get(i).getPk().getRoleId() == 2)
 					output = "User ist Product Owner";
-				if (bbsListe.get(i).getPk().getBenutzerrollenId() == 3)
+				if (urpList.get(i).getPk().getRoleId() == 3)
 					output = "User ist Entwickler";
+				if (urpList.get(i).getPk().getRoleId() == 4)
+					output = "User ist Admin";
 			}
 		}
 		return Response.status(200).entity(output).build();
@@ -134,17 +130,17 @@ public class BenutzerREST {
 	@Path("/suche/{email}/{hibernateconfigfilename}")
 	@GET
 	@Produces("application/json" + ";charset=utf-8")
-	public Response getBenutzerByEmail(@PathParam("email") String email,
+	public Response getUserByEmail(@PathParam("email") String email,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
-		BenutzerService benutzerService = new BenutzerService(hibernateconfigfilename);
-		Benutzer benutzer = benutzerService.findByEmail(email);
+		UserService userService = new UserService(hibernateconfigfilename);
+		User user = userService.findByEmail(email);
 		String output = "User ist nicht vorhanden";
-		if (benutzer != null) {
-			BenutzerDTO benutzerDTO = new BenutzerDTO(benutzer.getId(), benutzer.getVorname(), benutzer.getNachname(),
-					benutzer.getPasswort(), benutzer.getEmail());
+		if (user != null) {
+			UserDTO userDTO = new UserDTO(user.getId(), user.getPrename(), user.getLastname(), user.getPassword(),
+					user.getEmail());
 					
 			Gson gson = new Gson();
-			output = gson.toJson(benutzerDTO);
+			output = gson.toJson(userDTO);
 		}
 		return Response.status(200).entity(output).build();
 	}
@@ -152,7 +148,7 @@ public class BenutzerREST {
 	@Path("/updatePassword/{email}/{hibernateconfigfilename}")
 	@POST
 	@Consumes("application/json" + ";charset=utf-8")
-	public Response updateBenutzerPasswordByEmail(@PathParam("email") String email,
+	public Response updateUserPasswordByEmail(@PathParam("email") String email,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename, InputStream input) {
 		StringBuilder stringBuilder = new StringBuilder();
 		try {
@@ -164,24 +160,24 @@ public class BenutzerREST {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String benutzerDetails = stringBuilder.toString();
+		String userDetails = stringBuilder.toString();
 		
 		Gson gson = new Gson();
-		BenutzerDTO benutzerDTO = gson.fromJson(benutzerDetails, BenutzerDTO.class);
-		Benutzer benutzer = new Benutzer();
-		BenutzerService benutzerService = new BenutzerService(hibernateconfigfilename);
-		benutzer = benutzerService.findByEmail(email);
-		benutzer.setPasswort(benutzerDTO.getPasswort());
-		benutzerService.update(benutzer);
+		UserDTO userDTO = gson.fromJson(userDetails, UserDTO.class);
+		User user = new User();
+		UserService userService = new UserService(hibernateconfigfilename);
+		user = userService.findByEmail(email);
+		user.setPassword(userDTO.getPassword());
+		userService.update(user);
 		
 		String output = "Passwort vom Benutzer geupdated";
 		return Response.status(200).entity(output).build();
 	}
 	
 	@POST
-	@Path("/create/{benutzerrollenid}/{hibernateconfigfilename}")
+	@Path("/create/{roleId}/{hibernateconfigfilename}")
 	@Consumes("application/json" + ";charset=utf-8")
-	public Response createScrumMaster(@PathParam("benutzerrollenid") Integer benutzerrollenId,
+	public Response createScrumMaster(@PathParam("roleId") Integer roleId,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename, InputStream input) {
 		StringBuilder stringBuilder = new StringBuilder();
 		try {
@@ -193,27 +189,25 @@ public class BenutzerREST {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String benutzerDetails = stringBuilder.toString();
+		String userDetails = stringBuilder.toString();
 		
 		Gson gson = new Gson();
-		BenutzerDTO benutzerDTO = gson.fromJson(benutzerDetails, BenutzerDTO.class);
-		Benutzerrolle benutzerrolle = new Benutzerrolle();
-		Benutzer benutzer = new Benutzer(benutzerDTO.getId(), benutzerDTO.getVorname(), benutzerDTO.getNachname(),
-				benutzerDTO.getPasswort(), benutzerDTO.getEmail());
+		UserDTO userDTO = gson.fromJson(userDetails, UserDTO.class);
+		Role role = new Role();
+		User user = new User(userDTO.getId(), userDTO.getPrename(), userDTO.getLastname(), userDTO.getPassword(),
+				userDTO.getEmail());
 				
-		BenutzerService benutzerService = new BenutzerService(hibernateconfigfilename);
-		benutzerService.persist(benutzer);
+		UserService userService = new UserService(hibernateconfigfilename);
+		userService.persist(user);
 		
-		BenutzerrolleService benutzerrolleService = new BenutzerrolleService(hibernateconfigfilename);
-		benutzerrolle = benutzerrolleService.findById(benutzerrollenId);
+		RoleService roleService = new RoleService(hibernateconfigfilename);
+		role = roleService.findById(roleId);
 		
-		Benutzer_Benutzerrolle_ScrumprojektService bbsService = new Benutzer_Benutzerrolle_ScrumprojektService(
-				hibernateconfigfilename);
-		Benutzer_Benutzerrolle_Scrumprojekt bbs = new Benutzer_Benutzerrolle_Scrumprojekt();
-		Benutzer_Benutzerrolle_Scrumprojekt.Pk pk = new Benutzer_Benutzerrolle_Scrumprojekt.Pk(benutzer.getId(),
-				benutzerrolle.getId(), 0);
-		bbs.setPk(pk);
-		bbsService.persist(bbs);
+		User_Role_ProjectService urpService = new User_Role_ProjectService(hibernateconfigfilename);
+		User_Role_Project urp = new User_Role_Project();
+		User_Role_Project.Pk pk = new User_Role_Project.Pk(user.getId(), role.getId(), 0);
+		urp.setPk(pk);
+		urpService.persist(urp);
 		
 		String output = "User erfolgreich erstellt";
 		return Response.status(200).entity(output).build();
@@ -221,10 +215,9 @@ public class BenutzerREST {
 	}
 	
 	@POST
-	@Path("/create/{benutzerrollenid}/{scrumprojektid}/{hibernateconfigfilename}")
+	@Path("/create/{roleId}/{projectId}/{hibernateconfigfilename}")
 	@Consumes("application/json" + ";charset=utf-8")
-	public Response createUserForProject(@PathParam("scrumprojektid") Integer scrumprojektId,
-			@PathParam("benutzerrollenid") Integer benutzerrollenId,
+	public Response createUserForProject(@PathParam("projectId") Integer projectId, @PathParam("roleId") Integer roleId,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename, InputStream input) {
 		StringBuilder stringBuilder = new StringBuilder();
 		try {
@@ -236,28 +229,26 @@ public class BenutzerREST {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String benutzerDetails = stringBuilder.toString();
+		String userDetails = stringBuilder.toString();
 		
 		Gson gson = new Gson();
-		BenutzerDTO benutzerDTO = gson.fromJson(benutzerDetails, BenutzerDTO.class);
+		UserDTO userDTO = gson.fromJson(userDetails, UserDTO.class);
 		
-		Benutzer benutzer = new Benutzer(benutzerDTO.getId(), benutzerDTO.getVorname(), benutzerDTO.getNachname(),
-				benutzerDTO.getPasswort(), benutzerDTO.getEmail());
+		User user = new User(userDTO.getId(), userDTO.getPrename(), userDTO.getLastname(), userDTO.getPassword(),
+				userDTO.getEmail());
 				
-		BenutzerService bs = new BenutzerService(hibernateconfigfilename);
-		bs.persist(benutzer);
+		UserService bs = new UserService(hibernateconfigfilename);
+		bs.persist(user);
 		
-		BenutzerrolleService brs = new BenutzerrolleService(hibernateconfigfilename);
-		Benutzerrolle benutzerrolle = new Benutzerrolle();
-		benutzerrolle = brs.findById(benutzerrollenId);
+		RoleService brs = new RoleService(hibernateconfigfilename);
+		Role benutzerrolle = new Role();
+		benutzerrolle = brs.findById(roleId);
 		
-		Benutzer_Benutzerrolle_ScrumprojektService bbsService = new Benutzer_Benutzerrolle_ScrumprojektService(
-				hibernateconfigfilename);
-		Benutzer_Benutzerrolle_Scrumprojekt bbs = new Benutzer_Benutzerrolle_Scrumprojekt();
-		Benutzer_Benutzerrolle_Scrumprojekt.Pk pk = new Benutzer_Benutzerrolle_Scrumprojekt.Pk(benutzer.getId(),
-				benutzerrolle.getId(), scrumprojektId);
-		bbs.setPk(pk);
-		bbsService.persist(bbs);
+		User_Role_ProjectService urpService = new User_Role_ProjectService(hibernateconfigfilename);
+		User_Role_Project urp = new User_Role_Project();
+		User_Role_Project.Pk pk = new User_Role_Project.Pk(user.getId(), benutzerrolle.getId(), projectId);
+		urp.setPk(pk);
+		urpService.persist(urp);
 		
 		String output = "User erfolgreich erstellt";
 		return Response.status(200).entity(output).build();
@@ -265,15 +256,13 @@ public class BenutzerREST {
 	}
 	
 	@GET
-	@Path("/checkAdmission/{benutzerId}/{scrumprojektId}/{hibernateconfigfilename}")
+	@Path("/checkAdmission/{userId}/{projectId}/{hibernateconfigfilename}")
 	@Produces("application/json" + ";charset=utf-8")
 	public Response checkAdmission(@PathParam("hibernateconfigfilename") String hibernateconfigfilename,
-			@PathParam("benutzerId") Integer benutzerId, @PathParam("scrumprojektId") Integer scrumprojektId)
-					throws JSONException {
+			@PathParam("userId") Integer userId, @PathParam("projectId") Integer projectId) throws JSONException {
 		String output = "Nein";
-		Benutzer_Benutzerrolle_ScrumprojektService bbsService = new Benutzer_Benutzerrolle_ScrumprojektService(
-				hibernateconfigfilename);
-		if (bbsService.checkAdmission(benutzerId, scrumprojektId)) {
+		User_Role_ProjectService urpService = new User_Role_ProjectService(hibernateconfigfilename);
+		if (urpService.checkAdmission(userId, projectId)) {
 			output = "Ja";
 		}
 		
@@ -281,14 +270,13 @@ public class BenutzerREST {
 	}
 	
 	@GET
-	@Path("/checkAdmin/{benutzerId}/{hibernateconfigfilename}")
+	@Path("/checkAdmin/{userId}/{hibernateconfigfilename}")
 	@Produces("application/json" + ";charset=utf-8")
 	public Response checkAdmin(@PathParam("hibernateconfigfilename") String hibernateconfigfilename,
-			@PathParam("benutzerId") Integer benutzerId) throws JSONException {
+			@PathParam("userId") Integer userId) throws JSONException {
 		String output = "Nein";
-		Benutzer_Benutzerrolle_ScrumprojektService bbsService = new Benutzer_Benutzerrolle_ScrumprojektService(
-				hibernateconfigfilename);
-		if (bbsService.checkAdmin(benutzerId)) {
+		User_Role_ProjectService urpService = new User_Role_ProjectService(hibernateconfigfilename);
+		if (urpService.checkAdmin(userId)) {
 			output = "Ja";
 		}
 		
@@ -310,17 +298,16 @@ public class BenutzerREST {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		String benutzerDetails = b.toString();
+		String userDetails = b.toString();
 		Gson gson = new Gson();
-		BenutzerDTO benutzerDTO = gson.fromJson(benutzerDetails, BenutzerDTO.class);
-		BenutzerService benutzerService = new BenutzerService(hibernateconfigfilename);
-		Benutzer_Benutzerrolle_ScrumprojektService bbsService = new Benutzer_Benutzerrolle_ScrumprojektService(
-				hibernateconfigfilename);
-				
+		UserDTO userDTO = gson.fromJson(userDetails, UserDTO.class);
+		UserService userService = new UserService(hibernateconfigfilename);
+		User_Role_ProjectService urpService = new User_Role_ProjectService(hibernateconfigfilename);
+		
 		String output = "";
 		try {
-			benutzerService.delete(benutzerDTO.getId());
-			bbsService.deleteBenutzer(benutzerDTO.getId());
+			userService.delete(userDTO.getId());
+			urpService.deleteBenutzer(userDTO.getId());
 			output = "Benutzer erfolgreich gelöscht";
 		} catch (Exception e) {
 			e.printStackTrace();

@@ -5,29 +5,29 @@ import java.io.Serializable;
 public class UserStoryTaskDTO implements Serializable {
 	
 	private Integer			id;
-	private String			beschreibung;
+	private String			description;
 	private TaskstatusDTO	taskstatus;
-	private Integer			aufwandinstunden;
-	private BenutzerDTO		benutzer;
+	private Integer			effortInHours;
+	private UserDTO			user;
 	private UserStoryDTO	userstory;
 							
 	public UserStoryTaskDTO() {
 	
 	}
 	
-	public UserStoryTaskDTO(Integer id, String beschreibung, Integer aufwandinstunden) {
+	public UserStoryTaskDTO(Integer id, String description, Integer effortInHours) {
 		this.id = id;
-		this.beschreibung = beschreibung;
-		this.aufwandinstunden = aufwandinstunden;
+		this.description = description;
+		this.effortInHours = effortInHours;
 	}
 	
-	public UserStoryTaskDTO(Integer id, String beschreibung, Integer aufwandinstunden, TaskstatusDTO taskstatus,
-			BenutzerDTO benutzer, UserStoryDTO userstory) {
+	public UserStoryTaskDTO(Integer id, String description, Integer effortInHours, TaskstatusDTO taskstatus,
+			UserDTO user, UserStoryDTO userstory) {
 		this.id = id;
-		this.beschreibung = beschreibung;
-		this.aufwandinstunden = aufwandinstunden;
+		this.description = description;
+		this.effortInHours = effortInHours;
 		this.taskstatus = taskstatus;
-		this.benutzer = benutzer;
+		this.user = user;
 		this.userstory = userstory;
 	}
 	
@@ -39,12 +39,12 @@ public class UserStoryTaskDTO implements Serializable {
 		this.id = id;
 	}
 	
-	public String getBeschreibung() {
-		return beschreibung;
+	public String getDescription() {
+		return description;
 	}
 	
-	public void setBeschreibung(String beschreibung) {
-		this.beschreibung = beschreibung;
+	public void setDescription(String description) {
+		this.description = description;
 	}
 	
 	public TaskstatusDTO getTaskstatus() {
@@ -55,20 +55,20 @@ public class UserStoryTaskDTO implements Serializable {
 		this.taskstatus = taskstatus;
 	}
 	
-	public Integer getAufwandinstunden() {
-		return aufwandinstunden;
+	public Integer getEffortInHours() {
+		return effortInHours;
 	}
 	
-	public void setAufwandinstunden(Integer aufwandinstunden) {
-		this.aufwandinstunden = aufwandinstunden;
+	public void setEffortInHours(Integer effortInHours) {
+		this.effortInHours = effortInHours;
 	}
 	
-	public BenutzerDTO getBenutzer() {
-		return benutzer;
+	public UserDTO getUser() {
+		return user;
 	}
 	
-	public void setBenutzer(BenutzerDTO benutzer) {
-		this.benutzer = benutzer;
+	public void setUser(UserDTO user) {
+		this.user = user;
 	}
 	
 	public UserStoryDTO getUserstory() {

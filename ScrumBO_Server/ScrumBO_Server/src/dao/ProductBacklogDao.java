@@ -12,12 +12,12 @@ import model.UserStory;
 
 public class ProductBacklogDao implements DaoInterface<ProductBacklog, Integer> {
 	
-	private String			hibernateconfig	= "";
-	private HibernateUtil	hibernateutil	= null;
-											
+	private String			hibernateconfigfilename	= "";
+	private HibernateUtil	hibernateutil			= null;
+													
 	public ProductBacklogDao(String hibernateconfigfilename) {
-		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
+		this.setHibernateconfigfilename(hibernateconfigfilename);
+		this.setHibernateutil(new HibernateUtil(hibernateconfigfilename));
 	}
 	
 	public void persist(ProductBacklog entity) {
@@ -59,12 +59,12 @@ public class ProductBacklogDao implements DaoInterface<ProductBacklog, Integer> 
 	// LinkedHashSet, damit keine doppelten UserStorys in der Liste vorhanden
 	// sind
 	public ProductBacklog findById(Integer id) {
-		ProductBacklog productbacklog = null;
+		ProductBacklog entity = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				productbacklog = (ProductBacklog) s.get(ProductBacklog.class, id);
+				entity = (ProductBacklog) s.get(ProductBacklog.class, id);
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -75,10 +75,10 @@ public class ProductBacklogDao implements DaoInterface<ProductBacklog, Integer> 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		List<UserStory> liste = productbacklog.getUserstory();
-		List<UserStory> liste2 = new ArrayList<UserStory>(new LinkedHashSet<UserStory>(liste));
-		productbacklog.setUserstory(liste2);
-		return productbacklog;
+		List<UserStory> list = entity.getUserstory();
+		List<UserStory> list2 = new ArrayList<UserStory>(new LinkedHashSet<UserStory>(list));
+		entity.setUserstory(list2);
+		return entity;
 	}
 	
 	public void delete(ProductBacklog entity) {
@@ -100,13 +100,14 @@ public class ProductBacklogDao implements DaoInterface<ProductBacklog, Integer> 
 		
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<ProductBacklog> findAll() {
-		List<ProductBacklog> productbacklogListe = null;
+		List<ProductBacklog> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				productbacklogListe = (List<ProductBacklog>) s.createQuery("from ProductBacklog").list();
+				list = (List<ProductBacklog>) s.createQuery("FROM Productbacklog").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -118,17 +119,18 @@ public class ProductBacklogDao implements DaoInterface<ProductBacklog, Integer> 
 			e.printStackTrace();
 		}
 		
-		return productbacklogListe;
+		return list;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<ProductBacklog> findAllByProjectId(Integer projectId) {
-		List<ProductBacklog> productbacklogListe = null;
+		List<ProductBacklog> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				productbacklogListe = (List<ProductBacklog>) s
-						.createQuery("from ProductBacklog where scrumprojekt_id like'" + projectId + "'").list();
+				list = (List<ProductBacklog>) s
+						.createQuery("FROM Productbacklog WHERE project_id LIKE'" + projectId + "'").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -140,14 +142,30 @@ public class ProductBacklogDao implements DaoInterface<ProductBacklog, Integer> 
 			e.printStackTrace();
 		}
 		
-		return productbacklogListe;
+		return list;
 	}
 	
 	public void deleteAll() {
-		List<ProductBacklog> productbacklogListe = findAll();
-		for (ProductBacklog productbacklog : productbacklogListe) {
-			delete(productbacklog);
+		List<ProductBacklog> list = findAll();
+		for (ProductBacklog entity : list) {
+			delete(entity);
 		}
+	}
+	
+	public String getHibernateconfigfilename() {
+		return hibernateconfigfilename;
+	}
+	
+	public void setHibernateconfigfilename(String hibernateconfigfilename) {
+		this.hibernateconfigfilename = hibernateconfigfilename;
+	}
+	
+	public HibernateUtil getHibernateutil() {
+		return hibernateutil;
+	}
+	
+	public void setHibernateutil(HibernateUtil hibernateutil) {
+		this.hibernateutil = hibernateutil;
 	}
 	
 }

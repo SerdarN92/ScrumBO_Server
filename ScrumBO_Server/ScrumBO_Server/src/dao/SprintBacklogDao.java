@@ -9,12 +9,12 @@ import model.SprintBacklog;
 
 public class SprintBacklogDao implements DaoInterface<SprintBacklog, Integer> {
 	
-	private String			hibernateconfig	= "";
-	private HibernateUtil	hibernateutil	= null;
-											
+	private String			hibernateconfigfilename	= "";
+	private HibernateUtil	hibernateutil			= null;
+													
 	public SprintBacklogDao(String hibernateconfigfilename) {
-		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
+		this.setHibernateconfigfilename(hibernateconfigfilename);
+		this.setHibernateutil(new HibernateUtil(hibernateconfigfilename));
 	}
 	
 	public void persist(SprintBacklog entity) {
@@ -54,12 +54,12 @@ public class SprintBacklogDao implements DaoInterface<SprintBacklog, Integer> {
 	}
 	
 	public SprintBacklog findById(Integer id) {
-		SprintBacklog sprintbacklog = null;
+		SprintBacklog entity = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				sprintbacklog = (SprintBacklog) s.get(SprintBacklog.class, id);
+				entity = (SprintBacklog) s.get(SprintBacklog.class, id);
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -70,7 +70,7 @@ public class SprintBacklogDao implements DaoInterface<SprintBacklog, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return sprintbacklog;
+		return entity;
 	}
 	
 	public void delete(SprintBacklog entity) {
@@ -91,13 +91,14 @@ public class SprintBacklogDao implements DaoInterface<SprintBacklog, Integer> {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<SprintBacklog> findAll() {
-		List<SprintBacklog> sprintbacklogListe = null;
+		List<SprintBacklog> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				sprintbacklogListe = (List<SprintBacklog>) s.createQuery("from SprintBacklog").list();
+				list = (List<SprintBacklog>) s.createQuery("FROM SprintBacklog").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -108,13 +109,29 @@ public class SprintBacklogDao implements DaoInterface<SprintBacklog, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return sprintbacklogListe;
+		return list;
 	}
 	
 	public void deleteAll() {
-		List<SprintBacklog> sprintbacklogListe = findAll();
-		for (SprintBacklog sprintbacklog : sprintbacklogListe) {
-			delete(sprintbacklog);
+		List<SprintBacklog> list = findAll();
+		for (SprintBacklog entity : list) {
+			delete(entity);
 		}
+	}
+	
+	public String getHibernateconfigfilename() {
+		return hibernateconfigfilename;
+	}
+	
+	public void setHibernateconfigfilename(String hibernateconfigfilename) {
+		this.hibernateconfigfilename = hibernateconfigfilename;
+	}
+	
+	public HibernateUtil getHibernateutil() {
+		return hibernateutil;
+	}
+	
+	public void setHibernateutil(HibernateUtil hibernateutil) {
+		this.hibernateutil = hibernateutil;
 	}
 }

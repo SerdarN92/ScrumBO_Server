@@ -20,8 +20,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import scrumbo.de.entity.Benutzer;
-import scrumbo.de.entity.CurrentBenutzer;
+import scrumbo.de.entity.User;
+import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.service.BenutzerService;
 
 /**
@@ -36,7 +36,7 @@ public class AdminLoginController implements Initializable {
 	Parent					root;
 	Scene					scene;
 	BenutzerService			benutzerService	= null;
-	Benutzer				benutzer		= null;
+	User				benutzer		= null;
 	@FXML
 	private TextField		txtFieldEmail;
 	@FXML
@@ -71,11 +71,11 @@ public class AdminLoginController implements Initializable {
 				benutzer = benutzerService.getBenutzer();
 				if (pswtFieldPassword.getText().equals(benutzer.getPasswort())) {
 					pswtFieldPassword.setStyle(null);
-					CurrentBenutzer.benutzerID = benutzer.getId();
-					CurrentBenutzer.vorname = benutzer.getVorname();
-					CurrentBenutzer.nachname = benutzer.getNachname();
-					CurrentBenutzer.email = benutzer.getEmail();
-					CurrentBenutzer.passwort = benutzer.getPasswort();
+					CurrentUser.userId = benutzer.getId();
+					CurrentUser.prename = benutzer.getVorname();
+					CurrentUser.lastname = benutzer.getNachname();
+					CurrentUser.email = benutzer.getEmail();
+					CurrentUser.password = benutzer.getPasswort();
 					emailValidFail.setVisible(false);
 					passwordValidFail.setVisible(false);
 					if (benutzerService.checkAdmin()) {

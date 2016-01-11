@@ -20,8 +20,8 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import scrumbo.de.entity.Benutzer;
-import scrumbo.de.entity.CurrentBenutzer;
+import scrumbo.de.entity.User;
+import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.service.BenutzerService;
 import scrumbo.de.service.BenutzerrolleService;
 
@@ -36,7 +36,7 @@ public class UserLoginController implements Initializable {
 	Scene					scene;
 	Stage					stage;
 	BenutzerService			benutzerService			= null;
-	Benutzer				benutzer				= null;
+	User				benutzer				= null;
 	BenutzerrolleService	benutzerrolleService	= null;
 													
 	@FXML
@@ -71,23 +71,23 @@ public class UserLoginController implements Initializable {
 				txtFieldEmail.setStyle(null);
 				emailValidFail.setVisible(false);
 				benutzer = benutzerService.getBenutzer();
-				CurrentBenutzer.benutzerID = benutzer.getId();
-				CurrentBenutzer.vorname = benutzer.getVorname();
-				CurrentBenutzer.nachname = benutzer.getNachname();
-				CurrentBenutzer.email = benutzer.getEmail();
-				CurrentBenutzer.passwort = benutzer.getPasswort();
-				benutzerrolleService.checkRole(CurrentBenutzer.email);
-				if (pswtFieldPassword.getText().equals(CurrentBenutzer.passwort)) {
+				CurrentUser.userId = benutzer.getId();
+				CurrentUser.prename = benutzer.getVorname();
+				CurrentUser.lastname = benutzer.getNachname();
+				CurrentUser.email = benutzer.getEmail();
+				CurrentUser.password = benutzer.getPasswort();
+				benutzerrolleService.checkRole(CurrentUser.email);
+				if (pswtFieldPassword.getText().equals(CurrentUser.password)) {
 					pswtFieldPassword.setStyle(null);
 					emailValidFail.setVisible(false);
 					passwordValidFail.setVisible(false);
-					if (CurrentBenutzer.passwort.equals("12345678")) {
+					if (CurrentUser.password.equals("12345678")) {
 						this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/UserChangePassword.fxml"));
 						this.scene = new Scene(root);
 						Stage stage = (Stage) buttonLoginUser.getScene().getWindow();
 						stage.setScene(scene);
 					} else {
-						if (CurrentBenutzer.isSM) {
+						if (CurrentUser.isSM) {
 							this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Project.fxml"));
 							this.scene = new Scene(root);
 							Stage stage = (Stage) buttonLoginUser.getScene().getWindow();

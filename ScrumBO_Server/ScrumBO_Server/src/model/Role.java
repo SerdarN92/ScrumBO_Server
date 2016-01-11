@@ -1,20 +1,28 @@
-package dto;
+package model;
 
-import java.io.Serializable;
-import java.util.List;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
-public class TaskstatusDTO implements Serializable {
+@Entity
+@Table(name = "ROLE")
+public class Role {
 	
-	private Integer					id;
-	private String					description;
-	private List<UserStoryTaskDTO>	userstorytask;
-									
-	public TaskstatusDTO() {
+	@Id
+	@GeneratedValue
+	@Column(name = "role_id", unique = true, nullable = false)
+	private Integer	id;
+					
+	@Column(name = "description", unique = true, nullable = false)
+	private String	description;
+					
+	public Role() {
 	
 	}
 	
-	public TaskstatusDTO(Integer id, String description) {
-		this.id = id;
+	public Role(String description) {
 		this.description = description;
 	}
 	
@@ -34,14 +42,6 @@ public class TaskstatusDTO implements Serializable {
 		this.description = description;
 	}
 	
-	public List<UserStoryTaskDTO> getUserstorytask() {
-		return userstorytask;
-	}
-	
-	public void setUserstorytask(List<UserStoryTaskDTO> userstorytask) {
-		this.userstorytask = userstorytask;
-	}
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -58,7 +58,7 @@ public class TaskstatusDTO implements Serializable {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		TaskstatusDTO other = (TaskstatusDTO) obj;
+		Role other = (Role) obj;
 		if (id == null) {
 			if (other.id != null)
 				return false;

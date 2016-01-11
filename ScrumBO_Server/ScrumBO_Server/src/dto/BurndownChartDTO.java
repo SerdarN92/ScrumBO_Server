@@ -7,21 +7,21 @@ import java.util.List;
 public class BurndownChartDTO implements Serializable {
 	
 	private Integer						id;
-	private Integer						tage;
+	private Integer						days;
 	private List<BurndownChartPointDTO>	burndownChartPoint	= new LinkedList<BurndownChartPointDTO>();
 															
 	public BurndownChartDTO() {
 	
 	}
 	
-	public BurndownChartDTO(Integer id, Integer tage) {
+	public BurndownChartDTO(Integer id, Integer days) {
 		this.id = id;
-		this.tage = tage;
+		this.days = days;
 	}
 	
-	public BurndownChartDTO(Integer id, Integer tage, List<BurndownChartPointDTO> burndownChartPoint) {
+	public BurndownChartDTO(Integer id, Integer days, List<BurndownChartPointDTO> burndownChartPoint) {
 		this.id = id;
-		this.tage = tage;
+		this.days = days;
 		this.burndownChartPoint = burndownChartPoint;
 	}
 	
@@ -33,12 +33,12 @@ public class BurndownChartDTO implements Serializable {
 		this.id = id;
 	}
 	
-	public Integer getTage() {
-		return tage;
+	public Integer getDays() {
+		return days;
 	}
 	
-	public void setTage(Integer tage) {
-		this.tage = tage;
+	public void setDays(Integer days) {
+		this.days = days;
 	}
 	
 	public List<BurndownChartPointDTO> getBurndownChartPoint() {

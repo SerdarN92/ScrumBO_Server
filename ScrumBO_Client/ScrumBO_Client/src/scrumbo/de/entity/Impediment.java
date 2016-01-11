@@ -4,15 +4,15 @@ import java.io.Serializable;
 
 public class Impediment implements Serializable {
 	
-	private Integer			id;
-	private Integer			priorität;
-	private String			beschreibung;
-	private String			mitarbeiter;
-	private String			datumDesAuftretens;
-	private String			datumDerBehebung;
-	private String			kommentar;
-	private Scrumprojekt	scrumprojekt;
-	
+	private Integer	id;
+	private Integer	priority;
+	private String	description;
+	private String	employee;
+	private String	dateOfOccurrence;
+	private String	dateOfRectify;
+	private String	comment;
+	private Project	project;
+					
 	public Impediment() {
 	
 	}
@@ -20,12 +20,12 @@ public class Impediment implements Serializable {
 	public Impediment(Integer id, Integer priorität, String beschreibung, String mitarbeiter, String datumDesAuftretens,
 			String datumDerBehebung, String kommentar) {
 		this.id = id;
-		this.priorität = priorität;
-		this.beschreibung = beschreibung;
-		this.mitarbeiter = mitarbeiter;
-		this.datumDesAuftretens = datumDesAuftretens;
-		this.datumDerBehebung = datumDerBehebung;
-		this.kommentar = kommentar;
+		this.priority = priorität;
+		this.description = beschreibung;
+		this.employee = mitarbeiter;
+		this.dateOfOccurrence = datumDesAuftretens;
+		this.dateOfRectify = datumDerBehebung;
+		this.comment = kommentar;
 	}
 	
 	public Integer getId() {
@@ -37,59 +37,59 @@ public class Impediment implements Serializable {
 	}
 	
 	public Integer getPriorität() {
-		return priorität;
+		return priority;
 	}
 	
 	public void setPriorität(Integer priorität) {
-		this.priorität = priorität;
+		this.priority = priorität;
 	}
 	
 	public String getMitarbeiter() {
-		return mitarbeiter;
+		return employee;
 	}
 	
 	public void setMitarbeiter(String mitarbeiter) {
-		this.mitarbeiter = mitarbeiter;
+		this.employee = mitarbeiter;
 	}
 	
 	public String getKommentar() {
-		return kommentar;
+		return comment;
 	}
 	
 	public void setKommentar(String kommentar) {
-		this.kommentar = kommentar;
+		this.comment = kommentar;
 	}
 	
 	public String getBeschreibung() {
-		return beschreibung;
+		return description;
 	}
 	
 	public void setBeschreibung(String beschreibung) {
-		this.beschreibung = beschreibung;
+		this.description = beschreibung;
 	}
 	
 	public String getDatumDesAuftretens() {
-		return datumDesAuftretens;
+		return dateOfOccurrence;
 	}
 	
 	public void setDatumDesAuftretens(String datumDesAuftretens) {
-		this.datumDesAuftretens = datumDesAuftretens;
+		this.dateOfOccurrence = datumDesAuftretens;
 	}
 	
 	public String getDatumDerBehebung() {
-		return datumDerBehebung;
+		return dateOfRectify;
 	}
 	
 	public void setDatumDerBehebung(String datumDerBehebung) {
-		this.datumDerBehebung = datumDerBehebung;
+		this.dateOfRectify = datumDerBehebung;
 	}
 	
-	public Scrumprojekt getScrumprojekt() {
-		return scrumprojekt;
+	public Project getScrumprojekt() {
+		return project;
 	}
 	
-	public void setScrumprojekt(Scrumprojekt scrumprojekt) {
-		this.scrumprojekt = scrumprojekt;
+	public void setScrumprojekt(Project scrumprojekt) {
+		this.project = scrumprojekt;
 	}
 	
 	@Override

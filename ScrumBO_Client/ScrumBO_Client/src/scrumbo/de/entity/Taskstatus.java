@@ -6,7 +6,7 @@ import java.util.List;
 public class Taskstatus implements Serializable {
 	
 	private Integer					id;
-	private String					beschreibung;
+	private String					description;
 	private List<UserStoryTask>	userstorytask;
 	
 	public Taskstatus() {
@@ -15,7 +15,7 @@ public class Taskstatus implements Serializable {
 	
 	public Taskstatus(Integer id, String beschreibung) {
 		this.id = id;
-		this.beschreibung = beschreibung;
+		this.description = beschreibung;
 	}
 	
 	public Integer getId() {
@@ -27,11 +27,11 @@ public class Taskstatus implements Serializable {
 	}
 	
 	public String getBeschreibung() {
-		return beschreibung;
+		return description;
 	}
 	
 	public void setBeschreibung(String beschreibung) {
-		this.beschreibung = beschreibung;
+		this.description = beschreibung;
 	}
 	
 	public List<UserStoryTask> getUserstorytask() {

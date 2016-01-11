@@ -14,8 +14,8 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import scrumbo.de.entity.CurrentBenutzer;
-import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.CurrentProject;
+import scrumbo.de.entity.CurrentUser;
 
 public class ScrumSMController implements Initializable {
 	
@@ -48,17 +48,17 @@ public class ScrumSMController implements Initializable {
 	
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
-		CurrentBenutzer.benutzerID = -1;
-		CurrentBenutzer.vorname = null;
-		CurrentBenutzer.nachname = null;
-		CurrentBenutzer.email = null;
-		CurrentBenutzer.passwort = null;
-		CurrentBenutzer.benutzerrollenID = -1;
-		CurrentBenutzer.benutzerrolle = null;
-		CurrentBenutzer.projekte = null;
-		CurrentScrumprojekt.scrumprojektID = -1;
-		CurrentScrumprojekt.projektname = null;
-		CurrentBenutzer.isSM = false;
+		CurrentUser.userId = -1;
+		CurrentUser.prename = null;
+		CurrentUser.lastname = null;
+		CurrentUser.email = null;
+		CurrentUser.password = null;
+		CurrentUser.roleId = -1;
+		CurrentUser.role = null;
+		CurrentUser.projects = null;
+		CurrentProject.projectId = -1;
+		CurrentProject.projectname = null;
+		CurrentUser.isSM = false;
 		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		this.scene = new Scene(root);
@@ -106,10 +106,10 @@ public class ScrumSMController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		name.setText(CurrentBenutzer.vorname + " " + CurrentBenutzer.nachname);
-		projektname.setText(CurrentScrumprojekt.projektname);
+		name.setText(CurrentUser.prename + " " + CurrentUser.lastname);
+		projektname.setText(CurrentProject.projectname);
 		
-		if (!CurrentBenutzer.isSM)
+		if (!CurrentUser.isSM)
 			buttonAddProjectUser.setVisible(false);
 	}
 	

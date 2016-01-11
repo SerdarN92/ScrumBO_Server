@@ -74,7 +74,7 @@ public class UserStoryTaskService {
 		}
 	}
 	
-	public UserStoryTaskDao userstorytaskDao() {
+	public UserStoryTaskDao getUserstorytaskDao() {
 		return userstorytaskDao;
 	}
 	

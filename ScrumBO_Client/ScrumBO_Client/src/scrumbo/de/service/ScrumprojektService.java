@@ -14,12 +14,12 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import scrumbo.de.app.ScrumBOClient;
-import scrumbo.de.entity.CurrentBenutzer;
-import scrumbo.de.entity.Scrumprojekt;
+import scrumbo.de.entity.CurrentUser;
+import scrumbo.de.entity.Project;
 
 public class ScrumprojektService {
 	
-	Scrumprojekt scrumproject = null;
+	Project scrumproject = null;
 	
 	public Boolean checkIfProjectnameExists(String projectname) throws Exception {
 		URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
@@ -43,7 +43,7 @@ public class ScrumprojektService {
 			return false;
 			
 		} else {
-			scrumproject = gson.fromJson(output, Scrumprojekt.class);
+			scrumproject = gson.fromJson(output, Project.class);
 			if (projectname.equals(scrumproject.getProjektname())) {
 				return true;
 			} else {
@@ -75,7 +75,7 @@ public class ScrumprojektService {
 			return false;
 			
 		} else {
-			scrumproject = gson.fromJson(output, Scrumprojekt.class);
+			scrumproject = gson.fromJson(output, Project.class);
 			if (projectname.equals(scrumproject.getProjektname())) {
 				return true;
 			} else {
@@ -84,14 +84,16 @@ public class ScrumprojektService {
 		}
 	}
 	
-	public Boolean createProject(Scrumprojekt scrumproject) {
+	public Boolean createProject(Project scrumproject) {
 		boolean status = false;
 		Gson gson = new Gson();
 		String output = gson.toJson(scrumproject);
 		
+		System.out.println(output);
+		
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
-					+ "/ScrumBO_Server/rest/scrumprojekt/create/" + CurrentBenutzer.email + "/"
+					+ "/ScrumBO_Server/rest/scrumprojekt/create/" + CurrentUser.email + "/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
@@ -115,15 +117,15 @@ public class ScrumprojektService {
 		return status;
 	}
 	
-	public Scrumprojekt getScrumproject() {
+	public Project getScrumproject() {
 		return scrumproject;
 	}
 	
-	public void setScrumproject(Scrumprojekt scrumproject) {
+	public void setScrumproject(Project scrumproject) {
 		this.scrumproject = scrumproject;
 	}
 	
-	public boolean deleteProject(Scrumprojekt scrumproject) {
+	public boolean deleteProject(Project scrumproject) {
 		boolean status = false;
 		Gson gson = new Gson();
 		String output = gson.toJson(scrumproject);
@@ -152,8 +154,8 @@ public class ScrumprojektService {
 		return status;
 	}
 	
-	public List<Scrumprojekt> ladeProjekte() {
-		List<Scrumprojekt> projekteListe = new LinkedList<Scrumprojekt>();
+	public List<Project> ladeProjekte() {
+		List<Project> projekteListe = new LinkedList<Project>();
 		String output = "";
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
@@ -175,7 +177,7 @@ public class ScrumprojektService {
 		}
 		
 		Gson gson = new Gson();
-		Type listType = new TypeToken<LinkedList<Scrumprojekt>>() {
+		Type listType = new TypeToken<LinkedList<Project>>() {
 		}.getType();
 		projekteListe = gson.fromJson(output, listType);
 		

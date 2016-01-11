@@ -20,7 +20,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentUserStory;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.service.UserstoryService;
@@ -170,7 +170,7 @@ public class UserStoryEditController implements Initializable {
 	
 	@FXML
 	private void handleButtonDelete(ActionEvent event) throws Exception {
-		List<UserStory> userstoryList = CurrentScrumprojekt.productbacklog.getUserstory();
+		List<UserStory> userstoryList = CurrentProject.productbacklog.getUserstory();
 		UserStory userstory = new UserStory();
 		userstory.setId(data.getId());
 		
@@ -233,21 +233,21 @@ public class UserStoryEditController implements Initializable {
 	private void handleButtonUpdate(ActionEvent event) throws Exception {
 		if (checkPrioritaet() && checkThema() && checkBeschreibung() && checkAkzeptanzkriterien()
 				&& checkAufwandInTagen()) {
-			if (!(data.getPrioritaet().equals(Integer.parseInt(prioritaet.getText())))
-					|| !(data.getThema().equals(thema.getText()))
-					|| !(data.getBeschreibung().equals(beschreibung.getText()))
-					|| !(data.getAkzeptanzkriterien().equals(akzeptanzkriterien.getText()))
-					|| !(data.getAufwandintagen().equals(Integer.parseInt(aufwandintagen.getText())))) {
-				List<UserStory> userstoryList = CurrentScrumprojekt.productbacklog.getUserstory();
+			if (!(data.getPriority().equals(Integer.parseInt(prioritaet.getText())))
+					|| !(data.getTheme().equals(thema.getText()))
+					|| !(data.getDescription().equals(beschreibung.getText()))
+					|| !(data.getAcceptanceCriteria().equals(akzeptanzkriterien.getText()))
+					|| !(data.getEffortInDays().equals(Integer.parseInt(aufwandintagen.getText())))) {
+				List<UserStory> userstoryList = CurrentProject.productbacklog.getUserstory();
 				UserStory userstory = null;
 				for (int i = 0; i < userstoryList.size(); i++) {
 					if (userstoryList.get(i).getId().equals(data.getId())) {
 						this.id = data.getId();
-						userstoryList.get(i).setPrioritaet(Integer.parseInt(prioritaet.getText()));
-						userstoryList.get(i).setThema(thema.getText());
-						userstoryList.get(i).setBeschreibung(beschreibung.getText());
-						userstoryList.get(i).setAkzeptanzkriterien(akzeptanzkriterien.getText());
-						userstoryList.get(i).setAufwandintagen(Integer.parseInt(aufwandintagen.getText()));
+						userstoryList.get(i).setPriority(Integer.parseInt(prioritaet.getText()));
+						userstoryList.get(i).setTheme(thema.getText());
+						userstoryList.get(i).setDescription(beschreibung.getText());
+						userstoryList.get(i).setAcceptanceCriteria(akzeptanzkriterien.getText());
+						userstoryList.get(i).setEffortInDays(Integer.parseInt(aufwandintagen.getText()));
 						userstory = userstoryList.get(i);
 					}
 				}
@@ -282,11 +282,11 @@ public class UserStoryEditController implements Initializable {
 		data = ProductBacklogController.rowData;
 		id = data.getId();
 		CurrentUserStory.userstoryID = data.getId();
-		prioritaet.setText(data.getPrioritaet().toString());
-		thema.setText(data.getThema());
-		beschreibung.setText(data.getBeschreibung());
-		akzeptanzkriterien.setText(data.getAkzeptanzkriterien());
-		aufwandintagen.setText(data.getAufwandintagen().toString());
+		prioritaet.setText(data.getPriority().toString());
+		thema.setText(data.getTheme());
+		beschreibung.setText(data.getDescription());
+		akzeptanzkriterien.setText(data.getAcceptanceCriteria());
+		aufwandintagen.setText(data.getEffortInDays().toString());
 		CurrentUserStory.status = data.getStatus();
 		
 		if (data.getStatus() == 2) {

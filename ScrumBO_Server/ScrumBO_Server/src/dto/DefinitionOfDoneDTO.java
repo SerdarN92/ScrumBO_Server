@@ -5,17 +5,17 @@ import java.io.Serializable;
 public class DefinitionOfDoneDTO implements Serializable {
 	
 	private Integer			id;
-	private String			kriterium;
+	private String			criteria;
 	private boolean			status;
 	private UserStoryDTO	userstory;
-	
+							
 	public DefinitionOfDoneDTO() {
 	
 	}
 	
-	public DefinitionOfDoneDTO(Integer id, String kriterium, boolean status) {
+	public DefinitionOfDoneDTO(Integer id, String criteria, boolean status) {
 		this.id = id;
-		this.kriterium = kriterium;
+		this.criteria = criteria;
 		this.status = status;
 	}
 	
@@ -27,12 +27,12 @@ public class DefinitionOfDoneDTO implements Serializable {
 		this.id = id;
 	}
 	
-	public String getKriterium() {
-		return kriterium;
+	public String getCriteria() {
+		return criteria;
 	}
 	
-	public void setKriterium(String kriterium) {
-		this.kriterium = kriterium;
+	public void setCriteria(String criteria) {
+		this.criteria = criteria;
 	}
 	
 	public boolean getStatus() {

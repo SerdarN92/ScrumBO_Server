@@ -18,19 +18,19 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import scrumbo.de.app.ScrumBOClient;
-import scrumbo.de.entity.Benutzer;
-import scrumbo.de.entity.CurrentBenutzer;
-import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.User;
+import scrumbo.de.entity.CurrentUser;
+import scrumbo.de.entity.CurrentProject;
 
 public class BenutzerService {
 	
-	private Benutzer benutzer = null;
+	private User benutzer = null;
 	
-	public Benutzer getBenutzer() {
+	public User getBenutzer() {
 		return benutzer;
 	}
 	
-	public void setBenutzer(Benutzer benutzer) {
+	public void setBenutzer(User benutzer) {
 		this.benutzer = benutzer;
 	}
 	
@@ -57,7 +57,7 @@ public class BenutzerService {
 				
 			} else {
 				
-				benutzer = gson.fromJson(output, Benutzer.class);
+				benutzer = gson.fromJson(output, User.class);
 				if (email.equals(benutzer.getEmail())) {
 					return true;
 				} else {
@@ -73,7 +73,7 @@ public class BenutzerService {
 		return false;
 	}
 	
-	public Boolean createScrumMaster(Benutzer benutzer) throws JSONException {
+	public Boolean createScrumMaster(User benutzer) throws JSONException {
 		boolean status = false;
 		Gson gson = new Gson();
 		String output = gson.toJson(benutzer);
@@ -107,13 +107,13 @@ public class BenutzerService {
 		return status;
 	}
 	
-	public Boolean changeDefaultPassword(Benutzer benutzer) throws JSONException {
+	public Boolean changeDefaultPassword(User benutzer) throws JSONException {
 		boolean status = false;
 		Gson gson = new Gson();
 		String output = gson.toJson(benutzer);
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
-					+ "/ScrumBO_Server/rest/benutzer/updatePassword/" + CurrentBenutzer.email + "/"
+					+ "/ScrumBO_Server/rest/benutzer/updatePassword/" + CurrentUser.email + "/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
@@ -138,12 +138,12 @@ public class BenutzerService {
 	}
 	
 	// nur Benutzer die Entwickler sind
-	public List<Benutzer> ladeEntwicklerVomAktuellenProjekt() {
-		List<Benutzer> benutzerList = new LinkedList<Benutzer>();
+	public List<User> ladeEntwicklerVomAktuellenProjekt() {
+		List<User> benutzerList = new LinkedList<User>();
 		String output = "";
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
-					+ "/ScrumBO_Server/rest/benutzer/alle/scrumprojekt/entwickler/" + CurrentScrumprojekt.scrumprojektID
+					+ "/ScrumBO_Server/rest/benutzer/alle/scrumprojekt/entwickler/" + CurrentProject.projectId
 					+ "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -162,15 +162,15 @@ public class BenutzerService {
 		}
 		
 		Gson gson = new Gson();
-		Type listType = new TypeToken<LinkedList<Benutzer>>() {
+		Type listType = new TypeToken<LinkedList<User>>() {
 		}.getType();
 		benutzerList = gson.fromJson(output, listType);
 		
 		return benutzerList;
 	}
 	
-	public List<Benutzer> ladeBenutzer() {
-		List<Benutzer> benutzerList = new LinkedList<Benutzer>();
+	public List<User> ladeBenutzer() {
+		List<User> benutzerList = new LinkedList<User>();
 		String output = "";
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
@@ -192,7 +192,7 @@ public class BenutzerService {
 		}
 		
 		Gson gson = new Gson();
-		Type listType = new TypeToken<LinkedList<Benutzer>>() {
+		Type listType = new TypeToken<LinkedList<User>>() {
 		}.getType();
 		benutzerList = gson.fromJson(output, listType);
 		
@@ -202,8 +202,8 @@ public class BenutzerService {
 	public boolean checkAdmission() throws JSONException {
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
-					+ "/ScrumBO_Server/rest/benutzer/checkAdmission/" + CurrentBenutzer.benutzerID + "/"
-					+ CurrentScrumprojekt.scrumprojektID + "/" + ScrumBOClient.getDatabaseconfigfile());
+					+ "/ScrumBO_Server/rest/benutzer/checkAdmission/" + CurrentUser.userId + "/"
+					+ CurrentProject.projectId + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setReadTimeout(5000);
@@ -236,7 +236,7 @@ public class BenutzerService {
 	public boolean checkAdmin() throws JSONException {
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
-					+ "/ScrumBO_Server/rest/benutzer/checkAdmin/" + CurrentBenutzer.benutzerID + "/"
+					+ "/ScrumBO_Server/rest/benutzer/checkAdmin/" + CurrentUser.userId + "/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -267,7 +267,7 @@ public class BenutzerService {
 		return false;
 	}
 	
-	public boolean deleteBenutzer(Benutzer benutzer) {
+	public boolean deleteBenutzer(User benutzer) {
 		boolean status = false;
 		Gson gson = new Gson();
 		String output = gson.toJson(benutzer);

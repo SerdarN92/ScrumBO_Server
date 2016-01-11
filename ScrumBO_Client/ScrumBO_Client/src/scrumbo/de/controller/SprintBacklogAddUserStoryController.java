@@ -46,7 +46,7 @@ import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import scrumbo.de.app.ScrumBOClient;
-import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentSprint;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.entity.UserStoryTask;
@@ -170,8 +170,9 @@ public class SprintBacklogAddUserStoryController implements Initializable {
 		JSONObject jsonObject = new JSONObject(output);
 		
 		try {
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/userstory/updateTasks/" + CurrentSprint.id
-					+ "/" + ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/userstory/updateTasks/" + CurrentSprint.id + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestProperty("Content-Type", "application/json");
@@ -288,7 +289,7 @@ public class SprintBacklogAddUserStoryController implements Initializable {
 		comboBoxUserStory.setConverter(new StringConverter<UserStory>() {
 			@Override
 			public String toString(UserStory u) {
-				return u.getBeschreibung();
+				return u.getDescription();
 			}
 			
 			@Override
@@ -300,11 +301,11 @@ public class SprintBacklogAddUserStoryController implements Initializable {
 		comboBoxUserStory.valueProperty().addListener(new ChangeListener<UserStory>() {
 			@Override
 			public void changed(ObservableValue ov, UserStory t, UserStory t1) {
-				prioritaet.setText(t1.getPrioritaet().toString());
-				beschreibung.setText(t1.getBeschreibung());
-				aufwandintagen.setText(t1.getAufwandintagen().toString());
-				akzeptanzkriterien.setText(t1.getAkzeptanzkriterien());
-				thema.setText(t1.getThema());
+				prioritaet.setText(t1.getPriority().toString());
+				beschreibung.setText(t1.getDescription());
+				aufwandintagen.setText(t1.getEffortInDays().toString());
+				akzeptanzkriterien.setText(t1.getAcceptanceCriteria());
+				thema.setText(t1.getTheme());
 				currentUserStory = t1;
 				buttonAddTask.setDisable(false);
 			}
@@ -314,8 +315,9 @@ public class SprintBacklogAddUserStoryController implements Initializable {
 	private void ladeUserStory() {
 		String output = "";
 		try {
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/userstory/sucheNULL/productbacklogid/"
-					+ CurrentScrumprojekt.productbacklog.getId() + "/" + ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/userstory/sucheNULL/productbacklogid/"
+					+ CurrentProject.productbacklog.getId() + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");

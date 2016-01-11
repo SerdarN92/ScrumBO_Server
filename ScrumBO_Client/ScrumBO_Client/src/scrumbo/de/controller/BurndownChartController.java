@@ -25,10 +25,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import scrumbo.de.entity.BurndownChartPoint;
-import scrumbo.de.entity.CurrentBenutzer;
 import scrumbo.de.entity.CurrentBurndownChart;
-import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentSprint;
+import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.service.SprintbacklogService;
 
 public class BurndownChartController implements Initializable {
@@ -57,7 +57,7 @@ public class BurndownChartController implements Initializable {
 										
 	@FXML
 	private void handleButtonBack(ActionEvent event) throws Exception {
-		if (CurrentBenutzer.isSM) {
+		if (CurrentUser.isSM) {
 			pause();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
 			this.scene = new Scene(root);
@@ -111,13 +111,13 @@ public class BurndownChartController implements Initializable {
 				public void handle(WindowEvent event) {
 					try {
 						initLoadOldSprint();
-						if (CurrentSprint.sprintnummer < SprintBacklogController.anzahlSprints) {
+						if (CurrentSprint.sprintnumber < SprintBacklogController.anzahlSprints) {
 							pause();
 						} else {
 							resume();
 						}
 						burndownChartId = CurrentBurndownChart.id;
-						tage = CurrentBurndownChart.tage;
+						tage = CurrentBurndownChart.days;
 						points = CurrentBurndownChart.points;
 						
 						lineChart.getData().remove(series);
@@ -142,7 +142,7 @@ public class BurndownChartController implements Initializable {
 							lineChart.getData().add(series2);
 						}
 						
-						lineChart.setTitle("zu Sprint " + CurrentSprint.sprintnummer);
+						lineChart.setTitle("zu Sprint " + CurrentSprint.sprintnumber);
 					} catch (Exception e) {
 						e.printStackTrace();
 					}
@@ -155,22 +155,22 @@ public class BurndownChartController implements Initializable {
 	}
 	
 	public void initLoadOldSprint() {
-		sprintbacklogService.ladeAltenSprint(CurrentSprint.sprintnummer);
+		sprintbacklogService.ladeAltenSprint(CurrentSprint.sprintnumber);
 	}
 	
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
-		CurrentBenutzer.benutzerID = -1;
-		CurrentBenutzer.vorname = null;
-		CurrentBenutzer.nachname = null;
-		CurrentBenutzer.email = null;
-		CurrentBenutzer.passwort = null;
-		CurrentBenutzer.benutzerrollenID = -1;
-		CurrentBenutzer.benutzerrolle = null;
-		CurrentBenutzer.projekte = null;
-		CurrentScrumprojekt.scrumprojektID = -1;
-		CurrentScrumprojekt.projektname = null;
-		CurrentBenutzer.isSM = false;
+		CurrentUser.userId = -1;
+		CurrentUser.prename = null;
+		CurrentUser.lastname = null;
+		CurrentUser.email = null;
+		CurrentUser.password = null;
+		CurrentUser.roleId = -1;
+		CurrentUser.role = null;
+		CurrentUser.projects = null;
+		CurrentProject.projectId = -1;
+		CurrentProject.projectname = null;
+		CurrentUser.isSM = false;
 		
 		timer.cancel();
 		
@@ -187,7 +187,7 @@ public class BurndownChartController implements Initializable {
 		sprintbacklogService.ladeSprint();
 		
 		burndownChartId = CurrentBurndownChart.id;
-		tage = CurrentBurndownChart.tage;
+		tage = CurrentBurndownChart.days;
 		points = CurrentBurndownChart.points;
 		
 		mainPane.getChildren().removeAll();
@@ -220,7 +220,7 @@ public class BurndownChartController implements Initializable {
 		xAxis.setLabel("Anzahl der Tage");
 		yAxis.setLabel("Offener Entwicklungsaufwand in Stunden");
 		
-		lineChart.setTitle("zu Sprint " + CurrentSprint.sprintnummer);
+		lineChart.setTitle("zu Sprint " + CurrentSprint.sprintnumber);
 		
 		lineChart.setMinWidth(886);
 		lineChart.setMinHeight(422);
@@ -255,7 +255,7 @@ public class BurndownChartController implements Initializable {
 		sprintbacklogService = new SprintbacklogService();
 		sprintbacklogService.ladeSprint();
 		burndownChartId = CurrentBurndownChart.id;
-		tage = CurrentBurndownChart.tage;
+		tage = CurrentBurndownChart.days;
 		points = CurrentBurndownChart.points;
 		
 		lineChart.getData().remove(series);
@@ -279,7 +279,7 @@ public class BurndownChartController implements Initializable {
 			lineChart.getData().add(series2);
 		}
 		
-		lineChart.setTitle("zu Sprint " + CurrentSprint.sprintnummer);
+		lineChart.setTitle("zu Sprint " + CurrentSprint.sprintnumber);
 	}
 	
 }

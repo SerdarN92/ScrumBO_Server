@@ -164,11 +164,11 @@ public class SprintBacklogEditUserStoryController implements Initializable {
 		buttonRemoveTask.setDisable(true);
 		userstoryService = StartwindowController.getUserstoryService();
 		currentUserStory = MyHBox.blabla;
-		prioritaet.setText(currentUserStory.getPrioritaet().toString());
-		thema.setText(currentUserStory.getThema());
-		beschreibung.setText(currentUserStory.getBeschreibung());
-		akzeptanzkriterien.setText(currentUserStory.getAkzeptanzkriterien());
-		aufwandintagen.setText(currentUserStory.getAufwandintagen().toString());
+		prioritaet.setText(currentUserStory.getPriority().toString());
+		thema.setText(currentUserStory.getTheme());
+		beschreibung.setText(currentUserStory.getDescription());
+		akzeptanzkriterien.setText(currentUserStory.getAcceptanceCriteria());
+		aufwandintagen.setText(currentUserStory.getEffortInDays().toString());
 		userstoryList = userstoryService.ladeUserStory();
 		initListView();
 	}

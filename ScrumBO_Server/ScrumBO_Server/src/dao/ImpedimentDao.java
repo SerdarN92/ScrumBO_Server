@@ -9,12 +9,12 @@ import model.Impediment;
 
 public class ImpedimentDao implements DaoInterface<Impediment, Integer> {
 	
-	private String			hibernateconfig	= "";
-	private HibernateUtil	hibernateutil	= null;
-											
+	private String			hibernateconfigfilename	= "";
+	private HibernateUtil	hibernateutil			= null;
+													
 	public ImpedimentDao(String hibernateconfigfilename) {
-		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
+		this.setHibernateconfigfilename(hibernateconfigfilename);
+		this.setHibernateutil(new HibernateUtil(hibernateconfigfilename));
 	}
 	
 	public void persist(Impediment entity) {
@@ -54,12 +54,12 @@ public class ImpedimentDao implements DaoInterface<Impediment, Integer> {
 	}
 	
 	public Impediment findById(Integer id) {
-		Impediment impediment = null;
+		Impediment entity = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				impediment = (Impediment) s.get(Impediment.class, id);
+				entity = (Impediment) s.get(Impediment.class, id);
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -70,17 +70,18 @@ public class ImpedimentDao implements DaoInterface<Impediment, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return impediment;
+		return entity;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Impediment> findByProjectId(Integer projectId) {
-		List<Impediment> impedimentListe = null;
+		List<Impediment> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				impedimentListe = (List<Impediment>) s
-						.createQuery("from Impediment where scrumprojekt_id like'" + projectId + "'").list();
+				list = (List<Impediment>) s.createQuery("FROM Impediment WHERE project_id LIKE'" + projectId + "'")
+						.list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -91,7 +92,7 @@ public class ImpedimentDao implements DaoInterface<Impediment, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return impedimentListe;
+		return list;
 	}
 	
 	public void delete(Impediment entity) {
@@ -112,13 +113,14 @@ public class ImpedimentDao implements DaoInterface<Impediment, Integer> {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<Impediment> findAll() {
-		List<Impediment> impedimentListe = null;
+		List<Impediment> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				impedimentListe = (List<Impediment>) s.createQuery("from Impediment").list();
+				list = (List<Impediment>) s.createQuery("FROM Impediment").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -129,13 +131,29 @@ public class ImpedimentDao implements DaoInterface<Impediment, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return impedimentListe;
+		return list;
 	}
 	
 	public void deleteAll() {
-		List<Impediment> impedimentListe = findAll();
-		for (Impediment impediment : impedimentListe) {
-			delete(impediment);
+		List<Impediment> list = findAll();
+		for (Impediment entity : list) {
+			delete(entity);
 		}
+	}
+	
+	public String getHibernateconfigfilename() {
+		return hibernateconfigfilename;
+	}
+	
+	public void setHibernateconfigfilename(String hibernateconfigfilename) {
+		this.hibernateconfigfilename = hibernateconfigfilename;
+	}
+	
+	public HibernateUtil getHibernateutil() {
+		return hibernateutil;
+	}
+	
+	public void setHibernateutil(HibernateUtil hibernateutil) {
+		this.hibernateutil = hibernateutil;
 	}
 }

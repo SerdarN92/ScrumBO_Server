@@ -13,8 +13,8 @@ public class BurndownChartDao implements DaoInterface<BurndownChart, Integer> {
 	private HibernateUtil	hibernateutil			= null;
 													
 	public BurndownChartDao(String hibernateconfigfilename) {
-		this.hibernateconfigfilename = hibernateconfigfilename;
-		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
+		this.setHibernateconfigfilename(hibernateconfigfilename);
+		this.setHibernateutil(new HibernateUtil(hibernateconfigfilename));
 	}
 	
 	@Override
@@ -56,12 +56,12 @@ public class BurndownChartDao implements DaoInterface<BurndownChart, Integer> {
 	
 	@Override
 	public BurndownChart findById(Integer id) {
-		BurndownChart burndownChart = null;
+		BurndownChart entity = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				burndownChart = (BurndownChart) s.get(BurndownChart.class, id);
+				entity = (BurndownChart) s.get(BurndownChart.class, id);
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -72,7 +72,7 @@ public class BurndownChartDao implements DaoInterface<BurndownChart, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return burndownChart;
+		return entity;
 	}
 	
 	@Override
@@ -94,14 +94,15 @@ public class BurndownChartDao implements DaoInterface<BurndownChart, Integer> {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	@Override
 	public List<BurndownChart> findAll() {
-		List<BurndownChart> burndownChartListe = null;
+		List<BurndownChart> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				burndownChartListe = (List<BurndownChart>) s.createQuery("from Burndownchart").list();
+				list = (List<BurndownChart>) s.createQuery("from BurndownChart").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -112,17 +113,17 @@ public class BurndownChartDao implements DaoInterface<BurndownChart, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return burndownChartListe;
+		return list;
 	}
 	
-	public List<BurndownChart> findAllNull() {
-		List<BurndownChart> burndownChartListe = null;
+	@SuppressWarnings("unchecked")
+	public List<BurndownChart> findAllWithNull() {
+		List<BurndownChart> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				burndownChartListe = (List<BurndownChart>) s.createQuery("from Burndownchart WHERE tage IS NULL")
-						.list();
+				list = (List<BurndownChart>) s.createQuery("from BurndownChart WHERE days IS NULL").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -133,22 +134,38 @@ public class BurndownChartDao implements DaoInterface<BurndownChart, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return burndownChartListe;
+		return list;
 	}
 	
 	@Override
 	public void deleteAll() {
-		List<BurndownChart> burndownChartListe = findAll();
-		for (BurndownChart burndownChart : burndownChartListe) {
-			delete(burndownChart);
+		List<BurndownChart> list = findAll();
+		for (BurndownChart entity : list) {
+			delete(entity);
 		}
 	}
 	
-	public void deleteAllNull() {
-		List<BurndownChart> burndownChartListe = findAllNull();
-		for (BurndownChart burndownChart : burndownChartListe) {
-			delete(burndownChart);
+	public void deleteAllWithNull() {
+		List<BurndownChart> list = findAllWithNull();
+		for (BurndownChart entity : list) {
+			delete(entity);
 		}
+	}
+	
+	public String getHibernateconfigfilename() {
+		return hibernateconfigfilename;
+	}
+	
+	public void setHibernateconfigfilename(String hibernateconfigfilename) {
+		this.hibernateconfigfilename = hibernateconfigfilename;
+	}
+	
+	public HibernateUtil getHibernateutil() {
+		return hibernateutil;
+	}
+	
+	public void setHibernateutil(HibernateUtil hibernateutil) {
+		this.hibernateutil = hibernateutil;
 	}
 	
 }

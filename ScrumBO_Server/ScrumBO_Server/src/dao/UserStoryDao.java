@@ -10,12 +10,12 @@ import model.UserStory;
 
 public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 	
-	private String			hibernateconfig	= "";
-	private HibernateUtil	hibernateutil	= null;
-											
+	private String			hibernateconfigfilename	= "";
+	private HibernateUtil	hibernateutil			= null;
+													
 	public UserStoryDao(String hibernateconfigfilename) {
-		this.hibernateconfig = hibernateconfig;
-		this.hibernateutil = new HibernateUtil(hibernateconfigfilename);
+		this.setHibernateconfigfilename(hibernateconfigfilename);
+		this.setHibernateutil(new HibernateUtil(hibernateconfigfilename));
 	}
 	
 	public void persist(UserStory entity) {
@@ -60,10 +60,10 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				UserStory userstory = (UserStory) s.get(UserStory.class, userstoryId);
-				Sprint sprint = null;
-				userstory.setSprint(sprint);
-				s.update(userstory);
+				UserStory entityUserStory = (UserStory) s.get(UserStory.class, userstoryId);
+				Sprint entitySprint = null;
+				entityUserStory.setSprint(entitySprint);
+				s.update(entityUserStory);
 				s.getTransaction().commit();
 				s.close();
 				status = true;
@@ -79,12 +79,12 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 	}
 	
 	public UserStory findById(Integer id) {
-		UserStory userstory = null;
+		UserStory entity = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				userstory = (UserStory) s.get(UserStory.class, id);
+				entity = (UserStory) s.get(UserStory.class, id);
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -95,7 +95,7 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return userstory;
+		return entity;
 	}
 	
 	public void delete(UserStory entity) {
@@ -116,13 +116,14 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 		}
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<UserStory> findAll() {
-		List<UserStory> userstoryListe = null;
+		List<UserStory> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				userstoryListe = (List<UserStory>) s.createQuery("from UserStory").list();
+				list = (List<UserStory>) s.createQuery("FROM UserStory").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -133,17 +134,18 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return userstoryListe;
+		return list;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<UserStory> findAllByProductBacklogId(Integer productbacklogId) {
-		List<UserStory> userstoryListe = null;
+		List<UserStory> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				userstoryListe = (List<UserStory>) s
-						.createQuery("from UserStory where productbacklog_id like'" + productbacklogId + "'").list();
+				list = (List<UserStory>) s
+						.createQuery("FROM UserStory WHERE productbacklog_id LIKE'" + productbacklogId + "'").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -154,17 +156,17 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return userstoryListe;
+		return list;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<UserStory> findAllBySprintId(Integer sprintId) {
-		List<UserStory> userstoryListe = null;
+		List<UserStory> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				userstoryListe = (List<UserStory>) s
-						.createQuery("from UserStory where sprint_id like'" + sprintId + "'").list();
+				list = (List<UserStory>) s.createQuery("FROM UserStory WHERE sprint_id LIKE'" + sprintId + "'").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -175,17 +177,18 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return userstoryListe;
+		return list;
 	}
 	
+	@SuppressWarnings("unchecked")
 	public List<UserStory> findAllNULLwithProductBacklogId(Integer productbacklogid) {
-		List<UserStory> userstoryListe = null;
+		List<UserStory> list = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				userstoryListe = (List<UserStory>) s.createQuery("from UserStory where productbacklog_id like'"
-						+ productbacklogid + "'" + "AND sprint_id IS NULL").list();
+				list = (List<UserStory>) s.createQuery("FROM UserStory WHERE productbacklog_id LIKE'" + productbacklogid
+						+ "'" + "AND sprint_id IS NULL").list();
 				s.getTransaction().commit();
 				s.close();
 			} catch (Exception e) {
@@ -196,16 +199,16 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return userstoryListe;
+		return list;
 	}
 	
 	public Integer getUserStoryStatus(Integer userstoryId) {
-		UserStory userstory = null;
+		UserStory entity = null;
 		try {
 			Session s = HibernateUtil.openSession();
 			try {
 				s.beginTransaction();
-				userstory = (UserStory) s.createQuery("FROM UserStory where userstory_id like '" + userstoryId + "'")
+				entity = (UserStory) s.createQuery("FROM UserStory WHERE userstory_id LIKE '" + userstoryId + "'")
 						.uniqueResult();
 				s.getTransaction().commit();
 				s.close();
@@ -217,7 +220,7 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return userstory.getStatus();
+		return entity.getStatus();
 	}
 	
 	public void deleteAll() {
@@ -225,5 +228,21 @@ public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 		for (UserStory userstory : userstoryListe) {
 			delete(userstory);
 		}
+	}
+	
+	public String getHibernateconfigfilename() {
+		return hibernateconfigfilename;
+	}
+	
+	public void setHibernateconfigfilename(String hibernateconfigfilename) {
+		this.hibernateconfigfilename = hibernateconfigfilename;
+	}
+	
+	public HibernateUtil getHibernateutil() {
+		return hibernateutil;
+	}
+	
+	public void setHibernateutil(HibernateUtil hibernateutil) {
+		this.hibernateutil = hibernateutil;
 	}
 }

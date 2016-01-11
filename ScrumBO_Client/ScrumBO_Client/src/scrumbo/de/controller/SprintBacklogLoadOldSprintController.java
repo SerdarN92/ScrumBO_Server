@@ -39,7 +39,7 @@ public class SprintBacklogLoadOldSprintController implements Initializable {
 	
 	@FXML
 	private void handleButtonLoad(ActionEvent event) throws Exception {
-		CurrentSprint.sprintnummer = comboBoxSprintNumber.getValue();
+		CurrentSprint.sprintnumber = comboBoxSprintNumber.getValue();
 		Stage stage = (Stage) buttonLoad.getScene().getWindow();
 		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 	}
@@ -52,7 +52,7 @@ public class SprintBacklogLoadOldSprintController implements Initializable {
 		for (int i = 0; i < anzahlSprints; i++) {
 			options.add(i + 1);
 		}
-		comboBoxSprintNumber.setValue(CurrentSprint.sprintnummer);
+		comboBoxSprintNumber.setValue(CurrentSprint.sprintnumber);
 		comboBoxSprintNumber.getItems().addAll(options);
 		comboBoxSprintNumber.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override

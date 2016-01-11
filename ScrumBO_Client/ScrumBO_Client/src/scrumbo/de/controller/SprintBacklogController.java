@@ -31,10 +31,10 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import scrumbo.de.common.MyHBox;
-import scrumbo.de.entity.CurrentBenutzer;
 import scrumbo.de.entity.CurrentBurndownChart;
-import scrumbo.de.entity.CurrentScrumprojekt;
+import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentSprint;
+import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.Sprint;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.service.SprintbacklogService;
@@ -110,14 +110,14 @@ public class SprintBacklogController implements Initializable {
 	}
 	
 	public void initLoadOldSprint() {
-		if (CurrentSprint.sprintnummer < sprintbacklogService.ladeAnzahlSprints()) {
+		if (CurrentSprint.sprintnumber < sprintbacklogService.ladeAnzahlSprints()) {
 			pause();
 			editable = false;
 		} else {
 			resume();
 			editable = true;
 		}
-		sprintbacklogService.ladeAltenSprint(CurrentSprint.sprintnummer);
+		sprintbacklogService.ladeAltenSprint(CurrentSprint.sprintnumber);
 		dataSprintBacklog.clear();
 		VBOXUserStories.getChildren().remove(0, VBOXUserStories.getChildren().size());
 		initSprintBacklog();
@@ -127,7 +127,7 @@ public class SprintBacklogController implements Initializable {
 		sp.setContent(VBOXUserStories);
 		sp.setVisible(true);
 		
-		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.getId());
+		ladeSprintBacklog(CurrentProject.productbacklog.getId());
 		
 		for (int i = 0; i < dataSprintBacklog.size(); i++) {
 			UserStory userstory = dataSprintBacklog.get(i);
@@ -135,13 +135,13 @@ public class SprintBacklogController implements Initializable {
 			VBOXUserStories.getChildren().add(hb);
 		}
 		
-		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
-		if (CurrentBurndownChart.tage != null) {
-			tagNumber.setText((CurrentBurndownChart.tage.toString()));
+		sprintNumber.setText(CurrentSprint.sprintnumber.toString());
+		if (CurrentBurndownChart.days != null) {
+			tagNumber.setText((CurrentBurndownChart.days.toString()));
 		} else {
 			tagNumber.setText(null);
 		}
-		if (CurrentSprint.sprintnummer < anzahlSprints) {
+		if (CurrentSprint.sprintnumber < anzahlSprints) {
 			System.out.println("Ja");
 			buttonStartSprint.setDisable(true);
 			buttonCreateNewSprint.setDisable(true);
@@ -166,7 +166,7 @@ public class SprintBacklogController implements Initializable {
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Sprint starten");
 				alert.setHeaderText(null);
-				alert.setContentText("Sprint Nr." + CurrentSprint.sprintnummer + " wurde gestartet!");
+				alert.setContentText("Sprint Nr." + CurrentSprint.sprintnumber + " wurde gestartet!");
 				alert.showAndWait();
 				buttonEndDay.setDisable(false);
 				buttonCreateNewSprint.setDisable(false);
@@ -231,7 +231,7 @@ public class SprintBacklogController implements Initializable {
 						if (!dataSprintBacklog.isEmpty())
 							buttonStartSprint.setDisable(false);
 							
-						if (CurrentBenutzer.isPO || CurrentBenutzer.isDev) {
+						if (CurrentUser.isPO || CurrentUser.isDev) {
 							buttonStartSprint.setDisable(true);
 							buttonEndDay.setDisable(true);
 							buttonCreateNewSprint.setDisable(true);
@@ -269,7 +269,7 @@ public class SprintBacklogController implements Initializable {
 	
 	@FXML
 	private void handleButtonBack(ActionEvent event) throws Exception {
-		if (CurrentBenutzer.isSM) {
+		if (CurrentUser.isSM) {
 			pause();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
 			this.scene = new Scene(root);
@@ -286,17 +286,17 @@ public class SprintBacklogController implements Initializable {
 	
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
-		CurrentBenutzer.benutzerID = -1;
-		CurrentBenutzer.vorname = null;
-		CurrentBenutzer.nachname = null;
-		CurrentBenutzer.email = null;
-		CurrentBenutzer.passwort = null;
-		CurrentBenutzer.benutzerrollenID = -1;
-		CurrentBenutzer.benutzerrolle = null;
-		CurrentBenutzer.projekte = null;
-		CurrentScrumprojekt.scrumprojektID = -1;
-		CurrentScrumprojekt.projektname = null;
-		CurrentBenutzer.isSM = false;
+		CurrentUser.userId = -1;
+		CurrentUser.prename = null;
+		CurrentUser.lastname = null;
+		CurrentUser.email = null;
+		CurrentUser.password = null;
+		CurrentUser.roleId = -1;
+		CurrentUser.role = null;
+		CurrentUser.projects = null;
+		CurrentProject.projectId = -1;
+		CurrentProject.projectname = null;
+		CurrentUser.isSM = false;
 		
 		pause();
 		
@@ -320,7 +320,7 @@ public class SprintBacklogController implements Initializable {
 		sp.setVisible(true);
 		
 		sprintbacklogService.ladeSprint();
-		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.getId());
+		ladeSprintBacklog(CurrentProject.productbacklog.getId());
 		
 		for (int i = 0; i < dataSprintBacklog.size(); i++) {
 			UserStory userstory = dataSprintBacklog.get(i);
@@ -328,9 +328,9 @@ public class SprintBacklogController implements Initializable {
 			VBOXUserStories.getChildren().add(hb);
 		}
 		
-		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
-		if (CurrentBurndownChart.tage != null) {
-			tagNumber.setText(CurrentBurndownChart.tage.toString());
+		sprintNumber.setText(CurrentSprint.sprintnumber.toString());
+		if (CurrentBurndownChart.days != null) {
+			tagNumber.setText(CurrentBurndownChart.days.toString());
 		}
 		
 		controller = this;
@@ -350,11 +350,15 @@ public class SprintBacklogController implements Initializable {
 			buttonLoadSprint.setDisable(true);
 		}
 		
-		if (CurrentBenutzer.isPO || CurrentBenutzer.isDev) {
+		if (CurrentUser.isPO || CurrentUser.isDev) {
 			buttonStartSprint.setDisable(true);
 			buttonEndDay.setDisable(true);
 			buttonCreateNewSprint.setDisable(true);
 			buttonLoadSprint.setDisable(true);
+		}
+		
+		if (CurrentUser.isPO) {
+			buttonAddUserStory.setDisable(true);
 		}
 		
 		timer = new Timer();
@@ -451,7 +455,7 @@ public class SprintBacklogController implements Initializable {
 			alert.close();
 			Sprint sprint = sprintbacklogService.addNewSprintToSprintBacklog();
 			CurrentSprint.id = sprint.getId();
-			CurrentSprint.sprintnummer = sprint.getSprintnummer();
+			CurrentSprint.sprintnumber = sprint.getSprintnummer();
 			CurrentSprint.status = sprint.getStatus();
 			
 			reloadSprintBacklog();
@@ -478,7 +482,7 @@ public class SprintBacklogController implements Initializable {
 		sp.setVisible(true);
 		
 		sprintbacklogService.ladeSprint();
-		ladeSprintBacklog(CurrentScrumprojekt.productbacklog.getId());
+		ladeSprintBacklog(CurrentProject.productbacklog.getId());
 		
 		for (int i = 0; i < dataSprintBacklog.size(); i++) {
 			UserStory userstory = dataSprintBacklog.get(i);
@@ -486,9 +490,9 @@ public class SprintBacklogController implements Initializable {
 			VBOXUserStories.getChildren().add(hb);
 		}
 		
-		sprintNumber.setText(CurrentSprint.sprintnummer.toString());
-		if (CurrentBurndownChart.tage != null) {
-			tagNumber.setText(CurrentBurndownChart.tage.toString());
+		sprintNumber.setText(CurrentSprint.sprintnumber.toString());
+		if (CurrentBurndownChart.days != null) {
+			tagNumber.setText(CurrentBurndownChart.days.toString());
 		}
 		
 		if (dataSprintBacklog.isEmpty()) {

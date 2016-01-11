@@ -41,9 +41,9 @@ public class SprintService {
 		
 	}
 	
-	public Sprint findByProjectIdandSprintNumber(Integer scrumprojektid, Integer sprintnumber) {
+	public Sprint findByProjectIdandSprintNumber(Integer projectId, Integer sprintnumber) {
 		try {
-			return sprintDao.findByProjectIdandSprintNumber(scrumprojektid, sprintnumber);
+			return sprintDao.findByProjectIdandSprintNumber(projectId, sprintnumber);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -84,20 +84,20 @@ public class SprintService {
 		return sprintDao;
 	}
 	
-	public Integer countSprintsToProject(Integer scrumprojektid) {
+	public Integer countSprintsToProject(Integer projectId) {
 		Integer count = 0;
 		try {
-			count = sprintDao.countSprintsToProject(scrumprojektid);
+			count = sprintDao.countSprintsToProject(projectId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 		return count;
 	}
 	
-	public Integer countSprintsAnzahlToProject(Integer scrumprojektid) {
+	public Integer countNumberOfSprintsOfProject(Integer projectId) {
 		Integer count = 0;
 		try {
-			count = sprintDao.countSprintsAnzahlToProject(scrumprojektid);
+			count = sprintDao.countNumberOfSprintsOfProject(projectId);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
