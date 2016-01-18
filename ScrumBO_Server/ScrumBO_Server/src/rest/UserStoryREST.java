@@ -219,48 +219,43 @@ public class UserStoryREST {
 		Sprint sprint = new Sprint();
 		sprint = sprintService.findById(sprintId);
 		
-		List<UserStoryTask> oldList = new LinkedList<UserStoryTask>();
-		
 		if (userstory.getUserstorytask().size() > 0) {
-			for (int j = 0; j < userstory.getUserstorytask().size(); j++) {
-				oldList.add(userstory.getUserstorytask().get(j));
-			}
 			if (userstoryDTO.getUserstorytask().isEmpty()) {
+				System.out.println("hallo");
 				for (int i = 0; i < userstory.getUserstorytask().size(); i++) {
 					userstorytaskService.delete(userstory.getUserstorytask().get(i).getId());
 					userstory.getUserstorytask().remove(i);
 				}
 			} else {
+				List<UserStoryTask> list = userstorytaskService.findAllByUserStoryId(userstory.getId());
+				for (int i = 0; i < list.size(); i++) {
+					userstory.getUserstorytask().remove(list.get(i));
+				}
 				for (int i = 0; i < userstoryDTO.getUserstorytask().size(); i++) {
-					for (int j = 0; j < userstory.getUserstorytask().size(); j++) {
-						if (userstoryDTO.getUserstorytask().get(i).getId() == userstory.getUserstorytask().get(j)
-								.getId()) {
-							userstory.getUserstorytask().get(j)
-									.setDescription(userstoryDTO.getUserstorytask().get(i).getDescription());
-							userstory.getUserstorytask().get(j).setTaskstatus(taskstatusService
-									.findById(userstoryDTO.getUserstorytask().get(i).getTaskstatus().getId()));
-							userstory.getUserstorytask().get(j)
-									.setEffortInHours(userstoryDTO.getUserstorytask().get(i).getEffortInHours());
-							userstory.getUserstorytask().get(j).setUser(
-									benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getUser().getId()));
-							userstorytaskService.update(userstory.getUserstorytask().get(j));
-						} else {
-							userstorytaskService.delete(userstory.getUserstorytask().get(j).getId());
-							userstory.getUserstorytask().remove(j);
-						}
-					}
+					System.out.println("hallo2");
+					System.out.println(userstoryDTO.getUserstorytask().size());
+					UserStoryTask userstorytask = new UserStoryTask(
+							userstoryDTO.getUserstorytask().get(i).getDescription(), taskstatusService.findById(1),
+							userstoryDTO.getUserstorytask().get(i).getEffortInHours(),
+							benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getUser().getId()),
+							userstory);
+					userstory.getUserstorytask().add(userstorytask);
+					userstorytaskService.persist(userstorytask);
+				}
+				
+			}
+		} else {
+			if (userstoryDTO.getUserstorytask().size() > 0) {
+				for (int i = 0; i < userstoryDTO.getUserstorytask().size(); i++) {
+					UserStoryTask userstorytask = new UserStoryTask(
+							userstoryDTO.getUserstorytask().get(i).getDescription(), taskstatusService.findById(1),
+							userstoryDTO.getUserstorytask().get(i).getEffortInHours(),
+							benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getUser().getId()),
+							userstory);
+					userstory.getUserstorytask().add(userstorytask);
+					userstorytaskService.persist(userstorytask);
 				}
 			}
-			
-		} else {
-			for (int i = 0; i < userstoryDTO.getUserstorytask().size(); i++) {
-				UserStoryTask userstorytask = new UserStoryTask(userstoryDTO.getUserstorytask().get(i).getDescription(),
-						taskstatusService.findById(1), userstoryDTO.getUserstorytask().get(i).getEffortInHours(),
-						benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getUser().getId()), userstory);
-				userstory.getUserstorytask().add(userstorytask);
-				userstorytaskService.persist(userstorytask);
-			}
-			
 		}
 		
 		userstory.setSprint(sprint);

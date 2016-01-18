@@ -114,22 +114,24 @@ public class ScrumprojektREST {
 				SprintDTO sprintDTO = new SprintDTO();
 				sprintDTO.setId(projectList.get(i).getSprint().get(j).getId());
 				BurndownChartDTO burndownchartDTO = new BurndownChartDTO();
-				burndownchartDTO.setId(projectList.get(i).getSprint().get(j).getBurndownChart().getId());
-				burndownchartDTO.setDays(projectList.get(i).getSprint().get(j).getBurndownChart().getDays());
-				List<BurndownChartPointDTO> burndownchartPointDTOList = new LinkedList<BurndownChartPointDTO>();
-				for (int k = 0; k < projectList.get(i).getSprint().get(j).getBurndownChart().getBurndownChartPoint()
-						.size(); k++) {
-					BurndownChartPointDTO burndownchartPointDTO = new BurndownChartPointDTO();
-					burndownchartPointDTO.setId(projectList.get(i).getSprint().get(j).getBurndownChart()
-							.getBurndownChartPoint().get(k).getId());
-					burndownchartPointDTO.setX(projectList.get(i).getSprint().get(j).getBurndownChart()
-							.getBurndownChartPoint().get(k).getX());
-					burndownchartPointDTO.setY(projectList.get(i).getSprint().get(j).getBurndownChart()
-							.getBurndownChartPoint().get(k).getY());
-					burndownchartPointDTOList.add(burndownchartPointDTO);
+				if (projectList.get(i).getSprint().get(j).getBurndownChart() != null) {
+					burndownchartDTO.setId(projectList.get(i).getSprint().get(j).getBurndownChart().getId());
+					burndownchartDTO.setDays(projectList.get(i).getSprint().get(j).getBurndownChart().getDays());
+					List<BurndownChartPointDTO> burndownchartPointDTOList = new LinkedList<BurndownChartPointDTO>();
+					for (int k = 0; k < projectList.get(i).getSprint().get(j).getBurndownChart().getBurndownChartPoint()
+							.size(); k++) {
+						BurndownChartPointDTO burndownchartPointDTO = new BurndownChartPointDTO();
+						burndownchartPointDTO.setId(projectList.get(i).getSprint().get(j).getBurndownChart()
+								.getBurndownChartPoint().get(k).getId());
+						burndownchartPointDTO.setX(projectList.get(i).getSprint().get(j).getBurndownChart()
+								.getBurndownChartPoint().get(k).getX());
+						burndownchartPointDTO.setY(projectList.get(i).getSprint().get(j).getBurndownChart()
+								.getBurndownChartPoint().get(k).getY());
+						burndownchartPointDTOList.add(burndownchartPointDTO);
+					}
+					burndownchartDTO.setBurndownChartPoint(burndownchartPointDTOList);
+					sprintDTO.setBurndownChart(burndownchartDTO);
 				}
-				burndownchartDTO.setBurndownChartPoint(burndownchartPointDTOList);
-				sprintDTO.setBurndownChart(burndownchartDTO);
 				sprintDTOList.add(sprintDTO);
 			}
 			for (int j = 0; j < projectList.get(i).getImpediment().size(); j++) {

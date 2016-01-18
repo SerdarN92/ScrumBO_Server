@@ -4,7 +4,6 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -96,13 +95,13 @@ public class ProductBacklogController implements Initializable {
 	private void handleButtonBack(ActionEvent event) throws Exception {
 		data.clear();
 		if (CurrentUser.isSM) {
-			timer.cancel();
+			// timer.cancel();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonLogout.getScene().getWindow();
 			stage.setScene(scene);
 		} else {
-			timer.cancel();
+			// timer.cancel();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Scrum.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonLogout.getScene().getWindow();
@@ -148,7 +147,7 @@ public class ProductBacklogController implements Initializable {
 		CurrentProject.projectname = null;
 		CurrentUser.isSM = false;
 		
-		timer.cancel();
+		// timer.cancel();
 		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		this.scene = new Scene(root);
@@ -170,19 +169,19 @@ public class ProductBacklogController implements Initializable {
 			
 		initTableView();
 		
-		timer = new Timer();
-		timer.schedule(new TimerTask() {
-			
-			@Override
-			public void run() {
-				try {
-					reload();
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
-			}
-		}, 0, 10000);
+		// timer = new Timer();
+		// timer.schedule(new TimerTask() {
+		//
+		// @Override
+		// public void run() {
+		// try {
+		// reload();
+		// } catch (Exception e) {
+		// // TODO Auto-generated catch block
+		// e.printStackTrace();
+		// }
+		// }
+		// }, 0, 10000);
 		
 	}
 	
