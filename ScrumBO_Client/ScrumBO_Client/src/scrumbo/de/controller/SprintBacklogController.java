@@ -24,6 +24,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
@@ -45,6 +47,18 @@ public class SprintBacklogController implements Initializable {
 	Scene									scene;
 	Stage									stage					= null;
 	SprintbacklogService					sprintbacklogService	= null;
+	@FXML
+	private ImageView						informationImage;
+	private Tooltip							tooltipSB				= new Tooltip(
+			"Ein Sprint Backlog wird im Laufe des Sprints verändert und entsteht beim Sprint Plannung.\n"
+					+ "Es enthält die User Stories, die in dem aktuellen Sprint bearbeitet werden.\n"
+					+ "User Stories werden bezüglich ihrer technischen Anforderungen untersucht und in Tasks aufgeteilt,\n"
+					+ "deren Aufwand (jetzt genauer) geschätzt wird. In einem Sprint sollen die Entwickler die Tasks\n"
+					+ "zu den hoch priorisierten User Stories des Sprints zuerst abarbeiten.\n"
+					+ "Gibt es mehr als eine User Story mit derselben Priorisierung, wird keine weitere Angabe\n"
+					+ "zur Reihenfolge gemacht. Sind Tasks einer User Story in Bearbeitung und noch weitere\n"
+					+ "Tasks dieser User Story vorhanden, so soll ein Entwickler, der ein neues Task zweck\n"
+					+ "Bearbeitung aussucht, erst ein Task der aktuellen bearbeiteten User Story aussuchen.");
 	@FXML
 	private Button							buttonLogout;
 	@FXML
@@ -378,6 +392,8 @@ public class SprintBacklogController implements Initializable {
 				});
 			}
 		}, 0, 10000);
+		
+		Tooltip.install(informationImage, tooltipSB);
 	}
 	
 	private void initSprintBacklog() {

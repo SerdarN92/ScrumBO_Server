@@ -18,12 +18,15 @@ import javafx.geometry.Pos;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import javafx.scene.text.Text;
@@ -43,6 +46,18 @@ public class ProductBacklogController implements Initializable {
 	public static Stage						stage;
 	ProductbacklogService					productbacklogService	= null;
 	public static UserStory					rowData;
+	@FXML
+	private ImageView						informationImage;
+	private Tooltip							tooltipPB				= new Tooltip(
+			"Ein Product Backlog besteht aus User Stories, die vom Product Owner priorisiert werden.\n"
+					+ "Die Aufwände der User Stories werden vom Entwicklungsteam geschätzt, beispielsweise in einer Schätzklausur.\n"
+					+ "Eine User Story muss innerhalb eines Sprints realisierbar sein.\n"
+					+ "Das Product Backlog ist nicht vollständig und verändert sich im Laufe des Projekts.\n"
+					+ "Die Anforderungen können vom Kunden nach Bedarf verändert werden. Es wird üblich priorisiert.\n"
+					+ "Es dürfen also mehr als eine User Story die Priorität 1 erhalten.\n"
+					+ "Der Product Owner legt die Reihenfolge der User Stories fest. Die hoch priorisierten User Stories sollten, falls\n"
+					+ "möglich zuerst abgearbeitet werden. Daher wird im Sprint Planning Meeting nicht über die Reihenfolge der Abarbeitung\n"
+					+ "der User Stories diskutiert sondern nur über die Anzahl.");
 	@FXML
 	private Text							vorname;
 	@FXML
@@ -183,6 +198,7 @@ public class ProductBacklogController implements Initializable {
 		// }
 		// }, 0, 10000);
 		
+		Tooltip.install(informationImage, tooltipPB);
 	}
 	
 	public void initTableView() {
@@ -228,6 +244,11 @@ public class ProductBacklogController implements Initializable {
 		}
 		
 		tableColumnStatus.setCellValueFactory(new PropertyValueFactory<UserStory, Integer>("status"));
+		tableColumnStatus.setText(null);
+		Label statusLabel = new Label("Status");
+		statusLabel.setTooltip(new Tooltip(
+				"Status einer User Story.\n" + "Blau = Offen\n" + "Gelb = In Arbeit\n" + "Grün = Erledigt"));
+		tableColumnStatus.setGraphic(statusLabel);
 		tableColumnStatus
 				.setCellFactory(new Callback<TableColumn<UserStory, Integer>, TableCell<UserStory, Integer>>() {
 					@Override
@@ -264,8 +285,21 @@ public class ProductBacklogController implements Initializable {
 					}
 				});
 		tableColumnPrioritaet.setCellValueFactory(new PropertyValueFactory<UserStory, Integer>("priority"));
+		tableColumnPrioritaet.setText(null);
+		Label prioritaetLabel = new Label("Priorität");
+		prioritaetLabel.setTooltip(
+				new Tooltip("Priorität einer User Story. Kann vom Entwickler nicht mehr verändert werden."));
+		tableColumnPrioritaet.setGraphic(prioritaetLabel);
 		tableColumnThema.setCellValueFactory(new PropertyValueFactory<UserStory, String>("theme"));
+		tableColumnThema.setText(null);
+		Label themaLabel = new Label("Thema");
+		themaLabel.setTooltip(new Tooltip("'Grobes' Thema einer User Story."));
+		tableColumnThema.setGraphic(themaLabel);
 		tableColumnBeschreibung.setCellValueFactory(new PropertyValueFactory<UserStory, String>("description"));
+		tableColumnBeschreibung.setText(null);
+		Label beschreibungLabel = new Label("Thema");
+		beschreibungLabel.setTooltip(new Tooltip("Ausführliche Formulierung der User Story"));
+		tableColumnBeschreibung.setGraphic(beschreibungLabel);
 		tableColumnBeschreibung
 				.setCellFactory(new Callback<TableColumn<UserStory, String>, TableCell<UserStory, String>>() {
 					@Override
@@ -292,6 +326,10 @@ public class ProductBacklogController implements Initializable {
 				});
 		tableColumnAkzeptanzkriterien
 				.setCellValueFactory(new PropertyValueFactory<UserStory, String>("acceptanceCriteria"));
+		tableColumnAkzeptanzkriterien.setText(null);
+		Label akLabel = new Label("Akzeptanzkriterien");
+		akLabel.setTooltip(new Tooltip("Kriterien, die der Kunde an die User Story hat"));
+		tableColumnAkzeptanzkriterien.setGraphic(akLabel);
 		tableColumnAkzeptanzkriterien
 				.setCellFactory(new Callback<TableColumn<UserStory, String>, TableCell<UserStory, String>>() {
 					@Override
@@ -317,6 +355,10 @@ public class ProductBacklogController implements Initializable {
 					}
 				});
 		tableColumnAufwand.setCellValueFactory(new PropertyValueFactory<UserStory, Integer>("effortInDays"));
+		tableColumnAufwand.setText(null);
+		Label aufwandLabel = new Label("Aufwand in Tagen");
+		aufwandLabel.setTooltip(new Tooltip("1 Tag = 8 Stunden"));
+		tableColumnAufwand.setGraphic(aufwandLabel);
 		tableColumnSprintNummer
 				.setCellValueFactory(new Callback<CellDataFeatures<UserStory, Integer>, ObservableValue<Integer>>() {
 					@Override
@@ -331,7 +373,12 @@ public class ProductBacklogController implements Initializable {
 						return obsInt;
 					}
 				});
-				
+		tableColumnSprintNummer.setText(null);
+		Label sprintnummberLabel = new Label("Sprint Nr.");
+		sprintnummberLabel
+				.setTooltip(new Tooltip("Die Nummer des Sprints, in welchem die User Story bearbeitet wird/wurde."));
+		tableColumnSprintNummer.setGraphic(sprintnummberLabel);
+		
 		tableViewProductBacklog.setItems(data);
 	}
 	

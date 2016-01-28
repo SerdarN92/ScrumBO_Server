@@ -37,6 +37,11 @@
          </font>
       </Button>
       <Button fx:id="buttonReload" layoutX="46.0" layoutY="57.0" mnemonicParsing="false" onAction="#handleButtonReload" text="Neu laden" />
+      <ImageView fx:id="informationImage" fitHeight="30.0" fitWidth="31.0" layoutX="463.0" layoutY="43.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../content/1451334333_Info.png" />
+         </image>
+      </ImageView>
    </children>
    <cursor>
       <Cursor fx:constant="DEFAULT" />

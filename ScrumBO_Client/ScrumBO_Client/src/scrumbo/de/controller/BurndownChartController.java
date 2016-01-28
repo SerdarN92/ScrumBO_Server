@@ -20,6 +20,8 @@ import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
 import javafx.scene.control.Button;
+import javafx.scene.control.Tooltip;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -36,6 +38,13 @@ public class BurndownChartController implements Initializable {
 	private Parent						root;
 	private Scene						scene;
 	private SprintbacklogService		sprintbacklogService;
+	@FXML
+	private ImageView					informationImage;
+	private Tooltip						tooltipSBC	= new Tooltip(
+			"Die Fortschrittsanalyse eines Projektes erfolgt bei Scrum innerhalb der Sprints anhand\n"
+					+ "eines Burndown Charts. Das Burndown Chart gibt Auskunft über die noch zu leistende Arbeit ab dem aktuellen Tag. Auf der\n"
+					+ "x-Achse wird der geschätzte verbleibende Aufwand aller Aufgaben des Sprints in Tagen angezeigt und auf der\n"
+					+ "y-Achse die Anzahl der Arbeitstage.");
 	@FXML
 	private Button						buttonLogout;
 	@FXML
@@ -214,6 +223,8 @@ public class BurndownChartController implements Initializable {
 				});
 			}
 		}, 0, 10000);
+		
+		Tooltip.install(informationImage, tooltipSBC);
 	}
 	
 	private void initBurndownChart() {

@@ -21,7 +21,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -38,6 +40,11 @@ public class ImpedimentBacklogController implements Initializable {
 	Scene										scene;
 	Stage										stage;
 	ImpedimentService							impedimentService	= null;
+	@FXML
+	private ImageView							informationImage;
+	private Tooltip								tooltipIB			= new Tooltip(
+			"Ein Impediment Backlog besteht aus den Eintragungen von Hindernissen, die das\n"
+					+ "Entwicklungsteam an effektiver Arbeit hindern inklusive Datum des Auftretens und Datum der Behebung.");
 	public static Impediment					rowData;
 	@FXML
 	private Text								vorname;
@@ -235,6 +242,8 @@ public class ImpedimentBacklogController implements Initializable {
 				});
 			}
 		}, 0, 10000);
+		
+		Tooltip.install(informationImage, tooltipIB);
 		
 	}
 	
