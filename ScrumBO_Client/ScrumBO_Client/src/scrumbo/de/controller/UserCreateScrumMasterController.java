@@ -21,9 +21,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import scrumbo.de.common.Encryptor;
 import scrumbo.de.common.LetterTextField;
-import scrumbo.de.entity.User;
 import scrumbo.de.entity.Role;
+import scrumbo.de.entity.User;
 import scrumbo.de.service.BenutzerService;
 import scrumbo.de.service.BenutzerrolleService;
 
@@ -38,7 +39,7 @@ public class UserCreateScrumMasterController implements Initializable {
 	Scene					scene;
 	BenutzerService			benutzerService			= null;
 	BenutzerrolleService	benutzerrolleService	= null;
-	List<Role>		liste					= null;
+	List<Role>				liste					= null;
 	@FXML
 	private LetterTextField	txtFieldPrename;
 	@FXML
@@ -77,7 +78,7 @@ public class UserCreateScrumMasterController implements Initializable {
 				benutzer.setVorname(txtFieldPrename.getText());
 				benutzer.setNachname(txtFieldLastname.getText());
 				benutzer.setEmail(txtFieldEmail.getText());
-				benutzer.setPasswort("12345678");
+				benutzer.setPasswort(Encryptor.encrypt("12345678"));
 				
 				if (benutzerService.createScrumMaster(benutzer)) {
 					this.root = FXMLLoader

@@ -20,8 +20,9 @@ import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import scrumbo.de.entity.User;
+import scrumbo.de.common.Encryptor;
 import scrumbo.de.entity.CurrentUser;
+import scrumbo.de.entity.User;
 import scrumbo.de.service.BenutzerService;
 import scrumbo.de.service.BenutzerrolleService;
 
@@ -36,7 +37,7 @@ public class UserLoginController implements Initializable {
 	Scene					scene;
 	Stage					stage;
 	BenutzerService			benutzerService			= null;
-	User				benutzer				= null;
+	User					benutzer				= null;
 	BenutzerrolleService	benutzerrolleService	= null;
 													
 	@FXML
@@ -77,11 +78,11 @@ public class UserLoginController implements Initializable {
 				CurrentUser.email = benutzer.getEmail();
 				CurrentUser.password = benutzer.getPasswort();
 				benutzerrolleService.checkRole(CurrentUser.email);
-				if (pswtFieldPassword.getText().equals(CurrentUser.password)) {
+				if (pswtFieldPassword.getText().equals(Encryptor.decrypt(CurrentUser.password))) {
 					pswtFieldPassword.setStyle(null);
 					emailValidFail.setVisible(false);
 					passwordValidFail.setVisible(false);
-					if (CurrentUser.password.equals("12345678")) {
+					if (Encryptor.decrypt(CurrentUser.password).equals("12345678")) {
 						this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/UserChangePassword.fxml"));
 						this.scene = new Scene(root);
 						Stage stage = (Stage) buttonLoginUser.getScene().getWindow();

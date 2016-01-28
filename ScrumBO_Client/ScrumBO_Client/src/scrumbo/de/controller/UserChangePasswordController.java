@@ -13,8 +13,9 @@ import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import scrumbo.de.entity.User;
+import scrumbo.de.common.Encryptor;
 import scrumbo.de.entity.CurrentUser;
+import scrumbo.de.entity.User;
 import scrumbo.de.service.BenutzerService;
 
 public class UserChangePasswordController implements Initializable {
@@ -41,7 +42,7 @@ public class UserChangePasswordController implements Initializable {
 			benutzer.setVorname(CurrentUser.prename);
 			benutzer.setNachname(CurrentUser.lastname);
 			benutzer.setEmail(CurrentUser.email);
-			benutzer.setPasswort(txtPassword.getText());
+			benutzer.setPasswort(Encryptor.encrypt(txtPassword.getText()));
 			
 			if (benutzerService.changeDefaultPassword(benutzer)) {
 				if (CurrentUser.isSM) {

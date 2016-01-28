@@ -36,6 +36,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import scrumbo.de.app.ScrumBOClient;
+import scrumbo.de.common.Encryptor;
 import scrumbo.de.common.LetterTextField;
 import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentUser;
@@ -106,7 +107,7 @@ public class UserCreateForProjectController implements Initializable {
 				benutzer.setVorname(txtFieldPrename.getText());
 				benutzer.setNachname(txtFieldLastname.getText());
 				benutzer.setEmail(txtFieldEmail.getText());
-				benutzer.setPasswort("12345678");
+				benutzer.setPasswort(Encryptor.encrypt("12345678"));
 				
 				Role benutzerrolle = null;
 				
