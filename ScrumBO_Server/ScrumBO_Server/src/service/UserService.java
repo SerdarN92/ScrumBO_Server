@@ -47,6 +47,15 @@ public class UserService {
 		return null;
 	}
 	
+	public boolean checkIfEmailAlreadyExists(String email) {
+		try {
+			return userDao.checkIfEmailAlreadyExists(email);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return false;
+	}
+	
 	public void delete(Integer id) {
 		try {
 			User benutzer = userDao.findById(id);

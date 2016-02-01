@@ -88,9 +88,13 @@ public class UserStoryREST {
 					userstoryTaskDTO.setDescription(userstoryListe.get(i).getUserstorytask().get(j).getDescription());
 					userstoryTaskDTO
 							.setEffortInHours(userstoryListe.get(i).getUserstorytask().get(j).getEffortInHours());
-					User user = userstoryListe.get(i).getUserstorytask().get(j).getUser();
-					UserDTO userDTO = new UserDTO(user.getId(), user.getPrename(), user.getLastname(),
-							user.getPassword(), user.getEmail());
+					User user = null;
+					UserDTO userDTO = null;
+					if (userstoryListe.get(i).getUserstorytask().get(j).getUser() != null) {
+						user = userstoryListe.get(i).getUserstorytask().get(j).getUser();
+						userDTO = new UserDTO(user.getId(), user.getPrename(), user.getLastname(), user.getPassword(),
+								user.getEmail());
+					}
 					userstoryTaskDTO.setUser(userDTO);
 					Taskstatus taskstatus = userstoryListe.get(i).getUserstorytask().get(j).getTaskstatus();
 					TaskstatusDTO taskstatusDTO = new TaskstatusDTO(taskstatus.getId(), taskstatus.getDescription());
@@ -234,11 +238,18 @@ public class UserStoryREST {
 				for (int i = 0; i < userstoryDTO.getUserstorytask().size(); i++) {
 					System.out.println("hallo2");
 					System.out.println(userstoryDTO.getUserstorytask().size());
-					UserStoryTask userstorytask = new UserStoryTask(
-							userstoryDTO.getUserstorytask().get(i).getDescription(), taskstatusService.findById(1),
-							userstoryDTO.getUserstorytask().get(i).getEffortInHours(),
-							benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getUser().getId()),
-							userstory);
+					UserStoryTask userstorytask = null;
+					if (userstoryDTO.getUserstorytask().get(i).getUser() != null) {
+						userstorytask = new UserStoryTask(userstoryDTO.getUserstorytask().get(i).getDescription(),
+								taskstatusService.findById(1),
+								userstoryDTO.getUserstorytask().get(i).getEffortInHours(),
+								benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getUser().getId()),
+								userstory);
+					} else {
+						userstorytask = new UserStoryTask(userstoryDTO.getUserstorytask().get(i).getDescription(),
+								taskstatusService.findById(1),
+								userstoryDTO.getUserstorytask().get(i).getEffortInHours(), null, userstory);
+					}
 					userstory.getUserstorytask().add(userstorytask);
 					userstorytaskService.persist(userstorytask);
 				}
@@ -247,11 +258,18 @@ public class UserStoryREST {
 		} else {
 			if (userstoryDTO.getUserstorytask().size() > 0) {
 				for (int i = 0; i < userstoryDTO.getUserstorytask().size(); i++) {
-					UserStoryTask userstorytask = new UserStoryTask(
-							userstoryDTO.getUserstorytask().get(i).getDescription(), taskstatusService.findById(1),
-							userstoryDTO.getUserstorytask().get(i).getEffortInHours(),
-							benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getUser().getId()),
-							userstory);
+					UserStoryTask userstorytask = null;
+					if (userstoryDTO.getUserstorytask().get(i).getUser().getId() != null) {
+						userstorytask = new UserStoryTask(userstoryDTO.getUserstorytask().get(i).getDescription(),
+								taskstatusService.findById(1),
+								userstoryDTO.getUserstorytask().get(i).getEffortInHours(),
+								benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getUser().getId()),
+								userstory);
+					} else {
+						userstorytask = new UserStoryTask(userstoryDTO.getUserstorytask().get(i).getDescription(),
+								taskstatusService.findById(1),
+								userstoryDTO.getUserstorytask().get(i).getEffortInHours(), null, userstory);
+					}
 					userstory.getUserstorytask().add(userstorytask);
 					userstorytaskService.persist(userstorytask);
 				}
@@ -353,6 +371,31 @@ public class UserStoryREST {
 	@GET
 	@Produces("application/json" + ";charset=utf-8")
 	public Response deleteUserStoryFromSprint(@PathParam("userstoryid") Integer userstoryId,
+			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
+		String output = "Fehler";
+		UserStoryTaskService userstorytaskService = new UserStoryTaskService(hibernateconfigfilename);
+		UserStoryService userstoryService = new UserStoryService(hibernateconfigfilename);
+		UserStory userstory = null;
+		try {
+			userstory = userstoryService.findById(userstoryId);
+			for (int i = 0; i < userstory.getUserstorytask().size(); i++) {
+				userstorytaskService.delete(userstory.getUserstorytask().get(i).getId());
+			}
+			
+			if (userstoryService.setSprintNull(userstoryId))
+				output = "User Story aus Sprint entfernt";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return Response.status(200).entity(output).build();
+	}
+	
+	@Path("/setUserStoryOnUserId/{userstoryid}/{userid}/{hibernateconfigfilename}")
+	@GET
+	@Produces("application/json" + ";charset=utf-8")
+	public Response setUserStoryOnUserId(@PathParam("userid") Integer userId,
+			@PathParam("userstoryid") Integer userstoryId,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
 		String output = "Fehler";
 		UserStoryTaskService userstorytaskService = new UserStoryTaskService(hibernateconfigfilename);

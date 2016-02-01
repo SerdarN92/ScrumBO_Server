@@ -43,8 +43,8 @@ public class BurndownChartController implements Initializable {
 	private Tooltip						tooltipSBC	= new Tooltip(
 			"Die Fortschrittsanalyse eines Projektes erfolgt bei Scrum innerhalb der Sprints anhand\n"
 					+ "eines Burndown Charts. Das Burndown Chart gibt Auskunft über die noch zu leistende Arbeit ab dem aktuellen Tag. Auf der\n"
-					+ "x-Achse wird der geschätzte verbleibende Aufwand aller Aufgaben des Sprints in Tagen angezeigt und auf der\n"
-					+ "y-Achse die Anzahl der Arbeitstage.");
+					+ "y-Achse wird der geschätzte verbleibende Aufwand aller Aufgaben des Sprints in Tagen angezeigt und auf der\n"
+					+ "x-Achse die Anzahl der Arbeitstage.");
 	@FXML
 	private Button						buttonLogout;
 	@FXML

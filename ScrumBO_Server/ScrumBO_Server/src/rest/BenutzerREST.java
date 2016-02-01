@@ -134,6 +134,7 @@ public class BenutzerREST {
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
 		UserService userService = new UserService(hibernateconfigfilename);
 		User user = userService.findByEmail(email);
+		userService.checkIfEmailAlreadyExists(email);
 		String output = "User ist nicht vorhanden";
 		if (user != null) {
 			UserDTO userDTO = new UserDTO(user.getId(), user.getPrename(), user.getLastname(), user.getPassword(),
@@ -141,6 +142,19 @@ public class BenutzerREST {
 					
 			Gson gson = new Gson();
 			output = gson.toJson(userDTO);
+		}
+		return Response.status(200).entity(output).build();
+	}
+	
+	@Path("/sucheDoppelteMail/{email}/{hibernateconfigfilename}")
+	@GET
+	@Produces("application/json" + ";charset=utf-8")
+	public Response checkEmail(@PathParam("email") String email,
+			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
+		UserService userService = new UserService(hibernateconfigfilename);
+		String output = "Email frei";
+		if (userService.checkIfEmailAlreadyExists(email)) {
+			output = "Email bereits vergeben";
 		}
 		return Response.status(200).entity(output).build();
 	}

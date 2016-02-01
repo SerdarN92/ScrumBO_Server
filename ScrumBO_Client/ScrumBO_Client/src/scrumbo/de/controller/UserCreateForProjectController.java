@@ -42,6 +42,7 @@ import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.Role;
 import scrumbo.de.entity.User;
+import scrumbo.de.service.BenutzerService;
 
 /**
  * FXML Controller Klasse für die Erstellung eines Benutzers
@@ -94,8 +95,9 @@ public class UserCreateForProjectController implements Initializable {
 	@FXML
 	private void handleButtonCreateUser(ActionEvent event) throws Exception {
 		Integer benutzerrollenId = 0;
+		BenutzerService benutzerService = new BenutzerService();
 		if (checkPreName() && checkLastName() && checkEmail() && checkRole()) {
-			if (checkIfEmailExists(txtFieldEmail.getText())) {
+			if (benutzerService.checkEmail(txtFieldEmail.getText())) {
 				emailValidFail.setText("E-Mail Adresse bereits vorhanden.");
 				emailValidFail.setVisible(true);
 				txtFieldEmail.setStyle("-fx-border-color:#FF0000;");

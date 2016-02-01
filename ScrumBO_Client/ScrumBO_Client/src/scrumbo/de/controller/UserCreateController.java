@@ -38,8 +38,9 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.common.LetterTextField;
-import scrumbo.de.entity.User;
 import scrumbo.de.entity.Role;
+import scrumbo.de.entity.User;
+import scrumbo.de.service.BenutzerService;
 
 /**
  * FXML Controller Klasse für die Erstellung eines Benutzers
@@ -50,7 +51,7 @@ public class UserCreateController implements Initializable {
 	
 	Parent					root;
 	Scene					scene;
-	List<Role>		liste	= null;
+	List<Role>				liste	= null;
 	@FXML
 	private LetterTextField	txtFieldPrename;
 	@FXML
@@ -90,8 +91,9 @@ public class UserCreateController implements Initializable {
 	
 	@FXML
 	private void handleButtonCreateUser(ActionEvent event) throws Exception {
+		BenutzerService benutzerService = new BenutzerService();
 		if (checkPreName() && checkLastName() && checkPassword() && checkEmail() && checkRole()) {
-			if (checkIfEmailExists(txtFieldEmail.getText())) {
+			if (benutzerService.checkEmail(txtFieldEmail.getText())) {
 				emailValidFail.setText("E-Mail Adresse bereits vorhanden.");
 				emailValidFail.setVisible(true);
 			} else {
@@ -129,8 +131,8 @@ public class UserCreateController implements Initializable {
 				JSONObject jsonObject = new JSONObject(output);
 				
 				try {
-					URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/benutzer/create" + "/"
-							+ ScrumBOClient.getDatabaseconfigfile());
+					URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+							+ "/ScrumBO_Server/rest/benutzer/create" + "/" + ScrumBOClient.getDatabaseconfigfile());
 					HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 					conn.setDoOutput(true);
 					conn.setRequestProperty("Content-Type", "application/json");
@@ -226,8 +228,8 @@ public class UserCreateController implements Initializable {
 		HttpURLConnection conn = null;
 		
 		try {
-			url2 = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/benutzerrolle" + "/"
-					+ ScrumBOClient.getDatabaseconfigfile());
+			url2 = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/benutzerrolle" + "/" + ScrumBOClient.getDatabaseconfigfile());
 			conn = (HttpURLConnection) url2.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json");
@@ -265,8 +267,8 @@ public class UserCreateController implements Initializable {
 	
 	private Boolean checkIfEmailExists(String email) throws JSONException {
 		try {
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/benutzer/suche/" + email + "/"
-					+ ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/benutzer/suche/" + email + "/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json");

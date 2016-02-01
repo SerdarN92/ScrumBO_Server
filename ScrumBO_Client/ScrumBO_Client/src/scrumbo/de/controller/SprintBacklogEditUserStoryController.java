@@ -29,8 +29,11 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
 import scrumbo.de.common.MyHBox;
+import scrumbo.de.entity.CurrentUser;
+import scrumbo.de.entity.User;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.entity.UserStoryTask;
+import scrumbo.de.service.BenutzerService;
 import scrumbo.de.service.UserstoryService;
 
 public class SprintBacklogEditUserStoryController implements Initializable {
@@ -58,6 +61,8 @@ public class SprintBacklogEditUserStoryController implements Initializable {
 	private Button						buttonSave;
 	@FXML
 	private Button						buttonRemoveTask;
+	@FXML
+	private Button						buttonGetTask;
 										
 	private List<UserStory>				userstoryList			= new LinkedList<UserStory>();
 	protected UserStory					currentUserStory		= null;
@@ -66,6 +71,50 @@ public class SprintBacklogEditUserStoryController implements Initializable {
 	protected static UserStoryTask		selectedUserStoryTask	= new UserStoryTask();
 	protected static UserStoryTask		addedUserStoryTask		= new UserStoryTask();
 																
+	@FXML
+	private void handleButtonGetTask(ActionEvent event) throws Exception {
+		try {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Userstory zuweisen");
+			alert.setHeaderText(null);
+			alert.setContentText("Wollen Sie diese Userstory sich selbst zuweisen?");
+			
+			ButtonType buttonTypeOne = new ButtonType("Ja");
+			ButtonType buttonTypeTwo = new ButtonType("Nein");
+			alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+			
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == buttonTypeOne) {
+				boolean status = false;
+				try {
+					BenutzerService benutzerService = new BenutzerService();
+					User user = benutzerService.getUserByEmail(CurrentUser.email);
+					selectedUserStoryTask.setBenutzer(user);
+					status = true;
+				} catch (Exception e) {
+					e.printStackTrace();
+				}
+				if (status) {
+					Alert alert2 = new Alert(AlertType.INFORMATION);
+					alert2.setTitle("Userstory zuweisen");
+					alert2.setHeaderText(null);
+					alert2.setContentText("Userstory wurde Ihrem Benutzer erfolgreich zugewiesen!");
+					alert2.showAndWait();
+				} else {
+					Alert alert3 = new Alert(AlertType.INFORMATION);
+					alert3.setTitle("Userstory zuweisen");
+					alert3.setHeaderText(null);
+					alert3.setContentText("Fehler! Userstory wurde Ihrem Benutzer nicht zugewiesen!");
+					alert3.showAndWait();
+				}
+			} else {
+				alert.close();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@FXML
 	private void handleButtonDelete(ActionEvent event) throws Exception {
 		try {
@@ -120,7 +169,6 @@ public class SprintBacklogEditUserStoryController implements Initializable {
 		listViewUserStoryTask.getItems().remove(selectedUserStoryTask);
 		currentUserStory.getUserstorytask().remove(selectedUserStoryTask);
 		buttonRemoveTask.setDisable(true);
-		
 	}
 	
 	@FXML
@@ -161,6 +209,7 @@ public class SprintBacklogEditUserStoryController implements Initializable {
 	
 	@Override
 	public void initialize(URL arg0, ResourceBundle arg1) {
+		buttonGetTask.setDisable(true);
 		buttonRemoveTask.setDisable(true);
 		userstoryService = StartwindowController.getUserstoryService();
 		currentUserStory = MyHBox.blabla;
@@ -210,6 +259,7 @@ public class SprintBacklogEditUserStoryController implements Initializable {
 				if (click.getClickCount() == 1) {
 					selectedUserStoryTask = listViewUserStoryTask.getSelectionModel().getSelectedItem();
 					buttonRemoveTask.setDisable(false);
+					buttonGetTask.setDisable(false);
 					listViewUserStoryTask.setOnKeyPressed(new EventHandler<KeyEvent>() {
 						@Override
 						public void handle(KeyEvent event) {

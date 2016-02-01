@@ -66,7 +66,7 @@ public class UserCreateScrumMasterController implements Initializable {
 	@FXML
 	private void handleButtonCreateSM(ActionEvent event) throws Exception {
 		if (checkPreName() && checkLastName() && checkEmail()) {
-			if (benutzerService.checkIfEmailExists(txtFieldEmail.getText())) {
+			if (benutzerService.checkEmail(txtFieldEmail.getText())) {
 				txtEmail.setText("E-Mail Adresse bereits vorhanden.");
 				txtEmail.setVisible(true);
 				txtFieldEmail.setStyle("-fx-border-color:#FF0000;");

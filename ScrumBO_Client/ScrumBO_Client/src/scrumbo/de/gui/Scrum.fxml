@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import scrumbo.de.common.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.ScrumController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.ScrumController">
    <children>
       <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="75.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -25,7 +25,7 @@
          <font>
             <Font size="16.0" />
          </font></Label>
-      <Text fx:id="projektname" layoutX="423.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="129.13671875">
+      <Text fx:id="projektname" layoutX="423.0" layoutY="104.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="342.13671875">
          <font>
             <Font size="16.0" />
          </font></Text>
@@ -73,7 +73,7 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Text fx:id="name" layoutX="419.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="266.0">
+      <Text fx:id="name" layoutX="396.0" layoutY="76.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="266.0">
          <font>
             <Font size="16.0" />
          </font>

@@ -8,7 +8,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="847.0" prefWidth="764.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.SprintBacklogEditUserStoryController">
+<AnchorPane id="AnchorPane" prefHeight="847.0" prefWidth="764.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.SprintBacklogEditUserStoryController">
    <children>
       <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="261.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -20,13 +20,13 @@
             <Font size="30.0" />
          </font>
       </Label>
-      <ListView fx:id="listViewUserStoryTask" layoutX="165.0" layoutY="485.0" prefHeight="189.0" prefWidth="388.0" />
-      <Button fx:id="buttonAddTask" layoutX="454.0" layoutY="684.0" mnemonicParsing="false" onAction="#handleButtonAddTask" text="Task hinzufügen" />
-      <Button fx:id="buttonSave" layoutX="442.0" layoutY="718.0" mnemonicParsing="false" onAction="#handleButtonSave" text="Übernehmen">
+      <ListView fx:id="listViewUserStoryTask" layoutX="165.0" layoutY="485.0" prefHeight="189.0" prefWidth="425.0" />
+      <Button fx:id="buttonAddTask" layoutX="487.0" layoutY="684.0" mnemonicParsing="false" onAction="#handleButtonAddTask" text="Task hinzufügen" />
+      <Button fx:id="buttonSave" layoutX="476.0" layoutY="718.0" mnemonicParsing="false" onAction="#handleButtonSave" text="Übernehmen">
          <font>
             <Font size="16.0" />
          </font></Button>
-      <Button fx:id="buttonAbbort" layoutX="327.0" layoutY="718.0" mnemonicParsing="false" onAction="#handleButtonAbbort" text="Abbrechen">
+      <Button fx:id="buttonAbbort" layoutX="359.0" layoutY="718.0" mnemonicParsing="false" onAction="#handleButtonAbbort" text="Abbrechen">
          <font>
             <Font size="16.0" />
          </font></Button>
@@ -57,15 +57,16 @@
       </Label>
       <TextField fx:id="prioritaet" editable="false" layoutX="327.0" layoutY="184.0" />
       <TextField fx:id="thema" editable="false" layoutX="327.0" layoutY="222.0" />
-      <TextArea fx:id="beschreibung" editable="false" layoutX="328.0" layoutY="260.0" prefHeight="79.0" prefWidth="222.0" />
-      <TextArea fx:id="akzeptanzkriterien" editable="false" layoutX="328.0" layoutY="352.0" prefHeight="79.0" prefWidth="222.0" />
+      <TextArea fx:id="beschreibung" editable="false" layoutX="328.0" layoutY="260.0" prefHeight="79.0" prefWidth="262.0" />
+      <TextArea fx:id="akzeptanzkriterien" editable="false" layoutX="328.0" layoutY="352.0" prefHeight="79.0" prefWidth="262.0" />
       <TextField fx:id="aufwandintagen" editable="false" layoutX="328.0" layoutY="444.0" />
-      <Button fx:id="buttonDelete" layoutX="221.0" layoutY="718.0" mnemonicParsing="false" onAction="#handleButtonDelete" text="Entfernen">
+      <Button fx:id="buttonDelete" layoutX="252.0" layoutY="718.0" mnemonicParsing="false" onAction="#handleButtonDelete" text="Entfernen">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button fx:id="buttonRemoveTask" layoutX="331.0" layoutY="684.0" mnemonicParsing="false" onAction="#handleButtonRemoveTask" text="Task entfernen" />
+      <Button fx:id="buttonRemoveTask" layoutX="377.0" layoutY="684.0" mnemonicParsing="false" onAction="#handleButtonRemoveTask" text="Task entfernen" />
+      <Button fx:id="buttonGetTask" layoutX="165.0" layoutY="684.0" mnemonicParsing="false" onAction="#handleButtonGetTask" text="Task meinem Benutzer zuweisen" />
    </children>
    <cursor>
       <Cursor fx:constant="DEFAULT" />

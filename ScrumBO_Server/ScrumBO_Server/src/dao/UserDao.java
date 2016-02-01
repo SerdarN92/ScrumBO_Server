@@ -103,6 +103,36 @@ public class UserDao implements DaoInterface<User, Integer> {
 		return entity;
 	}
 	
+	public boolean checkIfEmailAlreadyExists(String email) {
+		boolean status = false;
+		List<User> list = null;
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				list = findAll();
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		Integer anzahl = 0;
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getEmail().equalsIgnoreCase(email)) {
+				anzahl++;
+			}
+		}
+		if (anzahl >= 1) {
+			status = true;
+		}
+		return status;
+	}
+	
 	public void delete(User entity) {
 		try {
 			Session s = HibernateUtil.openSession();

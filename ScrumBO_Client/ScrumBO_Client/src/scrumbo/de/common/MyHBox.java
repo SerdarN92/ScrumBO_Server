@@ -343,9 +343,14 @@ public class MyHBox extends HBox {
 		pane.setStyle("-fx-border-radius: 10px; -fx-border-style: solid;" + "-fx-border-width: 0.3;"
 				+ "-fx-border-color: black");
 				
-		Text taskInfo = new Text("Benutzer: " + String.valueOf(userstorytask.getBenutzer().getVorname().charAt(0))
-				+ String.valueOf(userstorytask.getBenutzer().getNachname().charAt(0)) + ", Aufwand: "
-				+ userstorytask.getAufwandinstunden() + "h");
+		Text taskInfo = new Text("");
+		if (userstorytask.getBenutzer() != null) {
+			taskInfo = new Text("Benutzer: " + String.valueOf(userstorytask.getBenutzer().getVorname().charAt(0))
+					+ String.valueOf(userstorytask.getBenutzer().getNachname().charAt(0)) + ", Aufwand: "
+					+ userstorytask.getAufwandinstunden() + "h");
+		} else {
+			taskInfo = new Text("Benutzer: " + ", Aufwand: " + userstorytask.getAufwandinstunden() + "h");
+		}
 		pane.setPadding(new Insets(1, 5, 1, 5));
 		pane.setVgap(2);
 		StringBuilder sb = new StringBuilder(userstorytask.getBeschreibung());

@@ -8,7 +8,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="847.0" prefWidth="764.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.SprintBacklogAddUserStoryController">
+<AnchorPane id="AnchorPane" prefHeight="758.0" prefWidth="764.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.SprintBacklogAddUserStoryController">
    <children>
       <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="240.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -26,13 +26,13 @@
          </font>
       </Label>
       <ComboBox fx:id="comboBoxUserStory" layoutX="323.0" layoutY="178.0" prefWidth="150.0" />
-      <ListView fx:id="listViewUserStoryTask" layoutX="162.0" layoutY="534.0" prefHeight="189.0" prefWidth="388.0" />
-      <Button fx:id="buttonAddTask" layoutX="445.0" layoutY="733.0" mnemonicParsing="false" onAction="#handleButtonAddTask" text="Task hinzufügen" />
-      <Button fx:id="buttonSave" layoutX="458.0" layoutY="767.0" mnemonicParsing="false" onAction="#handleButtonSave" text="Speichern">
+      <ListView fx:id="listViewUserStoryTask" layoutX="162.0" layoutY="534.0" prefHeight="109.0" prefWidth="388.0" />
+      <Button fx:id="buttonAddTask" layoutX="450.0" layoutY="652.0" mnemonicParsing="false" onAction="#handleButtonAddTask" text="Task hinzufügen" />
+      <Button fx:id="buttonSave" layoutX="463.0" layoutY="686.0" mnemonicParsing="false" onAction="#handleButtonSave" text="Speichern">
          <font>
             <Font size="16.0" />
          </font></Button>
-      <Button fx:id="buttonAbbort" layoutX="333.0" layoutY="767.0" mnemonicParsing="false" onAction="#handleButtonAbbort" text="Abbrechen">
+      <Button fx:id="buttonAbbort" layoutX="338.0" layoutY="686.0" mnemonicParsing="false" onAction="#handleButtonAbbort" text="Abbrechen">
          <font>
             <Font size="16.0" />
          </font></Button>
@@ -66,7 +66,7 @@
       <TextArea fx:id="beschreibung" editable="false" layoutX="325.0" layoutY="309.0" prefHeight="79.0" prefWidth="222.0" />
       <TextArea fx:id="akzeptanzkriterien" editable="false" layoutX="325.0" layoutY="401.0" prefHeight="79.0" prefWidth="222.0" />
       <TextField fx:id="aufwandintagen" editable="false" layoutX="325.0" layoutY="493.0" />
-      <Button fx:id="buttonRemoveTask" layoutX="336.0" layoutY="733.0" mnemonicParsing="false" onAction="#handleButtonRemoveTask" text="Task entfernen" />
+      <Button fx:id="buttonRemoveTask" layoutX="341.0" layoutY="652.0" mnemonicParsing="false" onAction="#handleButtonRemoveTask" text="Task entfernen" />
    </children>
    <cursor>
       <Cursor fx:constant="DEFAULT" />

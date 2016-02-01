@@ -141,6 +141,18 @@ public class AdminViewController implements Initializable {
 		txtConfigField.setText(ScrumBOClient.getDatabaseconfigfile());
 		hostField.setText(ScrumBOClient.getHost());
 		portField.setText(ScrumBOClient.getPort());
+		
+		buttonSave.setDisable(true);
+		
+		txtConfigField.textProperty().addListener((observable, oldValue, newValue) -> {
+			buttonSave.setDisable(false);
+		});
+		hostField.textProperty().addListener((observable, oldValue, newValue) -> {
+			buttonSave.setDisable(false);
+		});
+		portField.textProperty().addListener((observable, oldValue, newValue) -> {
+			buttonSave.setDisable(false);
+		});
 	}
 	
 }

@@ -50,7 +50,7 @@ public class SprintBacklogController implements Initializable {
 	@FXML
 	private ImageView						informationImage;
 	private Tooltip							tooltipSB				= new Tooltip(
-			"Ein Sprint Backlog wird im Laufe des Sprints verändert und entsteht beim Sprint Plannung.\n"
+			"Ein Sprint Backlog wird im Laufe des Sprints verändert und entsteht beim Sprint Planung.\n"
 					+ "Es enthält die User Stories, die in dem aktuellen Sprint bearbeitet werden.\n"
 					+ "User Stories werden bezüglich ihrer technischen Anforderungen untersucht und in Tasks aufgeteilt,\n"
 					+ "deren Aufwand (jetzt genauer) geschätzt wird. In einem Sprint sollen die Entwickler die Tasks\n"
@@ -185,6 +185,7 @@ public class SprintBacklogController implements Initializable {
 				buttonEndDay.setDisable(false);
 				buttonCreateNewSprint.setDisable(false);
 				buttonStartSprint.setDisable(true);
+				buttonAddUserStory.setDisable(true);
 				reloadSprintBacklog();
 			}
 			
@@ -369,6 +370,7 @@ public class SprintBacklogController implements Initializable {
 			buttonEndDay.setDisable(true);
 			buttonCreateNewSprint.setDisable(true);
 			buttonLoadSprint.setDisable(true);
+			buttonAddUserStory.setDisable(true);
 		}
 		
 		if (CurrentUser.isPO) {
@@ -479,6 +481,7 @@ public class SprintBacklogController implements Initializable {
 			buttonStartSprint.setDisable(false);
 			buttonEndDay.setDisable(true);
 			buttonCreateNewSprint.setDisable(true);
+			buttonAddUserStory.setDisable(false);
 		} else {
 			alert.close();
 		}

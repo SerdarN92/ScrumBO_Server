@@ -18,9 +18,9 @@ import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import scrumbo.de.app.ScrumBOClient;
-import scrumbo.de.entity.User;
-import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.CurrentProject;
+import scrumbo.de.entity.CurrentUser;
+import scrumbo.de.entity.User;
 
 public class BenutzerService {
 	
@@ -63,6 +63,38 @@ public class BenutzerService {
 				} else {
 					return false;
 				}
+			}
+		} catch (MalformedURLException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return false;
+	}
+	
+	public Boolean checkEmail(String email) throws JSONException {
+		try {
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/benutzer/sucheDoppelteMail/" + email + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setReadTimeout(5000);
+			conn.setRequestProperty("Accept", "application/json");
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
+			String output = br.readLine();
+			conn.disconnect();
+			
+			if (output.equals("Email bereits vergeben")) {
+				return true;
+			} else {
+				return false;
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -143,8 +175,8 @@ public class BenutzerService {
 		String output = "";
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
-					+ "/ScrumBO_Server/rest/benutzer/alle/scrumprojekt/entwickler/" + CurrentProject.projectId
-					+ "/" + ScrumBOClient.getDatabaseconfigfile());
+					+ "/ScrumBO_Server/rest/benutzer/alle/scrumprojekt/entwickler/" + CurrentProject.projectId + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
@@ -294,5 +326,35 @@ public class BenutzerService {
 			
 		}
 		return status;
+	}
+	
+	public User getUserByEmail(String email) {
+		User user = null;
+		String output = "";
+		try {
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/benutzer/suche/" + email + "/" + ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+			output = br.readLine();
+			conn.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Gson gson = new Gson();
+		Type listType = new TypeToken<LinkedList<User>>() {
+		}.getType();
+		user = gson.fromJson(output, User.class);
+		
+		return user;
 	}
 }

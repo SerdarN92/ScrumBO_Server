@@ -45,7 +45,7 @@ public class ScrumController implements Initializable {
 					+ "möglich zuerst abgearbeitet werden. Daher wird im Sprint Planning Meeting nicht über die Reihenfolge der Abarbeitung\n"
 					+ "der User Stories diskutiert sondern nur über die Anzahl.");
 	private Tooltip		tooltipSB	= new Tooltip(
-			"Ein Sprint Backlog wird im Laufe des Sprints verändert und entsteht beim Sprint Plannung.\n"
+			"Ein Sprint Backlog wird im Laufe des Sprints verändert und entsteht beim Sprint Planung.\n"
 					+ "Es enthält die User Stories, die in dem aktuellen Sprint bearbeitet werden.\n"
 					+ "User Stories werden bezüglich ihrer technischen Anforderungen untersucht und in Tasks aufgeteilt,\n"
 					+ "deren Aufwand (jetzt genauer) geschätzt wird. In einem Sprint sollen die Entwickler die Tasks\n"
@@ -57,8 +57,8 @@ public class ScrumController implements Initializable {
 	private Tooltip		tooltipSBC	= new Tooltip(
 			"Die Fortschrittsanalyse eines Projektes erfolgt bei Scrum innerhalb der Sprints anhand\n"
 					+ "eines Burndown Charts. Das Burndown Chart gibt Auskunft über die noch zu leistende Arbeit ab dem aktuellen Tag. Auf der\n"
-					+ "x-Achse wird der geschätzte verbleibende Aufwand aller Aufgaben des Sprints in Tagen angezeigt und auf der\n"
-					+ "y-Achse die Anzahl der Arbeitstage.");
+					+ "y-Achse wird der geschätzte verbleibende Aufwand aller Aufgaben des Sprints in Tagen angezeigt und auf der\n"
+					+ "x-Achse die Anzahl der Arbeitstage.");
 					
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
