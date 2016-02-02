@@ -23,6 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.CurrentUserStory;
 import scrumbo.de.entity.DefinitionOfDone;
 import scrumbo.de.service.DefinitionOfDoneService;
@@ -118,7 +119,7 @@ public class DefinitionOfDoneController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		definitionofdoneService = StartwindowController.getDefinitionofdoneService();
-		if (CurrentUserStory.status != 2) {
+		if (CurrentUserStory.status != 2 && CurrentUser.isPO) {
 			tableViewDefinitionOfDone.setRowFactory(tv -> {
 				TableRow<DefinitionOfDone> row = new TableRow<>();
 				row.setOnMouseClicked(event -> {
@@ -162,5 +163,9 @@ public class DefinitionOfDoneController implements Initializable {
 		tableViewDefinitionOfDone.setItems(data);
 		
 		Tooltip.install(informationImage, tooltipDoD);
+		
+		if (CurrentUser.isDev || CurrentUser.isSM) {
+			buttonCreateDefinitionOfDone.setDisable(true);
+		}
 	}
 }

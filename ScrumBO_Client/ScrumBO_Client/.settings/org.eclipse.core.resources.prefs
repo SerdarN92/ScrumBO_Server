@@ -1,5 +1,6 @@
 eclipse.preferences.version=1
 encoding//src/scrumbo/de/controller/AdminLoginController.java=UTF-8
+encoding//src/scrumbo/de/controller/UserAssignForProjectController.java=UTF-8
 encoding//src/scrumbo/de/controller/UserCreateController.java=UTF-8
 encoding//src/scrumbo/de/controller/UserCreateFailController.java=UTF-8
 encoding//src/scrumbo/de/controller/UserCreateForProjectController.java=UTF-8

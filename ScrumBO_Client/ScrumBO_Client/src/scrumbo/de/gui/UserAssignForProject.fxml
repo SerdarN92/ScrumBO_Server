@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.text.*?>
+<?import javafx.scene.image.*?>
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import scrumbo.de.common.*?>
+
+<AnchorPane id="AnchorPane" prefHeight="383.0" prefWidth="685.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.UserAssignForProjectController">
+   <children>
+      <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="75.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+         <image>
+            <Image url="@../../../content/logoScrumBO.png" />
+         </image>
+      </ImageView>
+      <Label layoutX="400.0" layoutY="65.0" text="Benutzer zuweisen">
+         <font>
+            <Font size="30.0" />
+         </font>
+      </Label>
+      <Label layoutX="155.0" layoutY="185.0" text="Rolle">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <Button fx:id="buttonAssignUser" layoutX="383.0" layoutY="288.0" mnemonicParsing="false" onAction="#handleButtonAssignUser" text="Benutzer zuweisen">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Button fx:id="buttonBackAssignUser" layoutX="150.0" layoutY="288.0" mnemonicParsing="false" onAction="#handleBackButtonAssignUser" text="Zurück">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
+      <Text fx:id="validFail" fill="#f50505" layoutX="174.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="337.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <RadioButton fx:id="radiobuttonProductOwner" layoutX="382.0" layoutY="192.0" mnemonicParsing="false" text="Product Owner" />
+      <RadioButton fx:id="radiobuttonDeveloper" layoutX="382.0" layoutY="221.0" mnemonicParsing="false" text="Entwickler" />
+      <Label layoutX="155.0" layoutY="142.0" text="Benutzer">
+         <font>
+            <Font size="21.0" />
+         </font>
+      </Label>
+      <ComboBox fx:id="comboBoxUser" layoutX="385.0" layoutY="145.0" prefWidth="150.0" />
+   </children>
+</AnchorPane>

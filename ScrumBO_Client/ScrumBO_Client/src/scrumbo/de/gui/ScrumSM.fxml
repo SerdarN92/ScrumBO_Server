@@ -98,6 +98,11 @@
             <Font size="16.0" />
          </font>
       </Text>
+      <Button fx:id="buttonAssignProjectUser" layoutX="624.0" layoutY="523.0" mnemonicParsing="false" onAction="#handleButtonAssignProjectUser" prefHeight="37.0" prefWidth="161.0" text="Benutzer zuweisen">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Button>
    </children>
    <cursor>
       <Cursor fx:constant="DEFAULT" />

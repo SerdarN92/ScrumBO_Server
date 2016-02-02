@@ -35,11 +35,11 @@ import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.common.Encryptor;
 import scrumbo.de.common.LetterTextField;
 import scrumbo.de.entity.CurrentProject;
-import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.Role;
 import scrumbo.de.entity.User;
 import scrumbo.de.service.BenutzerService;
@@ -79,17 +79,8 @@ public class UserCreateForProjectController implements Initializable {
 							
 	@FXML
 	private void handleBackButtonCreateUser(ActionEvent event) throws IOException {
-		if (CurrentUser.isSM) {
-			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
-			this.scene = new Scene(root);
-			Stage stage = (Stage) buttonBackCreateUser.getScene().getWindow();
-			stage.setScene(scene);
-		} else {
-			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Scrum.fxml"));
-			this.scene = new Scene(root);
-			Stage stage = (Stage) buttonBackCreateUser.getScene().getWindow();
-			stage.setScene(scene);
-		}
+		Stage stage = (Stage) buttonCreateUser.getScene().getWindow();
+		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 	}
 	
 	@FXML

@@ -231,6 +231,37 @@ public class BenutzerService {
 		return benutzerList;
 	}
 	
+	public List<User> ladeBenutzerOhneProjektzugriff() {
+		List<User> benutzerList = new LinkedList<User>();
+		String output = "";
+		try {
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/benutzer/alleOhneProjektZugriff/" + CurrentUser.userId + "/"
+					+ CurrentProject.projectId + "/" + ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+			output = br.readLine();
+			conn.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Gson gson = new Gson();
+		Type listType = new TypeToken<LinkedList<User>>() {
+		}.getType();
+		benutzerList = gson.fromJson(output, listType);
+		
+		return benutzerList;
+	}
+	
 	public boolean checkAdmission() throws JSONException {
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
@@ -249,7 +280,6 @@ public class BenutzerService {
 			String output = br.readLine();
 			conn.disconnect();
 			
-			Gson gson = new Gson();
 			if (output.equals("Ja")) {
 				return true;
 				

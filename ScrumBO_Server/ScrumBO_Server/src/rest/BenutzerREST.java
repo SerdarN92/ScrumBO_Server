@@ -21,9 +21,11 @@ import com.google.gson.Gson;
 import dto.UserDTO;
 import model.Role;
 import model.User;
+import model.UserStoryTask;
 import model.User_Role_Project;
 import service.RoleService;
 import service.UserService;
+import service.UserStoryTaskService;
 import service.User_Role_ProjectService;
 
 @Path("/benutzer")
@@ -48,6 +50,67 @@ public class BenutzerREST {
 		String output = gson.toJson(userDTOList);
 		
 		return Response.status(200).entity(output).build();
+	}
+	
+	@GET
+	@Path("/alleOhneProjektZugriff/{userId}/{projectId}/{hibernateconfigfilename}")
+	@Produces("application/json" + ";charset=utf-8")
+	public Response getAllUsersWithoutAssignForProject(@PathParam("userId") Integer userId,
+			@PathParam("projectId") Integer projectId,
+			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) throws JSONException {
+		UserService userService = new UserService(hibernateconfigfilename);
+		User_Role_ProjectService urpService = new User_Role_ProjectService(hibernateconfigfilename);
+		List<User_Role_Project> urpList = urpService.findAll();
+		List<User_Role_Project> urpListProject = urpService.findListByProjectId(projectId);
+		
+		List<UserDTO> userDTOList = new LinkedList<UserDTO>();
+		List<User> userList = userService.findAll();
+		List<Integer> ids = new LinkedList<Integer>();
+		
+		for (int i = 0; i < urpList.size(); i++) {
+			for (int j = 0; j < userList.size(); j++) {
+				if (urpList.get(i).getPk().getRoleId().equals(4)) {
+					if (userList.get(j).getId().equals(urpList.get(i).getPk().getUserId())) {
+						userList.remove(j);
+					}
+				}
+				if (urpList.get(i).getPk().getUserId().equals(userId)) {
+					if (userList.get(j).getId().equals(urpList.get(i).getPk().getUserId())) {
+						userList.remove(j);
+					}
+				}
+				if (urpList.get(i).getPk().getProjectId().equals(projectId)) {
+					if (userList.get(j).getId().equals(urpList.get(i).getPk().getUserId())) {
+						ids.add(userList.get(j).getId());
+						userList.remove(j);
+					}
+				}
+			}
+		}
+		
+		for (int i = 0; i < userList.size(); i++) {
+			for (int j = 0; j < ids.size(); j++) {
+				if (userList.get(i).getId().equals(ids.get(j))) {
+					userList.remove(i);
+				}
+			}
+		}
+		
+		for (int j = 0; j < userList.size(); j++) {
+			UserDTO userDTO = new UserDTO(userList.get(j).getId(), userList.get(j).getPrename(),
+					userList.get(j).getLastname(), userList.get(j).getPassword(), userList.get(j).getEmail());
+			userDTOList.add(userDTO);
+		}
+		
+		// Set<UserDTO> setList = new LinkedHashSet<>(userDTOList);
+		// userDTOList.clear();
+		// userDTOList.addAll(setList);
+		
+		Gson gson = new Gson();
+		String output = gson.toJson(userDTOList);
+		
+		return Response.status(200).entity(output).build();
+		
 	}
 	
 	@GET
@@ -317,9 +380,19 @@ public class BenutzerREST {
 		UserDTO userDTO = gson.fromJson(userDetails, UserDTO.class);
 		UserService userService = new UserService(hibernateconfigfilename);
 		User_Role_ProjectService urpService = new User_Role_ProjectService(hibernateconfigfilename);
+		UserStoryTaskService userstorytaskService = new UserStoryTaskService(hibernateconfigfilename);
+		
+		User user = userService.findById(userDTO.getId());
+		for (int i = 0; i < user.getUserstorytask().size(); i++) {
+			UserStoryTask userstorytask = userstorytaskService.findById(user.getUserstorytask().get(i).getId());
+			userstorytask.setUser(null);
+			userstorytaskService.update(userstorytask);
+			user.getUserstorytask().get(i).setUser(null);
+		}
 		
 		String output = "";
 		try {
+			userService.update(user);
 			userService.delete(userDTO.getId());
 			urpService.deleteBenutzer(userDTO.getId());
 			output = "Benutzer erfolgreich gelöscht";
@@ -327,6 +400,27 @@ public class BenutzerREST {
 			e.printStackTrace();
 			output = "Benutzer wurde nicht erfolgreich gelöscht";
 		}
+		return Response.status(200).entity(output).build();
+	}
+	
+	@GET
+	@Path("/assign/{userId}/{roleId}/{projectId}/{hibernateconfigfilename}")
+	@Produces("application/json" + ";charset=utf-8")
+	public Response assignUserForProject(@PathParam("hibernateconfigfilename") String hibernateconfigfilename,
+			@PathParam("userId") Integer userId, @PathParam("roleId") Integer roleId,
+			@PathParam("projectId") Integer projectId) throws JSONException {
+		String output = "Fail";
+		try {
+			User_Role_ProjectService urpService = new User_Role_ProjectService(hibernateconfigfilename);
+			User_Role_Project urp = new User_Role_Project();
+			User_Role_Project.Pk pk = new User_Role_Project.Pk(userId, roleId, projectId);
+			urp.setPk(pk);
+			urpService.persist(urp);
+			output = "Ok";
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 		return Response.status(200).entity(output).build();
 	}
 	

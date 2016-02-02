@@ -88,7 +88,7 @@ public class StartwindowController implements Initializable {
 			
 		Tooltip tooltip = new Tooltip(
 				"Herzlich Willkommen zum ScrumBO! \nDiese Applikation ermöglicht es Ihnen Projektmanagement \nnach Scrum zu betreiben.");
-		setupCustomTooltipBehavior(650, 10000, 12000);
+		setupCustomTooltipBehavior(650, 10000, 650);
 		Tooltip.install(informationImage, tooltip);
 	}
 	

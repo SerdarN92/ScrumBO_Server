@@ -205,35 +205,35 @@ public class ProductBacklogController implements Initializable {
 		
 		tableViewProductBacklog.setRowFactory(tv -> {
 			TableRow<UserStory> row = new TableRow<>();
-			if (CurrentUser.isPO) {
-				row.setOnMouseClicked(event -> {
-					if (event.getClickCount() == 1 && (!row.isEmpty())) {
-						rowData = row.getItem();
-						try {
-							FXMLLoader fxmlLoader = new FXMLLoader(
-									getClass().getResource("/scrumbo/de/gui/UserStoryEdit.fxml"));
-							Parent root1 = (Parent) fxmlLoader.load();
-							Stage stage = new Stage();
-							stage.initModality(Modality.APPLICATION_MODAL);
-							stage.setScene(new Scene(root1));
-							stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-								@Override
-								public void handle(WindowEvent event) {
-									try {
-										data.clear();
-										reload();
-									} catch (IOException e) {
-										e.printStackTrace();
-									}
+			// if (CurrentUser.isPO) {
+			row.setOnMouseClicked(event -> {
+				if (event.getClickCount() == 1 && (!row.isEmpty())) {
+					rowData = row.getItem();
+					try {
+						FXMLLoader fxmlLoader = new FXMLLoader(
+								getClass().getResource("/scrumbo/de/gui/UserStoryEdit.fxml"));
+						Parent root1 = (Parent) fxmlLoader.load();
+						Stage stage = new Stage();
+						stage.initModality(Modality.APPLICATION_MODAL);
+						stage.setScene(new Scene(root1));
+						stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+							@Override
+							public void handle(WindowEvent event) {
+								try {
+									data.clear();
+									reload();
+								} catch (IOException e) {
+									e.printStackTrace();
 								}
-							});
-							stage.show();
-						} catch (Exception e) {
-							e.printStackTrace();
-						}
+							}
+						});
+						stage.show();
+					} catch (Exception e) {
+						e.printStackTrace();
 					}
-				});
-			}
+				}
+			});
+			// }
 			return row;
 		});
 		

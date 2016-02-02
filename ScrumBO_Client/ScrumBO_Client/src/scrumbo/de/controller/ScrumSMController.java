@@ -33,6 +33,8 @@ public class ScrumSMController implements Initializable {
 	@FXML
 	private Button			buttonAddProjectUser;
 	@FXML
+	private Button			buttonAssignProjectUser;
+	@FXML
 	private ImageView		imageProductBacklog;
 	@FXML
 	private ImageView		imageSprintBacklog;
@@ -69,6 +71,21 @@ public class ScrumSMController implements Initializable {
 			"Ein Impediment Backlog besteht aus den Eintragungen von Hindernissen, die das\n"
 					+ "Entwicklungsteam an effektiver Arbeit hindern inklusive Datum des Auftretens und Datum der Behebung.");
 					
+	@FXML
+	private void handleButtonAssignProjectUser(ActionEvent event) throws Exception {
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/scrumbo/de/gui/UserAssignForProject.fxml"));
+			Parent root1 = (Parent) fxmlLoader.load();
+			Stage stage = new Stage();
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.setScene(new Scene(root1));
+			stage.show();
+			stage.setResizable(false);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
 	@FXML
 	private void handleButtonAddProjectUser(ActionEvent event) throws Exception {
 		try {

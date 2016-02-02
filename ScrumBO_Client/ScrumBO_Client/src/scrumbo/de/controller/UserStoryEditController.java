@@ -21,6 +21,7 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import scrumbo.de.entity.CurrentProject;
+import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.CurrentUserStory;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.service.UserstoryService;
@@ -289,7 +290,7 @@ public class UserStoryEditController implements Initializable {
 		aufwandintagen.setText(data.getEffortInDays().toString());
 		CurrentUserStory.status = data.getStatus();
 		
-		if (data.getStatus() == 2) {
+		if (data.getStatus() == 2 || CurrentUser.isDev || CurrentUser.isSM) {
 			buttonDelete.setDisable(true);
 			buttonUpdate.setDisable(true);
 			buttonAbbort.setText("Schlieﬂen");
