@@ -14,15 +14,19 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
+import javafx.scene.shape.Circle;
+import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import javafx.util.Callback;
 import scrumbo.de.common.MyToolBox;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.CurrentUserStory;
@@ -157,7 +161,39 @@ public class DefinitionOfDoneController implements Initializable {
 		
 		tableColumnKriterien.setCellValueFactory(new PropertyValueFactory<DefinitionOfDone, String>("kriterium"));
 		tableColumnStatus.setCellValueFactory(new PropertyValueFactory<DefinitionOfDone, Boolean>("status"));
-		
+		tableColumnStatus.setCellFactory(
+				new Callback<TableColumn<DefinitionOfDone, Boolean>, TableCell<DefinitionOfDone, Boolean>>() {
+					@Override
+					public TableCell<DefinitionOfDone, Boolean> call(TableColumn<DefinitionOfDone, Boolean> param) {
+						final TableCell<DefinitionOfDone, Boolean> cell = new TableCell<DefinitionOfDone, Boolean>() {
+							private boolean status;
+							
+							@Override
+							public void updateItem(Boolean item, boolean empty) {
+								super.updateItem(item, empty);
+								Circle circle = null;
+								if (!isEmpty()) {
+									
+									status = item;
+									
+									Text text = new Text();
+									
+									if (status) {
+										text.setText("Erfüllt");
+									} else {
+										text.setText("Nicht erfüllt");
+									}
+									
+									setGraphic(text);
+								} else {
+									setGraphic(null);
+								}
+							}
+						};
+						return cell;
+					}
+				});
+				
 		tableViewDefinitionOfDone.setItems(data);
 		
 		MyToolBox toolbox = new MyToolBox();

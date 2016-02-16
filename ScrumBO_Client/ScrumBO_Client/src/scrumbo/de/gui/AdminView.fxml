@@ -7,7 +7,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="396.0" prefWidth="678.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.AdminViewController">
+<AnchorPane id="AnchorPane" prefHeight="396.0" prefWidth="678.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.AdminViewController">
    <children>
       <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="75.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -40,7 +40,7 @@
             <Font size="16.0" />
          </font>
       </Text>
-      <Button fx:id="buttonAddSM" layoutX="229.0" layoutY="331.0" mnemonicParsing="false" onAction="#handleAddSMButton" text="Scrum Master hinzufügen">
+      <Button fx:id="buttonAddSM" layoutX="229.0" layoutY="331.0" mnemonicParsing="false" onAction="#handleAddSMButton" text="Scrum Master anlegen">
          <font>
             <Font size="16.0" />
          </font>

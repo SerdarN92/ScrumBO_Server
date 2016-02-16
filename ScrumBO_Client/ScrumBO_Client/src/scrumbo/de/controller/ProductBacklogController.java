@@ -257,7 +257,7 @@ public class ProductBacklogController implements Initializable {
 		tableColumnThema.setGraphic(themaLabel);
 		tableColumnBeschreibung.setCellValueFactory(new PropertyValueFactory<UserStory, String>("description"));
 		tableColumnBeschreibung.setText(null);
-		Label beschreibungLabel = new Label("Thema");
+		Label beschreibungLabel = new Label("Beschreibung");
 		beschreibungLabel.setTooltip(new Tooltip("Ausführliche Formulierung der User Story"));
 		tableColumnBeschreibung.setGraphic(beschreibungLabel);
 		tableColumnBeschreibung
