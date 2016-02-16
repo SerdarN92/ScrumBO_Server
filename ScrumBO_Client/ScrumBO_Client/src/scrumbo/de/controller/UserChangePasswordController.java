@@ -1,7 +1,10 @@
 package scrumbo.de.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+
+import org.json.JSONException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -11,6 +14,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import scrumbo.de.common.Encryptor;
@@ -35,7 +40,12 @@ public class UserChangePasswordController implements Initializable {
 	private Text			txtError;
 							
 	@FXML
-	private void handleButtonSave(ActionEvent event) throws Exception {
+	private void handleKeyPressed(KeyEvent event) throws JSONException, IOException, Exception {
+		if (event.getCode().equals(KeyCode.ENTER))
+			saveChangedPW();
+	}
+	
+	private void saveChangedPW() throws JSONException, IOException {
 		if (passwordCheck()) {
 			User benutzer = new User();
 			benutzer.setId(CurrentUser.userId);
@@ -59,6 +69,11 @@ public class UserChangePasswordController implements Initializable {
 			} else {
 			}
 		}
+	}
+	
+	@FXML
+	private void handleButtonSave(ActionEvent event) throws Exception {
+		saveChangedPW();
 	}
 	
 	private Boolean passwordCheck() {

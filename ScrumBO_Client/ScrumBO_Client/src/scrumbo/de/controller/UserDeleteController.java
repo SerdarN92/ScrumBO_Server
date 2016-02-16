@@ -20,27 +20,30 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
+import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.User;
 import scrumbo.de.service.BenutzerService;
 
 public class UserDeleteController implements Initializable {
 	
-	Parent						root;
-	Scene						scene;
-	BenutzerService				benutzerService		= null;
+	Parent					root;
+	Scene					scene;
+	BenutzerService			benutzerService		= null;
 	@FXML
 	private ComboBox<User>	comboBoxBenutzer	= new ComboBox<>();
 	@FXML
-	private Button				buttonAbbort;
+	private Button			buttonAbbort;
 	@FXML
-	private Button				buttonDelete;
+	private Button			buttonDelete;
 	private List<User>		benutzerList		= new LinkedList<User>();
 	private User			currentBenutzer		= new User();
-													
+												
 	@FXML
 	private void handleButtonAbbort(ActionEvent event) throws Exception {
 		Stage stage = (Stage) buttonDelete.getScene().getWindow();
@@ -48,7 +51,12 @@ public class UserDeleteController implements Initializable {
 	}
 	
 	@FXML
-	private void handleButtonDelete(ActionEvent event) throws Exception {
+	private void handleKeyPressed(KeyEvent event) {
+		if (event.getCode().equals(KeyCode.ENTER))
+			deleteUser();
+	}
+	
+	private void deleteUser() {
 		if (currentBenutzer.getId() != null) {
 			try {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -89,6 +97,11 @@ public class UserDeleteController implements Initializable {
 		}
 	}
 	
+	@FXML
+	private void handleButtonDelete(ActionEvent event) throws Exception {
+		deleteUser();
+	}
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		benutzerService = StartwindowController.getBenutzerService();
@@ -102,7 +115,8 @@ public class UserDeleteController implements Initializable {
 		
 		ObservableList<User> options = FXCollections.observableArrayList();
 		for (int i = 0; i < benutzerList.size(); i++) {
-			options.add(benutzerList.get(i));
+			if (!benutzerList.get(i).getId().equals(CurrentUser.userId))
+				options.add(benutzerList.get(i));
 		}
 		comboBoxBenutzer.getItems().addAll(options);
 		comboBoxBenutzer.setOnMousePressed(new EventHandler<MouseEvent>() {

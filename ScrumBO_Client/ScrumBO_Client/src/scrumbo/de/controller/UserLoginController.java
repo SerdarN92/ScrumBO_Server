@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.json.JSONException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +20,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import scrumbo.de.common.Encryptor;
@@ -62,7 +66,12 @@ public class UserLoginController implements Initializable {
 	}
 	
 	@FXML
-	private void handleLoginButton(ActionEvent event) throws Exception {
+	private void handleKeyPressed(KeyEvent event) throws JSONException, IOException, Exception {
+		if (event.getCode().equals(KeyCode.ENTER))
+			login();
+	}
+	
+	private void login() throws JSONException, IOException, Exception {
 		if (checkEmail() && checkPassword()) {
 			if (!benutzerService.checkIfEmailExists(txtFieldEmail.getText())) {
 				emailValidFail.setText("Benutzer mit dieser E-Mail existiert nicht.");
@@ -109,6 +118,11 @@ public class UserLoginController implements Initializable {
 				
 			}
 		}
+	}
+	
+	@FXML
+	private void handleLoginButton(ActionEvent event) throws Exception {
+		login();
 	}
 	
 	private Boolean checkEmail() {

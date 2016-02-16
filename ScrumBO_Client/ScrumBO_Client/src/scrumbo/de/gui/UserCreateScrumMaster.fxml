@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import scrumbo.de.common.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="406.0" prefWidth="665.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.UserCreateScrumMasterController">
+<AnchorPane id="AnchorPane" prefHeight="406.0" prefWidth="665.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.UserCreateScrumMasterController">
    <children>
       <ImageView fitHeight="101.0" fitWidth="149.0" layoutX="15.0" layoutY="12.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -36,9 +36,9 @@
             <Font size="21.0" />
          </font>
       </Label>
-      <LetterTextField fx:id="txtFieldPrename" layoutX="282.0" layoutY="149.0" />
-      <LetterTextField fx:id="txtFieldLastname" layoutX="282.0" layoutY="191.0" />
-      <TextField fx:id="txtFieldEmail" layoutX="282.0" layoutY="232.0" prefHeight="25.0" prefWidth="180.0" />
+      <LetterTextField fx:id="txtFieldPrename" layoutX="282.0" layoutY="149.0" onKeyPressed="#handleKeyPressed"/>
+      <LetterTextField fx:id="txtFieldLastname" layoutX="282.0" layoutY="191.0" onKeyPressed="#handleKeyPressed"/>
+      <TextField fx:id="txtFieldEmail" layoutX="282.0" layoutY="232.0" onKeyPressed="#handleKeyPressed" prefHeight="25.0" prefWidth="180.0" />
       <Button fx:id="buttonCreateSM" layoutX="282.0" layoutY="283.0" mnemonicParsing="false" onAction="#handleButtonCreateSM" text="Scrum Master anlegen">
          <font>
             <Font size="16.0" />

@@ -10,6 +10,8 @@ import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 
+import org.json.JSONException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,6 +20,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -64,7 +68,12 @@ public class UserCreateScrumMasterController implements Initializable {
 	}
 	
 	@FXML
-	private void handleButtonCreateSM(ActionEvent event) throws Exception {
+	private void handleKeyPressed(KeyEvent event) throws JSONException, IOException {
+		if (event.getCode().equals(KeyCode.ENTER))
+			createSM();
+	}
+	
+	private void createSM() throws JSONException, IOException {
 		if (checkPreName() && checkLastName() && checkEmail()) {
 			if (benutzerService.checkEmail(txtFieldEmail.getText())) {
 				txtEmail.setText("E-Mail Adresse bereits vorhanden.");
@@ -95,6 +104,11 @@ public class UserCreateScrumMasterController implements Initializable {
 				}
 			}
 		}
+	}
+	
+	@FXML
+	private void handleButtonCreateSM(ActionEvent event) throws Exception {
+		createSM();
 	}
 	
 	private Boolean checkEmail() {

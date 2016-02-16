@@ -20,6 +20,8 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -29,26 +31,25 @@ import scrumbo.de.service.ScrumprojektService;
 
 public class ProjektLoeschenController implements Initializable {
 	
-	Parent							root;
-	Scene							scene;
-	ScrumprojektService				scrumprojektService	= null;
+	Parent						root;
+	Scene						scene;
+	ScrumprojektService			scrumprojektService	= null;
 	@FXML
 	private ComboBox<Project>	comboBoxProjekte	= new ComboBox<>();
 	@FXML
-	private Button					buttonAbbort;
+	private Button				buttonAbbort;
 	@FXML
-	private Button					buttonDelete;
+	private Button				buttonDelete;
 	private List<Project>		scrumprojectList	= new LinkedList<Project>();
-	private Project			currentScrumproject	= new Project();
-														
+	private Project				currentScrumproject	= new Project();
+													
 	@FXML
 	private void handleButtonAbbort(ActionEvent event) throws Exception {
 		Stage stage = (Stage) buttonDelete.getScene().getWindow();
 		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 	}
 	
-	@FXML
-	private void handleButtonDelete(ActionEvent event) throws Exception {
+	private void deleteProject() {
 		if (currentScrumproject.getId() != null) {
 			try {
 				Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -92,6 +93,17 @@ public class ProjektLoeschenController implements Initializable {
 		}
 	}
 	
+	@FXML
+	private void handleButtonDelete(ActionEvent event) throws Exception {
+		deleteProject();
+	}
+	
+	@FXML
+	private void handleKeyPressed(KeyEvent event) {
+		if (event.getCode().equals(KeyCode.ENTER))
+			deleteProject();
+	}
+	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		scrumprojektService = StartwindowController.getScrumprojektService();
@@ -127,9 +139,8 @@ public class ProjektLoeschenController implements Initializable {
 			}
 		});
 		
-		comboBoxProjekte.valueProperty()
-				.addListener((ChangeListener<Project>) (ov, t, t1) -> currentScrumproject = t1);
-				
+		comboBoxProjekte.valueProperty().addListener((ChangeListener<Project>) (ov, t, t1) -> currentScrumproject = t1);
+		
 	}
 	
 }

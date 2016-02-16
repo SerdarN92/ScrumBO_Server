@@ -18,7 +18,6 @@ import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import scrumbo.de.app.ScrumBOClient;
-import scrumbo.de.entity.CurrentUser;
 
 public class AdminViewController implements Initializable {
 	
@@ -47,15 +46,7 @@ public class AdminViewController implements Initializable {
 						
 	@FXML
 	private void handleBackButton(ActionEvent event) throws Exception {
-		CurrentUser.userId = -1;
-		CurrentUser.prename = null;
-		CurrentUser.lastname = null;
-		CurrentUser.email = null;
-		CurrentUser.password = null;
-		CurrentUser.roleId = -1;
-		CurrentUser.role = null;
-		CurrentUser.projects = null;
-		CurrentUser.isSM = false;
+		StartwindowController.logout();
 		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		this.scene = new Scene(root);

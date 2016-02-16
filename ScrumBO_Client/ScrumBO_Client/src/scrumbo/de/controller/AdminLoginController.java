@@ -9,6 +9,8 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import org.json.JSONException;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -18,10 +20,12 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import scrumbo.de.entity.User;
 import scrumbo.de.entity.CurrentUser;
+import scrumbo.de.entity.User;
 import scrumbo.de.service.BenutzerService;
 
 /**
@@ -36,7 +40,7 @@ public class AdminLoginController implements Initializable {
 	Parent					root;
 	Scene					scene;
 	BenutzerService			benutzerService	= null;
-	User				benutzer		= null;
+	User					benutzer		= null;
 	@FXML
 	private TextField		txtFieldEmail;
 	@FXML
@@ -59,7 +63,17 @@ public class AdminLoginController implements Initializable {
 	}
 	
 	@FXML
+	private void handleKeyPressed(KeyEvent event) throws JSONException, IOException, Exception {
+		if (event.getCode().equals(KeyCode.ENTER))
+			handleLogin();
+	}
+	
+	@FXML
 	private void handleLoginButton(ActionEvent event) throws Exception {
+		handleLogin();
+	}
+	
+	public void handleLogin() throws JSONException, IOException, Exception {
 		if (checkEmail() && checkPassword()) {
 			if (!benutzerService.checkIfEmailExists(txtFieldEmail.getText())) {
 				emailValidFail
