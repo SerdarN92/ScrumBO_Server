@@ -231,4 +231,25 @@ public class SprintREST {
 		return Response.status(200).entity(output).build();
 	}
 	
+	@Path("/removeIncompleteUserStories/{sprintid}/{hibernateconfigfilename}")
+	@GET
+	@Produces("application/json" + ";charset=utf-8")
+	public Response removeIncompleteUserStories(@PathParam("sprintid") Integer sprintid,
+			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
+		String output = "";
+		UserStoryService userStoryService = new UserStoryService(hibernateconfigfilename);
+		List<UserStory> list = userStoryService.findAllBySprintId(sprintid);
+		for (int i = 0; i < list.size(); i++) {
+			if (list.get(i).getStatus() == 0 || list.get(i).getStatus() == 1) {
+				list.get(i).setSprint(null);
+				for (int j = 0; j < list.get(i).getUserstorytask().size(); j++) {
+					list.get(i).getUserstorytask().remove(j);
+				}
+			}
+			userStoryService.update(list.get(i));
+		}
+		
+		return Response.status(200).entity(output).build();
+	}
+	
 }

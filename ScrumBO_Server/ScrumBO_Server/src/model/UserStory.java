@@ -46,7 +46,7 @@ public class UserStory {
 	@Column(name = "status", unique = false, nullable = true)
 	private Integer					status;
 									
-	@ManyToOne(fetch = FetchType.LAZY)
+	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name = "productbacklog_id", nullable = true)
 	private ProductBacklog			productbacklog;
 									

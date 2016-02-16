@@ -33,6 +33,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import scrumbo.de.common.MyHBox;
+import scrumbo.de.common.MyToolBox;
 import scrumbo.de.entity.CurrentBurndownChart;
 import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentSprint;
@@ -49,16 +50,6 @@ public class SprintBacklogController implements Initializable {
 	SprintbacklogService					sprintbacklogService	= null;
 	@FXML
 	private ImageView						informationImage;
-	private Tooltip							tooltipSB				= new Tooltip(
-			"Ein Sprint Backlog wird im Laufe des Sprints verändert und entsteht beim Sprint Planung.\n"
-					+ "Es enthält die User Stories, die in dem aktuellen Sprint bearbeitet werden.\n"
-					+ "User Stories werden bezüglich ihrer technischen Anforderungen untersucht und in Tasks aufgeteilt,\n"
-					+ "deren Aufwand (jetzt genauer) geschätzt wird. In einem Sprint sollen die Entwickler die Tasks\n"
-					+ "zu den hoch priorisierten User Stories des Sprints zuerst abarbeiten.\n"
-					+ "Gibt es mehr als eine User Story mit derselben Priorisierung, wird keine weitere Angabe\n"
-					+ "zur Reihenfolge gemacht. Sind Tasks einer User Story in Bearbeitung und noch weitere\n"
-					+ "Tasks dieser User Story vorhanden, so soll ein Entwickler, der ein neues Task zweck\n"
-					+ "Bearbeitung aussucht, erst ein Task der aktuellen bearbeiteten User Story aussuchen.");
 	@FXML
 	private Button							buttonLogout;
 	@FXML
@@ -301,17 +292,7 @@ public class SprintBacklogController implements Initializable {
 	
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
-		CurrentUser.userId = -1;
-		CurrentUser.prename = null;
-		CurrentUser.lastname = null;
-		CurrentUser.email = null;
-		CurrentUser.password = null;
-		CurrentUser.roleId = -1;
-		CurrentUser.role = null;
-		CurrentUser.projects = null;
-		CurrentProject.projectId = -1;
-		CurrentProject.projectname = null;
-		CurrentUser.isSM = false;
+		StartwindowController.logout();
 		
 		pause();
 		
@@ -395,7 +376,8 @@ public class SprintBacklogController implements Initializable {
 			}
 		}, 0, 10000);
 		
-		Tooltip.install(informationImage, tooltipSB);
+		MyToolBox toolbox = new MyToolBox();
+		Tooltip.install(informationImage, toolbox.getTooltipSprintBacklog());
 	}
 	
 	private void initSprintBacklog() {
@@ -469,7 +451,7 @@ public class SprintBacklogController implements Initializable {
 		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
 		
 		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == buttonTypeOne) {
+		if (result.get() == buttonTypeOne && sprintbacklogService.removeIncompleteUserStories()) {
 			alert.close();
 			Sprint sprint = sprintbacklogService.addNewSprintToSprintBacklog();
 			CurrentSprint.id = sprint.getId();

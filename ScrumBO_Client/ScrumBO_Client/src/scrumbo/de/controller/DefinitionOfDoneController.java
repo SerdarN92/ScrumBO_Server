@@ -23,6 +23,7 @@ import javafx.scene.image.ImageView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import scrumbo.de.common.MyToolBox;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.CurrentUserStory;
 import scrumbo.de.entity.DefinitionOfDone;
@@ -37,9 +38,6 @@ public class DefinitionOfDoneController implements Initializable {
 	public static DefinitionOfDone					rowData;
 	@FXML
 	private ImageView								informationImage;
-	private Tooltip									tooltipDoD				= new Tooltip(
-			"Eine Definition of Done ist die Einigung eines agilen Teams darauf,\n"
-					+ "was getan werden muss, damit ein Feature als fertig angesehen wird.");
 	@FXML
 	private Button									buttonBack;
 	@FXML
@@ -162,7 +160,8 @@ public class DefinitionOfDoneController implements Initializable {
 		
 		tableViewDefinitionOfDone.setItems(data);
 		
-		Tooltip.install(informationImage, tooltipDoD);
+		MyToolBox toolbox = new MyToolBox();
+		Tooltip.install(informationImage, toolbox.getTooltipDoD());
 		
 		if (CurrentUser.isDev || CurrentUser.isSM) {
 			buttonCreateDefinitionOfDone.setDisable(true);

@@ -14,7 +14,6 @@ import javafx.scene.control.Button;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import scrumbo.de.entity.CurrentUser;
 
 public class ProjectController implements Initializable {
 	
@@ -31,15 +30,7 @@ public class ProjectController implements Initializable {
 						
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
-		CurrentUser.userId = -1;
-		CurrentUser.prename = null;
-		CurrentUser.lastname = null;
-		CurrentUser.email = null;
-		CurrentUser.password = null;
-		CurrentUser.roleId = -1;
-		CurrentUser.role = null;
-		CurrentUser.projects = null;
-		CurrentUser.isSM = false;
+		StartwindowController.logout();
 		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		this.scene = new Scene(root);

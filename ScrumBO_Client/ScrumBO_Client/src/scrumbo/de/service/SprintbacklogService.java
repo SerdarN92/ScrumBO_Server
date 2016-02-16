@@ -21,6 +21,29 @@ import scrumbo.de.entity.UserStory;
 
 public class SprintbacklogService {
 	
+	public boolean removeIncompleteUserStories() {
+		boolean status = true;
+		try {
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/sprint/removeIncompleteUserStories/" + CurrentSprint.id + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
+			
+			if (conn.getResponseCode() != 200) {
+				status = false;
+				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
+			}
+			
+			conn.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return status;
+	}
+	
 	public Sprint addNewSprintToSprintBacklog() {
 		String output = "";
 		try {

@@ -26,9 +26,9 @@ import javafx.scene.layout.Pane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
+import scrumbo.de.common.MyToolBox;
 import scrumbo.de.entity.BurndownChartPoint;
 import scrumbo.de.entity.CurrentBurndownChart;
-import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentSprint;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.service.SprintbacklogService;
@@ -40,11 +40,7 @@ public class BurndownChartController implements Initializable {
 	private SprintbacklogService		sprintbacklogService;
 	@FXML
 	private ImageView					informationImage;
-	private Tooltip						tooltipSBC	= new Tooltip(
-			"Die Fortschrittsanalyse eines Projektes erfolgt bei Scrum innerhalb der Sprints anhand\n"
-					+ "eines Burndown Charts. Das Burndown Chart gibt Auskunft über die noch zu leistende Arbeit ab dem aktuellen Tag. Auf der\n"
-					+ "y-Achse wird der geschätzte verbleibende Aufwand aller Aufgaben des Sprints in Tagen angezeigt und auf der\n"
-					+ "x-Achse die Anzahl der Arbeitstage.");
+										
 	@FXML
 	private Button						buttonLogout;
 	@FXML
@@ -169,18 +165,7 @@ public class BurndownChartController implements Initializable {
 	
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
-		CurrentUser.userId = -1;
-		CurrentUser.prename = null;
-		CurrentUser.lastname = null;
-		CurrentUser.email = null;
-		CurrentUser.password = null;
-		CurrentUser.roleId = -1;
-		CurrentUser.role = null;
-		CurrentUser.projects = null;
-		CurrentProject.projectId = -1;
-		CurrentProject.projectname = null;
-		CurrentUser.isSM = false;
-		
+		StartwindowController.logout();
 		timer.cancel();
 		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
@@ -224,7 +209,9 @@ public class BurndownChartController implements Initializable {
 			}
 		}, 0, 10000);
 		
-		Tooltip.install(informationImage, tooltipSBC);
+		MyToolBox toolbox = new MyToolBox();
+		
+		Tooltip.install(informationImage, toolbox.getTooltipBurndownChart());
 	}
 	
 	private void initBurndownChart() {

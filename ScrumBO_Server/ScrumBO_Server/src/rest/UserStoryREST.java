@@ -349,9 +349,11 @@ public class UserStoryREST {
 					userstoryTaskDTO
 							.setEffortInHours(userstoryListe.get(i).getUserstorytask().get(j).getEffortInHours());
 					User benutzer = userstoryListe.get(i).getUserstorytask().get(j).getUser();
-					UserDTO benutzerDTO = new UserDTO(benutzer.getId(), benutzer.getPrename(), benutzer.getLastname(),
-							benutzer.getPassword(), benutzer.getEmail());
-					userstoryTaskDTO.setUser(benutzerDTO);
+					if (benutzer != null) {
+						UserDTO benutzerDTO = new UserDTO(benutzer.getId(), benutzer.getPrename(),
+								benutzer.getLastname(), benutzer.getPassword(), benutzer.getEmail());
+						userstoryTaskDTO.setUser(benutzerDTO);
+					}
 					Taskstatus taskstatus = userstoryListe.get(i).getUserstorytask().get(j).getTaskstatus();
 					TaskstatusDTO taskstatusDTO = new TaskstatusDTO(taskstatus.getId(), taskstatus.getDescription());
 					userstoryTaskDTO.setTaskstatus(taskstatusDTO);

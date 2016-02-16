@@ -29,6 +29,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
+import scrumbo.de.common.MyToolBox;
 import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.Impediment;
@@ -42,9 +43,7 @@ public class ImpedimentBacklogController implements Initializable {
 	ImpedimentService							impedimentService	= null;
 	@FXML
 	private ImageView							informationImage;
-	private Tooltip								tooltipIB			= new Tooltip(
-			"Ein Impediment Backlog besteht aus den Eintragungen von Hindernissen, die das\n"
-					+ "Entwicklungsteam an effektiver Arbeit hindern inklusive Datum des Auftretens und Datum der Behebung.");
+												
 	public static Impediment					rowData;
 	@FXML
 	private Text								vorname;
@@ -104,17 +103,8 @@ public class ImpedimentBacklogController implements Initializable {
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
 		data.clear();
-		CurrentUser.userId = -1;
-		CurrentUser.prename = null;
-		CurrentUser.lastname = null;
-		CurrentUser.email = null;
-		CurrentUser.password = null;
-		CurrentUser.roleId = -1;
-		CurrentUser.role = null;
-		CurrentUser.projects = null;
-		CurrentProject.projectId = -1;
-		CurrentProject.projectname = null;
-		CurrentUser.isSM = false;
+		
+		StartwindowController.logout();
 		
 		timer.cancel();
 		
@@ -243,7 +233,9 @@ public class ImpedimentBacklogController implements Initializable {
 			}
 		}, 0, 10000);
 		
-		Tooltip.install(informationImage, tooltipIB);
+		MyToolBox toolbox = new MyToolBox();
+		
+		Tooltip.install(informationImage, toolbox.getTooltipImpedimentBacklog());
 		
 	}
 	

@@ -3,7 +3,6 @@ package scrumbo.de.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import java.util.Timer;
 
 import javafx.beans.property.ReadOnlyObjectWrapper;
 import javafx.beans.value.ObservableValue;
@@ -34,6 +33,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Callback;
+import scrumbo.de.common.MyToolBox;
 import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.UserStory;
@@ -48,16 +48,6 @@ public class ProductBacklogController implements Initializable {
 	public static UserStory					rowData;
 	@FXML
 	private ImageView						informationImage;
-	private Tooltip							tooltipPB				= new Tooltip(
-			"Ein Product Backlog besteht aus User Stories, die vom Product Owner priorisiert werden.\n"
-					+ "Die Aufwände der User Stories werden vom Entwicklungsteam geschätzt, beispielsweise in einer Schätzklausur.\n"
-					+ "Eine User Story muss innerhalb eines Sprints realisierbar sein.\n"
-					+ "Das Product Backlog ist nicht vollständig und verändert sich im Laufe des Projekts.\n"
-					+ "Die Anforderungen können vom Kunden nach Bedarf verändert werden. Es wird üblich priorisiert.\n"
-					+ "Es dürfen also mehr als eine User Story die Priorität 1 erhalten.\n"
-					+ "Der Product Owner legt die Reihenfolge der User Stories fest. Die hoch priorisierten User Stories sollten, falls\n"
-					+ "möglich zuerst abgearbeitet werden. Daher wird im Sprint Planning Meeting nicht über die Reihenfolge der Abarbeitung\n"
-					+ "der User Stories diskutiert sondern nur über die Anzahl.");
 	@FXML
 	private Text							vorname;
 	@FXML
@@ -93,8 +83,6 @@ public class ProductBacklogController implements Initializable {
 											
 	public static ObservableList<UserStory>	data					= FXCollections.observableArrayList();
 																	
-	private Timer							timer;
-											
 	private ObservableValue<Integer>		obsInt					= null;
 																	
 	public static ObservableList<UserStory> getData() {
@@ -110,13 +98,11 @@ public class ProductBacklogController implements Initializable {
 	private void handleButtonBack(ActionEvent event) throws Exception {
 		data.clear();
 		if (CurrentUser.isSM) {
-			// timer.cancel();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonLogout.getScene().getWindow();
 			stage.setScene(scene);
 		} else {
-			// timer.cancel();
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Scrum.fxml"));
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonLogout.getScene().getWindow();
@@ -150,19 +136,7 @@ public class ProductBacklogController implements Initializable {
 	
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
-		CurrentUser.userId = -1;
-		CurrentUser.prename = null;
-		CurrentUser.lastname = null;
-		CurrentUser.email = null;
-		CurrentUser.password = null;
-		CurrentUser.roleId = -1;
-		CurrentUser.role = null;
-		CurrentUser.projects = null;
-		CurrentProject.projectId = -1;
-		CurrentProject.projectname = null;
-		CurrentUser.isSM = false;
-		
-		// timer.cancel();
+		StartwindowController.logout();
 		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		this.scene = new Scene(root);
@@ -184,28 +158,15 @@ public class ProductBacklogController implements Initializable {
 			
 		initTableView();
 		
-		// timer = new Timer();
-		// timer.schedule(new TimerTask() {
-		//
-		// @Override
-		// public void run() {
-		// try {
-		// reload();
-		// } catch (Exception e) {
-		// // TODO Auto-generated catch block
-		// e.printStackTrace();
-		// }
-		// }
-		// }, 0, 10000);
+		MyToolBox toolbox = new MyToolBox();
 		
-		Tooltip.install(informationImage, tooltipPB);
+		Tooltip.install(informationImage, toolbox.getTooltipProductBacklog());
 	}
 	
 	public void initTableView() {
 		
 		tableViewProductBacklog.setRowFactory(tv -> {
 			TableRow<UserStory> row = new TableRow<>();
-			// if (CurrentUser.isPO) {
 			row.setOnMouseClicked(event -> {
 				if (event.getClickCount() == 1 && (!row.isEmpty())) {
 					rowData = row.getItem();
@@ -233,7 +194,6 @@ public class ProductBacklogController implements Initializable {
 					}
 				}
 			});
-			// }
 			return row;
 		});
 		
@@ -383,13 +343,6 @@ public class ProductBacklogController implements Initializable {
 	}
 	
 	public void reload() throws IOException {
-		// tableViewProductBacklog.getItems().clear();
-		// productbacklogService.loadProductBacklog();
-		// for (int i = 0; i <
-		// CurrentScrumprojekt.productbacklog.getUserstory().size(); i++) {
-		// data.add(CurrentScrumprojekt.productbacklog.getUserstory().get(i));
-		// }
-		
 		data.clear();
 		productbacklogService.loadProductBacklog();
 		for (int i = 0; i < CurrentProject.productbacklog.getUserstory().size(); i++) {

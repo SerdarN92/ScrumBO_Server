@@ -16,6 +16,9 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import scrumbo.de.common.MyToolBox;
+import scrumbo.de.entity.CurrentProject;
+import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.service.BenutzerService;
 import scrumbo.de.service.BenutzerrolleService;
 import scrumbo.de.service.DefinitionOfDoneService;
@@ -86,10 +89,9 @@ public class StartwindowController implements Initializable {
 		if (definitionofdoneService == null)
 			definitionofdoneService = new DefinitionOfDoneService();
 			
-		Tooltip tooltip = new Tooltip(
-				"Herzlich Willkommen zum ScrumBO! \nDiese Applikation ermöglicht es Ihnen Projektmanagement \nnach Scrum zu betreiben.");
+		MyToolBox toolbox = new MyToolBox();
 		setupCustomTooltipBehavior(650, 10000, 650);
-		Tooltip.install(informationImage, tooltip);
+		Tooltip.install(informationImage, toolbox.getTooltipWelcome());
 	}
 	
 	public static BenutzerService getBenutzerService() {
@@ -207,6 +209,22 @@ public class StartwindowController implements Initializable {
 		} catch (Exception e) {
 			System.out.println("Aborted setup due to error:" + e.getMessage());
 		}
+	}
+	
+	public static void logout() throws Exception {
+		CurrentUser.userId = -1;
+		CurrentUser.prename = null;
+		CurrentUser.lastname = null;
+		CurrentUser.email = null;
+		CurrentUser.password = null;
+		CurrentUser.roleId = -1;
+		CurrentUser.role = null;
+		CurrentUser.projects = null;
+		CurrentProject.projectId = -1;
+		CurrentProject.projectname = null;
+		CurrentUser.isSM = false;
+		CurrentUser.isPO = false;
+		CurrentUser.isDev = false;
 	}
 	
 }
