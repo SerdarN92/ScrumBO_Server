@@ -41,10 +41,13 @@
             <Font size="21.0" />
          </font>
       </Label>
-      <LetterTextField fx:id="txtFieldPrename" layoutX="400.0" layoutY="195.0" />
-      <LetterTextField fx:id="txtFieldLastname" layoutX="400.0" layoutY="235.0" />
-      <TextField fx:id="txtFieldEmail" layoutX="400.0" layoutY="272.0" />
-      <Button fx:id="buttonCreateUser" layoutX="401.0" layoutY="414.0" mnemonicParsing="false" onAction="#handleButtonCreateUser" text="Benutzer erstellen">
+      <LetterTextField fx:id="txtFieldPrename" layoutX="400.0" layoutY="195.0" onKeyPressed="#handleKeyPressed" />
+      <LetterTextField fx:id="txtFieldLastname" layoutX="400.0" layoutY="235.0" onKeyPressed="#handleKeyPressed" />
+      <TextField fx:id="txtFieldEmail" layoutX="400.0" layoutY="272.0" onKeyPressed="#handleKeyPressed" />
+      <RadioButton fx:id="radiobuttonScrumMaster" layoutX="400.0" layoutY="318.0" mnemonicParsing="false" text="Scrum Master" />
+      <RadioButton fx:id="radiobuttonProductOwner" layoutX="400.0" layoutY="342.0" mnemonicParsing="false" text="Product Owner" />
+      <RadioButton fx:id="radiobuttonDeveloper" layoutX="400.0" layoutY="366.0" mnemonicParsing="false" text="Entwickler" />
+      <Button fx:id="buttonCreateUser" layoutX="401.0" layoutY="414.0" mnemonicParsing="false" onAction="#handleButtonCreateUser" onKeyPressed="#handleKeyPressed" text="Benutzer erstellen">
          <font>
             <Font size="16.0" />
          </font>
@@ -74,7 +77,5 @@
             <Font size="16.0" />
          </font>
       </Text>
-      <RadioButton fx:id="radiobuttonProductOwner" layoutX="400.0" layoutY="318.0" mnemonicParsing="false" text="Product Owner" />
-      <RadioButton fx:id="radiobuttonDeveloper" layoutX="400.0" layoutY="347.0" mnemonicParsing="false" text="Entwickler" />
    </children>
 </AnchorPane>

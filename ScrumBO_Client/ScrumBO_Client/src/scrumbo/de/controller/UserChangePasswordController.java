@@ -6,12 +6,15 @@ import java.util.ResourceBundle;
 
 import org.json.JSONException;
 
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.input.KeyCode;
@@ -55,6 +58,11 @@ public class UserChangePasswordController implements Initializable {
 			benutzer.setPasswort(Encryptor.encrypt(txtPassword.getText()));
 			
 			if (benutzerService.changeDefaultPassword(benutzer)) {
+				Alert alert = new Alert(AlertType.INFORMATION);
+				alert.setTitle("Passwort Änderung");
+				alert.setHeaderText(null);
+				alert.setContentText("Ihr Passwort wurde erfolgreich geändert.");
+				alert.showAndWait();
 				if (CurrentUser.isSM) {
 					this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Project.fxml"));
 					this.scene = new Scene(root);
@@ -67,6 +75,16 @@ public class UserChangePasswordController implements Initializable {
 					stage.setScene(scene);
 				}
 			} else {
+				Alert alert = new Alert(AlertType.ERROR);
+				alert.setTitle("Passwort Änderung");
+				alert.setHeaderText(null);
+				alert.setContentText("Fehler! Ihr Passwort wurde nicht erfolgreich geändert.");
+				alert.showAndWait();
+				
+				this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
+				this.scene = new Scene(root);
+				Stage stage = (Stage) buttonSave.getScene().getWindow();
+				stage.setScene(scene);
 			}
 		}
 	}
@@ -123,6 +141,13 @@ public class UserChangePasswordController implements Initializable {
 	public void initialize(URL location, ResourceBundle resources) {
 		benutzerService = StartwindowController.getBenutzerService();
 		txtName.setText(CurrentUser.prename + " " + CurrentUser.lastname + ",");
+		
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				txtPassword.requestFocus();
+			}
+		});
 		
 	}
 	

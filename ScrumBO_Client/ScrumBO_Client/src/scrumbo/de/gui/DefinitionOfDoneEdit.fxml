@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import scrumbo.de.common.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="294.0" prefWidth="676.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.DefinitionOfDoneEditController">
+<AnchorPane id="AnchorPane" prefHeight="294.0" prefWidth="676.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.DefinitionOfDoneEditController">
    <children>
       <ImageView fitHeight="77.0" fitWidth="98.0" layoutX="535.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -26,7 +26,7 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="kriterium" layoutX="189.0" layoutY="113.0" prefHeight="25.0" prefWidth="416.0" />
+      <TextField fx:id="kriterium" layoutX="189.0" layoutY="113.0" onKeyPressed="#handleKeyPressed" prefHeight="25.0" prefWidth="416.0" />
       <Button fx:id="buttonSave" layoutX="500.0" layoutY="233.0" mnemonicParsing="false" onAction="#handleButtonSave" text="Übernehmen">
          <font>
             <Font size="16.0" />
@@ -48,8 +48,8 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <RadioButton fx:id="erfuellt" layoutX="189.0" layoutY="166.0" mnemonicParsing="false" text="Erfüllt" />
-      <RadioButton fx:id="nichtErfuellt" layoutX="189.0" layoutY="194.0" mnemonicParsing="false" text="Nicht Erfüllt" />
+      <RadioButton fx:id="erfuellt" layoutX="189.0" layoutY="166.0" mnemonicParsing="false" onKeyPressed="#handleKeyPressed" text="Erfüllt" />
+      <RadioButton fx:id="nichtErfuellt" layoutX="189.0" layoutY="194.0" mnemonicParsing="false" onKeyPressed="#handleKeyPressed" text="Nicht Erfüllt" />
    </children>
    <cursor>
       <Cursor fx:constant="DEFAULT" />

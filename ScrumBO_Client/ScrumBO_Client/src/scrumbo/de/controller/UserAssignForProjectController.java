@@ -66,6 +66,8 @@ public class UserAssignForProjectController implements Initializable {
 	@FXML
 	private Button			buttonAssignUser;
 	@FXML
+	private RadioButton		radiobuttonScrumMaster;
+	@FXML
 	private RadioButton		radiobuttonProductOwner;
 	@FXML
 	private RadioButton		radiobuttonDeveloper;
@@ -112,6 +114,8 @@ public class UserAssignForProjectController implements Initializable {
 						roleId = 2;
 					} else if (radiobuttonDeveloper.isSelected()) {
 						roleId = 3;
+					} else if (radiobuttonScrumMaster.isSelected()) {
+						roleId = 1;
 					}
 					
 					URL url = null;
@@ -159,13 +163,16 @@ public class UserAssignForProjectController implements Initializable {
 	}
 	
 	private Boolean checkRole() {
-		if ((radiobuttonProductOwner.isSelected()) || (radiobuttonDeveloper.isSelected())) {
+		if ((radiobuttonProductOwner.isSelected()) || (radiobuttonDeveloper.isSelected())
+				|| (radiobuttonScrumMaster.isSelected())) {
 			validFail.setText(null);
+			radiobuttonScrumMaster.setStyle(null);
 			radiobuttonProductOwner.setStyle(null);
 			radiobuttonDeveloper.setStyle(null);
 			return true;
 		} else {
 			validFail.setText("Bitte eine Rolle auswählen");
+			radiobuttonScrumMaster.setStyle("-fx-border-color:#FF0000;");
 			radiobuttonProductOwner.setStyle("-fx-border-color:#FF0000;");
 			radiobuttonDeveloper.setStyle("-fx-border-color:#FF0000;");
 			return false;

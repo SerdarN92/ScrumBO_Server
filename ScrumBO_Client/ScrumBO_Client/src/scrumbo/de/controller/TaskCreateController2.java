@@ -27,32 +27,34 @@ import scrumbo.de.service.BenutzerService;
 
 public class TaskCreateController2 implements Initializable {
 	
-	Parent						root;
-	Scene						scene;
-	BenutzerService				benutzerService		= null;
+	Parent					root;
+	Scene					scene;
+	BenutzerService			benutzerService		= null;
 	@FXML
-	private TextField			taskbeschreibung;
+	private TextField		taskbeschreibung;
 	@FXML
-	private TextField			aufwandinstunden;
+	private TextField		aufwandinstunden;
 	@FXML
 	private ComboBox<User>	comboBoxBenutzer	= new ComboBox<>();
 	@FXML
-	private Button				buttonAbbort;
+	private Button			buttonAbbort;
 	@FXML
-	private Button				buttonAdd;
-								
+	private Button			buttonAdd;
+							
 	private List<User>		benutzerList		= new LinkedList<User>();
 	private User			currentBenutzer		= new User();
-	private UserStoryTask		task				= new UserStoryTask();
-													
+	private UserStoryTask	task				= new UserStoryTask();
+												
 	@FXML
 	private void handleButtonAdd(ActionEvent event) throws Exception {
-		task.setBeschreibung(taskbeschreibung.getText());
-		task.setAufwandinstunden(Integer.parseInt(aufwandinstunden.getText()));
-		task.setBenutzer(currentBenutzer);
-		SprintBacklogEditUserStoryController.addedUserStoryTask = task;
-		Stage stage = (Stage) buttonAdd.getScene().getWindow();
-		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+		if (!taskbeschreibung.getText().isEmpty() && !aufwandinstunden.getText().isEmpty()) {
+			task.setBeschreibung(taskbeschreibung.getText());
+			task.setAufwandinstunden(Integer.parseInt(aufwandinstunden.getText()));
+			task.setBenutzer(currentBenutzer);
+			SprintBacklogEditUserStoryController.addedUserStoryTask = task;
+			Stage stage = (Stage) buttonAdd.getScene().getWindow();
+			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+		}
 	}
 	
 	@Override

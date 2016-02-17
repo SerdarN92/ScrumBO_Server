@@ -1,11 +1,18 @@
 package scrumbo.de.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import org.json.JSONException;
+
+import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
+import com.sun.javafx.scene.control.skin.TextAreaSkin;
+
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,6 +24,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -54,6 +63,12 @@ public class UserStoryEditController implements Initializable {
 	private Text			txtError;
 	private UserStory		data				= null;
 												
+	@FXML
+	private void handleKeyPressed(KeyEvent event) throws JSONException, IOException, Exception {
+		if (event.getCode().equals(KeyCode.ENTER))
+			updateUserStory();
+	}
+	
 	private Boolean checkPrioritaet() {
 		if (prioritaet.getText().isEmpty()) {
 			txtError.setText("Bitte eine Priorität eingeben");
@@ -232,6 +247,10 @@ public class UserStoryEditController implements Initializable {
 	
 	@FXML
 	private void handleButtonUpdate(ActionEvent event) throws Exception {
+		updateUserStory();
+	}
+	
+	private void updateUserStory() {
 		if (checkPrioritaet() && checkThema() && checkBeschreibung() && checkAkzeptanzkriterien()
 				&& checkAufwandInTagen()) {
 			if (!(data.getPriority().equals(Integer.parseInt(prioritaet.getText())))
@@ -300,6 +319,42 @@ public class UserStoryEditController implements Initializable {
 			thema.setEditable(false);
 			prioritaet.setEditable(false);
 		}
+		
+		beschreibung.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.TAB) {
+					TextAreaSkin skin = (TextAreaSkin) beschreibung.getSkin();
+					if (skin.getBehavior() instanceof TextAreaBehavior) {
+						TextAreaBehavior behavior = (TextAreaBehavior) skin.getBehavior();
+						if (event.isControlDown()) {
+							behavior.callAction("InsertTab");
+						} else {
+							behavior.callAction("TraverseNext");
+						}
+						event.consume();
+					}
+				}
+			}
+		});
+		
+		akzeptanzkriterien.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.TAB) {
+					TextAreaSkin skin = (TextAreaSkin) akzeptanzkriterien.getSkin();
+					if (skin.getBehavior() instanceof TextAreaBehavior) {
+						TextAreaBehavior behavior = (TextAreaBehavior) skin.getBehavior();
+						if (event.isControlDown()) {
+							behavior.callAction("InsertTab");
+						} else {
+							behavior.callAction("TraverseNext");
+						}
+						event.consume();
+					}
+				}
+			}
+		});
 	}
 	
 	public static Integer getId() {

@@ -1,5 +1,6 @@
 package scrumbo.de.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -10,7 +11,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import org.json.JSONException;
+
+import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
+import com.sun.javafx.scene.control.skin.TextAreaSkin;
+
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -22,6 +29,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -35,6 +44,8 @@ public class ImpedimentEditController implements Initializable {
 	Scene				scene;
 	ImpedimentService	impedimentService	= null;
 	private Integer		id					= -1;
+	private Impediment	data				= null;
+											
 	@FXML
 	private Button		buttonAbbort;
 	@FXML
@@ -55,8 +66,13 @@ public class ImpedimentEditController implements Initializable {
 	private DatePicker	datumBehobenAm;
 	@FXML
 	private Text		txtError;
-	private Impediment	data				= null;
-											
+						
+	@FXML
+	private void handleKeyPressed(KeyEvent event) throws JSONException, IOException, Exception {
+		if (event.getCode().equals(KeyCode.ENTER))
+			saveImpediment();
+	}
+	
 	@FXML
 	private void handleButtonAbbort(ActionEvent event) throws Exception {
 		Alert alert = new Alert(AlertType.CONFIRMATION);
@@ -76,7 +92,6 @@ public class ImpedimentEditController implements Initializable {
 		} else {
 			alert.close();
 		}
-		
 	}
 	
 	@FXML
@@ -119,6 +134,10 @@ public class ImpedimentEditController implements Initializable {
 	
 	@FXML
 	private void handleButtonSave(ActionEvent event) throws Exception {
+		saveImpediment();
+	}
+	
+	private void saveImpediment() {
 		if (checkPrioritaet() && checkAngelegtVon() && checkBeschreibung() && checkDatumAngelegtAm()) {
 			Impediment impediment = data;
 			impediment.setPriorität(Integer.parseInt(prioritaet.getText()));
@@ -130,7 +149,6 @@ public class ImpedimentEditController implements Initializable {
 			impediment.setDatumDesAuftretens(b);
 			if (datumBehobenAm.getValue() != null) {
 				Date date2 = Date.from(datumBehobenAm.getValue().atStartOfDay(ZoneId.systemDefault()).toInstant());
-				SimpleDateFormat sdf2 = new SimpleDateFormat("dd-MM-yyyy");
 				String b2 = sdf.format(date2);
 				impediment.setDatumDerBehebung(b2);
 			} else {
@@ -138,9 +156,9 @@ public class ImpedimentEditController implements Initializable {
 			}
 			impediment.setKommentar(kommentar.getText());
 			List<Impediment> liste = CurrentProject.impedimentbacklog;
-			liste.add(impediment);
 			
 			if (impedimentService.updateImpediment(impediment)) {
+				liste.add(impediment);
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Impediment bearbeiten");
 				alert.setHeaderText(null);
@@ -275,6 +293,42 @@ public class ImpedimentEditController implements Initializable {
 			datumBehobenAm.setValue(null);
 		}
 		kommentar.setText(data.getKommentar());
+		
+		beschreibung.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.TAB) {
+					TextAreaSkin skin = (TextAreaSkin) beschreibung.getSkin();
+					if (skin.getBehavior() instanceof TextAreaBehavior) {
+						TextAreaBehavior behavior = (TextAreaBehavior) skin.getBehavior();
+						if (event.isControlDown()) {
+							behavior.callAction("InsertTab");
+						} else {
+							behavior.callAction("TraverseNext");
+						}
+						event.consume();
+					}
+				}
+			}
+		});
+		
+		kommentar.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.TAB) {
+					TextAreaSkin skin = (TextAreaSkin) kommentar.getSkin();
+					if (skin.getBehavior() instanceof TextAreaBehavior) {
+						TextAreaBehavior behavior = (TextAreaBehavior) skin.getBehavior();
+						if (event.isControlDown()) {
+							behavior.callAction("InsertTab");
+						} else {
+							behavior.callAction("TraverseNext");
+						}
+						event.consume();
+					}
+				}
+			}
+		});
 	}
 	
 }

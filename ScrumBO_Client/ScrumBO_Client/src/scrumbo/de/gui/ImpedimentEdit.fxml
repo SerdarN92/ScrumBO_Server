@@ -9,7 +9,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="619.0" prefWidth="544.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.ImpedimentEditController">
+<AnchorPane id="AnchorPane" prefHeight="619.0" prefWidth="544.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.ImpedimentEditController">
    <children>
       <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="174.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -26,7 +26,7 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Label layoutX="85.0" layoutY="224.0" text="Angelegt von">
+      <Label layoutX="85.0" layoutY="224.0" text="Erstellt von">
          <font>
             <Font size="16.0" />
          </font>
@@ -36,10 +36,13 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <TextField fx:id="prioritaet" layoutX="221.0" layoutY="186.0" />
-      <TextField fx:id="angelegtVon" layoutX="221.0" layoutY="224.0" prefHeight="25.0" prefWidth="149.0" />
-      <TextArea fx:id="beschreibung" layoutX="221.0" layoutY="262.0" prefHeight="79.0" prefWidth="174.0" wrapText="true" />
-      <Button fx:id="buttonSave" layoutX="370.0" layoutY="568.0" mnemonicParsing="false" onAction="#handleButtonSave" text="Übernehmen">
+      <TextField fx:id="prioritaet" layoutX="221.0" layoutY="186.0" onKeyPressed="#handleKeyPressed" />
+      <TextField fx:id="angelegtVon" layoutX="221.0" layoutY="224.0" onKeyPressed="#handleKeyPressed" prefHeight="25.0" prefWidth="149.0" />
+      <TextArea fx:id="beschreibung" layoutX="221.0" layoutY="262.0" onKeyPressed="#handleKeyPressed" prefHeight="79.0" prefWidth="174.0" wrapText="true" />
+      <DatePicker fx:id="datumAufgetretenAm" layoutX="221.0" layoutY="351.0" onKeyPressed="#handleKeyPressed" />
+      <DatePicker fx:id="datumBehobenAm" layoutX="221.0" layoutY="391.0" onKeyPressed="#handleKeyPressed" />
+      <TextArea fx:id="kommentar" layoutX="221.0" layoutY="429.0" onKeyPressed="#handleKeyPressed" prefHeight="79.0" prefWidth="174.0" wrapText="true" />
+      <Button fx:id="buttonSave" layoutX="370.0" layoutY="568.0" mnemonicParsing="false" onAction="#handleButtonSave" onKeyPressed="#handleKeyPressed" text="Übernehmen">
          <font>
             <Font size="16.0" />
          </font>
@@ -49,7 +52,6 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <DatePicker fx:id="datumAufgetretenAm" layoutX="221.0" layoutY="351.0" />
       <Label layoutX="78.0" layoutY="351.0" text="Aufgetreten am">
          <font>
             <Font size="16.0" />
@@ -60,13 +62,11 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <DatePicker fx:id="datumBehobenAm" layoutX="221.0" layoutY="391.0" />
       <Label layoutX="81.0" layoutY="429.0" text="Kommentar">
          <font>
             <Font size="16.0" />
          </font>
       </Label>
-      <TextArea fx:id="kommentar" layoutX="221.0" layoutY="429.0" prefHeight="79.0" prefWidth="174.0" wrapText="true" />
       <Button fx:id="buttonDelete" layoutX="142.0" layoutY="568.0" mnemonicParsing="false" onAction="#handleButtonDelete" text="Löschen">
          <font>
             <Font size="16.0" />

@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import scrumbo.de.common.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.ProjectCreateSuccessController">
+<AnchorPane id="AnchorPane" onKeyPressed="#handleKeyPressed" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.ProjectCreateSuccessController">
    <children>
       <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="75.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -36,7 +36,7 @@
             <Font size="20.0" />
          </font>
       </Text>
-      <Button fx:id="buttonForward" layoutX="373.0" layoutY="377.0" mnemonicParsing="false" onAction="#handleButtonForward" text="Ok">
+      <Button fx:id="buttonForward" layoutX="373.0" layoutY="377.0" mnemonicParsing="false" onAction="#handleButtonForward" onKeyPressed="#handleKeyPressed" text="Ok">
          <font>
             <Font size="16.0" />
          </font>

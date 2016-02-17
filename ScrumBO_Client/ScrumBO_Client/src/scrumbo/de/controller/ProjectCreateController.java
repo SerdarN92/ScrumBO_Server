@@ -1,9 +1,12 @@
 package scrumbo.de.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.ResourceBundle;
+
+import org.json.JSONException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,6 +16,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import scrumbo.de.entity.CurrentUser;
@@ -41,6 +46,12 @@ public class ProjectCreateController implements Initializable {
 	private Text		passwordValidFail;
 						
 	@FXML
+	private void handleKeyPressed(KeyEvent event) throws JSONException, IOException, Exception {
+		if (event.getCode().equals(KeyCode.ENTER))
+			createProject();
+	}
+	
+	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
 		StartwindowController.logout();
 		
@@ -61,6 +72,10 @@ public class ProjectCreateController implements Initializable {
 	
 	@FXML
 	private void handleButtonCreateProject(ActionEvent event) throws Exception {
+		createProject();
+	}
+	
+	private void createProject() throws IOException, Exception {
 		if (checkProjectname() && checkPassword()) {
 			if (!scrumprojektService.checkIfProjectnameExists(txtFieldProjectname.getText().toString())) {
 				txtFieldProjectname.setStyle(null);

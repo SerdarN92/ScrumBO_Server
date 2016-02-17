@@ -33,6 +33,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -65,6 +67,8 @@ public class UserCreateForProjectController implements Initializable {
 	@FXML
 	private Button			buttonCreateUser;
 	@FXML
+	private RadioButton		radiobuttonScrumMaster;
+	@FXML
 	private RadioButton		radiobuttonProductOwner;
 	@FXML
 	private RadioButton		radiobuttonDeveloper;
@@ -78,6 +82,12 @@ public class UserCreateForProjectController implements Initializable {
 	private Text			roleValidFail;
 							
 	@FXML
+	private void handleKeyPressed(KeyEvent event) throws JSONException, IOException, Exception {
+		if (event.getCode().equals(KeyCode.ENTER))
+			createUserForProject();
+	}
+	
+	@FXML
 	private void handleBackButtonCreateUser(ActionEvent event) throws IOException {
 		Stage stage = (Stage) buttonCreateUser.getScene().getWindow();
 		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
@@ -85,6 +95,10 @@ public class UserCreateForProjectController implements Initializable {
 	
 	@FXML
 	private void handleButtonCreateUser(ActionEvent event) throws Exception {
+		createUserForProject();
+	}
+	
+	private void createUserForProject() throws JSONException, IOException {
 		Integer benutzerrollenId = 0;
 		BenutzerService benutzerService = new BenutzerService();
 		if (checkPreName() && checkLastName() && checkEmail() && checkRole()) {
@@ -112,6 +126,9 @@ public class UserCreateForProjectController implements Initializable {
 				} else if (radiobuttonDeveloper.isSelected()) {
 					benutzerrolleSelection = radiobuttonDeveloper.getText();
 					benutzerrollenId = 3;
+				} else if (radiobuttonScrumMaster.isSelected()) {
+					benutzerrolleSelection = radiobuttonScrumMaster.getText();
+					benutzerrollenId = 1;
 				}
 				
 				for (int i = 0; i < liste.size(); i++) {
@@ -200,13 +217,16 @@ public class UserCreateForProjectController implements Initializable {
 	}
 	
 	private Boolean checkRole() {
-		if ((radiobuttonProductOwner.isSelected()) || (radiobuttonDeveloper.isSelected())) {
+		if ((radiobuttonProductOwner.isSelected()) || (radiobuttonDeveloper.isSelected())
+				|| (radiobuttonScrumMaster.isSelected())) {
 			roleValidFail.setText(null);
+			radiobuttonScrumMaster.setStyle(null);
 			radiobuttonProductOwner.setStyle(null);
 			radiobuttonDeveloper.setStyle(null);
 			return true;
 		} else {
 			roleValidFail.setText("Bitte eine Rolle auswählen");
+			radiobuttonScrumMaster.setStyle("-fx-border-color:#FF0000;");
 			radiobuttonProductOwner.setStyle("-fx-border-color:#FF0000;");
 			radiobuttonDeveloper.setStyle("-fx-border-color:#FF0000;");
 			return false;

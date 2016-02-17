@@ -1,5 +1,6 @@
 package scrumbo.de.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -8,7 +9,13 @@ import java.util.List;
 import java.util.Optional;
 import java.util.ResourceBundle;
 
+import org.json.JSONException;
+
+import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
+import com.sun.javafx.scene.control.skin.TextAreaSkin;
+
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
@@ -17,36 +24,49 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.Impediment;
+import scrumbo.de.entity.User;
 import scrumbo.de.service.ImpedimentService;
 
 public class ImpedimentCreatController implements Initializable {
 	
-	Parent				root;
-	Scene				scene;
-	ImpedimentService	impedimentService	= null;
+	private Parent				root;
+	private Scene				scene;
+	private ImpedimentService	impedimentService	= null;
+													
 	@FXML
-	private Button		buttonAbbort;
+	private Button				buttonAbbort;
 	@FXML
-	private Button		buttonAdd;
+	private Button				buttonAdd;
 	@FXML
-	private TextField	prioritaet;
+	private TextField			prioritaet;
 	@FXML
-	private TextField	angelegtVon;
+	private TextField			angelegtVon;
 	@FXML
-	private TextArea	beschreibung;
+	private TextArea			beschreibung;
 	@FXML
-	private DatePicker	datumAufgetretenAm;
+	private DatePicker			datumAufgetretenAm;
 	@FXML
-	private Text		txtError;
-						
+	private Text				txtError;
+	@FXML
+	private ComboBox<User>		comboBoxBenutzer	= new ComboBox<>();
+													
+	@FXML
+	private void handleKeyPressed(KeyEvent event) throws JSONException, IOException, Exception {
+		if (event.getCode().equals(KeyCode.ENTER))
+			createImpediment();
+	}
+	
 	@FXML
 	private void handleButtonAbbort(ActionEvent event) throws Exception {
 		if (!prioritaet.getText().isEmpty() || !angelegtVon.getText().isEmpty() || !beschreibung.getText().isEmpty()
@@ -75,6 +95,10 @@ public class ImpedimentCreatController implements Initializable {
 	
 	@FXML
 	private void handleButtonAdd(ActionEvent event) throws Exception {
+		createImpediment();
+	}
+	
+	private void createImpediment() {
 		if (checkPrioritaet() && checkAngelegtVon() && checkBeschreibung() && checkDatumAngelegtAm()) {
 			Impediment impediment = new Impediment();
 			impediment.setPriorität(Integer.parseInt(prioritaet.getText()));
@@ -85,7 +109,6 @@ public class ImpedimentCreatController implements Initializable {
 			String b = sdf.format(date);
 			impediment.setDatumDesAuftretens(b);
 			List<Impediment> liste = CurrentProject.impedimentbacklog;
-			liste.add(impediment);
 			
 			if (impedimentService.createImpediment(impediment)) {
 				Alert alert = new Alert(AlertType.INFORMATION);
@@ -93,6 +116,7 @@ public class ImpedimentCreatController implements Initializable {
 				alert.setHeaderText(null);
 				alert.setContentText("Impediment wurde erfolgreich erstellt.");
 				alert.showAndWait();
+				liste.add(impediment);
 				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 			} else {
@@ -188,6 +212,23 @@ public class ImpedimentCreatController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		impedimentService = StartwindowController.getImpedimentService();
+		
+		beschreibung.addEventFilter(KeyEvent.KEY_PRESSED, new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				if (event.getCode() == KeyCode.TAB) {
+					TextAreaSkin skin = (TextAreaSkin) beschreibung.getSkin();
+					if (skin.getBehavior() instanceof TextAreaBehavior) {
+						TextAreaBehavior behavior = (TextAreaBehavior) skin.getBehavior();
+						if (event.isControlDown()) {
+							behavior.callAction("InsertTab");
+						} else {
+							behavior.callAction("TraverseNext");
+						}
+						event.consume();
+					}
+				}
+			}
+		});
 	}
-	
 }

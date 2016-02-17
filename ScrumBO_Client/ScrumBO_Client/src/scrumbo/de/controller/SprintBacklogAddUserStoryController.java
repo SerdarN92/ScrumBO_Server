@@ -125,8 +125,21 @@ public class SprintBacklogAddUserStoryController implements Initializable {
 	
 	@FXML
 	private void handleButtonRemoveTask(ActionEvent event) throws Exception {
-		listViewUserStoryTask.getItems().remove(selectedUserStoryTask);
-		currentUserStory.getUserstorytask().remove(selectedUserStoryTask);
+		ObservableList<UserStoryTask> options = FXCollections.observableArrayList();
+		for (int i = 0; i < listViewUserStoryTask.getItems().size(); i++) {
+			if (!(listViewUserStoryTask.getItems().get(i) == selectedUserStoryTask))
+				options.add(listViewUserStoryTask.getItems().get(i));
+		}
+		for (int i = 0; i < currentUserStory.getUserstorytask().size(); i++) {
+			if (currentUserStory.getUserstorytask().get(i).getBeschreibung()
+					.equals(selectedUserStoryTask.getBeschreibung())) {
+				currentUserStory.getUserstorytask().remove(i);
+			}
+		}
+		listViewUserStoryTask.getItems().clear();
+		
+		listViewUserStoryTask.getItems().addAll(options);
+		
 		buttonRemoveTask.setDisable(true);
 		
 		if (currentUserStory.getUserstorytask().isEmpty()) {
@@ -239,6 +252,8 @@ public class SprintBacklogAddUserStoryController implements Initializable {
 						super.updateItem(t, bln);
 						if (t != null) {
 							setText(t.getBeschreibung());
+						} else {
+							setText(null);
 						}
 					}
 					

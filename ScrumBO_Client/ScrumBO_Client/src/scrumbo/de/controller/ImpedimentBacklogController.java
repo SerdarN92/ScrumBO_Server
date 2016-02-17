@@ -24,7 +24,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.Tooltip;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.ImageView;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -37,22 +36,15 @@ import scrumbo.de.service.ImpedimentService;
 
 public class ImpedimentBacklogController implements Initializable {
 	
-	Parent										root;
-	Scene										scene;
-	Stage										stage;
-	ImpedimentService							impedimentService	= null;
+	private Parent								root;
+	private Scene								scene;
+	private ImpedimentService					impedimentService	= null;
+	public static Impediment					rowData;
+	public static ObservableList<Impediment>	data				= FXCollections.observableArrayList();
+	private Timer								timer;
+												
 	@FXML
 	private ImageView							informationImage;
-												
-	public static Impediment					rowData;
-	@FXML
-	private Text								vorname;
-	@FXML
-	private Text								nachname;
-	@FXML
-	private Text								benutzerrolle;
-	@FXML
-	private Text								projektname;
 	@FXML
 	private Button								buttonLogout;
 	@FXML
@@ -73,10 +65,6 @@ public class ImpedimentBacklogController implements Initializable {
 	private TableColumn<Impediment, Date>		tableColumnBehobenAm;
 	@FXML
 	private TableColumn<Impediment, String>		tableColumnKommentar;
-												
-	public static ObservableList<Impediment>	data				= FXCollections.observableArrayList();
-																	
-	private Timer								timer;
 												
 	public static ObservableList<Impediment> getData() {
 		return data;
@@ -102,17 +90,14 @@ public class ImpedimentBacklogController implements Initializable {
 	
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
-		data.clear();
-		
-		StartwindowController.logout();
-		
 		timer.cancel();
+		data.clear();
+		StartwindowController.logout();
 		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		this.scene = new Scene(root);
 		Stage stage = (Stage) buttonLogout.getScene().getWindow();
 		stage.setScene(scene);
-		
 	}
 	
 	@FXML
@@ -144,11 +129,6 @@ public class ImpedimentBacklogController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		impedimentService = StartwindowController.getImpedimentService();
-		vorname.setText(CurrentUser.prename);
-		nachname.setText(CurrentUser.lastname);
-		benutzerrolle.setText(CurrentUser.role);
-		projektname.setText(CurrentProject.projectname);
-		
 		impedimentService.getImpedimentBacklog();
 		
 		data.clear();
@@ -225,7 +205,6 @@ public class ImpedimentBacklogController implements Initializable {
 						try {
 							reload();
 						} catch (Exception e) {
-							// TODO Auto-generated catch block
 							e.printStackTrace();
 						}
 					}

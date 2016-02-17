@@ -1,17 +1,26 @@
 package scrumbo.de.controller;
 
+import java.io.IOException;
 import java.net.URL;
+import java.util.Optional;
 import java.util.ResourceBundle;
+
+import org.json.JSONException;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.RadioButton;
 import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleGroup;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -40,6 +49,12 @@ public class DefinitionOfDoneEditController implements Initializable {
 	private DefinitionOfDone	data					= null;
 	private final ToggleGroup	group					= new ToggleGroup();
 														
+	@FXML
+	private void handleKeyPressed(KeyEvent event) throws JSONException, IOException, Exception {
+		if (event.getCode().equals(KeyCode.ENTER))
+			updateDod();
+	}
+	
 	private Boolean checkKriterium() {
 		if (kriterium.getText().isEmpty()) {
 			txtKriterium.setText("Bitte ein Kriterium eingeben");
@@ -52,24 +67,64 @@ public class DefinitionOfDoneEditController implements Initializable {
 	
 	@FXML
 	private void handleButtonAbbort(ActionEvent event) throws Exception {
-		Stage stage = (Stage) buttonAbbort.getScene().getWindow();
-		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
-	}
-	
-	@FXML
-	private void handleButtonDelete(ActionEvent event) throws Exception {
-		DefinitionOfDone definitionOfDone = data;
-		if (definitionofdoneService.deleteDefinitionOfDone(definitionOfDone)) {
-			Stage stage = (Stage) buttonDelete.getScene().getWindow();
-			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+		if (!data.getKriterium().equals(kriterium.getText()) || (!data.isStatus() && erfuellt.isSelected())
+				|| (data.isStatus() && nichtErfuellt.isSelected())) {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Definition of Done bearbeiten");
+			alert.setHeaderText(null);
+			alert.setContentText("Daten wurden verändert. Wollen Sie fortfahren ohne diese zu speichern?");
+			
+			ButtonType buttonTypeOne = new ButtonType("Ja");
+			ButtonType buttonTypeTwo = new ButtonType("Nein");
+			alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+			
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == buttonTypeOne) {
+				alert.close();
+				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
+				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+			} else {
+				alert.close();
+			}
 		} else {
 			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
-			stage.close();
+			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 		}
 	}
 	
 	@FXML
+	private void handleButtonDelete(ActionEvent event) throws Exception {
+		Alert alert = new Alert(AlertType.CONFIRMATION);
+		alert.setTitle("Definition of Done löschen");
+		alert.setHeaderText(null);
+		alert.setContentText("Wollen Sie diese Definition of Done wirklich löschen?");
+		
+		ButtonType buttonTypeOne = new ButtonType("Ja");
+		ButtonType buttonTypeTwo = new ButtonType("Nein");
+		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+		
+		Optional<ButtonType> result = alert.showAndWait();
+		if (result.get() == buttonTypeOne) {
+			DefinitionOfDone definitionOfDone = data;
+			if (definitionofdoneService.deleteDefinitionOfDone(definitionOfDone)) {
+				Stage stage = (Stage) buttonDelete.getScene().getWindow();
+				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+			} else {
+				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
+				stage.close();
+			}
+		} else {
+			alert.close();
+		}
+		
+	}
+	
+	@FXML
 	private void handleButtonSave(ActionEvent event) throws Exception {
+		updateDod();
+	}
+	
+	private void updateDod() {
 		if (checkKriterium()) {
 			DefinitionOfDone definitionOfDone = data;
 			definitionOfDone.setKriterium(kriterium.getText());

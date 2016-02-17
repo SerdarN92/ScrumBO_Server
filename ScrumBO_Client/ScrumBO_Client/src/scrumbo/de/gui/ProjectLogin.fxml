@@ -9,14 +9,16 @@
 <?import javafx.scene.layout.*?>
 <?import scrumbo.de.common.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.ProjectLoginController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.ProjectLoginController">
    <children>
       <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="75.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../content/logoScrumBO.png" />
          </image>
       </ImageView>
-      <Button fx:id="buttonLogout" layoutX="637.0" layoutY="58.0" mnemonicParsing="false" onAction="#handleButtonLogout" prefHeight="30.0" prefWidth="98.0" text="Ausloggen">
+      <TextField fx:id="txtFieldProjectname" layoutX="410.0" layoutY="243.0" onKeyPressed="#handleKeyPressed" text="Testprojekt" />
+      <PasswordField fx:id="pswtFieldPassword" layoutX="410.0" layoutY="288.0" onKeyPressed="#handleKeyPressed" text="TESTTEST" />
+      <Button fx:id="buttonOpenProject" layoutX="410.0" layoutY="395.0" mnemonicParsing="false" onAction="#handleButtonOpenProject" onKeyPressed="#handleKeyPressed" text="Projekt öffnen">
          <font>
             <Font size="16.0" />
          </font>
@@ -31,14 +33,12 @@
             <Font size="21.0" />
          </font>
       </Label>
-      <PasswordField fx:id="pswtFieldPassword" layoutX="410.0" layoutY="288.0" text="TESTTEST" />
-      <TextField fx:id="txtFieldProjectname" layoutX="410.0" layoutY="243.0" text="Testprojekt" />
       <Button fx:id="buttonBack" layoutX="183.0" layoutY="395.0" mnemonicParsing="false" onAction="#handleBackButton" text="Zurück">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button fx:id="buttonOpenProject" layoutX="410.0" layoutY="395.0" mnemonicParsing="false" onAction="#handleButtonOpenProject" text="Projekt öffnen">
+      <Button fx:id="buttonLogout" layoutX="637.0" layoutY="58.0" mnemonicParsing="false" onAction="#handleButtonLogout" prefHeight="30.0" prefWidth="98.0" text="Ausloggen">
          <font>
             <Font size="16.0" />
          </font>
