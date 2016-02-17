@@ -14,8 +14,8 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
-import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.chart.XYChart.Data;
@@ -55,7 +55,7 @@ public class BurndownChartController implements Initializable {
 										
 	private CategoryAxis				xAxis		= new CategoryAxis();
 	private NumberAxis					yAxis		= new NumberAxis();
-	private LineChart<String, Number>	lineChart	= new LineChart<String, Number>(xAxis, yAxis);
+	private BarChart<String, Number>	lineChart	= new BarChart<String, Number>(xAxis, yAxis);
 	private XYChart.Series				series;
 	private XYChart.Series				series2;
 	private Timer						timer;
@@ -127,6 +127,7 @@ public class BurndownChartController implements Initializable {
 						
 						lineChart.getData().remove(series);
 						lineChart.getData().remove(series2);
+						lineChart.setCategoryGap(-7);
 						
 						series.getData().clear();
 						series2.getData().clear();
@@ -134,17 +135,19 @@ public class BurndownChartController implements Initializable {
 						if (points != null && points.size() > 0) {
 							
 							for (int i = 0; i < points.size(); i++) {
-								series.getData().add(new Data("Tag " + i, points.get(i).getY()));
+								series.getData().add(new Data("Tag " + (i + 1), points.get(i).getY()));
 							}
 							
-							series2.getData().add(new Data("Tag 0", points.get(0).getY()));
-							if (points.size() > 0) {
-								series2.getData().add(
-										new Data("Tag " + (points.size() - 1), points.get(points.size() - 1).getY()));
-							}
+							// series2.getData().add(new Data("Tag 1",
+							// points.get(0).getY()));
+							// if (points.size() > 0) {
+							// series2.getData()
+							// .add(new Data("Tag " + (points.size()),
+							// points.get(points.size() - 1).getY()));
+							// }
 							
 							lineChart.getData().add(series);
-							lineChart.getData().add(series2);
+							// lineChart.getData().add(series2);
 						}
 						
 						lineChart.setTitle("zu Sprint " + CurrentSprint.sprintnumber);
@@ -223,10 +226,9 @@ public class BurndownChartController implements Initializable {
 		lineChart.setMinWidth(886);
 		lineChart.setMinHeight(422);
 		lineChart.setAnimated(false);
+		lineChart.setLegendVisible(false);
 		
 		series = new XYChart.Series<>();
-		
-		series.setName("Real");
 		
 		series2 = new XYChart.Series<>();
 		series2.setName("Geplant");
@@ -234,16 +236,17 @@ public class BurndownChartController implements Initializable {
 		if (points != null && points.size() > 0) {
 			
 			for (int i = 0; i < points.size(); i++) {
-				series.getData().add(new Data("Tag " + i, points.get(i).getY()));
+				series.getData().add(new Data("Tag " + (i + 1), points.get(i).getY()));
 			}
 			
-			series2.getData().add(new Data("Tag 0", points.get(0).getY()));
-			if (points.size() > 0) {
-				series2.getData().add(new Data("Tag " + (points.size() - 1), points.get(points.size() - 1).getY()));
-			}
+			// series2.getData().add(new Data("Tag 1", points.get(0).getY()));
+			// if (points.size() > 0) {
+			// series2.getData().add(new Data("Tag " + (points.size()),
+			// points.get(points.size() - 1).getY()));
+			// }
 			
 			lineChart.getData().add(series);
-			lineChart.getData().add(series2);
+			// lineChart.getData().add(series2);
 		}
 		
 		mainPane.getChildren().add(lineChart);
@@ -265,16 +268,17 @@ public class BurndownChartController implements Initializable {
 		if (points != null && points.size() > 0) {
 			
 			for (int i = 0; i < points.size(); i++) {
-				series.getData().add(new Data("Tag " + i, points.get(i).getY()));
+				series.getData().add(new Data("Tag " + (i + 1), points.get(i).getY()));
 			}
 			
-			series2.getData().add(new Data("Tag 0", points.get(0).getY()));
-			if (points.size() > 0) {
-				series2.getData().add(new Data("Tag " + (points.size() - 1), points.get(points.size() - 1).getY()));
-			}
+			// series2.getData().add(new Data("Tag 1", points.get(0).getY()));
+			// if (points.size() > 0) {
+			// series2.getData().add(new Data("Tag " + (points.size()),
+			// points.get(points.size() - 1).getY()));
+			// }
 			
 			lineChart.getData().add(series);
-			lineChart.getData().add(series2);
+			// lineChart.getData().add(series2);
 		}
 		
 		lineChart.setTitle("zu Sprint " + CurrentSprint.sprintnumber);

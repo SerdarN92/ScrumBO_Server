@@ -231,7 +231,7 @@ public class SprintBacklogEditUserStoryController implements Initializable {
 		buttonGetTask.setDisable(true);
 		buttonRemoveTask.setDisable(true);
 		userstoryService = StartwindowController.getUserstoryService();
-		currentUserStory = MyHBox.blabla;
+		currentUserStory = MyHBox.userstoryStatic;
 		prioritaet.setText(currentUserStory.getPriority().toString());
 		thema.setText(currentUserStory.getTheme());
 		beschreibung.setText(currentUserStory.getDescription());

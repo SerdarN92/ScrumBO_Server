@@ -52,10 +52,10 @@ public class MyHBox extends HBox {
 	private Integer			bla				= 0;
 	private Pane			currentPane		= new Pane();
 											
-	public static UserStory	blabla			= new UserStory();
+	public static UserStory	userstoryStatic	= new UserStory();
 											
 	public static void setUserStory(UserStory userstory) {
-		blabla = userstory;
+		MyHBox.userstoryStatic = userstory;
 	}
 	
 	private void initMyHBox() {

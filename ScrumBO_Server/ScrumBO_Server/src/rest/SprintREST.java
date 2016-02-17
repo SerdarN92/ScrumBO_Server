@@ -158,7 +158,7 @@ public class SprintREST {
 			Sprint sprint = sprintService.findById(sprintid);
 			BurndownChartService burndownChartService = new BurndownChartService(hibernateconfigfilename);
 			BurndownChart burndownChart = new BurndownChart();
-			burndownChart.setDays(0);
+			burndownChart.setDays(1);
 			burndownChartService.persist(burndownChart);
 			sprint.setBurndownChart(burndownChart);
 			sprint.setStatus(true);
