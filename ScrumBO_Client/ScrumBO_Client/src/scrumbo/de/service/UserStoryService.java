@@ -146,8 +146,6 @@ public class UserStoryService {
 		Gson gson = new Gson();
 		String output = gson.toJson(userstory);
 		
-		System.out.println(output);
-		
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
 					+ "/ScrumBO_Server/rest/userstory/updateTasks/" + CurrentSprint.id + "/"

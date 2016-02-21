@@ -58,8 +58,6 @@ public class UserStoryREST {
 		}
 		String output = gson.toJson(userstoryDTOListe);
 		
-		System.out.println(output);
-		
 		return Response.status(200).entity(output).build();
 	}
 	

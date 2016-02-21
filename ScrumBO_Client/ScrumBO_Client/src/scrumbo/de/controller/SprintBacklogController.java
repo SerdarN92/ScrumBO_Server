@@ -147,7 +147,6 @@ public class SprintBacklogController implements Initializable {
 			tagNumber.setText(null);
 		}
 		if (CurrentSprint.sprintnumber < anzahlSprints) {
-			System.out.println("Ja");
 			buttonStartSprint.setDisable(true);
 			buttonCreateNewSprint.setDisable(true);
 			buttonEndDay.setDisable(true);
