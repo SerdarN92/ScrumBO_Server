@@ -18,7 +18,7 @@ import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentSprint;
 import scrumbo.de.entity.UserStory;
 
-public class UserstoryService {
+public class UserStoryService {
 	
 	public boolean createUserStory(UserStory userstory) {
 		boolean status = false;

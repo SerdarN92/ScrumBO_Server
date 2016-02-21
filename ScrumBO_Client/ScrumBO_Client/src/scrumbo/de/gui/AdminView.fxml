@@ -14,7 +14,7 @@
             <Image url="@../../../content/logoScrumBO.png" />
          </image>
       </ImageView>
-      <Label layoutX="339.0" layoutY="56.0" text="Willkommen Admin!">
+      <Label layoutX="362.0" layoutY="56.0" text="Willkommen Admin!">
          <font>
             <Font size="30.0" />
          </font>
@@ -62,7 +62,7 @@
       </Label>
       <TextField fx:id="portField" layoutX="145.0" layoutY="242.0" prefHeight="25.0" prefWidth="224.0" />
       <TextField fx:id="hostField" layoutX="145.0" layoutY="204.0" prefHeight="25.0" prefWidth="224.0" />
-      <Button fx:id="buttonDeleteUser" layoutX="400.0" layoutY="242.0" mnemonicParsing="false" onAction="#handleButtonDeleteUser" text="Benutzer löschen" />
-      <Button fx:id="buttonProject" layoutX="400.0" layoutY="204.0" mnemonicParsing="false" onAction="#handleButtonDeleteProject" text="Projekt löschen" />
+      <Button fx:id="buttonDeleteUser" layoutX="399.0" layoutY="242.0" mnemonicParsing="false" onAction="#handleButtonDeleteUser" text="Benutzer löschen" />
+      <Button fx:id="buttonProject" layoutX="399.0" layoutY="204.0" mnemonicParsing="false" onAction="#handleButtonDeleteProject" prefHeight="25.0" prefWidth="107.0" text="Projekt löschen" />
    </children>
 </AnchorPane>

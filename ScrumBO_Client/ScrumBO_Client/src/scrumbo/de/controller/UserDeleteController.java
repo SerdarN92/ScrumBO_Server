@@ -13,8 +13,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -28,32 +26,40 @@ import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.User;
-import scrumbo.de.service.BenutzerService;
+import scrumbo.de.service.UserService;
 
 public class UserDeleteController implements Initializable {
 	
-	Parent					root;
-	Scene					scene;
-	BenutzerService			benutzerService		= null;
+	private UserService	benutzerService		= null;
+	private List<User>		benutzerList		= new LinkedList<User>();
+	private User			currentBenutzer		= new User();
+												
 	@FXML
 	private ComboBox<User>	comboBoxBenutzer	= new ComboBox<>();
 	@FXML
 	private Button			buttonAbbort;
 	@FXML
 	private Button			buttonDelete;
-	private List<User>		benutzerList		= new LinkedList<User>();
-	private User			currentBenutzer		= new User();
-												
+							
 	@FXML
-	private void handleButtonAbbort(ActionEvent event) throws Exception {
-		Stage stage = (Stage) buttonDelete.getScene().getWindow();
-		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+	private void handleButtonAbbort() throws Exception {
+		try {
+			Stage stage = (Stage) buttonDelete.getScene().getWindow();
+			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@FXML
 	private void handleKeyPressed(KeyEvent event) {
-		if (event.getCode().equals(KeyCode.ENTER))
-			deleteUser();
+		if (event.getCode().equals(KeyCode.ENTER)) {
+			try {
+				deleteUser();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	private void deleteUser() {
@@ -71,7 +77,7 @@ public class UserDeleteController implements Initializable {
 				Optional<ButtonType> result = alert.showAndWait();
 				if (result.get() == buttonTypeOne) {
 					alert.close();
-					if (benutzerService.deleteBenutzer(currentBenutzer)) {
+					if (benutzerService.deleteUser(currentBenutzer)) {
 						Alert alert2 = new Alert(AlertType.INFORMATION);
 						alert2.setTitle("Benutzer löschen");
 						alert2.setHeaderText(null);

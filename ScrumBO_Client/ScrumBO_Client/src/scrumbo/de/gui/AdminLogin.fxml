@@ -11,44 +11,44 @@
 
 <AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.AdminLoginController">
    <children>
-      <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="75.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="96.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../content/logoScrumBO.png" />
          </image>
       </ImageView>
-      <Label layoutX="400.0" layoutY="65.0" text="Admin einloggen">
+      <Label layoutX="443.0" layoutY="88.0" text="Admin einloggen">
          <font>
             <Font size="30.0" />
          </font>
       </Label>
-      <Label layoutX="167.0" layoutY="284.0" text="Passwort">
+      <Label layoutX="209.0" layoutY="288.0" text="Passwort">
          <font>
             <Font size="21.0" />
          </font>
       </Label>
-      <Label layoutX="167.0" layoutY="245.0" text="E-Mail">
+      <Label layoutX="209.0" layoutY="249.0" text="E-Mail">
          <font>
             <Font size="21.0" />
          </font>
       </Label>
-      <TextField fx:id="txtFieldEmail" layoutX="401.0" layoutY="248.0" onKeyPressed="#handleKeyPressed" text="Stefan.Jonker@hs-bochum.de" />
-      <PasswordField fx:id="pswtFieldPassword" layoutX="401.0" layoutY="288.0" onKeyPressed="#handleKeyPressed" />
-      <Button fx:id="buttonLoginUser" layoutX="457.0" layoutY="353.0" mnemonicParsing="false" onAction="#handleLoginButton" text="Einloggen">
+      <TextField fx:id="txtFieldEmail" layoutX="420.0" layoutY="252.0" onKeyPressed="#handleKeyPressed" prefHeight="25.0" prefWidth="172.0" text="Stefan.Jonker@hs-bochum.de" />
+      <PasswordField fx:id="pswtFieldPassword" layoutX="420.0" layoutY="292.0" onKeyPressed="#handleKeyPressed" prefHeight="25.0" prefWidth="172.0" />
+      <Button fx:id="buttonLoginUser" layoutX="499.0" layoutY="357.0" mnemonicParsing="false" onAction="#handleLoginButton" text="Einloggen">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button fx:id="buttonBack" layoutX="167.0" layoutY="353.0" mnemonicParsing="false" onAction="#handleBackButton" text="Zurück">
+      <Button fx:id="buttonBack" layoutX="209.0" layoutY="357.0" mnemonicParsing="false" onAction="#handleBackButton" text="Zurück">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Text fx:id="emailValidFail" fill="#f50505" layoutX="572.0" layoutY="266.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="172.0">
+      <Text fx:id="emailValidFail" fill="#f50505" layoutX="606.0" layoutY="270.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="172.0">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Text fx:id="passwordValidFail" fill="#f50505" layoutX="572.0" layoutY="306.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="172.0">
+      <Text fx:id="passwordValidFail" fill="#f50505" layoutX="606.0" layoutY="310.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="172.0">
          <font>
             <Font size="16.0" />
          </font>

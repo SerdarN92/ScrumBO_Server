@@ -12,9 +12,17 @@ import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.ProductBacklog;
 
-public class ProductbacklogService {
+public class ProductBacklogService {
 	
-	public void getProductbacklog() {
+	private Gson gson = new Gson();
+	
+	/*
+	 * Erhält vom Server die Id des Product Backlogs des Projekts in Form eines
+	 * ProductBacklog-Objekts mit der Id und speichert Sie zum
+	 * CurrentProject-Objekt, damit diese für spätere Abfragen genutzt werden
+	 * kann.
+	 */
+	public void getProductBacklogForProject() {
 		String output = "";
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
@@ -35,15 +43,17 @@ public class ProductbacklogService {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		
-		Gson gson = new Gson();
-		ProductBacklog liste = gson.fromJson(output, ProductBacklog.class);
-		CurrentProject.productbacklog = liste;
+		ProductBacklog productbacklog = gson.fromJson(output, ProductBacklog.class);
+		CurrentProject.productbacklog = productbacklog;
 	}
 	
+	/*
+	 * Die Methode lädt anhand der Id des Product Backlogs alle zum Product
+	 * Backlog gehörenden User Stories und speichert diese zum
+	 * CurrentProject-Objekt.
+	 */
 	public void loadProductBacklog() {
 		String output = "";
-		Integer platz = -1;
 		try {
 			
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
@@ -66,8 +76,8 @@ public class ProductbacklogService {
 		}
 		
 		Gson gson = new Gson();
-		ProductBacklog a = gson.fromJson(output, ProductBacklog.class);
-		CurrentProject.productbacklog = a;
+		ProductBacklog productbacklog = gson.fromJson(output, ProductBacklog.class);
+		CurrentProject.productbacklog = productbacklog;
 		
 	}
 }

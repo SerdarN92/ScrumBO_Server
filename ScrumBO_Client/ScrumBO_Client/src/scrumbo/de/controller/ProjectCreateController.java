@@ -23,13 +23,13 @@ import javafx.stage.Stage;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.Project;
 import scrumbo.de.entity.User;
-import scrumbo.de.service.ScrumprojektService;
+import scrumbo.de.service.ProjectService;
 
 public class ProjectCreateController implements Initializable {
 	
 	Parent				root;
 	Scene				scene;
-	ScrumprojektService	scrumprojektService	= null;
+	ProjectService	scrumprojektService	= null;
 	@FXML
 	private Button		buttonLogout;
 	@FXML

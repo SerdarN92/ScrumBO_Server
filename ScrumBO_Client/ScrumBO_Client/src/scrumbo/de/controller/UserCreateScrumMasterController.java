@@ -29,8 +29,8 @@ import scrumbo.de.common.Encryptor;
 import scrumbo.de.common.LetterTextField;
 import scrumbo.de.entity.Role;
 import scrumbo.de.entity.User;
-import scrumbo.de.service.BenutzerService;
-import scrumbo.de.service.BenutzerrolleService;
+import scrumbo.de.service.UserService;
+import scrumbo.de.service.RoleService;
 
 /**
  * FXML Controller Klasse für die Erstellung eines Benutzers
@@ -41,8 +41,8 @@ public class UserCreateScrumMasterController implements Initializable {
 	
 	Parent					root;
 	Scene					scene;
-	BenutzerService			benutzerService			= null;
-	BenutzerrolleService	benutzerrolleService	= null;
+	UserService			benutzerService			= null;
+	RoleService	benutzerrolleService	= null;
 	List<Role>				liste					= null;
 	@FXML
 	private LetterTextField	txtFieldPrename;

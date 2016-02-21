@@ -157,9 +157,9 @@ public class ScrumprojektREST {
 	}
 	
 	@POST
-	@Path("/create/{email}/{hibernateconfigfilename}")
+	@Path("/create/{userId}/{hibernateconfigfilename}")
 	@Consumes("application/json" + ";charset=utf-8")
-	public Response createProject(@PathParam("email") String email, InputStream input,
+	public Response createProject(@PathParam("userId") Integer userId, InputStream input,
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
 		StringBuilder b = new StringBuilder();
 		try {
@@ -184,7 +184,7 @@ public class ScrumprojektREST {
 		ProjectDTO projectDTO = gson.fromJson(projectdetails, ProjectDTO.class);
 		
 		Project scrumprojekt = new Project();
-		User benutzer = bs.findByEmail(email);
+		User benutzer = bs.findById(userId);
 		ProductBacklog productbacklog = new ProductBacklog();
 		User_Role_Project bssmodel = new User_Role_Project();
 		SprintBacklog sprintbacklog = new SprintBacklog();
@@ -270,6 +270,7 @@ public class ScrumprojektREST {
 		User_Role_ProjectService urpService = new User_Role_ProjectService(hibernateconfigfilename);
 		ProjectService projectService = new ProjectService(hibernateconfigfilename);
 		Project scrumprojekt = projectService.findById(scrumprojektid);
+		
 		boolean success = false;
 		
 		try {
@@ -288,44 +289,47 @@ public class ScrumprojektREST {
 		return Response.status(200).entity(output).build();
 		
 	}
-	
-	@POST
-	@Path("/delete/{hibernateconfigfilename}")
-	@Consumes("application/json" + ";charset=utf-8")
-	public Response deleteProject(InputStream input,
-			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
-		StringBuilder b = new StringBuilder();
-		try {
-			BufferedReader in = new BufferedReader(new InputStreamReader(input));
-			String line = null;
-			while ((line = in.readLine()) != null) {
-				b.append(line);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		String scrumprojektDetails = b.toString();
-		Gson gson = new Gson();
-		ProjectDTO projectDTO = gson.fromJson(scrumprojektDetails, ProjectDTO.class);
-		User_Role_ProjectService urpService = new User_Role_ProjectService(hibernateconfigfilename);
-		ProjectService projectService = new ProjectService(hibernateconfigfilename);
-		Project scrumprojekt = projectService.findById(projectDTO.getId());
-		boolean success = false;
-		String output = "Projekt nicht gelöscht";
-		
-		try {
-			urpService.deleteProject(scrumprojekt.getId());
-			projectService.delete(scrumprojekt.getId());
-			success = true;
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		
-		if (success) {
-			output = "Projekt gelöscht";
-		}
-		
-		return Response.status(200).entity(output).build();
-	}
+	//
+	// @POST
+	// @Path("/delete/{hibernateconfigfilename}")
+	// @Consumes("application/json" + ";charset=utf-8")
+	// public Response deleteProject(InputStream input,
+	// @PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
+	// StringBuilder b = new StringBuilder();
+	// try {
+	// BufferedReader in = new BufferedReader(new InputStreamReader(input));
+	// String line = null;
+	// while ((line = in.readLine()) != null) {
+	// b.append(line);
+	// }
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	// String scrumprojektDetails = b.toString();
+	// Gson gson = new Gson();
+	// ProjectDTO projectDTO = gson.fromJson(scrumprojektDetails,
+	// ProjectDTO.class);
+	// User_Role_ProjectService urpService = new
+	// User_Role_ProjectService(hibernateconfigfilename);
+	// ProjectService projectService = new
+	// ProjectService(hibernateconfigfilename);
+	// Project scrumprojekt = projectService.findById(projectDTO.getId());
+	// boolean success = false;
+	// String output = "Projekt nicht gelöscht";
+	//
+	// try {
+	// urpService.deleteProject(scrumprojekt.getId());
+	// projectService.delete(scrumprojekt.getId());
+	// success = true;
+	// } catch (Exception e) {
+	// e.printStackTrace();
+	// }
+	//
+	// if (success) {
+	// output = "Projekt gelöscht";
+	// }
+	//
+	// return Response.status(200).entity(output).build();
+	// }
 	
 }

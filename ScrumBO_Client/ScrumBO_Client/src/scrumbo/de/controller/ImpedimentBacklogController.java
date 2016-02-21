@@ -129,7 +129,7 @@ public class ImpedimentBacklogController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		impedimentService = StartwindowController.getImpedimentService();
-		impedimentService.getImpedimentBacklog();
+		impedimentService.getImpedimentsForProject();
 		
 		data.clear();
 		
@@ -225,7 +225,7 @@ public class ImpedimentBacklogController implements Initializable {
 	
 	private void reload() throws Exception {
 		tableViewImpedimentBacklog.getItems().clear();
-		impedimentService.getImpedimentBacklog();
+		impedimentService.getImpedimentsForProject();
 		
 		data.clear();
 		

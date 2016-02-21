@@ -108,7 +108,7 @@ public class DefinitionOfDoneController implements Initializable {
 	}
 	
 	public void ladeDefinitionOfDone() {
-		definitionofdoneService.ladeDefinitionOfDone();
+		definitionofdoneService.loadDefinitionOfDone();
 		
 		data.clear();
 		

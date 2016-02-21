@@ -149,8 +149,7 @@ public class BenutzerREST {
 		List<User_Role_Project> urpList = urpService.findListByProjectId(projectId);
 		List<User> userList = new LinkedList<User>();
 		for (int i = 0; i < urpList.size(); i++) {
-			if (urpList.get(i).getPk().getRoleId() == 3)
-				userList.add(userService.findById(urpList.get(i).getPk().getUserId()));
+			userList.add(userService.findById(urpList.get(i).getPk().getUserId()));
 		}
 		
 		List<UserDTO> userDTOList = new LinkedList<UserDTO>();
@@ -197,7 +196,7 @@ public class BenutzerREST {
 			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
 		UserService userService = new UserService(hibernateconfigfilename);
 		User user = userService.findByEmail(email);
-		userService.checkIfEmailAlreadyExists(email);
+		// userService.checkIfEmailAlreadyExists(email);
 		String output = "User ist nicht vorhanden";
 		if (user != null) {
 			UserDTO userDTO = new UserDTO(user.getId(), user.getPrename(), user.getLastname(), user.getPassword(),

@@ -33,7 +33,6 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.controller.SprintBacklogController;
-import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.entity.UserStoryTask;
 
@@ -72,7 +71,7 @@ public class MyHBox extends HBox {
 		beschreibung.setText(sb.toString());
 		vboxuserstory.setMinWidth(183);
 		vboxuserstory.setMaxWidth(183);
-		beschreibung.setWrappingWidth(vboxuserstory.getWidth());
+		beschreibung.setWrappingWidth(vboxuserstory.getMaxWidth() - 10);
 		vboxuserstory.setAlignment(Pos.CENTER);
 		vboxuserstory.getChildren().add(beschreibung);
 		vboxuserstory.setStyle("-fx-border-style: solid;" + "-fx-border-width: 0.3;" + "-fx-border-color: black");
@@ -92,7 +91,7 @@ public class MyHBox extends HBox {
 		vboxdonetasks.setStyle(
 				"-fx-padding:5px;" + "-fx-border-style: solid;" + "-fx-border-width: 0.3;" + "-fx-border-color: black");
 				
-		if (SprintBacklogController.editable && !CurrentUser.isPO) {
+		if (SprintBacklogController.editable) {
 			
 			vboxtasksinwork.setOnDragEntered(new EventHandler<DragEvent>() {
 				@Override

@@ -249,6 +249,8 @@ public class SprintREST {
 			userStoryService.update(list.get(i));
 		}
 		
+		output = "User Stories wurden entfernt.";
+		
 		return Response.status(200).entity(output).build();
 	}
 	

@@ -9,12 +9,9 @@ import java.util.ResourceBundle;
 import javafx.beans.value.ChangeListener;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -27,26 +24,29 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
 import scrumbo.de.entity.Project;
-import scrumbo.de.service.ScrumprojektService;
+import scrumbo.de.service.ProjectService;
 
-public class ProjektLoeschenController implements Initializable {
+public class ProjectDeleteController implements Initializable {
 	
-	Parent						root;
-	Scene						scene;
-	ScrumprojektService			scrumprojektService	= null;
+	private ProjectService	scrumprojektService;
+	private List<Project>		scrumprojectList	= new LinkedList<Project>();
+	private Project				currentScrumproject	= new Project();
+													
 	@FXML
 	private ComboBox<Project>	comboBoxProjekte	= new ComboBox<>();
 	@FXML
 	private Button				buttonAbbort;
 	@FXML
 	private Button				buttonDelete;
-	private List<Project>		scrumprojectList	= new LinkedList<Project>();
-	private Project				currentScrumproject	= new Project();
-													
+								
 	@FXML
-	private void handleButtonAbbort(ActionEvent event) throws Exception {
-		Stage stage = (Stage) buttonDelete.getScene().getWindow();
-		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+	private void handleButtonAbbort() {
+		try {
+			Stage stage = (Stage) buttonDelete.getScene().getWindow();
+			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	private void deleteProject() {
@@ -94,20 +94,29 @@ public class ProjektLoeschenController implements Initializable {
 	}
 	
 	@FXML
-	private void handleButtonDelete(ActionEvent event) throws Exception {
-		deleteProject();
+	private void handleButtonDelete() {
+		try {
+			deleteProject();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@FXML
 	private void handleKeyPressed(KeyEvent event) {
-		if (event.getCode().equals(KeyCode.ENTER))
-			deleteProject();
+		if (event.getCode().equals(KeyCode.ENTER)) {
+			try {
+				deleteProject();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		scrumprojektService = StartwindowController.getScrumprojektService();
-		scrumprojectList = scrumprojektService.ladeProjekte();
+		scrumprojectList = scrumprojektService.loadProjects();
 		
 		if (scrumprojectList.isEmpty()) {
 			buttonDelete.setDisable(true);
@@ -119,6 +128,7 @@ public class ProjektLoeschenController implements Initializable {
 		for (int i = 0; i < scrumprojectList.size(); i++) {
 			options.add(scrumprojectList.get(i));
 		}
+		
 		comboBoxProjekte.getItems().addAll(options);
 		comboBoxProjekte.setOnMousePressed(new EventHandler<MouseEvent>() {
 			@Override

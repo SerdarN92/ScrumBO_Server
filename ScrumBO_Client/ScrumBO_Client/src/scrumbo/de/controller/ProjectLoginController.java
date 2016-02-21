@@ -20,19 +20,19 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentUser;
-import scrumbo.de.service.BenutzerService;
 import scrumbo.de.service.ImpedimentService;
-import scrumbo.de.service.ProductbacklogService;
-import scrumbo.de.service.ScrumprojektService;
+import scrumbo.de.service.ProductBacklogService;
+import scrumbo.de.service.ProjectService;
+import scrumbo.de.service.UserService;
 
 public class ProjectLoginController implements Initializable {
 	
 	Parent					root;
 	Scene					scene;
-	ScrumprojektService		scrumprojektService		= null;
+	ProjectService			scrumprojektService		= null;
 	ImpedimentService		impedimentService		= null;
-	ProductbacklogService	productbacklogService	= null;
-	BenutzerService			benutzerService			= null;
+	ProductBacklogService	productbacklogService	= null;
+	UserService				benutzerService			= null;
 	@FXML
 	private Button			buttonLogout;
 	@FXML
@@ -83,27 +83,34 @@ public class ProjectLoginController implements Initializable {
 			if (scrumprojektService.checkIfProjectnameExists(txtFieldProjectname.getText().toString())) {
 				projectnameValidFail.setVisible(false);
 				txtFieldProjectname.setStyle(null);
-				CurrentProject.projectId = scrumprojektService.getScrumproject().getScrumProjektID();
-				CurrentProject.projectname = scrumprojektService.getScrumproject().getProjektname();
-				if (benutzerService.checkAdmission()) {
-					txtFieldProjectname.setStyle(null);
-					productbacklogService.getProductbacklog();
-					impedimentService.getImpedimentBacklog();
-					if (CurrentUser.isSM) {
-						this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
-						this.scene = new Scene(root);
-						Stage stage = (Stage) buttonLogout.getScene().getWindow();
-						stage.setScene(scene);
+				if (scrumprojektService.getScrumproject().getPasswort()
+						.equals(pswtFieldPassword.getText().toString())) {
+					CurrentProject.projectId = scrumprojektService.getScrumproject().getScrumProjektID();
+					CurrentProject.projectname = scrumprojektService.getScrumproject().getProjektname();
+					if (benutzerService.checkAdmission()) {
+						txtFieldProjectname.setStyle(null);
+						productbacklogService.getProductBacklogForProject();
+						impedimentService.getImpedimentsForProject();
+						if (CurrentUser.isSM) {
+							this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
+							this.scene = new Scene(root);
+							Stage stage = (Stage) buttonLogout.getScene().getWindow();
+							stage.setScene(scene);
+						} else {
+							this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Scrum.fxml"));
+							this.scene = new Scene(root);
+							Stage stage = (Stage) buttonLogout.getScene().getWindow();
+							stage.setScene(scene);
+						}
 					} else {
-						this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Scrum.fxml"));
-						this.scene = new Scene(root);
-						Stage stage = (Stage) buttonLogout.getScene().getWindow();
-						stage.setScene(scene);
+						projectnameValidFail.setText("Sie haben keine Zugriffsrechte auf dieses Projekt");
+						projectnameValidFail.setVisible(true);
+						txtFieldProjectname.setStyle("-fx-border-color:#FF0000;");
 					}
 				} else {
-					projectnameValidFail.setText("Sie haben keine Zugriffsrechte auf dieses Projekt");
-					projectnameValidFail.setVisible(true);
-					txtFieldProjectname.setStyle("-fx-border-color:#FF0000;");
+					passwordValidFail.setText("Passwort ist falsch.");
+					passwordValidFail.setVisible(true);
+					pswtFieldPassword.setStyle("-fx-border-color:#FF0000;");
 				}
 			} else {
 				projectnameValidFail.setText("Projekt mit diesem Namen existiert nicht.");

@@ -11,7 +11,6 @@ import java.util.ResourceBundle;
 
 import org.json.JSONException;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -24,9 +23,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import scrumbo.de.common.Encryptor;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.User;
-import scrumbo.de.service.BenutzerService;
+import scrumbo.de.service.UserService;
 
 /**
  * FXML Controller class
@@ -37,10 +37,11 @@ import scrumbo.de.service.BenutzerService;
  */
 public class AdminLoginController implements Initializable {
 	
-	Parent					root;
-	Scene					scene;
-	BenutzerService			benutzerService	= null;
-	User					benutzer		= null;
+	private Parent			root;
+	private Scene			scene;
+	private UserService		benutzerService;
+	private User			benutzer;
+							
 	@FXML
 	private TextField		txtFieldEmail;
 	@FXML
@@ -55,22 +56,36 @@ public class AdminLoginController implements Initializable {
 	private Button			buttonLoginUser;
 							
 	@FXML
-	private void handleBackButton(ActionEvent event) throws IOException {
-		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
-		this.scene = new Scene(root);
-		Stage stage = (Stage) buttonBack.getScene().getWindow();
-		stage.setScene(scene);
+	private void handleBackButton() {
+		try {
+			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
+			this.scene = new Scene(root);
+			Stage stage = (Stage) buttonBack.getScene().getWindow();
+			stage.setScene(scene);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	@FXML
-	private void handleKeyPressed(KeyEvent event) throws JSONException, IOException, Exception {
-		if (event.getCode().equals(KeyCode.ENTER))
+	private void handleKeyPressed(KeyEvent event) {
+		if (event.getCode().equals(KeyCode.ENTER)) {
+			try {
+				handleLogin();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+		
+	}
+	
+	@FXML
+	private void handleLoginButton() {
+		try {
 			handleLogin();
-	}
-	
-	@FXML
-	private void handleLoginButton(ActionEvent event) throws Exception {
-		handleLogin();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	public void handleLogin() throws JSONException, IOException, Exception {
@@ -83,15 +98,15 @@ public class AdminLoginController implements Initializable {
 			} else {
 				txtFieldEmail.setStyle(null);
 				benutzer = benutzerService.getBenutzer();
-				if (pswtFieldPassword.getText().equals(benutzer.getPasswort())) {
+				if (pswtFieldPassword.getText().equals(Encryptor.decrypt(benutzer.getPasswort()))) {
 					pswtFieldPassword.setStyle(null);
+					emailValidFail.setVisible(false);
+					passwordValidFail.setVisible(false);
 					CurrentUser.userId = benutzer.getId();
 					CurrentUser.prename = benutzer.getVorname();
 					CurrentUser.lastname = benutzer.getNachname();
 					CurrentUser.email = benutzer.getEmail();
 					CurrentUser.password = benutzer.getPasswort();
-					emailValidFail.setVisible(false);
-					passwordValidFail.setVisible(false);
 					if (benutzerService.checkAdmin()) {
 						this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/AdminView.fxml"));
 						this.scene = new Scene(root);
@@ -136,7 +151,7 @@ public class AdminLoginController implements Initializable {
 	}
 	
 	@Override
-	public void initialize(URL url, ResourceBundle rb) {
+	public void initialize(URL arg0, ResourceBundle arg1) {
 		benutzerService = StartwindowController.getBenutzerService();
 	}
 	

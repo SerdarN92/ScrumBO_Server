@@ -40,14 +40,14 @@ import scrumbo.de.entity.CurrentSprint;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.Sprint;
 import scrumbo.de.entity.UserStory;
-import scrumbo.de.service.SprintbacklogService;
+import scrumbo.de.service.SprintBacklogService;
 
 public class SprintBacklogController implements Initializable {
 	
 	Parent									root;
 	Scene									scene;
 	Stage									stage					= null;
-	SprintbacklogService					sprintbacklogService	= null;
+	SprintBacklogService					sprintbacklogService	= null;
 	@FXML
 	private ImageView						informationImage;
 	@FXML
@@ -241,7 +241,6 @@ public class SprintBacklogController implements Initializable {
 							buttonStartSprint.setDisable(true);
 							buttonEndDay.setDisable(true);
 							buttonCreateNewSprint.setDisable(true);
-							buttonLoadSprint.setDisable(true);
 						}
 						
 					} catch (Exception e) {
@@ -305,7 +304,6 @@ public class SprintBacklogController implements Initializable {
 	
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
-		editable = true;
 		sprintbacklogService = StartwindowController.getSprintbacklogService();
 		anzahlSprints = sprintbacklogService.ladeAnzahlSprints();
 		initSprintBacklog();
@@ -350,7 +348,6 @@ public class SprintBacklogController implements Initializable {
 			buttonStartSprint.setDisable(true);
 			buttonEndDay.setDisable(true);
 			buttonCreateNewSprint.setDisable(true);
-			buttonLoadSprint.setDisable(true);
 			buttonAddUserStory.setDisable(true);
 		}
 		

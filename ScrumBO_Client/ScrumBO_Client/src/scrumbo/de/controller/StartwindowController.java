@@ -19,15 +19,15 @@ import javafx.util.Duration;
 import scrumbo.de.common.MyToolBox;
 import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentUser;
-import scrumbo.de.service.BenutzerService;
-import scrumbo.de.service.BenutzerrolleService;
+import scrumbo.de.service.UserService;
+import scrumbo.de.service.RoleService;
 import scrumbo.de.service.DefinitionOfDoneService;
 import scrumbo.de.service.ImpedimentService;
-import scrumbo.de.service.ProductbacklogService;
-import scrumbo.de.service.ScrumprojektService;
-import scrumbo.de.service.SprintbacklogService;
+import scrumbo.de.service.ProductBacklogService;
+import scrumbo.de.service.ProjectService;
+import scrumbo.de.service.SprintBacklogService;
 import scrumbo.de.service.TaskService;
-import scrumbo.de.service.UserstoryService;
+import scrumbo.de.service.UserStoryService;
 
 public class StartwindowController implements Initializable {
 	
@@ -41,14 +41,14 @@ public class StartwindowController implements Initializable {
 	@FXML
 	private ImageView						informationImage;
 											
-	private static BenutzerService			benutzerService			= null;
-	private static BenutzerrolleService		benutzerrolleService	= null;
-	private static ScrumprojektService		scrumprojektService		= null;
+	private static UserService			benutzerService			= null;
+	private static RoleService		benutzerrolleService	= null;
+	private static ProjectService		scrumprojektService		= null;
 	private static ImpedimentService		impedimentService		= null;
-	private static ProductbacklogService	productbacklogService	= null;
-	private static UserstoryService			userstoryService		= null;
+	private static ProductBacklogService	productbacklogService	= null;
+	private static UserStoryService			userstoryService		= null;
 	private static TaskService				taskService				= null;
-	private static SprintbacklogService		sprintbacklogService	= null;
+	private static SprintBacklogService		sprintbacklogService	= null;
 	private static DefinitionOfDoneService	definitionofdoneService	= null;
 																	
 	@FXML
@@ -71,21 +71,21 @@ public class StartwindowController implements Initializable {
 	public void initialize(URL url, ResourceBundle rb) {
 		
 		if (benutzerService == null)
-			benutzerService = new BenutzerService();
+			benutzerService = new UserService();
 		if (benutzerrolleService == null)
-			benutzerrolleService = new BenutzerrolleService();
+			benutzerrolleService = new RoleService();
 		if (scrumprojektService == null)
-			scrumprojektService = new ScrumprojektService();
+			scrumprojektService = new ProjectService();
 		if (impedimentService == null)
 			impedimentService = new ImpedimentService();
 		if (productbacklogService == null)
-			productbacklogService = new ProductbacklogService();
+			productbacklogService = new ProductBacklogService();
 		if (userstoryService == null)
-			userstoryService = new UserstoryService();
+			userstoryService = new UserStoryService();
 		if (taskService == null)
 			taskService = new TaskService();
 		if (sprintbacklogService == null)
-			sprintbacklogService = new SprintbacklogService();
+			sprintbacklogService = new SprintBacklogService();
 		if (definitionofdoneService == null)
 			definitionofdoneService = new DefinitionOfDoneService();
 			
@@ -94,27 +94,27 @@ public class StartwindowController implements Initializable {
 		Tooltip.install(informationImage, toolbox.getTooltipWelcome());
 	}
 	
-	public static BenutzerService getBenutzerService() {
+	public static UserService getBenutzerService() {
 		return benutzerService;
 	}
 	
-	public static void setBenutzerService(BenutzerService benutzerService) {
+	public static void setBenutzerService(UserService benutzerService) {
 		StartwindowController.benutzerService = benutzerService;
 	}
 	
-	public static BenutzerrolleService getBenutzerrolleService() {
+	public static RoleService getBenutzerrolleService() {
 		return benutzerrolleService;
 	}
 	
-	public static void setBenutzerrolleService(BenutzerrolleService benutzerrolleService) {
+	public static void setBenutzerrolleService(RoleService benutzerrolleService) {
 		StartwindowController.benutzerrolleService = benutzerrolleService;
 	}
 	
-	public static ScrumprojektService getScrumprojektService() {
+	public static ProjectService getScrumprojektService() {
 		return scrumprojektService;
 	}
 	
-	public static void setScrumprojektService(ScrumprojektService scrumprojektService) {
+	public static void setScrumprojektService(ProjectService scrumprojektService) {
 		StartwindowController.scrumprojektService = scrumprojektService;
 	}
 	
@@ -126,19 +126,19 @@ public class StartwindowController implements Initializable {
 		StartwindowController.impedimentService = impedimentService;
 	}
 	
-	public static ProductbacklogService getProductbacklogService() {
+	public static ProductBacklogService getProductbacklogService() {
 		return productbacklogService;
 	}
 	
-	public static void setProductbacklogService(ProductbacklogService productbacklogService) {
+	public static void setProductbacklogService(ProductBacklogService productbacklogService) {
 		StartwindowController.productbacklogService = productbacklogService;
 	}
 	
-	public static UserstoryService getUserstoryService() {
+	public static UserStoryService getUserstoryService() {
 		return userstoryService;
 	}
 	
-	public static void setUserstoryService(UserstoryService userstoryService) {
+	public static void setUserstoryService(UserStoryService userstoryService) {
 		StartwindowController.userstoryService = userstoryService;
 	}
 	
@@ -150,11 +150,11 @@ public class StartwindowController implements Initializable {
 		StartwindowController.taskService = taskService;
 	}
 	
-	public static SprintbacklogService getSprintbacklogService() {
+	public static SprintBacklogService getSprintbacklogService() {
 		return sprintbacklogService;
 	}
 	
-	public static void setSprintbacklogService(SprintbacklogService sprintbacklogService) {
+	public static void setSprintbacklogService(SprintBacklogService sprintbacklogService) {
 		StartwindowController.sprintbacklogService = sprintbacklogService;
 	}
 	

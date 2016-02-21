@@ -22,10 +22,11 @@ import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.User;
 
-public class BenutzerService {
+public class UserService {
 	
-	private User benutzer = null;
-	
+	private User	benutzer	= null;
+	private Gson	gson		= new Gson();
+								
 	public User getBenutzer() {
 		return benutzer;
 	}
@@ -34,6 +35,12 @@ public class BenutzerService {
 		this.benutzer = benutzer;
 	}
 	
+	/*
+	 * Methode prüft, ob ein Benutzer zu der übergebenen E-Mail existiert oder
+	 * nicht. Falls ja, wird ein true zurückgegeben und das erhaltene
+	 * User-Objekt zwischengespeichert. Sollte zu der E-Mail kein Nutzer
+	 * existieren wird ein false zurückgegeben.
+	 */
 	public Boolean checkIfEmailExists(String email) throws JSONException {
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
@@ -51,18 +58,11 @@ public class BenutzerService {
 			String output = br.readLine();
 			conn.disconnect();
 			
-			Gson gson = new Gson();
 			if (output.equals("User ist nicht vorhanden")) {
 				return false;
-				
 			} else {
-				
 				benutzer = gson.fromJson(output, User.class);
-				if (email.equals(benutzer.getEmail())) {
-					return true;
-				} else {
-					return false;
-				}
+				return true;
 			}
 		} catch (MalformedURLException e) {
 			e.printStackTrace();
@@ -107,7 +107,6 @@ public class BenutzerService {
 	
 	public Boolean createScrumMaster(User benutzer) throws JSONException {
 		boolean status = false;
-		Gson gson = new Gson();
 		String output = gson.toJson(benutzer);
 		
 		try {
@@ -141,7 +140,6 @@ public class BenutzerService {
 	
 	public Boolean changeDefaultPassword(User benutzer) throws JSONException {
 		boolean status = false;
-		Gson gson = new Gson();
 		String output = gson.toJson(benutzer);
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
@@ -170,7 +168,7 @@ public class BenutzerService {
 	}
 	
 	// nur Benutzer die Entwickler sind
-	public List<User> ladeEntwicklerVomAktuellenProjekt() {
+	public List<User> ladeBenutzerVomProjekt() {
 		List<User> benutzerList = new LinkedList<User>();
 		String output = "";
 		try {
@@ -193,7 +191,6 @@ public class BenutzerService {
 			e.printStackTrace();
 		}
 		
-		Gson gson = new Gson();
 		Type listType = new TypeToken<LinkedList<User>>() {
 		}.getType();
 		benutzerList = gson.fromJson(output, listType);
@@ -223,7 +220,6 @@ public class BenutzerService {
 			e.printStackTrace();
 		}
 		
-		Gson gson = new Gson();
 		Type listType = new TypeToken<LinkedList<User>>() {
 		}.getType();
 		benutzerList = gson.fromJson(output, listType);
@@ -254,7 +250,6 @@ public class BenutzerService {
 			e.printStackTrace();
 		}
 		
-		Gson gson = new Gson();
 		Type listType = new TypeToken<LinkedList<User>>() {
 		}.getType();
 		benutzerList = gson.fromJson(output, listType);
@@ -313,10 +308,8 @@ public class BenutzerService {
 			String output = br.readLine();
 			conn.disconnect();
 			
-			Gson gson = new Gson();
 			if (output.equals("Ja")) {
 				return true;
-				
 			} else {
 				return false;
 			}
@@ -329,10 +322,9 @@ public class BenutzerService {
 		return false;
 	}
 	
-	public boolean deleteBenutzer(User benutzer) {
+	public boolean deleteUser(User user) {
 		boolean status = false;
-		Gson gson = new Gson();
-		String output = gson.toJson(benutzer);
+		String output = gson.toJson(user);
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
 					+ "/ScrumBO_Server/rest/benutzer/delete/" + ScrumBOClient.getDatabaseconfigfile());
@@ -380,7 +372,6 @@ public class BenutzerService {
 			e.printStackTrace();
 		}
 		
-		Gson gson = new Gson();
 		Type listType = new TypeToken<LinkedList<User>>() {
 		}.getType();
 		user = gson.fromJson(output, User.class);

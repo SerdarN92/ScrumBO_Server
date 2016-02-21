@@ -17,11 +17,18 @@ import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.Project;
 
-public class ScrumprojektService {
+public class ProjectService {
 	
-	Project scrumproject = null;
-	
-	public Boolean checkIfProjectnameExists(String projectname) throws Exception {
+	private Project	project	= null;
+	private Gson	gson	= new Gson();
+	private Type	listType;
+					
+	/*
+	 * Methode zum Prüfen, ob ein Projekt mit exakt dem Projektnamen existiert.
+	 * Falls ja, wird true zurückgegeben und das erhaltene Project-Objekt wird
+	 * zwischengespeichert. Falls nein, wird ein false zurückgegeben.
+	 */
+	public boolean checkIfProjectnameExists(String projectname) throws Exception {
 		URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
 				+ "/ScrumBO_Server/rest/scrumprojekt/suche/" + projectname + "/"
 				+ ScrumBOClient.getDatabaseconfigfile());
@@ -35,16 +42,13 @@ public class ScrumprojektService {
 		
 		BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
 		String output = br.readLine();
-		conn.disconnect();
-		
-		Gson gson = new Gson();
 		
 		if (output.equals("Projekt nicht vorhanden")) {
 			return false;
 			
 		} else {
-			scrumproject = gson.fromJson(output, Project.class);
-			if (projectname.equals(scrumproject.getProjektname())) {
+			project = gson.fromJson(output, Project.class);
+			if (projectname.equalsIgnoreCase(project.getProjektname())) {
 				return true;
 			} else {
 				return false;
@@ -52,48 +56,17 @@ public class ScrumprojektService {
 		}
 	}
 	
-	public Boolean checkIfProjectnameExistsForProjectLogin(String projectname) throws Exception {
-		URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
-				+ "/ScrumBO_Server/rest/scrumprojekt/suche/" + projectname + "/"
-				+ ScrumBOClient.getDatabaseconfigfile());
-		HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-		conn.setRequestMethod("GET");
-		conn.setRequestProperty("Accept", "application/json");
-		
-		if (conn.getResponseCode() != 200) {
-			throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
-		}
-		
-		BufferedReader br = new BufferedReader(new InputStreamReader((conn.getInputStream())));
-		String output = br.readLine();
-		conn.disconnect();
-		
-		Gson gson = new Gson();
-		
-		if (output.equals("Projekt nicht vorhanden")) {
-			
-			return false;
-			
-		} else {
-			scrumproject = gson.fromJson(output, Project.class);
-			if (projectname.equals(scrumproject.getProjektname())) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-	}
-	
-	public Boolean createProject(Project scrumproject) {
+	/*
+	 * Methode zum Erstellen eines Projekts. Die Id des eingeloggten Benutzers
+	 * wird mitgegeben, damit das Projekt dem User zugeordnet werden kann.
+	 */
+	public Boolean createProject(Project project) {
 		boolean status = false;
-		Gson gson = new Gson();
-		String output = gson.toJson(scrumproject);
-		
-		System.out.println(output);
+		String output = gson.toJson(project);
 		
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
-					+ "/ScrumBO_Server/rest/scrumprojekt/create/" + CurrentUser.email + "/"
+					+ "/ScrumBO_Server/rest/scrumprojekt/create/" + CurrentUser.userId + "/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
@@ -117,34 +90,31 @@ public class ScrumprojektService {
 		return status;
 	}
 	
-	public Project getScrumproject() {
-		return scrumproject;
-	}
-	
-	public void setScrumproject(Project scrumproject) {
-		this.scrumproject = scrumproject;
-	}
-	
-	public boolean deleteProject(Project scrumproject) {
+	/*
+	 * Methode zum Löschen eines Projekts.
+	 */
+	public boolean deleteProject(Project project) {
 		boolean status = false;
-		Gson gson = new Gson();
-		String output = gson.toJson(scrumproject);
+		String output = "";
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
-					+ "/ScrumBO_Server/rest/scrumprojekt/delete/" + ScrumBOClient.getDatabaseconfigfile());
+					+ "/ScrumBO_Server/rest/scrumprojekt/delete/" + project.getId() + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setRequestProperty("Content-Type", "application/json");
-			conn.setConnectTimeout(5000);
-			conn.setReadTimeout(5000);
-			conn.setRequestMethod("POST");
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
 			
-			OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-			out.write(output);
-			out.close();
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
+			}
 			
-			if (conn.getResponseMessage().equals("OK"))
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+			output = br.readLine();
+			
+			if (output.equals("Projekt gelöscht")) {
 				status = true;
+			}
 			conn.disconnect();
 			
 		} catch (Exception e) {
@@ -154,8 +124,11 @@ public class ScrumprojektService {
 		return status;
 	}
 	
-	public List<Project> ladeProjekte() {
-		List<Project> projekteListe = new LinkedList<Project>();
+	/*
+	 * Methode zum Laden aller vorhandenen Projekte auf der Datenbank.
+	 */
+	public List<Project> loadProjects() {
+		List<Project> projectList;
 		String output = "";
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
@@ -176,12 +149,19 @@ public class ScrumprojektService {
 			e.printStackTrace();
 		}
 		
-		Gson gson = new Gson();
-		Type listType = new TypeToken<LinkedList<Project>>() {
+		listType = new TypeToken<LinkedList<Project>>() {
 		}.getType();
-		projekteListe = gson.fromJson(output, listType);
+		projectList = gson.fromJson(output, listType);
 		
-		return projekteListe;
+		return projectList;
+	}
+	
+	public Project getScrumproject() {
+		return project;
+	}
+	
+	public void setScrumproject(Project project) {
+		this.project = project;
 	}
 	
 }

@@ -15,8 +15,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -30,30 +28,30 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.UserStory;
-import scrumbo.de.service.UserstoryService;
+import scrumbo.de.service.UserStoryService;
 
 public class UserStoryCreateController implements Initializable {
 	
-	Parent				root;
-	Scene				scene;
-	UserstoryService	userstoryService	= null;
+	private UserStoryService	userstoryService	= null;
+	private UserStory			userstory			= null;
+													
 	@FXML
-	private TextField	prioritaet;
+	private TextField			prioritaet;
 	@FXML
-	private TextField	thema;
+	private TextField			thema;
 	@FXML
-	private TextArea	beschreibung;
+	private TextArea			beschreibung;
 	@FXML
-	private TextArea	akzeptanzkriterien;
+	private TextArea			akzeptanzkriterien;
 	@FXML
-	private TextField	aufwandintagen;
+	private TextField			aufwandintagen;
 	@FXML
-	private Button		buttonAbbort;
+	private Button				buttonAbbort;
 	@FXML
-	private Button		buttonAdd;
+	private Button				buttonAdd;
 	@FXML
-	private Text		txtError;
-						
+	private Text				txtError;
+								
 	@FXML
 	private void handleKeyPressed(KeyEvent event) throws JSONException, IOException, Exception {
 		if (event.getCode().equals(KeyCode.ENTER))
@@ -203,7 +201,7 @@ public class UserStoryCreateController implements Initializable {
 	private void createUserStory() {
 		if (checkPrioritaet() && checkThema() && checkBeschreibung() && checkAkzeptanzkriterien()
 				&& checkAufwandInTagen()) {
-			UserStory userstory = new UserStory();
+			userstory = new UserStory();
 			userstory.setPriority(Integer.parseInt(prioritaet.getText()));
 			userstory.setTheme(thema.getText());
 			userstory.setDescription(beschreibung.getText());

@@ -97,7 +97,7 @@ public class UserDao implements DaoInterface<User, Integer> {
 		}
 		User entity = null;
 		for (int i = 0; i < list.size(); i++) {
-			if (list.get(i).getEmail().equals(email))
+			if (list.get(i).getEmail().equalsIgnoreCase(email))
 				entity = list.get(i);
 		}
 		return entity;

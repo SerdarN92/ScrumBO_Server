@@ -35,14 +35,14 @@ import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.User;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.entity.UserStoryTask;
-import scrumbo.de.service.BenutzerService;
-import scrumbo.de.service.UserstoryService;
+import scrumbo.de.service.UserService;
+import scrumbo.de.service.UserStoryService;
 
 public class SprintBacklogEditUserStoryController implements Initializable {
 	
 	Parent								root;
 	Scene								scene;
-	UserstoryService					userstoryService		= null;
+	UserStoryService					userstoryService		= null;
 	@FXML
 	private TextField					prioritaet;
 	@FXML
@@ -89,7 +89,7 @@ public class SprintBacklogEditUserStoryController implements Initializable {
 			if (result.get() == buttonTypeOne) {
 				boolean status = false;
 				try {
-					BenutzerService benutzerService = new BenutzerService();
+					UserService benutzerService = new UserService();
 					User user = benutzerService.getUserByEmail(CurrentUser.email);
 					selectedUserStoryTask.setBenutzer(user);
 					status = true;
@@ -185,7 +185,7 @@ public class SprintBacklogEditUserStoryController implements Initializable {
 		
 		buttonRemoveTask.setDisable(true);
 		
-		if (currentUserStory.getUserstorytask().isEmpty()) {
+		if (currentUserStory.getUserstorytask().isEmpty() && listViewUserStoryTask.getItems().isEmpty()) {
 			buttonSave.setDisable(true);
 		}
 	}
@@ -204,6 +204,10 @@ public class SprintBacklogEditUserStoryController implements Initializable {
 					try {
 						listViewUserStoryTask.getItems().add(addedUserStoryTask);
 						currentUserStory.getUserstorytask().add(addedUserStoryTask);
+						
+						if (!currentUserStory.getUserstorytask().isEmpty()) {
+							buttonSave.setDisable(false);
+						}
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

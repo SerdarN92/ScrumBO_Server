@@ -9,15 +9,15 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.StartwindowController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.StartwindowController">
     <children>
         <Label fx:id="label" layoutX="126" layoutY="120" minHeight="16" minWidth="69" />
-      <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="291.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="302.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../content/logoScrumBO.png" />
          </image>
       </ImageView>
-      <ImageView fx:id="adminImage" fitHeight="150.0" fitWidth="200.0" layoutX="161.0" layoutY="225.0" onMouseClicked="#handleClickAdminImage" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="adminImage" fitHeight="150.0" fitWidth="200.0" layoutX="191.0" layoutY="225.0" onMouseClicked="#handleClickAdminImage" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../content/1448997976_Key.png" />
          </image>
@@ -25,7 +25,7 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <ImageView fx:id="loginUserImage" fitHeight="150.0" fitWidth="200.0" layoutX="487.0" layoutY="225.0" onMouseClicked="#handleClickLoginUserImage" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="loginUserImage" fitHeight="150.0" fitWidth="200.0" layoutX="488.0" layoutY="225.0" onMouseClicked="#handleClickLoginUserImage" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../content/1445532700_User.png" />
          </image>
@@ -33,17 +33,17 @@
             <Cursor fx:constant="HAND" />
          </cursor>
       </ImageView>
-      <Label layoutX="207.0" layoutY="412.0" text="Admin">
+      <Label layoutX="237.0" layoutY="397.0" text="Admin">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <Label layoutX="477.0" layoutY="412.0" text="Benutzer anmelden">
+      <Label layoutX="478.0" layoutY="397.0" text="Benutzer anmelden">
          <font>
             <Font size="20.0" />
          </font>
       </Label>
-      <ImageView fx:id="informationImage" fitHeight="30.0" fitWidth="31.0" layoutX="756.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="informationImage" fitHeight="30.0" fitWidth="30.0" layoutX="756.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../../../content/1451334333_Info.png" />
          </image>

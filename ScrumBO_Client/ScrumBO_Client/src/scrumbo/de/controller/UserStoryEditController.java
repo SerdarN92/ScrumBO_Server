@@ -33,13 +33,13 @@ import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.CurrentUserStory;
 import scrumbo.de.entity.UserStory;
-import scrumbo.de.service.UserstoryService;
+import scrumbo.de.service.UserStoryService;
 
 public class UserStoryEditController implements Initializable {
 	
 	Parent					root;
 	Scene					scene;
-	UserstoryService		userstoryService	= null;
+	UserStoryService		userstoryService	= null;
 	private static Integer	id					= -1;
 	@FXML
 	private TextField		prioritaet;
@@ -226,22 +226,27 @@ public class UserStoryEditController implements Initializable {
 	
 	@FXML
 	private void handleButtonAbbort(ActionEvent event) throws Exception {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Userstory bearbeiten");
-		alert.setHeaderText(null);
-		alert.setContentText("Wollen Sie die Bearbeitung der Userstory wirklich abbrechen?");
-		
-		ButtonType buttonTypeOne = new ButtonType("Ja");
-		ButtonType buttonTypeTwo = new ButtonType("Nein");
-		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
-		
-		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == buttonTypeOne) {
-			alert.close();
+		if (CurrentUser.isPO) {
+			Alert alert = new Alert(AlertType.CONFIRMATION);
+			alert.setTitle("Userstory bearbeiten");
+			alert.setHeaderText(null);
+			alert.setContentText("Wollen Sie die Bearbeitung der Userstory wirklich abbrechen?");
+			
+			ButtonType buttonTypeOne = new ButtonType("Ja");
+			ButtonType buttonTypeTwo = new ButtonType("Nein");
+			alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
+			
+			Optional<ButtonType> result = alert.showAndWait();
+			if (result.get() == buttonTypeOne) {
+				alert.close();
+				Stage stage = (Stage) buttonAbbort.getScene().getWindow();
+				stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
+			} else {
+				alert.close();
+			}
+		} else {
 			Stage stage = (Stage) buttonAbbort.getScene().getWindow();
 			stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
-		} else {
-			alert.close();
 		}
 	}
 	
@@ -309,7 +314,7 @@ public class UserStoryEditController implements Initializable {
 		aufwandintagen.setText(data.getEffortInDays().toString());
 		CurrentUserStory.status = data.getStatus();
 		
-		if (data.getStatus() == 2 || CurrentUser.isDev || CurrentUser.isSM) {
+		if (data.getStatus() == 2 || data.getStatus() == 1 || CurrentUser.isDev || CurrentUser.isSM) {
 			buttonDelete.setDisable(true);
 			buttonUpdate.setDisable(true);
 			buttonAbbort.setText("Schlieﬂen");

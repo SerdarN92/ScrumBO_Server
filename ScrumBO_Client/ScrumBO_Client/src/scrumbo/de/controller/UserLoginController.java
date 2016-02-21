@@ -27,8 +27,8 @@ import javafx.stage.Stage;
 import scrumbo.de.common.Encryptor;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.User;
-import scrumbo.de.service.BenutzerService;
-import scrumbo.de.service.BenutzerrolleService;
+import scrumbo.de.service.UserService;
+import scrumbo.de.service.RoleService;
 
 /**
  * FXML Controller class
@@ -40,9 +40,9 @@ public class UserLoginController implements Initializable {
 	Parent					root;
 	Scene					scene;
 	Stage					stage;
-	BenutzerService			benutzerService			= null;
+	UserService			benutzerService			= null;
 	User					benutzer				= null;
-	BenutzerrolleService	benutzerrolleService	= null;
+	RoleService	benutzerrolleService	= null;
 													
 	@FXML
 	private TextField		txtFieldEmail;

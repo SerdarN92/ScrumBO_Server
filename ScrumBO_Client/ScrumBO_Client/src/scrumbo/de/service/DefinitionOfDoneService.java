@@ -19,11 +19,19 @@ import scrumbo.de.entity.DefinitionOfDone;
 
 public class DefinitionOfDoneService {
 	
-	public void ladeDefinitionOfDone() {
+	private Gson	gson	= new Gson();
+	private Type	listType;
+					
+	/*
+	 * Methode, die alle Definition of Dones zu der Id einer User Story lädt und
+	 * abspeichert.
+	 */
+	public void loadDefinitionOfDone() {
 		String output = "";
 		try {
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/definitionofdone/"
-					+ CurrentUserStory.userstoryID + "/" + ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/definitionofdone/" + CurrentUserStory.userstoryID + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
 			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
@@ -40,21 +48,22 @@ public class DefinitionOfDoneService {
 			e.printStackTrace();
 		}
 		
-		Gson gson = new Gson();
-		Type listType = new TypeToken<LinkedList<DefinitionOfDone>>() {
+		listType = new TypeToken<LinkedList<DefinitionOfDone>>() {
 		}.getType();
 		List<DefinitionOfDone> liste = gson.fromJson(output, listType);
 		CurrentUserStory.dod = liste;
 	}
 	
+	/*
+	 * Methode zum Erstellen einer Definition of Done
+	 */
 	public boolean createDefinitionOfDone(DefinitionOfDone dod) {
 		boolean status = false;
-		Gson gson = new Gson();
 		String output = gson.toJson(dod);
 		
 		try {
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/definitionofdone/create/"
-					+ ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/definitionofdone/create/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestProperty("Content-Type", "application/json");
@@ -78,13 +87,16 @@ public class DefinitionOfDoneService {
 		return status;
 	}
 	
+	/*
+	 * Methode zum Löschen einer DefinitionOfDone.
+	 */
 	public boolean deleteDefinitionOfDone(DefinitionOfDone dod) {
 		boolean status = false;
 		Gson gson = new Gson();
 		String output = gson.toJson(dod);
 		try {
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/definitionofdone/delete/"
-					+ ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/definitionofdone/delete/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestProperty("Content-Type", "application/json");
@@ -107,14 +119,17 @@ public class DefinitionOfDoneService {
 		return status;
 	}
 	
+	/*
+	 * Methode zum Aktualisieren einer DefinitionOfDone.
+	 */
 	public boolean updateDefinitionOfDone(DefinitionOfDone dod) {
 		boolean status = false;
 		Gson gson = new Gson();
 		String output = gson.toJson(dod);
 		
 		try {
-			URL url = new URL("http://"+ScrumBOClient.getHost()+":"+ScrumBOClient.getPort()+"/ScrumBO_Server/rest/definitionofdone/update/"
-					+ ScrumBOClient.getDatabaseconfigfile());
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/definitionofdone/update/" + ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setDoOutput(true);
 			conn.setRequestProperty("Content-Type", "application/json");

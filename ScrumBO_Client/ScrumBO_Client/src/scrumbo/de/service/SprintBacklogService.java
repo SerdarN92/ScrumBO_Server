@@ -19,10 +19,15 @@ import scrumbo.de.entity.CurrentSprint;
 import scrumbo.de.entity.Sprint;
 import scrumbo.de.entity.UserStory;
 
-public class SprintbacklogService {
+public class SprintBacklogService {
 	
+	/*
+	 * Methode zum Entfernen aller User Stories eines Sprints, die entweder den
+	 * Status offen oder in Arbeit haben.
+	 */
 	public boolean removeIncompleteUserStories() {
-		boolean status = true;
+		boolean status = false;
+		String output = "";
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
 					+ "/ScrumBO_Server/rest/sprint/removeIncompleteUserStories/" + CurrentSprint.id + "/"
@@ -32,11 +37,17 @@ public class SprintbacklogService {
 			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
 			
 			if (conn.getResponseCode() != 200) {
-				status = false;
 				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
 			}
 			
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+			output = br.readLine();
 			conn.disconnect();
+			
+			if (output.equals("User Stories wurden entfernt.")) {
+				status = true;
+			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -44,6 +55,9 @@ public class SprintbacklogService {
 		return status;
 	}
 	
+	/*
+	 * Methode zum Hinzufügen eines Sprints zum SprintBacklog.
+	 */
 	public Sprint addNewSprintToSprintBacklog() {
 		String output = "";
 		try {

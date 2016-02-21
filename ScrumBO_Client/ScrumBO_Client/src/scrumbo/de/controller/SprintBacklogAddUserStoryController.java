@@ -231,7 +231,7 @@ public class SprintBacklogAddUserStoryController implements Initializable {
 		initListView();
 	}
 	
-	protected void initListView() {
+	private void initListView() {
 		ObservableList<UserStoryTask> options = FXCollections.observableArrayList();
 		
 		if (currentUserStory != null) {

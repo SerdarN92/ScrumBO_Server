@@ -47,7 +47,7 @@ import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.Role;
 import scrumbo.de.entity.User;
-import scrumbo.de.service.BenutzerService;
+import scrumbo.de.service.UserService;
 
 /**
  *
@@ -58,7 +58,7 @@ public class UserAssignForProjectController implements Initializable {
 	Parent					root;
 	Scene					scene;
 	List<Role>				liste			= null;
-	BenutzerService			benutzerService	= null;
+	UserService			benutzerService	= null;
 	private List<User>		benutzerList	= new LinkedList<User>();
 	private User			currentBenutzer	= null;
 	@FXML

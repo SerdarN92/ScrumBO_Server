@@ -24,13 +24,13 @@ import javafx.stage.Stage;
 import scrumbo.de.common.Encryptor;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.User;
-import scrumbo.de.service.BenutzerService;
+import scrumbo.de.service.UserService;
 
 public class UserChangePasswordController implements Initializable {
 	
 	Parent					root;
 	Scene					scene;
-	BenutzerService			benutzerService	= null;
+	UserService			benutzerService	= null;
 	@FXML
 	private Button			buttonSave;
 	@FXML

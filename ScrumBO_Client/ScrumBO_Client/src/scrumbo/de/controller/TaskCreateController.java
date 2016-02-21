@@ -23,13 +23,13 @@ import javafx.stage.WindowEvent;
 import javafx.util.StringConverter;
 import scrumbo.de.entity.User;
 import scrumbo.de.entity.UserStoryTask;
-import scrumbo.de.service.BenutzerService;
+import scrumbo.de.service.UserService;
 
 public class TaskCreateController implements Initializable {
 	
 	Parent					root;
 	Scene					scene;
-	BenutzerService			benutzerService		= null;
+	UserService			benutzerService		= null;
 	@FXML
 	private TextField		taskbeschreibung;
 	@FXML
@@ -67,7 +67,7 @@ public class TaskCreateController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		benutzerService = StartwindowController.getBenutzerService();
-		benutzerList = benutzerService.ladeEntwicklerVomAktuellenProjekt();
+		benutzerList = benutzerService.ladeBenutzerVomProjekt();
 		ObservableList<User> options = FXCollections.observableArrayList();
 		for (int i = 0; i < benutzerList.size(); i++) {
 			options.add(benutzerList.get(i));

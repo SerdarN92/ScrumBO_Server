@@ -31,13 +31,13 @@ import scrumbo.de.entity.BurndownChartPoint;
 import scrumbo.de.entity.CurrentBurndownChart;
 import scrumbo.de.entity.CurrentSprint;
 import scrumbo.de.entity.CurrentUser;
-import scrumbo.de.service.SprintbacklogService;
+import scrumbo.de.service.SprintBacklogService;
 
 public class BurndownChartController implements Initializable {
 	
 	private Parent						root;
 	private Scene						scene;
-	private SprintbacklogService		sprintbacklogService;
+	private SprintBacklogService		sprintbacklogService;
 	@FXML
 	private ImageView					informationImage;
 										
@@ -169,7 +169,7 @@ public class BurndownChartController implements Initializable {
 	@FXML
 	private void handleButtonLogout(ActionEvent event) throws Exception {
 		StartwindowController.logout();
-		timer.cancel();
+		pause();
 		
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/Startwindow.fxml"));
 		this.scene = new Scene(root);
@@ -180,7 +180,7 @@ public class BurndownChartController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		sprintbacklogService = new SprintbacklogService();
+		sprintbacklogService = new SprintBacklogService();
 		sprintbacklogService.ladeSprint();
 		
 		burndownChartId = CurrentBurndownChart.id;
@@ -253,7 +253,7 @@ public class BurndownChartController implements Initializable {
 	}
 	
 	public void reloadBurndownChart() {
-		sprintbacklogService = new SprintbacklogService();
+		sprintbacklogService = new SprintBacklogService();
 		sprintbacklogService.ladeSprint();
 		burndownChartId = CurrentBurndownChart.id;
 		tage = CurrentBurndownChart.days;

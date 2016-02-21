@@ -40,7 +40,7 @@ import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.common.LetterTextField;
 import scrumbo.de.entity.Role;
 import scrumbo.de.entity.User;
-import scrumbo.de.service.BenutzerService;
+import scrumbo.de.service.UserService;
 
 /**
  * FXML Controller Klasse für die Erstellung eines Benutzers
@@ -91,7 +91,7 @@ public class UserCreateController implements Initializable {
 	
 	@FXML
 	private void handleButtonCreateUser(ActionEvent event) throws Exception {
-		BenutzerService benutzerService = new BenutzerService();
+		UserService benutzerService = new UserService();
 		if (checkPreName() && checkLastName() && checkPassword() && checkEmail() && checkRole()) {
 			if (benutzerService.checkEmail(txtFieldEmail.getText())) {
 				emailValidFail.setText("E-Mail Adresse bereits vorhanden.");

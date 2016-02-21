@@ -37,14 +37,14 @@ import scrumbo.de.common.MyToolBox;
 import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.UserStory;
-import scrumbo.de.service.ProductbacklogService;
+import scrumbo.de.service.ProductBacklogService;
 
 public class ProductBacklogController implements Initializable {
 	
 	Parent									root;
 	Scene									scene;
 	public static Stage						stage;
-	ProductbacklogService					productbacklogService	= null;
+	ProductBacklogService					productbacklogService	= null;
 	public static UserStory					rowData;
 	@FXML
 	private ImageView						informationImage;
@@ -95,7 +95,7 @@ public class ProductBacklogController implements Initializable {
 	}
 	
 	@FXML
-	private void handleButtonBack(ActionEvent event) throws Exception {
+	private void handleButtonBack() throws Exception {
 		data.clear();
 		if (CurrentUser.isSM) {
 			this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/ScrumSM.fxml"));
@@ -343,8 +343,8 @@ public class ProductBacklogController implements Initializable {
 	}
 	
 	public void reload() throws IOException {
-		data.clear();
 		productbacklogService.loadProductBacklog();
+		data.clear();
 		for (int i = 0; i < CurrentProject.productbacklog.getUserstory().size(); i++) {
 			data.add(CurrentProject.productbacklog.getUserstory().get(i));
 		}
