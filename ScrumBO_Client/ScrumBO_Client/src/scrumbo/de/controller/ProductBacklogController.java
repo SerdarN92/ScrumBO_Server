@@ -49,14 +49,6 @@ public class ProductBacklogController implements Initializable {
 	@FXML
 	private ImageView						informationImage;
 	@FXML
-	private Text							vorname;
-	@FXML
-	private Text							nachname;
-	@FXML
-	private Text							benutzerrolle;
-	@FXML
-	private Text							projektname;
-	@FXML
 	private Button							buttonLogout;
 	@FXML
 	private Button							buttonBack;
@@ -148,10 +140,6 @@ public class ProductBacklogController implements Initializable {
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
 		productbacklogService = StartwindowController.getProductbacklogService();
-		vorname.setText(CurrentUser.prename);
-		nachname.setText(CurrentUser.lastname);
-		benutzerrolle.setText(CurrentUser.role);
-		projektname.setText(CurrentProject.projectname);
 		
 		if (!CurrentUser.isPO)
 			buttonCreateUserStory.setDisable(true);
@@ -340,10 +328,12 @@ public class ProductBacklogController implements Initializable {
 		tableColumnSprintNummer.setGraphic(sprintnummberLabel);
 		
 		tableViewProductBacklog.setItems(data);
+		
 	}
 	
 	public void reload() throws IOException {
 		productbacklogService.loadProductBacklog();
+		tableViewProductBacklog.getSortOrder().clear();
 		data.clear();
 		for (int i = 0; i < CurrentProject.productbacklog.getUserstory().size(); i++) {
 			data.add(CurrentProject.productbacklog.getUserstory().get(i));

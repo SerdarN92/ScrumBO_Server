@@ -1,5 +1,6 @@
 package scrumbo.de.common;
 
+import java.io.IOException;
 import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -35,6 +36,7 @@ import scrumbo.de.app.ScrumBOClient;
 import scrumbo.de.controller.SprintBacklogController;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.entity.UserStoryTask;
+import scrumbo.de.service.UserStoryService;
 
 public class MyHBox extends HBox {
 	
@@ -115,6 +117,7 @@ public class MyHBox extends HBox {
 					String pane = dragEvent.getDragboard().getString();
 					int userstorytaskid = Integer.parseInt(pane);
 					int platz = -1;
+					UserStoryService userstoryservice = new UserStoryService();
 					if (bla == 1) {
 						for (int i = 0; i < vboxopentasks.getChildren().size(); i++) {
 							if (vboxopentasks.getChildren().get(i).equals(currentPane)) {
@@ -149,9 +152,11 @@ public class MyHBox extends HBox {
 					}
 					
 				}
+				
 			});
 			
 			vboxtasksinwork.setOnDragDropped(new EventHandler<DragEvent>() {
+				
 				@Override
 				public void handle(DragEvent dragEvent) {
 				}
@@ -289,44 +294,45 @@ public class MyHBox extends HBox {
 			
 			this.setStyle("-fx-border-style: solid;" + "-fx-border-width: 1;" + "-fx-border-color: black");
 			
-			this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
-				@Override
-				public void handle(MouseEvent event) {
-					setUserStory(userstory);
-				}
-			});
-			this.setOnMouseClicked(new EventHandler<MouseEvent>() {
-				@Override
-				public void handle(MouseEvent event) {
-					if (event.getButton().equals(MouseButton.PRIMARY)) {
-						if (event.getClickCount() == 2) {
-							try {
-								FXMLLoader fxmlLoader = new FXMLLoader(
-										getClass().getResource("/scrumbo/de/gui/SprintBacklogEditUserStory.fxml"));
-								Parent root1 = (Parent) fxmlLoader.load();
-								Stage stage = new Stage();
-								stage.initModality(Modality.APPLICATION_MODAL);
-								stage.setScene(new Scene(root1));
-								stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-									@Override
-									public void handle(WindowEvent event) {
-										try {
-											SprintBacklogController.controller.reloadSprintBacklog();
-										} catch (Exception e) {
-											e.printStackTrace();
-										}
+		}
+		this.addEventHandler(MouseEvent.MOUSE_CLICKED, new EventHandler<MouseEvent>() {
+			
+			@Override
+			public void handle(MouseEvent event) {
+				setUserStory(userstory);
+			}
+		});
+		this.setOnMouseClicked(new EventHandler<MouseEvent>() {
+			@Override
+			public void handle(MouseEvent event) {
+				if (event.getButton().equals(MouseButton.PRIMARY)) {
+					if (event.getClickCount() == 2) {
+						try {
+							FXMLLoader fxmlLoader = new FXMLLoader(
+									getClass().getResource("/scrumbo/de/gui/SprintBacklogEditUserStory.fxml"));
+							Parent root1 = (Parent) fxmlLoader.load();
+							Stage stage = new Stage();
+							stage.initModality(Modality.APPLICATION_MODAL);
+							stage.setScene(new Scene(root1));
+							stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+								@Override
+								public void handle(WindowEvent event) {
+									try {
+										SprintBacklogController.controller.reloadSprintBacklog();
+									} catch (Exception e) {
+										e.printStackTrace();
 									}
-								});
-								stage.show();
-							} catch (Exception e) {
-								e.printStackTrace();
-							}
+								}
+							});
+							stage.show();
+						} catch (Exception e) {
+							e.printStackTrace();
 						}
 					}
 				}
-			});
-			
-		}
+			}
+		});
+		
 		this.getChildren().add(vboxprioritaet);
 		this.getChildren().add(vboxuserstory);
 		this.getChildren().add(vboxopentasks);
@@ -344,11 +350,11 @@ public class MyHBox extends HBox {
 				
 		Text taskInfo = new Text("");
 		if (userstorytask.getBenutzer() != null) {
-			taskInfo = new Text("Benutzer: " + String.valueOf(userstorytask.getBenutzer().getVorname().charAt(0))
-					+ String.valueOf(userstorytask.getBenutzer().getNachname().charAt(0)) + ", Aufwand: "
+			taskInfo = new Text("Benutzer: " + String.valueOf(userstorytask.getBenutzer().getVorname() + " ")
+					+ String.valueOf(userstorytask.getBenutzer().getNachname()) + "\nAufwand: "
 					+ userstorytask.getAufwandinstunden() + "h");
 		} else {
-			taskInfo = new Text("Benutzer: " + ", Aufwand: " + userstorytask.getAufwandinstunden() + "h");
+			taskInfo = new Text("Benutzer: " + "\nAufwand: " + userstorytask.getAufwandinstunden() + "h");
 		}
 		pane.setPadding(new Insets(1, 5, 1, 5));
 		pane.setVgap(2);
@@ -426,57 +432,67 @@ public class MyHBox extends HBox {
 	}
 	
 	private void updateTaskstatus(int userstorytaskid, int taskstatusid) throws JSONException {
+		boolean update = false;
 		UserStoryTask userstorytask = new UserStoryTask();
 		UserStory userstory = this.userstory;
 		for (int i = 0; i < userstory.getUserstorytask().size(); i++) {
-			
-			if (userstory.getUserstorytask().get(i).getId() == userstorytaskid) {
-				if (taskstatusid == 1) {
-					userstory.getUserstorytask().get(i).getTaskstatus().setId(taskstatusid);
-					userstory.getUserstorytask().get(i).getTaskstatus().setBeschreibung("Offen");
-					userstorytask = userstory.getUserstorytask().get(i);
+			if (userstory.getUserstorytask().get(i).getBenutzer() != null) {
+				if (userstory.getUserstorytask().get(i).getId() == userstorytaskid) {
+					update = true;
+					if (taskstatusid == 1) {
+						userstory.getUserstorytask().get(i).getTaskstatus().setId(taskstatusid);
+						userstory.getUserstorytask().get(i).getTaskstatus().setBeschreibung("Offen");
+						userstorytask = userstory.getUserstorytask().get(i);
+					}
+					if (taskstatusid == 2) {
+						userstory.getUserstorytask().get(i).getTaskstatus().setId(taskstatusid);
+						userstory.getUserstorytask().get(i).getTaskstatus().setBeschreibung("In Arbeit");
+						userstorytask = userstory.getUserstorytask().get(i);
+					}
+					if (taskstatusid == 3) {
+						userstory.getUserstorytask().get(i).getTaskstatus().setId(taskstatusid);
+						userstory.getUserstorytask().get(i).getTaskstatus().setBeschreibung("Erledigt");
+						userstorytask = userstory.getUserstorytask().get(i);
+					}
 				}
-				if (taskstatusid == 2) {
-					userstory.getUserstorytask().get(i).getTaskstatus().setId(taskstatusid);
-					userstory.getUserstorytask().get(i).getTaskstatus().setBeschreibung("In Arbeit");
-					userstorytask = userstory.getUserstorytask().get(i);
-				}
-				if (taskstatusid == 3) {
-					userstory.getUserstorytask().get(i).getTaskstatus().setId(taskstatusid);
-					userstory.getUserstorytask().get(i).getTaskstatus().setBeschreibung("Erledigt");
-					userstorytask = userstory.getUserstorytask().get(i);
+			} else {
+				try {
+					SprintBacklogController.controller.reloadSprintBacklog();
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
 				}
 			}
-			
 		}
 		
-		Gson gson = new Gson();
-		String output = gson.toJson(userstorytask);
-		
-		JSONObject jsonObject = new JSONObject(output);
-		
-		try {
-			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
-					+ "/ScrumBO_Server/rest/userstorytask/update" + "/" + ScrumBOClient.getDatabaseconfigfile());
-			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-			conn.setDoOutput(true);
-			conn.setRequestProperty("Content-Type", "application/json");
-			conn.setConnectTimeout(5000);
-			conn.setReadTimeout(5000);
-			conn.setRequestMethod("POST");
+		if (update) {
+			Gson gson = new Gson();
+			String output = gson.toJson(userstorytask);
 			
-			OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
-			out.write(jsonObject.toString());
-			out.close();
+			JSONObject jsonObject = new JSONObject(output);
 			
-			if (conn.getResponseMessage().equals("User Story Task erfolgreich geupdated"))
-				System.out.println("\nRest Service Invoked Successfully..");
-			conn.disconnect();
-		} catch (Exception e) {
-			System.out.println("\nError while calling Rest service");
-			e.printStackTrace();
+			try {
+				URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+						+ "/ScrumBO_Server/rest/userstorytask/update" + "/" + ScrumBOClient.getDatabaseconfigfile());
+				HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+				conn.setDoOutput(true);
+				conn.setRequestProperty("Content-Type", "application/json");
+				conn.setConnectTimeout(5000);
+				conn.setReadTimeout(5000);
+				conn.setRequestMethod("POST");
+				
+				OutputStreamWriter out = new OutputStreamWriter(conn.getOutputStream());
+				out.write(jsonObject.toString());
+				out.close();
+				
+				if (conn.getResponseMessage().equals("User Story Task erfolgreich geupdated"))
+					System.out.println("\nRest Service Invoked Successfully..");
+				conn.disconnect();
+			} catch (Exception e) {
+				System.out.println("\nError while calling Rest service");
+				e.printStackTrace();
+			}
 		}
-		
 	}
 	
 }

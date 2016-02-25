@@ -146,6 +146,8 @@ public class UserStoryService {
 		Gson gson = new Gson();
 		String output = gson.toJson(userstory);
 		
+		System.out.println(output);
+		
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
 					+ "/ScrumBO_Server/rest/userstory/updateTasks/" + CurrentSprint.id + "/"
@@ -213,6 +215,32 @@ public class UserStoryService {
 			
 			if (conn.getResponseMessage().equals("OK"))
 				status = true;
+			conn.disconnect();
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+		}
+		return status;
+	}
+	
+	public boolean checkTaskUser(Integer userstorytaskId) {
+		boolean status = false;
+		
+		try {
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/userstory/checkTaskUser/" + userstorytaskId + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setDoOutput(true);
+			conn.setRequestProperty("Content-Type", "application/json");
+			conn.setConnectTimeout(50000);
+			conn.setReadTimeout(50000);
+			conn.setRequestMethod("GET");
+			
+			if (conn.getResponseMessage().equals("Vorhanden")) {
+				status = true;
+			}
 			conn.disconnect();
 			
 		} catch (Exception e) {

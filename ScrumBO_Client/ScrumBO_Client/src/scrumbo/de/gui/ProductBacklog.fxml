@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.*?>
 <?import scrumbo.de.common.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.ProductBacklogController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.ProductBacklogController">
    <children>
       <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="75.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -21,11 +21,7 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <Text fx:id="benutzerrolle" layoutX="180.0" layoutY="580.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="97.99998998641968" />
       <Text fx:id="nachname" layoutX="124.0" layoutY="580.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="56.0" />
-      <Text fx:id="vorname" layoutX="75.0" layoutY="580.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="48.999998927116394" />
-      <Label layoutX="287.0" layoutY="566.0" text="Projektname:" />
-      <Text fx:id="projektname" layoutX="367.0" layoutY="579.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="129.13671875" />
       <TableView fx:id="tableViewProductBacklog" editable="true" layoutX="75.0" layoutY="173.0" prefHeight="373.0" prefWidth="883.0">
          <columns>
             <TableColumn fx:id="tableColumnStatus" maxWidth="75.0" minWidth="75.0" prefWidth="75.0" resizable="false" text="Status" />

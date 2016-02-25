@@ -138,7 +138,7 @@ public class ImpedimentEditController implements Initializable {
 	}
 	
 	private void saveImpediment() {
-		if (checkPrioritaet() && checkAngelegtVon() && checkBeschreibung() && checkDatumAngelegtAm()) {
+		if (checkPrioritaet() && checkAngelegtVon() && checkBeschreibung() && checkDatumAngelegtAm() && checkDates()) {
 			Impediment impediment = data;
 			impediment.setPriorität(Integer.parseInt(prioritaet.getText()));
 			impediment.setMitarbeiter(angelegtVon.getText());
@@ -256,6 +256,23 @@ public class ImpedimentEditController implements Initializable {
 		} else {
 			txtError.setVisible(false);
 			datumAufgetretenAm.setStyle(null);
+			return true;
+		}
+	}
+	
+	private boolean checkDates() {
+		int check = -1;
+		check = datumAufgetretenAm.getValue().compareTo(datumBehobenAm.getValue());
+		if (check > 0) {
+			txtError.setText("Das \"Behoben am Datum\" kann nicht vor dem \"Erstellt am Datum\" liegen!");
+			txtError.setVisible(true);
+			datumAufgetretenAm.setStyle("-fx-border-color:#FF0000;");
+			datumBehobenAm.setStyle("-fx-border-color:#FF0000;");
+			return false;
+		} else {
+			txtError.setVisible(false);
+			datumAufgetretenAm.setStyle(null);
+			datumBehobenAm.setStyle(null);
 			return true;
 		}
 	}

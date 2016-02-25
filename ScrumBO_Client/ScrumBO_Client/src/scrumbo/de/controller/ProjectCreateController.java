@@ -20,6 +20,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import scrumbo.de.common.Encryptor;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.Project;
 import scrumbo.de.entity.User;
@@ -29,7 +30,7 @@ public class ProjectCreateController implements Initializable {
 	
 	Parent				root;
 	Scene				scene;
-	ProjectService	scrumprojektService	= null;
+	ProjectService		scrumprojektService	= null;
 	@FXML
 	private Button		buttonLogout;
 	@FXML
@@ -82,7 +83,7 @@ public class ProjectCreateController implements Initializable {
 				projectnameValidFail.setVisible(false);
 				Project scrumproject = new Project();
 				scrumproject.setProjektname(txtFieldProjectname.getText());
-				scrumproject.setPasswort(pswtFieldPassword.getText());
+				scrumproject.setPasswort(Encryptor.encrypt(pswtFieldPassword.getText()));
 				List<User> benutzerliste = new LinkedList<User>();
 				User currBen = new User();
 				currBen.setId(CurrentUser.userId);

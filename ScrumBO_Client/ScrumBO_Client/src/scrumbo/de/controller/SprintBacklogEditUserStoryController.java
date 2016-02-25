@@ -79,7 +79,7 @@ public class SprintBacklogEditUserStoryController implements Initializable {
 			Alert alert = new Alert(AlertType.CONFIRMATION);
 			alert.setTitle("Userstory zuweisen");
 			alert.setHeaderText(null);
-			alert.setContentText("Wollen Sie diese Userstory sich selbst zuweisen?");
+			alert.setContentText("Wollen Sie diesen Task sich selbst zuweisen?");
 			
 			ButtonType buttonTypeOne = new ButtonType("Ja");
 			ButtonType buttonTypeTwo = new ButtonType("Nein");
@@ -89,10 +89,12 @@ public class SprintBacklogEditUserStoryController implements Initializable {
 			if (result.get() == buttonTypeOne) {
 				boolean status = false;
 				try {
-					UserService benutzerService = new UserService();
-					User user = benutzerService.getUserByEmail(CurrentUser.email);
-					selectedUserStoryTask.setBenutzer(user);
-					status = true;
+					if (selectedUserStoryTask.getTaskstatus().getId() < 3) {
+						UserService benutzerService = new UserService();
+						User user = benutzerService.getUserByEmail(CurrentUser.email);
+						selectedUserStoryTask.setBenutzer(user);
+						status = true;
+					}
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
@@ -100,13 +102,14 @@ public class SprintBacklogEditUserStoryController implements Initializable {
 					Alert alert2 = new Alert(AlertType.INFORMATION);
 					alert2.setTitle("Userstory zuweisen");
 					alert2.setHeaderText(null);
-					alert2.setContentText("Userstory wurde Ihrem Benutzer erfolgreich zugewiesen!");
+					alert2.setContentText("Task wurde Ihrem Benutzer erfolgreich zugewiesen!");
 					alert2.showAndWait();
 				} else {
 					Alert alert3 = new Alert(AlertType.INFORMATION);
-					alert3.setTitle("Userstory zuweisen");
+					alert3.setTitle("Task zuweisen");
 					alert3.setHeaderText(null);
-					alert3.setContentText("Fehler! Userstory wurde Ihrem Benutzer nicht zugewiesen!");
+					alert3.setContentText(
+							"Fehler! Task wurde Ihrem Benutzer nicht zugewiesen! Tasks im Status \"Erledigt\" können nicht mehr zugewiesen werden.");
 					alert3.showAndWait();
 				}
 			} else {

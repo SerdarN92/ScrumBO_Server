@@ -31,7 +31,7 @@
             <Font size="21.0" />
          </font>
       </Label>
-      <TextField fx:id="txtFieldEmail" layoutX="420.0" layoutY="252.0" onKeyPressed="#handleKeyPressed" prefHeight="25.0" prefWidth="172.0" text="Stefan.Jonker@hs-bochum.de" />
+      <TextField fx:id="txtFieldEmail" layoutX="420.0" layoutY="252.0" onKeyPressed="#handleKeyPressed" prefHeight="25.0" prefWidth="172.0" />
       <PasswordField fx:id="pswtFieldPassword" layoutX="420.0" layoutY="292.0" onKeyPressed="#handleKeyPressed" prefHeight="25.0" prefWidth="172.0" />
       <Button fx:id="buttonLoginUser" layoutX="499.0" layoutY="357.0" mnemonicParsing="false" onAction="#handleLoginButton" text="Einloggen">
          <font>

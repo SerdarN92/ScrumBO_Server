@@ -18,6 +18,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import scrumbo.de.common.Encryptor;
 import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.service.ImpedimentService;
@@ -83,7 +84,7 @@ public class ProjectLoginController implements Initializable {
 			if (scrumprojektService.checkIfProjectnameExists(txtFieldProjectname.getText().toString())) {
 				projectnameValidFail.setVisible(false);
 				txtFieldProjectname.setStyle(null);
-				if (scrumprojektService.getScrumproject().getPasswort()
+				if (Encryptor.decrypt(scrumprojektService.getScrumproject().getPasswort())
 						.equals(pswtFieldPassword.getText().toString())) {
 					CurrentProject.projectId = scrumprojektService.getScrumproject().getScrumProjektID();
 					CurrentProject.projectname = scrumprojektService.getScrumproject().getProjektname();

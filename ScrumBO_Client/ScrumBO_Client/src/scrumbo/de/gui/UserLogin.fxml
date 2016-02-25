@@ -31,8 +31,8 @@
             <Font size="21.0" />
          </font>
       </Label>
-      <TextField fx:id="txtFieldEmail" layoutX="401.0" layoutY="248.0" onKeyPressed="#handleKeyPressed" text="Serdar.Nurguen@hs-bochum.de" />
-      <PasswordField fx:id="pswtFieldPassword" layoutX="401.0" layoutY="288.0" onKeyPressed="#handleKeyPressed" text="TESTTEST" />
+      <TextField fx:id="txtFieldEmail" layoutX="401.0" layoutY="248.0" onKeyPressed="#handleKeyPressed" />
+      <PasswordField fx:id="pswtFieldPassword" layoutX="401.0" layoutY="288.0" onKeyPressed="#handleKeyPressed" />
       <Button fx:id="buttonLoginUser" layoutX="457.0" layoutY="353.0" mnemonicParsing="false" onAction="#handleLoginButton" text="Einloggen">
          <font>
             <Font size="16.0" />

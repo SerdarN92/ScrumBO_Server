@@ -167,6 +167,7 @@ public class SprintBacklogController implements Initializable {
 	private void handleButtonStartSprint(ActionEvent event) throws Exception {
 		try {
 			if (sprintbacklogService.createBurndownChart()) {
+				editable = true;
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Sprint starten");
 				alert.setHeaderText(null);
@@ -374,6 +375,12 @@ public class SprintBacklogController implements Initializable {
 		
 		MyToolBox toolbox = new MyToolBox();
 		Tooltip.install(informationImage, toolbox.getTooltipSprintBacklog());
+		
+		if (CurrentSprint.status) {
+			editable = true;
+		} else {
+			editable = false;
+		}
 	}
 	
 	private void initSprintBacklog() {
@@ -448,6 +455,7 @@ public class SprintBacklogController implements Initializable {
 		
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == buttonTypeOne && sprintbacklogService.removeIncompleteUserStories()) {
+			editable = false;
 			alert.close();
 			Sprint sprint = sprintbacklogService.addNewSprintToSprintBacklog();
 			CurrentSprint.id = sprint.getId();
