@@ -216,6 +216,7 @@ public class SprintBacklogService {
 		List<UserStory> liste = gson.fromJson(output, listType);
 		
 		return liste;
+		
 	}
 	
 	public boolean createBurndownChart() {

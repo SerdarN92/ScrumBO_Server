@@ -80,6 +80,8 @@ public class SprintBacklogController implements Initializable {
 																	
 	public static boolean					editable				= true;
 																	
+	public static boolean					editTasks				= true;
+																	
 	private Timer							timer;
 											
 	public ObservableList<UserStory> getData() {
@@ -168,6 +170,7 @@ public class SprintBacklogController implements Initializable {
 		try {
 			if (sprintbacklogService.createBurndownChart()) {
 				editable = true;
+				editTasks = true;
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Sprint starten");
 				alert.setHeaderText(null);
@@ -378,8 +381,10 @@ public class SprintBacklogController implements Initializable {
 		
 		if (CurrentSprint.status) {
 			editable = true;
+			editTasks = true;
 		} else {
 			editable = false;
+			editTasks = false;
 		}
 	}
 	
@@ -456,6 +461,7 @@ public class SprintBacklogController implements Initializable {
 		Optional<ButtonType> result = alert.showAndWait();
 		if (result.get() == buttonTypeOne && sprintbacklogService.removeIncompleteUserStories()) {
 			editable = false;
+			editTasks = false;
 			alert.close();
 			Sprint sprint = sprintbacklogService.addNewSprintToSprintBacklog();
 			CurrentSprint.id = sprint.getId();

@@ -64,7 +64,7 @@ public class UserStory {
 	private List<UserStoryTask>		userstorytask;
 									
 	@OneToMany(cascade = { CascadeType.PERSIST, CascadeType.MERGE,
-			CascadeType.REFRESH }, fetch = FetchType.EAGER, mappedBy = "userstory")
+			CascadeType.REFRESH }, fetch = FetchType.LAZY, mappedBy = "userstory")
 	@Cascade({ org.hibernate.annotations.CascadeType.SAVE_UPDATE, org.hibernate.annotations.CascadeType.DELETE,
 			org.hibernate.annotations.CascadeType.MERGE, org.hibernate.annotations.CascadeType.PERSIST,
 			org.hibernate.annotations.CascadeType.DELETE_ORPHAN })

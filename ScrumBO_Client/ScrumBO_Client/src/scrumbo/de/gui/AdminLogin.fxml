@@ -9,7 +9,8 @@
 <?import javafx.scene.layout.*?>
 <?import scrumbo.de.common.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.AdminLoginController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="800.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1"
+	fx:controller="scrumbo.de.controller.AdminLoginController">
    <children>
       <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="96.0" layoutY="37.0" pickOnBounds="true" preserveRatio="true">
          <image>

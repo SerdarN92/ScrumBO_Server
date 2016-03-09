@@ -1,7 +1,5 @@
 package dao;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -9,7 +7,6 @@ import org.hibernate.Session;
 import hibernate.HibernateUtil;
 import model.Sprint;
 import model.UserStory;
-import model.UserStoryTask;
 
 public class UserStoryDao implements DaoInterface<UserStory, Integer> {
 	

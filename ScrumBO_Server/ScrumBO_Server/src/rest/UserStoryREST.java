@@ -234,7 +234,8 @@ public class UserStoryREST {
 					if (userstoryDTO.getUserstorytask().get(i).getUser() != null) {
 						if (userstoryDTO.getUserstorytask().get(i).getUser().getId() != null) {
 							userstorytask = new UserStoryTask(userstoryDTO.getUserstorytask().get(i).getDescription(),
-									taskstatusService.findById(1),
+									taskstatusService
+											.findById(userstoryDTO.getUserstorytask().get(i).getTaskstatus().getId()),
 									userstoryDTO.getUserstorytask().get(i).getEffortInHours(),
 									benutzerService.findById(userstoryDTO.getUserstorytask().get(i).getUser().getId()),
 									userstory);

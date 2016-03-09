@@ -240,21 +240,20 @@ public class SprintREST {
 		UserStoryService userStoryService = new UserStoryService(hibernateconfigfilename);
 		UserStoryTaskService userStoryTaskService = new UserStoryTaskService(hibernateconfigfilename);
 		List<UserStory> list = userStoryService.findAllBySprintId(sprintid);
-		List<Integer> userstorytasklistids = new LinkedList<Integer>();
+		List<Integer> ids = new LinkedList<Integer>();
 		for (int i = 0; i < list.size(); i++) {
 			if (list.get(i).getStatus() == 0 || list.get(i).getStatus() == 1) {
 				list.get(i).setSprint(null);
-				list.get(i).setStatus(0);
 				for (int j = 0; j < list.get(i).getUserstorytask().size(); j++) {
 					list.get(i).getUserstorytask().remove(j);
-					userstorytasklistids.add(list.get(i).getUserstorytask().get(j).getId());
+					list.get(i).setStatus(0);
+					ids.add(list.get(i).getUserstorytask().get(j).getId());
 				}
 			}
 			userStoryService.update(list.get(i));
 		}
-		
-		for (int i = 0; i < userstorytasklistids.size(); i++) {
-			userStoryTaskService.delete(userstorytasklistids.get(i));
+		for (int i = 0; i < ids.size(); i++) {
+			userStoryTaskService.delete(ids.get(i));
 		}
 		
 		output = "User Stories wurden entfernt.";

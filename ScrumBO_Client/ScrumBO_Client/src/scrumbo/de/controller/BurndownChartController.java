@@ -151,6 +151,7 @@ public class BurndownChartController implements Initializable {
 						}
 						
 						lineChart.setTitle("zu Sprint " + CurrentSprint.sprintnumber);
+						pause();
 					} catch (Exception e) {
 						e.printStackTrace();
 					}

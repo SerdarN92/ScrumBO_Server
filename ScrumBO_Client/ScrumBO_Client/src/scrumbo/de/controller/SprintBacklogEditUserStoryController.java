@@ -246,6 +246,14 @@ public class SprintBacklogEditUserStoryController implements Initializable {
 		aufwandintagen.setText(currentUserStory.getEffortInDays().toString());
 		userstoryList = userstoryService.ladeUserStory();
 		initListView();
+		
+		if (!SprintBacklogController.editTasks) {
+			buttonAddTask.setDisable(false);
+			buttonRemoveTask.setDisable(false);
+		} else {
+			buttonAddTask.setDisable(true);
+			buttonRemoveTask.setDisable(true);
+		}
 	}
 	
 	protected void initListView() {
