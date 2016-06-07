@@ -56,6 +56,15 @@ public class BurndownChartPointService {
 		return null;
 	}
 	
+	public List<BurndownChartPoint> findAllWithBurndownChartId(int burndownchartId) {
+		try {
+			return burndownChartPointDao.findAllWithBurndownChartId(burndownchartId);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return null;
+	}
+	
 	public void deleteAll() {
 		try {
 			burndownChartPointDao.deleteAll();

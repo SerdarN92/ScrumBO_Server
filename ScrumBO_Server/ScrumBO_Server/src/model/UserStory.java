@@ -34,7 +34,7 @@ public class UserStory {
 	@Column(name = "theme", nullable = false)
 	private String					theme;
 									
-	@Column(name = "description", nullable = false)
+	@Column(name = "description", nullable = false, length = 600)
 	private String					description;
 									
 	@Column(name = "effortInDays", nullable = false)

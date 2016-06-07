@@ -53,6 +53,30 @@ public class BenutzerREST {
 	}
 	
 	@GET
+	@Path("/alleOhneAdmin/{hibernateconfigfilename}")
+	@Produces("application/json" + ";charset=utf-8")
+	public Response getAllUserWithAdmin(@PathParam("hibernateconfigfilename") String hibernateconfigfilename)
+			throws JSONException {
+		UserService userService = new UserService(hibernateconfigfilename);
+		User_Role_ProjectService urpService = new User_Role_ProjectService(hibernateconfigfilename);
+		
+		List<UserDTO> userDTOList = new LinkedList<UserDTO>();
+		List<User> userList = userService.findAll();
+		for (int i = 0; i < userList.size(); i++) {
+			if (!urpService.checkAdmin(userList.get(i).getId())) {
+				UserDTO userDTO = new UserDTO(userList.get(i).getId(), userList.get(i).getPrename(),
+						userList.get(i).getLastname(), userList.get(i).getPassword(), userList.get(i).getEmail());
+				userDTOList.add(userDTO);
+			}
+		}
+		
+		Gson gson = new Gson();
+		String output = gson.toJson(userDTOList);
+		
+		return Response.status(200).entity(output).build();
+	}
+	
+	@GET
 	@Path("/alleOhneProjektZugriff/{userId}/{projectId}/{hibernateconfigfilename}")
 	@Produces("application/json" + ";charset=utf-8")
 	public Response getAllUsersWithoutAssignForProject(@PathParam("userId") Integer userId,

@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 
 import javax.swing.Timer;
 
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,34 +17,39 @@ import javafx.scene.control.TextField;
 import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import scrumbo.de.app.ScrumBOClient;
+import scrumbo.de.service.ProjectService;
+import scrumbo.de.service.UserService;
 
 public class AdminViewController implements Initializable {
 	
-	private Parent		root;
-	private Scene		scene;
-						
+	private Parent			root;
+	private Scene			scene;
+	private ProjectService	scrumprojektService;
+	private UserService		benutzerService;
+							
 	@FXML
-	private TextField	txtConfigField;
+	private TextField		txtConfigField;
 	@FXML
-	private TextField	hostField;
+	private TextField		hostField;
 	@FXML
-	private TextField	portField;
+	private TextField		portField;
 	@FXML
-	private Text		txtSuccess;
+	private Text			txtSuccess;
 	@FXML
-	private Button		buttonSave;
+	private Button			buttonSave;
 	@FXML
-	private Button		buttonBack;
+	private Button			buttonBack;
 	@FXML
-	private Button		buttonAddSM;
+	private Button			buttonAddSM;
 	@FXML
-	private Button		buttonDeleteUser;
+	private Button			buttonDeleteUser;
 	@FXML
-	private Button		buttonDeleteProject;
+	private Button			buttonDeleteProject;
 	@FXML
-	private Text		txtFail;
-						
+	private Text			txtFail;
+							
 	@FXML
 	private void handleBackButton() throws Exception {
 		try {
@@ -67,6 +73,17 @@ public class AdminViewController implements Initializable {
 			stage.setScene(new Scene(root1));
 			stage.show();
 			stage.setResizable(false);
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent event) {
+					try {
+						checkProjects();
+						checkUsers();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -82,6 +99,17 @@ public class AdminViewController implements Initializable {
 			stage.setScene(new Scene(root1));
 			stage.show();
 			stage.setResizable(false);
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent event) {
+					try {
+						checkProjects();
+						checkUsers();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -98,9 +126,22 @@ public class AdminViewController implements Initializable {
 			stage.setScene(new Scene(root1));
 			stage.show();
 			stage.setResizable(false);
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent event) {
+					try {
+						checkProjects();
+						checkUsers();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		checkProjects();
+		checkUsers();
 	}
 	
 	@FXML
@@ -122,6 +163,9 @@ public class AdminViewController implements Initializable {
 			timer.setRepeats(false);
 			timer.start();
 		}
+		checkProjects();
+		checkUsers();
+		
 	}
 	
 	@Override
@@ -130,6 +174,8 @@ public class AdminViewController implements Initializable {
 		hostField.setText(ScrumBOClient.getHost());
 		portField.setText(ScrumBOClient.getPort());
 		buttonSave.setDisable(true);
+		buttonDeleteProject.setDisable(true);
+		buttonDeleteUser.setDisable(true);
 		txtConfigField.textProperty().addListener((observable, oldValue, newValue) -> {
 			buttonSave.setDisable(false);
 		});
@@ -139,6 +185,28 @@ public class AdminViewController implements Initializable {
 		portField.textProperty().addListener((observable, oldValue, newValue) -> {
 			buttonSave.setDisable(false);
 		});
+		
+		checkProjects();
+		checkUsers();
+		
+	}
+	
+	private void checkProjects() {
+		scrumprojektService = StartwindowController.getScrumprojektService();
+		if (scrumprojektService.loadProjects().size() > 0) {
+			buttonDeleteProject.setDisable(false);
+		} else {
+			buttonDeleteProject.setDisable(true);
+		}
+	}
+	
+	private void checkUsers() {
+		benutzerService = StartwindowController.getBenutzerService();
+		if (benutzerService.ladeBenutzerOhneAdmin().size() > 0) {
+			buttonDeleteUser.setDisable(false);
+		} else {
+			buttonDeleteUser.setDisable(true);
+		}
 	}
 	
 }

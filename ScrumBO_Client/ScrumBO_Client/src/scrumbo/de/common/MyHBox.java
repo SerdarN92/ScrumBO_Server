@@ -342,7 +342,7 @@ public class MyHBox extends HBox {
 	
 	private void addTask(UserStoryTask userstorytask) {
 		final GridPane pane = new GridPane();
-		pane.setMinHeight(40);
+		pane.setMinHeight(70);
 		pane.setMaxWidth(150);
 		pane.setMinWidth(150);
 		pane.setStyle("-fx-border-radius: 10px; -fx-border-style: solid;" + "-fx-border-width: 0.3;"
@@ -360,7 +360,8 @@ public class MyHBox extends HBox {
 		pane.setVgap(2);
 		StringBuilder sb = new StringBuilder(userstorytask.getBeschreibung());
 		int i = 0;
-		while (i + 20 < sb.length() && (i = sb.lastIndexOf(" ", i + 20)) != -1) {
+		while (i + 20 < sb.length() && (i = sb.lastIndexOf(" ", i + 25)) != -1) {
+			pane.setMinHeight(pane.getMinHeight() + 10);
 			sb.replace(i, i + 1, "\n");
 		}
 		String output = sb.toString();

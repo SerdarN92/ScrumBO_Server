@@ -116,6 +116,29 @@ public class BurndownChartPointDao implements DaoInterface<BurndownChartPoint, I
 		return list;
 	}
 	
+	@SuppressWarnings("unchecked")
+	public List<BurndownChartPoint> findAllWithBurndownChartId(int burndownchartId) {
+		List<BurndownChartPoint> list = null;
+		try {
+			Session s = HibernateUtil.openSession();
+			try {
+				s.beginTransaction();
+				list = (List<BurndownChartPoint>) s
+						.createQuery("from BurndownChartPoint WHERE burndownchart_id LIKE'" + burndownchartId + "'")
+						.list();
+				s.getTransaction().commit();
+				s.close();
+			} catch (Exception e) {
+				s.getTransaction().rollback();
+				s.close();
+				e.printStackTrace();
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+	
 	@Override
 	public void deleteAll() {
 		List<BurndownChartPoint> list = findAll();

@@ -19,14 +19,14 @@ import javafx.util.Duration;
 import scrumbo.de.common.MyToolBox;
 import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentUser;
-import scrumbo.de.service.UserService;
-import scrumbo.de.service.RoleService;
 import scrumbo.de.service.DefinitionOfDoneService;
 import scrumbo.de.service.ImpedimentService;
 import scrumbo.de.service.ProductBacklogService;
 import scrumbo.de.service.ProjectService;
+import scrumbo.de.service.RoleService;
 import scrumbo.de.service.SprintBacklogService;
 import scrumbo.de.service.TaskService;
+import scrumbo.de.service.UserService;
 import scrumbo.de.service.UserStoryService;
 
 public class StartwindowController implements Initializable {
@@ -41,9 +41,9 @@ public class StartwindowController implements Initializable {
 	@FXML
 	private ImageView						informationImage;
 											
-	private static UserService			benutzerService			= null;
-	private static RoleService		benutzerrolleService	= null;
-	private static ProjectService		scrumprojektService		= null;
+	private static UserService				benutzerService			= null;
+	private static RoleService				benutzerrolleService	= null;
+	private static ProjectService			scrumprojektService		= null;
 	private static ImpedimentService		impedimentService		= null;
 	private static ProductBacklogService	productbacklogService	= null;
 	private static UserStoryService			userstoryService		= null;
@@ -69,7 +69,6 @@ public class StartwindowController implements Initializable {
 	
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		
 		if (benutzerService == null)
 			benutzerService = new UserService();
 		if (benutzerrolleService == null)
@@ -166,6 +165,10 @@ public class StartwindowController implements Initializable {
 		StartwindowController.definitionofdoneService = definitionofdoneService;
 	}
 	
+	/*
+	 * Methode, um das Verhalten aller Tooltips in dieser Anwendung zu steuern.
+	 * -> Dauer der Anzeige etc.
+	 */
 	public static void setupCustomTooltipBehavior(int openDelayInMillis, int visibleDurationInMillis,
 			int closeDelayInMillis) {
 		try {
@@ -211,6 +214,10 @@ public class StartwindowController implements Initializable {
 		}
 	}
 	
+	/*
+	 * Setzt alle wichtigen Daten zurück, damit beim erneuten Einloggen eines
+	 * anderen Users keine Fehler auftreten.
+	 */
 	public static void logout() throws Exception {
 		CurrentUser.userId = -1;
 		CurrentUser.prename = null;

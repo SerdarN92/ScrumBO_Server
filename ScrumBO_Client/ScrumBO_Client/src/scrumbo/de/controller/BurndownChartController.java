@@ -122,7 +122,7 @@ public class BurndownChartController implements Initializable {
 							resume();
 						}
 						burndownChartId = CurrentBurndownChart.id;
-						tage = CurrentBurndownChart.days;
+						// tage = CurrentBurndownChart.days;
 						points = CurrentBurndownChart.points;
 						
 						lineChart.getData().remove(series);
@@ -185,7 +185,7 @@ public class BurndownChartController implements Initializable {
 		sprintbacklogService.ladeSprint();
 		
 		burndownChartId = CurrentBurndownChart.id;
-		tage = CurrentBurndownChart.days;
+		// tage = CurrentBurndownChart.days;
 		points = CurrentBurndownChart.points;
 		
 		mainPane.getChildren().removeAll();
@@ -257,7 +257,7 @@ public class BurndownChartController implements Initializable {
 		sprintbacklogService = new SprintBacklogService();
 		sprintbacklogService.ladeSprint();
 		burndownChartId = CurrentBurndownChart.id;
-		tage = CurrentBurndownChart.days;
+		// tage = CurrentBurndownChart.days;
 		points = CurrentBurndownChart.points;
 		
 		lineChart.getData().remove(series);

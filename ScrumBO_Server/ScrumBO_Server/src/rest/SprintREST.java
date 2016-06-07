@@ -261,4 +261,175 @@ public class SprintREST {
 		return Response.status(200).entity(output).build();
 	}
 	
+	@Path("/startSprint/{sprintid}/{sprintdays}/{hibernateconfigfilename}")
+	@GET
+	@Produces("application/json" + ";charset=utf-8")
+	public Response startSprint(@PathParam("sprintid") Integer sprintid, @PathParam("sprintdays") Integer sprintdays,
+			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
+		boolean status = false;
+		try {
+			SprintService sprintService = new SprintService(hibernateconfigfilename);
+			Sprint sprint = sprintService.findById(sprintid);
+			BurndownChartService burndownChartService = new BurndownChartService(hibernateconfigfilename);
+			BurndownChart burndownChart = new BurndownChart();
+			BurndownChartPoint burndownChartPoint = new BurndownChartPoint();
+			BurndownChartPointService burndownChartPointService = new BurndownChartPointService(
+					hibernateconfigfilename);
+			UserStoryTaskService userstorytaskService = new UserStoryTaskService(hibernateconfigfilename);
+			UserStoryService userstoryService = new UserStoryService(hibernateconfigfilename);
+			
+			burndownChart.setDays(sprintdays);
+			burndownChartService.persist(burndownChart);
+			
+			Integer aufwand = 0;
+			
+			List<UserStory> userstoryList = userstoryService.findAllBySprintId(sprintid);
+			
+			for (int i = 0; i < userstoryList.size(); i++) {
+				List<UserStoryTask> userstorytaskList = userstorytaskService
+						.findAllByUserStoryId(userstoryList.get(i).getId());
+				for (int j = 0; j < userstorytaskList.size(); j++) {
+					if ((userstorytaskList.get(j).getTaskstatus().getDescription().equals("Offen"))
+							|| (userstorytaskList.get(j).getTaskstatus().getDescription().equals("In Arbeit"))) {
+						aufwand += userstorytaskList.get(j).getEffortInHours();
+					}
+				}
+			}
+			
+			burndownChartPoint.setX(1);
+			burndownChartPoint.setY(aufwand);
+			burndownChartPoint.setBurndownChart(burndownChart);
+			burndownChartPointService.persist(burndownChartPoint);
+			
+			sprint.setBurndownChart(burndownChart);
+			sprint.setStatus(true);
+			sprintService.update(sprint);
+			status = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String output = "false";
+		if (status) {
+			output = "true";
+		}
+		return Response.status(200).entity(output).build();
+	}
+	
+	@Path("/endDayNew/{sprintid}/{hibernateconfigfilename}")
+	@GET
+	@Produces("application/json" + ";charset=utf-8")
+	public Response endDayNew(@PathParam("sprintid") Integer sprintid,
+			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
+		boolean status = false;
+		try {
+			SprintService sprintService = new SprintService(hibernateconfigfilename);
+			Sprint sprint = sprintService.findById(sprintid);
+			BurndownChartService burndownChartService = new BurndownChartService(hibernateconfigfilename);
+			BurndownChart burndownChart = burndownChartService.findById(sprint.getBurndownChart().getId());
+			BurndownChartPoint burndownChartPoint = new BurndownChartPoint();
+			BurndownChartPointService burndownChartPointService = new BurndownChartPointService(
+					hibernateconfigfilename);
+			UserStoryTaskService userstorytaskService = new UserStoryTaskService(hibernateconfigfilename);
+			UserStoryService userstoryService = new UserStoryService(hibernateconfigfilename);
+			
+			Integer aufwand = 0;
+			
+			List<UserStory> userstoryList = userstoryService.findAllBySprintId(sprintid);
+			
+			for (int i = 0; i < userstoryList.size(); i++) {
+				List<UserStoryTask> userstorytaskList = userstorytaskService
+						.findAllByUserStoryId(userstoryList.get(i).getId());
+				for (int j = 0; j < userstorytaskList.size(); j++) {
+					if ((userstorytaskList.get(j).getTaskstatus().getDescription().equals("Offen"))
+							|| (userstorytaskList.get(j).getTaskstatus().getDescription().equals("In Arbeit"))) {
+						aufwand += userstorytaskList.get(j).getEffortInHours();
+					}
+				}
+			}
+			
+			List<BurndownChartPoint> points = burndownChartPointService
+					.findAllWithBurndownChartId(sprint.getBurndownChart().getId());
+			int currentday = points.size() + 1;
+			
+			burndownChartPoint.setX(currentday);
+			burndownChartPoint.setY(aufwand);
+			burndownChartPoint.setBurndownChart(burndownChart);
+			burndownChartPointService.persist(burndownChartPoint);
+			
+			sprintService.update(sprint);
+			status = true;
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String output = "false";
+		if (status) {
+			output = "true";
+		}
+		return Response.status(200).entity(output).build();
+	}
+	
+	@Path("/checkSprintStatus/{sprintid}/{hibernateconfigfilename}")
+	@GET
+	@Produces("application/json" + ";charset=utf-8")
+	public Response checkSprintStatus(@PathParam("sprintid") Integer sprintid,
+			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
+		boolean status = false;
+		try {
+			SprintService sprintService = new SprintService(hibernateconfigfilename);
+			Sprint sprint = sprintService.findById(sprintid);
+			BurndownChartService burndownChartService = new BurndownChartService(hibernateconfigfilename);
+			BurndownChart burndownChart = burndownChartService.findById(sprint.getBurndownChart().getId());
+			BurndownChartPointService burndownChartPointService = new BurndownChartPointService(
+					hibernateconfigfilename);
+					
+			List<BurndownChartPoint> points = burndownChartPointService
+					.findAllWithBurndownChartId(sprint.getBurndownChart().getId());
+					
+			if (points != null && burndownChart.getDays() != null) {
+				if (points.size() == burndownChart.getDays()) {
+					status = false;
+				} else {
+					status = true;
+				}
+			} else {
+				status = false;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String output = "false";
+		if (status) {
+			output = "true";
+		}
+		return Response.status(200).entity(output).build();
+	}
+	
+	@Path("/currentDaySprint/{sprintid}/{hibernateconfigfilename}")
+	@GET
+	@Produces("application/json" + ";charset=utf-8")
+	public Response currentDaySprint(@PathParam("sprintid") Integer sprintid,
+			@PathParam("hibernateconfigfilename") String hibernateconfigfilename) {
+		int currentDay = 0;
+		try {
+			SprintService sprintService = new SprintService(hibernateconfigfilename);
+			Sprint sprint = sprintService.findById(sprintid);
+			BurndownChartPointService burndownChartPointService = new BurndownChartPointService(
+					hibernateconfigfilename);
+			if (sprint.getBurndownChart() != null) {
+				List<BurndownChartPoint> points = burndownChartPointService
+						.findAllWithBurndownChartId(sprint.getBurndownChart().getId());
+						
+				for (int i = 0; i < points.size(); i++) {
+					if (currentDay < points.get(i).getX())
+						currentDay = points.get(i).getX();
+				}
+			}
+			
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		String output = new Integer(currentDay).toString();
+		return Response.status(200).entity(output).build();
+	}
+	
 }

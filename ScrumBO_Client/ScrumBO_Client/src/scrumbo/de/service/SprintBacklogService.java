@@ -153,11 +153,11 @@ public class SprintBacklogService {
 		CurrentSprint.status = sprint.getStatus();
 		if (sprint.getBurndownChart() != null) {
 			CurrentBurndownChart.id = sprint.getBurndownChart().getId();
-			CurrentBurndownChart.days = sprint.getBurndownChart().getDays();
+			// CurrentBurndownChart.days = sprint.getBurndownChart().getDays();
 			CurrentBurndownChart.points = sprint.getBurndownChart().getBurndownChartPoint();
 		} else {
 			CurrentBurndownChart.id = null;
-			CurrentBurndownChart.days = null;
+			// CurrentBurndownChart.days = null;
 			CurrentBurndownChart.points = null;
 		}
 	}
@@ -251,7 +251,7 @@ public class SprintBacklogService {
 		boolean status = false;
 		try {
 			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
-					+ "/ScrumBO_Server/rest/sprint/endDay/" + CurrentSprint.id + "/"
+					+ "/ScrumBO_Server/rest/sprint/endDayNew/" + CurrentSprint.id + "/"
 					+ ScrumBOClient.getDatabaseconfigfile());
 			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
 			conn.setRequestMethod("GET");
@@ -272,6 +272,87 @@ public class SprintBacklogService {
 		}
 		
 		return status;
+		
+	}
+	
+	public boolean checkSprintStatus() {
+		boolean status = false;
+		try {
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/sprint/checkSprintStatus/" + CurrentSprint.id + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+			String output = br.readLine();
+			if (output.equals("true"))
+				status = true;
+			conn.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return status;
+		
+	}
+	
+	public boolean startSprint(int sprintDays) {
+		boolean status = false;
+		try {
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/sprint/startSprint/" + CurrentSprint.id + "/" + sprintDays + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+			String output = br.readLine();
+			if (output.equals("true"))
+				status = true;
+			conn.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return status;
+	}
+	
+	public int getCurrentDayOfCurrentSprint() {
+		int day = 0;
+		try {
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/sprint/currentDaySprint/" + CurrentSprint.id + "/"
+					+ ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+			String output = br.readLine();
+			conn.disconnect();
+			day = Integer.parseInt(output);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		return day;
 		
 	}
 }

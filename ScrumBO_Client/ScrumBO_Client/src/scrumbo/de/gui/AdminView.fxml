@@ -63,6 +63,6 @@
       <TextField fx:id="portField" layoutX="145.0" layoutY="242.0" prefHeight="25.0" prefWidth="224.0" />
       <TextField fx:id="hostField" layoutX="145.0" layoutY="204.0" prefHeight="25.0" prefWidth="224.0" />
       <Button fx:id="buttonDeleteUser" layoutX="399.0" layoutY="242.0" mnemonicParsing="false" onAction="#handleButtonDeleteUser" text="Benutzer löschen" />
-      <Button fx:id="buttonProject" layoutX="399.0" layoutY="204.0" mnemonicParsing="false" onAction="#handleButtonDeleteProject" prefHeight="25.0" prefWidth="107.0" text="Projekt löschen" />
+      <Button fx:id="buttonDeleteProject" layoutX="399.0" layoutY="204.0" mnemonicParsing="false" onAction="#handleButtonDeleteProject" prefHeight="25.0" prefWidth="107.0" text="Projekt löschen" />
    </children>
 </AnchorPane>

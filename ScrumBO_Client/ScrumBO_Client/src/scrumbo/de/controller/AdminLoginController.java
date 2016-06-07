@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package scrumbo.de.controller;
 
 import java.io.IOException;
@@ -28,13 +23,6 @@ import scrumbo.de.entity.CurrentUser;
 import scrumbo.de.entity.User;
 import scrumbo.de.service.UserService;
 
-/**
- * FXML Controller class
- *
- * Controller Klasse für den Admin Login
- *
- * @author Serdar
- */
 public class AdminLoginController implements Initializable {
 	
 	private Parent			root;
@@ -113,6 +101,7 @@ public class AdminLoginController implements Initializable {
 						Stage stage = (Stage) buttonLoginUser.getScene().getWindow();
 						stage.setScene(scene);
 					} else {
+						StartwindowController.logout();
 						emailValidFail.setText("Benutzer hat keine Admin-Rechte!");
 						emailValidFail.setVisible(true);
 					}

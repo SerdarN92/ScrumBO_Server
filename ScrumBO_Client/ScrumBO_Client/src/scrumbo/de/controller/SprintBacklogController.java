@@ -3,7 +3,6 @@ package scrumbo.de.controller;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.Timer;
 import java.util.TimerTask;
@@ -22,8 +21,8 @@ import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.TextField;
 import javafx.scene.control.Tooltip;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
@@ -34,11 +33,9 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import scrumbo.de.common.MyHBox;
 import scrumbo.de.common.MyToolBox;
-import scrumbo.de.entity.CurrentBurndownChart;
 import scrumbo.de.entity.CurrentProject;
 import scrumbo.de.entity.CurrentSprint;
 import scrumbo.de.entity.CurrentUser;
-import scrumbo.de.entity.Sprint;
 import scrumbo.de.entity.UserStory;
 import scrumbo.de.service.SprintBacklogService;
 
@@ -59,8 +56,6 @@ public class SprintBacklogController implements Initializable {
 	@FXML
 	private Button							buttonLoadSprint;
 	@FXML
-	private Button							buttonCreateNewSprint;
-	@FXML
 	private Button							buttonStartSprint;
 	@FXML
 	private Button							buttonEndDay;
@@ -70,6 +65,10 @@ public class SprintBacklogController implements Initializable {
 	private Text							sprintNumber;
 	@FXML
 	private Text							tagNumber;
+	@FXML
+	private TextField						txtFieldSprintDays;
+	@FXML
+	private Text							errorTxt;
 											
 	public ObservableList<UserStory>		dataSprintBacklog		= FXCollections.observableArrayList();
 	public static Integer					anzahlSprints			= 0;
@@ -143,23 +142,20 @@ public class SprintBacklogController implements Initializable {
 		}
 		
 		sprintNumber.setText(CurrentSprint.sprintnumber.toString());
-		if (CurrentBurndownChart.days != null) {
-			tagNumber.setText((CurrentBurndownChart.days.toString()));
+		if (sprintbacklogService.getCurrentDayOfCurrentSprint() > 0) {
+			tagNumber.setText(new Integer(sprintbacklogService.getCurrentDayOfCurrentSprint()).toString());
 		} else {
 			tagNumber.setText(null);
 		}
 		if (CurrentSprint.sprintnumber < anzahlSprints) {
 			buttonStartSprint.setDisable(true);
-			buttonCreateNewSprint.setDisable(true);
 			buttonEndDay.setDisable(true);
 		} else {
 			if (!CurrentSprint.status) {
 				buttonStartSprint.setDisable(false);
-				buttonCreateNewSprint.setDisable(true);
 				buttonEndDay.setDisable(true);
 			} else {
 				buttonStartSprint.setDisable(true);
-				buttonCreateNewSprint.setDisable(false);
 				buttonEndDay.setDisable(false);
 			}
 		}
@@ -167,24 +163,26 @@ public class SprintBacklogController implements Initializable {
 	
 	@FXML
 	private void handleButtonStartSprint(ActionEvent event) throws Exception {
-		try {
-			if (sprintbacklogService.createBurndownChart()) {
-				editable = true;
-				editTasks = true;
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Sprint starten");
-				alert.setHeaderText(null);
-				alert.setContentText("Sprint Nr." + CurrentSprint.sprintnumber + " wurde gestartet!");
-				alert.showAndWait();
-				buttonEndDay.setDisable(false);
-				buttonCreateNewSprint.setDisable(false);
-				buttonStartSprint.setDisable(true);
-				buttonAddUserStory.setDisable(true);
-				reloadSprintBacklog();
+		if (checkTxtFieldSprintDays()) {
+			int sprintdays = Integer.parseInt(txtFieldSprintDays.getText());
+			try {
+				if (sprintbacklogService.startSprint(sprintdays)) {
+					editable = true;
+					editTasks = true;
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Sprint starten");
+					alert.setHeaderText(null);
+					alert.setContentText("Sprint Nr." + CurrentSprint.sprintnumber + " mit der Länge von " + sprintdays
+							+ " Tagen wurde gestartet!");
+					alert.showAndWait();
+					buttonEndDay.setDisable(false);
+					buttonStartSprint.setDisable(true);
+					buttonAddUserStory.setDisable(true);
+					reloadSprintBacklog();
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-			
-		} catch (Exception e) {
-			e.printStackTrace();
 		}
 	}
 	
@@ -237,13 +235,14 @@ public class SprintBacklogController implements Initializable {
 				public void handle(WindowEvent event) {
 					try {
 						reloadSprintBacklog();
-						if (!dataSprintBacklog.isEmpty())
+						if (!dataSprintBacklog.isEmpty()) {
 							buttonStartSprint.setDisable(false);
-							
+							txtFieldSprintDays.setDisable(false);
+							txtFieldSprintDays.setEditable(true);
+						}
 						if (CurrentUser.isPO || CurrentUser.isDev) {
 							buttonStartSprint.setDisable(true);
 							buttonEndDay.setDisable(true);
-							buttonCreateNewSprint.setDisable(true);
 						}
 						
 					} catch (Exception e) {
@@ -261,15 +260,27 @@ public class SprintBacklogController implements Initializable {
 	private void handleButtonEndDay(ActionEvent event) throws Exception {
 		if (count == 0) {
 			if (sprintbacklogService.endDay()) {
-				Alert alert = new Alert(AlertType.INFORMATION);
-				alert.setTitle("Tag beenden");
-				alert.setHeaderText(null);
-				alert.setContentText("Tag " + tagNumber.getText() + " wurde beendet.");
-				alert.showAndWait();
-				count++;
-				Integer number = Integer.parseInt(tagNumber.getText());
-				number++;
-				tagNumber.setText(number.toString());
+				if (sprintbacklogService.checkSprintStatus()) {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Tag beenden");
+					alert.setHeaderText(null);
+					alert.setContentText("Tag " + tagNumber.getText() + " wurde beendet.");
+					alert.showAndWait();
+					count++;
+					Integer number = Integer.parseInt(tagNumber.getText());
+					number++;
+					tagNumber.setText(number.toString());
+				} else {
+					Alert alert = new Alert(AlertType.INFORMATION);
+					alert.setTitle("Sprint beenden");
+					alert.setHeaderText(null);
+					alert.setContentText("Der Sprint Nr." + CurrentSprint.sprintnumber + " wurde mit dem Tag "
+							+ tagNumber.getText() + " beendet.");
+					alert.showAndWait();
+					sprintbacklogService.removeIncompleteUserStories();
+					sprintbacklogService.addNewSprintToSprintBacklog();
+					reloadSprintBacklog();
+				}
 			}
 		}
 		count = 0;
@@ -326,21 +337,28 @@ public class SprintBacklogController implements Initializable {
 		}
 		
 		sprintNumber.setText(CurrentSprint.sprintnumber.toString());
-		if (CurrentBurndownChart.days != null) {
-			tagNumber.setText(CurrentBurndownChart.days.toString());
+		if (sprintbacklogService.getCurrentDayOfCurrentSprint() > 0) {
+			tagNumber.setText(new Integer(sprintbacklogService.getCurrentDayOfCurrentSprint()).toString());
 		}
 		
 		controller = this;
 		
 		if (!CurrentSprint.status) {
 			buttonEndDay.setDisable(true);
-			buttonCreateNewSprint.setDisable(true);
 		} else {
 			buttonStartSprint.setDisable(true);
+			txtFieldSprintDays.setText(new Integer(sprintbacklogService.getCurrentDayOfCurrentSprint()).toString());
+			txtFieldSprintDays.setDisable(true);
+			txtFieldSprintDays.setEditable(false);
 		}
 		
 		if (dataSprintBacklog.isEmpty()) {
 			buttonStartSprint.setDisable(true);
+			txtFieldSprintDays.setDisable(true);
+			txtFieldSprintDays.setEditable(false);
+		} else {
+			txtFieldSprintDays.setDisable(false);
+			txtFieldSprintDays.setEditable(true);
 		}
 		
 		if (sprintbacklogService.ladeAnzahlSprints() <= 1) {
@@ -350,7 +368,6 @@ public class SprintBacklogController implements Initializable {
 		if (CurrentUser.isPO || CurrentUser.isDev) {
 			buttonStartSprint.setDisable(true);
 			buttonEndDay.setDisable(true);
-			buttonCreateNewSprint.setDisable(true);
 			buttonAddUserStory.setDisable(true);
 		}
 		
@@ -447,41 +464,6 @@ public class SprintBacklogController implements Initializable {
 		
 	}
 	
-	@FXML
-	public void handleButtonCreateNewSprint(ActionEvent event) throws IOException {
-		Alert alert = new Alert(AlertType.CONFIRMATION);
-		alert.setTitle("Sprint beenden");
-		alert.setHeaderText(null);
-		alert.setContentText("Wollen Sie diese Sprint wirklich beenden?");
-		
-		ButtonType buttonTypeOne = new ButtonType("Ja");
-		ButtonType buttonTypeTwo = new ButtonType("Nein");
-		alert.getButtonTypes().setAll(buttonTypeOne, buttonTypeTwo);
-		
-		Optional<ButtonType> result = alert.showAndWait();
-		if (result.get() == buttonTypeOne && sprintbacklogService.removeIncompleteUserStories()) {
-			editable = false;
-			editTasks = false;
-			alert.close();
-			Sprint sprint = sprintbacklogService.addNewSprintToSprintBacklog();
-			CurrentSprint.id = sprint.getId();
-			CurrentSprint.sprintnumber = sprint.getSprintnummer();
-			CurrentSprint.status = sprint.getStatus();
-			
-			reloadSprintBacklog();
-			
-			buttonStartSprint.setDisable(false);
-			buttonEndDay.setDisable(true);
-			buttonCreateNewSprint.setDisable(true);
-			buttonAddUserStory.setDisable(false);
-		} else {
-			alert.close();
-		}
-		
-		tagNumber.setText(null);
-		
-	}
-	
 	public void reloadSprintBacklog() throws IOException {
 		VBOXUserStories.getChildren().clear();
 		
@@ -502,13 +484,55 @@ public class SprintBacklogController implements Initializable {
 		}
 		
 		sprintNumber.setText(CurrentSprint.sprintnumber.toString());
-		if (CurrentBurndownChart.days != null) {
-			tagNumber.setText(CurrentBurndownChart.days.toString());
+		if (sprintbacklogService.getCurrentDayOfCurrentSprint() > 0) {
+			tagNumber.setText(new Integer(sprintbacklogService.getCurrentDayOfCurrentSprint()).toString());
 		}
 		
 		if (dataSprintBacklog.isEmpty()) {
 			buttonStartSprint.setDisable(true);
 		}
+	}
+	
+	private boolean checkTxtFieldSprintDays() {
+		if (!txtFieldSprintDays.getText().isEmpty()) {
+			if (isInteger(txtFieldSprintDays.getText())) {
+				errorTxt.setText(null);
+				txtFieldSprintDays.setStyle(null);
+				return true;
+			} else {
+				errorTxt.setText("Bitte geben Sie eine ganze Zahl ein.");
+				txtFieldSprintDays.setStyle("-fx-border-color:#FF0000;");
+				return false;
+			}
+		} else {
+			errorTxt.setText("Bitte geben Sie eine ganze Zahl ein.");
+			txtFieldSprintDays.setStyle("-fx-border-color:#FF0000;");
+			return false;
+		}
+	}
+	
+	private boolean isInteger(String str) {
+		if (str == null) {
+			return false;
+		}
+		int length = str.length();
+		if (length == 0) {
+			return false;
+		}
+		int i = 0;
+		if (str.charAt(0) == '-') {
+			if (length == 1) {
+				return false;
+			}
+			i = 1;
+		}
+		for (; i < length; i++) {
+			char c = str.charAt(i);
+			if (c < '0' || c > '9') {
+				return false;
+			}
+		}
+		return true;
 	}
 	
 }

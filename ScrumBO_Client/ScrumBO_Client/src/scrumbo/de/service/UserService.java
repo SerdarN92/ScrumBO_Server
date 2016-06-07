@@ -227,6 +227,35 @@ public class UserService {
 		return benutzerList;
 	}
 	
+	public List<User> ladeBenutzerOhneAdmin() {
+		List<User> benutzerList = new LinkedList<User>();
+		String output = "";
+		try {
+			URL url = new URL("http://" + ScrumBOClient.getHost() + ":" + ScrumBOClient.getPort()
+					+ "/ScrumBO_Server/rest/benutzer/alleOhneAdmin/" + ScrumBOClient.getDatabaseconfigfile());
+			HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+			conn.setRequestMethod("GET");
+			conn.setRequestProperty("Accept", "application/json" + ";charset=utf-8");
+			
+			if (conn.getResponseCode() != 200) {
+				throw new RuntimeException("Failed: HTTP error code : " + conn.getResponseCode());
+			}
+			
+			BufferedReader br = new BufferedReader(
+					new InputStreamReader(conn.getInputStream(), StandardCharsets.UTF_8));
+			output = br.readLine();
+			conn.disconnect();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
+		Type listType = new TypeToken<LinkedList<User>>() {
+		}.getType();
+		benutzerList = gson.fromJson(output, listType);
+		
+		return benutzerList;
+	}
+	
 	public List<User> ladeBenutzerOhneProjektzugriff() {
 		List<User> benutzerList = new LinkedList<User>();
 		String output = "";

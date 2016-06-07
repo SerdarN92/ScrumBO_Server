@@ -260,7 +260,7 @@ public class ProductBacklogController implements Initializable {
 								super.updateItem(item, empty);
 								if (!isEmpty()) {
 									text = new Text(item.toString());
-									text.setWrappingWidth(280);
+									text.setWrappingWidth(230);
 									
 									setGraphic(text);
 								} else {
@@ -290,7 +290,7 @@ public class ProductBacklogController implements Initializable {
 								super.updateItem(item, empty);
 								if (!isEmpty()) {
 									text = new Text(item.toString());
-									text.setWrappingWidth(270);
+									text.setWrappingWidth(150);
 									
 									setGraphic(text);
 								} else {

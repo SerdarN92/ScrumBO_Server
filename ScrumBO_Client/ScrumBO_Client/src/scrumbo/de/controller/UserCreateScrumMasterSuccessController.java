@@ -20,6 +20,7 @@ import javafx.scene.control.Button;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 /**
  * FXML Controller class
@@ -41,7 +42,7 @@ public class UserCreateScrumMasterSuccessController implements Initializable {
 	
 	private void forward() {
 		Stage stage = (Stage) buttonForward.getScene().getWindow();
-		stage.close();
+		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 	}
 	
 	@Override

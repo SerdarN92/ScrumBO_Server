@@ -8,7 +8,7 @@
 <?import javafx.scene.text.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.SprintBacklogController">
+<AnchorPane id="AnchorPane" prefHeight="600.0" prefWidth="1000.0" style="-fx-background-color: WHITE;" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="scrumbo.de.controller.SprintBacklogController">
    <children>
       <ImageView fitHeight="147.0" fitWidth="333.0" layoutX="75.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
          <image>
@@ -20,7 +20,10 @@
             <Font size="16.0" />
          </font>
       </Button>
-      <Text fx:id="vorname" layoutX="75.0" layoutY="580.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="48.999998927116394" />
+      <Text fx:id="errorTxt" layoutX="75.0" layoutY="580.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="159.9999989271164">
+         <font>
+            <Font size="16.0" />
+         </font></Text>
       <Label layoutX="392.0" layoutY="54.0" text="Sprint Backlog">
          <font>
             <Font size="30.0" />
@@ -47,26 +50,22 @@
             <Font size="16.0" />
          </font>
       </Label>
-      <Button fx:id="buttonCreateNewSprint" layoutX="827.0" layoutY="556.0" mnemonicParsing="false" onAction="#handleButtonCreateNewSprint" text="Sprint beenden">
-         <font>
-            <Font size="16.0" />
-         </font></Button>
       <Text fx:id="sprintNumber" layoutX="480.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" wrappingWidth="32.0">
          <font>
             <Font size="16.0" />
          </font>
       </Text>
-      <Button fx:id="buttonLoadSprint" layoutX="696.0" layoutY="556.0" mnemonicParsing="false" onAction="#handleButtonLoadSprint" text="Sprint laden">
+      <Button fx:id="buttonLoadSprint" layoutX="850.0" layoutY="556.0" mnemonicParsing="false" onAction="#handleButtonLoadSprint" text="Sprint laden">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button fx:id="buttonStartSprint" layoutX="412.0" layoutY="557.0" mnemonicParsing="false" onAction="#handleButtonStartSprint" prefHeight="37.0" prefWidth="123.0" text="Sprint starten">
+      <Button fx:id="buttonStartSprint" layoutX="566.0" layoutY="557.0" mnemonicParsing="false" onAction="#handleButtonStartSprint" prefHeight="37.0" prefWidth="123.0" text="Sprint starten">
          <font>
             <Font size="16.0" />
          </font>
       </Button>
-      <Button fx:id="buttonEndDay" layoutX="557.0" layoutY="556.0" mnemonicParsing="false" onAction="#handleButtonEndDay" text="Tag beenden">
+      <Button fx:id="buttonEndDay" layoutX="711.0" layoutY="556.0" mnemonicParsing="false" onAction="#handleButtonEndDay" text="Tag beenden">
          <font>
             <Font size="16.0" />
          </font>
@@ -86,6 +85,17 @@
             <Image url="@../../../content/1451334333_Info.png" />
          </image>
       </ImageView>
+      <Text layoutX="239.0" layoutY="581.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Dauer des Sprints (in Tagen):">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
+      <TextField fx:id="txtFieldSprintDays" layoutX="448.0" layoutY="563.0" prefHeight="25.0" prefWidth="98.0" />
+      <Text fill="RED" layoutX="75.0" layoutY="579.0" strokeType="OUTSIDE" strokeWidth="0.0">
+         <font>
+            <Font size="16.0" />
+         </font>
+      </Text>
    </children>
    <cursor>
       <Cursor fx:constant="DEFAULT" />

@@ -11,19 +11,20 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 
 public class UserCreateScrumMasterFailController implements Initializable {
 	
-	Parent	root;
-	Scene	scene;
-	
+	Parent			root;
+	Scene			scene;
+					
 	@FXML
-	private Button buttonForward;
-	
+	private Button	buttonForward;
+					
 	@FXML
 	private void handleButtonForward(ActionEvent event) throws IOException {
 		Stage stage = (Stage) buttonForward.getScene().getWindow();
-		stage.close();
+		stage.fireEvent(new WindowEvent(stage, WindowEvent.WINDOW_CLOSE_REQUEST));
 	}
 	
 	@Override
