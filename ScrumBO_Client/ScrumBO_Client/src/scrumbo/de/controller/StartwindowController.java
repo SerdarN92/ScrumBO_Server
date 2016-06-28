@@ -41,16 +41,19 @@ public class StartwindowController implements Initializable {
 	@FXML
 	private ImageView						informationImage;
 											
-	private static UserService				benutzerService			= null;
-	private static RoleService				benutzerrolleService	= null;
-	private static ProjectService			scrumprojektService		= null;
-	private static ImpedimentService		impedimentService		= null;
-	private static ProductBacklogService	productbacklogService	= null;
-	private static UserStoryService			userstoryService		= null;
-	private static TaskService				taskService				= null;
-	private static SprintBacklogService		sprintbacklogService	= null;
-	private static DefinitionOfDoneService	definitionofdoneService	= null;
-																	
+	private static UserService				benutzerService;
+	private static RoleService				benutzerrolleService;
+	private static ProjectService			scrumprojektService;
+	private static ImpedimentService		impedimentService;
+	private static ProductBacklogService	productbacklogService;
+	private static UserStoryService			userstoryService;
+	private static TaskService				taskService;
+	private static SprintBacklogService		sprintbacklogService;
+	private static DefinitionOfDoneService	definitionofdoneService;
+											
+	/*
+	 * Method that is called, when the user klicks on the Admin-Login-Image
+	 */
 	@FXML
 	private void handleClickAdminImage(MouseEvent event) throws IOException {
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/AdminLogin.fxml"));
@@ -59,6 +62,9 @@ public class StartwindowController implements Initializable {
 		stage.setScene(scene);
 	}
 	
+	/*
+	 * Method that is called, when the user klicks on the User-Login-Image
+	 */
 	@FXML
 	private void handleClickLoginUserImage(MouseEvent event) throws IOException {
 		this.root = FXMLLoader.load(getClass().getResource("/scrumbo/de/gui/UserLogin.fxml"));
@@ -67,27 +73,22 @@ public class StartwindowController implements Initializable {
 		stage.setScene(scene);
 	}
 	
+	/*
+	 * All services were initialized, when the ScrumBO starts. The
+	 * Welcome-Tooltip were added to the Information-Image.
+	 */
 	@Override
 	public void initialize(URL url, ResourceBundle rb) {
-		if (benutzerService == null)
-			benutzerService = new UserService();
-		if (benutzerrolleService == null)
-			benutzerrolleService = new RoleService();
-		if (scrumprojektService == null)
-			scrumprojektService = new ProjectService();
-		if (impedimentService == null)
-			impedimentService = new ImpedimentService();
-		if (productbacklogService == null)
-			productbacklogService = new ProductBacklogService();
-		if (userstoryService == null)
-			userstoryService = new UserStoryService();
-		if (taskService == null)
-			taskService = new TaskService();
-		if (sprintbacklogService == null)
-			sprintbacklogService = new SprintBacklogService();
-		if (definitionofdoneService == null)
-			definitionofdoneService = new DefinitionOfDoneService();
-			
+		benutzerService = new UserService();
+		benutzerrolleService = new RoleService();
+		scrumprojektService = new ProjectService();
+		impedimentService = new ImpedimentService();
+		productbacklogService = new ProductBacklogService();
+		userstoryService = new UserStoryService();
+		taskService = new TaskService();
+		sprintbacklogService = new SprintBacklogService();
+		definitionofdoneService = new DefinitionOfDoneService();
+		
 		MyToolBox toolbox = new MyToolBox();
 		setupCustomTooltipBehavior(650, 10000, 650);
 		Tooltip.install(informationImage, toolbox.getTooltipWelcome());

@@ -48,6 +48,8 @@ public class AdminViewController implements Initializable {
 	@FXML
 	private Button			buttonDeleteProject;
 	@FXML
+	private Button			buttonPasswordChange;
+	@FXML
 	private Text			txtFail;
 							
 	@FXML
@@ -58,6 +60,32 @@ public class AdminViewController implements Initializable {
 			this.scene = new Scene(root);
 			Stage stage = (Stage) buttonBack.getScene().getWindow();
 			stage.setScene(scene);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@FXML
+	private void handleButtonChangePassword() throws Exception {
+		try {
+			FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/scrumbo/de/gui/AdminChangePassword.fxml"));
+			Parent root1 = (Parent) fxmlLoader.load();
+			Stage stage = new Stage();
+			stage.initModality(Modality.APPLICATION_MODAL);
+			stage.setScene(new Scene(root1));
+			stage.show();
+			stage.setResizable(false);
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent event) {
+					try {
+						checkProjects();
+						checkUsers();
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+				}
+			});
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
