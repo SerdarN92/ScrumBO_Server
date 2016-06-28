@@ -12,6 +12,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
@@ -40,6 +42,17 @@ public class AdminChangePasswordController implements Initializable {
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		userService = StartwindowController.getBenutzerService();
+	}
+	
+	@FXML
+	private void handleKeyPressed(KeyEvent event) {
+		if (event.getCode().equals(KeyCode.ENTER)) {
+			try {
+				handleButtonSave();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 		
 	}
 	
@@ -70,7 +83,7 @@ public class AdminChangePasswordController implements Initializable {
 			User benutzer = new User(CurrentUser.userId, CurrentUser.prename, CurrentUser.lastname,
 					Encryptor.encrypt(password1.getText()), CurrentUser.email);
 					
-			if (userService.changeDefaultPassword(benutzer)) {
+			if (userService.changePassword(benutzer)) {
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Passwort Änderung");
 				alert.setHeaderText(null);

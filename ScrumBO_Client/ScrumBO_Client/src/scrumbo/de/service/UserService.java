@@ -138,7 +138,7 @@ public class UserService {
 		return status;
 	}
 	
-	public Boolean changeDefaultPassword(User benutzer) throws JSONException {
+	public Boolean changePassword(User benutzer) throws JSONException {
 		boolean status = false;
 		String output = gson.toJson(benutzer);
 		try {

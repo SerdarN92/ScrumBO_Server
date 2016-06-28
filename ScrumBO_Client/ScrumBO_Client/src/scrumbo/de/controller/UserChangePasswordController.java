@@ -57,7 +57,7 @@ public class UserChangePasswordController implements Initializable {
 			benutzer.setEmail(CurrentUser.email);
 			benutzer.setPasswort(Encryptor.encrypt(txtPassword.getText()));
 			
-			if (benutzerService.changeDefaultPassword(benutzer)) {
+			if (benutzerService.changePassword(benutzer)) {
 				Alert alert = new Alert(AlertType.INFORMATION);
 				alert.setTitle("Passwort Änderung");
 				alert.setHeaderText(null);
